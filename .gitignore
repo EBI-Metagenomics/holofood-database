@@ -3,3 +3,9 @@
 
 # PyCharm
 .idea
+
+# Secrets
+secrets.env
+
+# Database
+db.sqlite3

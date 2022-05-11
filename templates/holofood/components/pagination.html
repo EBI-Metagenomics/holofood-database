@@ -1,0 +1,62 @@
+<nav class="vf-pagination" aria-label="Pagination">
+  <ul class="vf-pagination__list">
+    {% if page_obj.has_previous %}
+        <li class="vf-pagination__item">
+          <a href="?page=1" class="vf-pagination__link">
+            First<span class="vf-u-sr-only"> page</span>
+          </a>
+        </li>
+        <li class="vf-pagination__item vf-pagination__item--previous-page">
+          <a href="?page={{ page_obj.previous_page_number }}" class="vf-pagination__link">
+            Previous<span class="vf-u-sr-only"> page</span>
+          </a>
+        </li>
+    {% else %}
+        <li class="vf-pagination__item" disabled>
+          <span class="vf-pagination__link">
+            First<span class="vf-u-sr-only"> page</span>
+          </span>
+        </li>
+        <li class="vf-pagination__item vf-pagination__item--previous-page" disabled>
+          <span class="vf-pagination__link">
+            Previous<span class="vf-u-sr-only"> page</span>
+          </span>
+        </li>
+    {% endif %}
+
+
+
+    <li class="vf-pagination__item vf-pagination__item--is-active">
+      <span class="vf-pagination__label" aria-current="page">
+        <span class="vf-u-sr-only">Page </span>{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+    </li>
+
+
+    {% if page_obj.has_next %}
+        <li class="vf-pagination__item vf-pagination__item--next-page">
+          <a href="?page={{ page_obj.next_page_number }}" class="vf-pagination__link">
+            Next<span class="vf-u-sr-only"> page</span>
+          </a>
+        </li>
+        <li class="vf-pagination__item">
+          <a href="?page={{ page_obj.paginator.num_pages }}" class="vf-pagination__link">
+            Last <span class="vf-u-sr-only"> page</span>
+          </a>
+        </li>
+    {% else %}
+        <li class="vf-pagination__item" disabled>
+          <span class="vf-pagination__link vf-pagination__item--next-page">
+            Next<span class="vf-u-sr-only"> page</span>
+          </span>
+        </li>
+        <li class="vf-pagination__item" disabled>
+          <span class="vf-pagination__link">
+            Last<span class="vf-u-sr-only"> page</span>
+          </span>
+        </li>
+    {% endif %}
+
+
+  </ul>
+</nav>

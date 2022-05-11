@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load sample_metadata %}
+
+{% block content %}
+    <div class="vf-sidebar vf-sidebar--start vf-sidebar--800">
+        <div class="vf-sidebar__inner">
+            <div>
+                <h2>Filter samples</h2>
+                {% include "holofood/components/form.html" with form=filterset.form method="get" submit="Apply" only %}
+            </div>
+            <div style="overflow-x: scroll">
+                <h2>Samples</h2>
+                <table class="vf-table">
+                    <thead class="vf-table__header">
+                        <tr class="vf-table__row">
+                          <th class="vf-table__heading" scope="col">Sample accession</th>
+                          <th class="vf-table__heading" scope="col">Project</th>
+                          <th class="vf-table__heading" scope="col">Treatment code</th>
+                          <th class="vf-table__heading" scope="col">Inclusion level</th>
+                          <th class="vf-table__heading" scope="col">Treatment description</th>
+                          <th class="vf-table__heading" scope="col">Trial timepoint</th>
+                          <th class="vf-table__heading" scope="col">Data available</th>
+                          <th class="vf-table__heading" scope="col">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody class="vf-table__body">
+                    {% for sample in samples %}
+                        <tr class="vf-table__row">
+                            <td class="vf-table__cell">{{ sample.accession }}</td>
+                            <td class="vf-table__cell"><a href="{{ ENA_BROWSER_URL }}/{{ sample.project.accession }}" class="vf-link">{{ sample.project.accession }}</a></td>
+                            <td class="vf-table__cell">{{ sample|metadatum:"host storage container"|default:"—" }}</td>
+                            <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment concentration"|default:"—" }}</td>
+                            <td class="vf-table__cell">{{ sample|metadatum:"host diet"|default:"—" }}</td>
+                            <td class="vf-table__cell">{{ sample|metadatum:"trial timepoint"|default:"—" }}</td>
+                            <td class="vf-table__cell">{% data_types sample %}</td>
+                            <td class="vf-table__cell"><button class="vf-button vf-button--link vf-button--sm ">View</button></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot class="vf-table__footer">
+                        <tr class="vf-table__row">
+                          <td class="vf-table__cell" colspan="100">
+                            {% include "holofood/components/pagination.html" %}
+                          </td>
+                        </tr>
+                  </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

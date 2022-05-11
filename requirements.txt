@@ -1,1 +1,6 @@
 django==4.0.3
+requests==2.27.1
+pydantic==1.9.0
+python-dotenv==0.20.0
+xsdata==22.5
+django-filter==21.1
