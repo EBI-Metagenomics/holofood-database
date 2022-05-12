@@ -16,9 +16,15 @@
 
 """
 import json
-from typing import List
+from pathlib import Path
+from typing import List, Dict, Any
 
 from pydantic import BaseSettings, AnyHttpUrl, BaseModel, validator
+
+
+def data_config_source(settings: BaseSettings) -> Dict[str, Any]:
+    encoding = settings.__config__.env_file_encoding
+    return json.loads(Path("config/data_config.json").read_text(encoding))
 
 
 class BiosamplesConfig(BaseModel):
@@ -27,14 +33,6 @@ class BiosamplesConfig(BaseModel):
 
 
 class EnaConfig(BaseModel):
-    @validator("projects", pre=True)
-    def projects_is_list(cls, v):
-        try:
-            projects = json.loads(v)
-        except json.JSONDecodeError:
-            raise ValueError("value is not valid json")
-        return projects
-
     projects: List[str] = []
     username: str = "Webin-0"
     password: str = "secret"
@@ -43,13 +41,36 @@ class EnaConfig(BaseModel):
     submit_api_root: AnyHttpUrl = "https://www.ebi.ac.uk/ena/submit"
 
 
+class SampleTableConfig(BaseModel):
+    default_metadata_marker_columns: List[str]
+
+
+class TablesConfig(BaseModel):
+    samples_list: SampleTableConfig = []
+
+
 class HolofoodConfig(BaseSettings):
     mock_apis: bool = False
 
     biosamples: BiosamplesConfig = BiosamplesConfig()
     ena: EnaConfig = EnaConfig()
+    tables: TablesConfig = TablesConfig()
 
     class Config:
         env_prefix = "holofood_"
         env_nested_delimiter = "__"
         # E.g. set the env var `HOLOFOOD_ENA__PROJECTS` to override the default
+
+        @classmethod
+        def customise_sources(
+            cls,
+            init_settings,
+            env_settings,
+            file_secret_settings,
+        ):
+            return (
+                init_settings,
+                data_config_source,
+                env_settings,
+                file_secret_settings,
+            )

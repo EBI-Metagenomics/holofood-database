@@ -1,9 +1,12 @@
 import logging
 
+from django.conf import settings
 from django.db import models
+from django.db.models import Prefetch
 
 from holofood.external_apis.biosamples.api import get_sample_structured_data
 from holofood.external_apis.ena.submit_api import get_checklist_metadata
+from holofood.utils import holofood_config
 
 
 class Project(models.Model):
@@ -13,11 +16,20 @@ class Project(models.Model):
 
 class SampleManager(models.Manager):
     def get_queryset(self):
+        primary_markers = SampleStructuredDatum.objects.filter(
+            marker__name__in=holofood_config.tables.samples_list.default_metadata_marker_columns
+        )
         return (
             super()
             .get_queryset()
             .select_related("project")
-            .prefetch_related("structured_metadata", "structured_metadata__marker")
+            .prefetch_related(
+                Prefetch(
+                    "structured_metadata",
+                    queryset=primary_markers,
+                    to_attr="primary_metadata",
+                )
+            )
         )
 
 
