@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
+{% load sass_tags %}
+
 <html lang="en">
 <head>
 {%  block head %}
@@ -39,7 +41,8 @@
 <body class="vf-body | vf-stack vf-stack--200">
 
 <link rel="stylesheet" href="//ebi.emblstatic.net/web_guidelines/EBI-Icon-fonts/v1.3/fonts.css" type="text/css" media="all" />
-<link rel="stylesheet" href="{% static 'css/site.css'  %}" type="text/css" media="all" />
+{#<link rel="stylesheet" href="{% static 'css/site.css'  %}" type="text/css" media="all" />#}
+<link href="{% sass_src 'scss/site.scss' %}" rel="stylesheet" type="text/css" />
 <script defer="defer" src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.4/js/script.js"></script>
 
 <section class="vf-hero vf-hero--1200 | vf-u-fullbleed" style="--vf-hero--bg-image: url('{{request.scheme}}://{{request.META.HTTP_HOST}}{% static "/img/algae-banner.png" %}');">

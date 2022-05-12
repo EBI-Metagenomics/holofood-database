@@ -7,5 +7,6 @@
 # Secrets
 secrets.env
 
-# Database
+# Artefacts
 db.sqlite3
+staticfiles

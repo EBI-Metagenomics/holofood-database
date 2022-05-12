@@ -4,3 +4,6 @@ pydantic==1.9.0
 python-dotenv==0.20.0
 xsdata==22.5
 django-filter==21.1
+django-sass-processor==1.1
+libsass==0.21.0
+django-compressor==4.0
