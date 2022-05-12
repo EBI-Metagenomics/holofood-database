@@ -1,13 +1,15 @@
+{% load query_params %}
+
 <nav class="vf-pagination" aria-label="Pagination">
   <ul class="vf-pagination__list">
     {% if page_obj.has_previous %}
         <li class="vf-pagination__item">
-          <a href="?page=1" class="vf-pagination__link">
+          <a href="{% url_for_param page=1 %}" class="vf-pagination__link">
             First<span class="vf-u-sr-only"> page</span>
           </a>
         </li>
         <li class="vf-pagination__item vf-pagination__item--previous-page">
-          <a href="?page={{ page_obj.previous_page_number }}" class="vf-pagination__link">
+          <a href="{% url_for_param page=page_obj.previous_page_number %}" class="vf-pagination__link">
             Previous<span class="vf-u-sr-only"> page</span>
           </a>
         </li>
@@ -35,12 +37,12 @@
 
     {% if page_obj.has_next %}
         <li class="vf-pagination__item vf-pagination__item--next-page">
-          <a href="?page={{ page_obj.next_page_number }}" class="vf-pagination__link">
+          <a href="{% url_for_param page=page_obj.next_page_number %}" class="vf-pagination__link">
             Next<span class="vf-u-sr-only"> page</span>
           </a>
         </li>
         <li class="vf-pagination__item">
-          <a href="?page={{ page_obj.paginator.num_pages }}" class="vf-pagination__link">
+          <a href="{% url_for_param page=page_obj.paginator.num_pages %}" class="vf-pagination__link">
             Last <span class="vf-u-sr-only"> page</span>
           </a>
         </li>
