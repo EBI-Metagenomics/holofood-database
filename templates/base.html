@@ -4,129 +4,153 @@
 
 <html lang="en">
 <head>
-{%  block head %}
-  <meta charset="UTF-8">
-    <title>{% block title %}HoloFood database{% endblock %}</title>
+    {% block head %}
+        <meta charset="UTF-8">
+        <title>{% block title %}HoloFood database{% endblock %}</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://assets.emblstatic.net/vf/v2.5.7/css/styles.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://assets.emblstatic.net/vf/v2.5.7/css/styles.css">
 
-  <link rel="icon" type="image/x-icon" href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/favicon.ico" />
-  <link rel="icon" type="image/png" href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="192×192" href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/android-chrome-192x192.png" /> <!-- Android (192px) -->
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/apple-icon-114x114.png" /> <!-- For iPhone 4 Retina display (114px) -->
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/apple-icon-72x72.png" /> <!-- For iPad (72px) -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/apple-icon-144x144.png" /> <!-- For iPad retinat (144px) -->
-  <link rel="apple-touch-icon-precomposed" href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/apple-icon-57x57.png" /> <!-- For iPhone (57px) -->
-  <link rel="mask-icon" href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/safari-pinned-tab.svg" color="#ffffff" /> <!-- Safari icon for pinned tab -->
-  <meta name="msapplication-TileColor" content="#2b5797" /> <!-- MS Icons -->
-  <meta name="msapplication-TileImage" content="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/mstile-144x144.png" />
+        <link rel="icon" type="image/x-icon"
+              href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/favicon.ico"/>
+        <link rel="icon" type="image/png"
+              href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/favicon-32x32.png"/>
+        <link rel="icon" type="image/png" sizes="192×192"
+              href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/android-chrome-192x192.png"/>
+        <!-- Android (192px) -->
+        <link rel="apple-touch-icon-precomposed" sizes="114x114"
+              href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/apple-icon-114x114.png"/>
+        <!-- For iPhone 4 Retina display (114px) -->
+        <link rel="apple-touch-icon-precomposed" sizes="72x72"
+              href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/apple-icon-72x72.png"/>
+        <!-- For iPad (72px) -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144"
+              href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/apple-icon-144x144.png"/>
+        <!-- For iPad retinat (144px) -->
+        <link rel="apple-touch-icon-precomposed"
+              href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/apple-icon-57x57.png"/>
+        <!-- For iPhone (57px) -->
+        <link rel="mask-icon"
+              href="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/safari-pinned-tab.svg"
+              color="#ffffff"/> <!-- Safari icon for pinned tab -->
+        <meta name="msapplication-TileColor" content="#2b5797"/> <!-- MS Icons -->
+        <meta name="msapplication-TileImage"
+              content="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/images/logos/EMBL-EBI/favicons/mstile-144x144.png"/>
 
-  <!-- Web component polyfill (only loads what it needs) -->
-  <script
-          src="https://cdn.jsdelivr.net/npm/@webcomponents/custom-elements@latest"
-          defer
-  ></script>
-  <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-  <script
-          src="https://cdn.jsdelivr.net/npm/@webcomponents/custom-elements@latest/src/native-shim.js"
-          defer
-  ></script>
-{%  endblock %}
+        <!-- Web component polyfill (only loads what it needs) -->
+        <script
+                src="https://cdn.jsdelivr.net/npm/@webcomponents/custom-elements@latest"
+                defer
+        ></script>
+        <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+        <script
+                src="https://cdn.jsdelivr.net/npm/@webcomponents/custom-elements@latest/src/native-shim.js"
+                defer
+        ></script>
+    {% endblock %}
 </head>
 
 <body class="vf-body | vf-stack vf-stack--200">
 
-<link rel="stylesheet" href="//ebi.emblstatic.net/web_guidelines/EBI-Icon-fonts/v1.3/fonts.css" type="text/css" media="all" />
-{#<link rel="stylesheet" href="{% static 'css/site.css'  %}" type="text/css" media="all" />#}
-<link href="{% sass_src 'scss/site.scss' %}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="//ebi.emblstatic.net/web_guidelines/EBI-Icon-fonts/v1.3/fonts.css" type="text/css"
+      media="all"/>
+<link href="{% sass_src 'scss/site.scss' %}" rel="stylesheet" type="text/css"/>
 <script defer="defer" src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.4/js/script.js"></script>
 
-<section class="vf-hero vf-hero--1200 | vf-u-fullbleed" style="--vf-hero--bg-image: url('{{request.scheme}}://{{request.META.HTTP_HOST}}{% static "/img/algae-banner.png" %}');">
-  <div class="vf-hero__content | vf-box | vf-stack vf-stack--400">
-    <p class="vf-hero__kicker"><a href="https://wwwholofood.eu">HoloFood</a> | Database</p>
-    <p class="vf-hero__kicker"><span class="vf-badge vf-badge--primary">alpha</span></p>
-    <h2 class="vf-hero__heading">HoloFood database</h2>
-    <p class="vf-hero__subheading">Hologenomics for sustainable food production</p>
-    <p class="vf-hero__text">Database of samples and data collected and generated by the HoloFood project.</p>
-  </div>
+<section class="vf-hero vf-hero--1200 | vf-u-fullbleed" style="--vf-hero--bg-image: url('{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static "/img/algae-banner.png" %}');">
+    <div class="vf-hero__content | vf-box | vf-stack vf-stack--400">
+        <p class="vf-hero__kicker"><a href="https://wwwholofood.eu">HoloFood</a> | Database</p>
+        <p class="vf-hero__kicker"><span class="vf-badge vf-badge--primary">alpha</span></p>
+        <h2 class="vf-hero__heading">HoloFood database</h2>
+        <p class="vf-hero__subheading">Hologenomics for sustainable food production</p>
+        <p class="vf-hero__text">Database of samples and data collected and generated by the HoloFood project.</p>
+    </div>
 </section>
 
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <nav class="vf-navigation vf-navigation--main | vf-cluster">
-  <ul class="vf-navigation__list | vf-list | vf-cluster__inner">
-    <li class="vf-navigation__item">
-      <a href="JavaScript:Void(0);" class="vf-navigation__link" aria-current="page">Chicken</a>
-    </li>
-    <li class="vf-navigation__item">
-      <a href="JavaScript:Void(0);" class="vf-navigation__link">Salmon</a>
-    </li>
-  </ul>
+    <ul class="vf-navigation__list | vf-list | vf-cluster__inner">
+        <li class="vf-navigation__item">
+            <a href="/samples?system=chicken" class="vf-navigation__link"><img
+                    src="{% static "img/icons/chicken.svg" %}" class="nav-icon"/>Chicken</a>
+        </li>
+        <li class="vf-navigation__item">
+            <a href="/samples?system=salmon" class="vf-navigation__link"><img
+                    src="{% static "img/icons/salmon.svg" %}" class="nav-icon"/>Salmon</a>
+        </li>
+        <li class="vf-navigation__item">
+            <a href="#" class="vf-navigation__link"><img
+                    src="{% static "img/icons/book.svg" %}" class="nav-icon"/>Documentation</a>
+        </li>
+    </ul>
 </nav>
 {% block content %}
 {% endblock %}
 
 <div class="full-width">
     <footer class="vf-footer">
-      <div class="vf-footer__inner">
-        <p class="vf-footer__notice">HoloFood is a consortium and project investigating sustainable food production through a hologenomic approach.</p>
-        <p class="vf-footer__notice">This project has received funding from the European Unionʼs Horizon 2020 research and innovation programme under grant agreement No 817729</p>
-        <div class="vf-footer__links-group | vf-grid">
-          <div class="vf-links">
-            <h4 class="vf-links__heading">The project</h4>
-            <ul class="vf-links__list | vf-list">
-              <li class="vf-list__item">
-                <a class="vf-list__link" href="https://www.holofood.eu">HoloFood project site</a>
-              </li>
-            </ul>
-          </div>
+        <div class="vf-footer__inner">
+            <p class="vf-footer__notice">HoloFood is a consortium and project investigating sustainable food production
+                through a hologenomic approach.</p>
+            <p class="vf-footer__notice">This project has received funding from the European Unionʼs Horizon 2020
+                research and innovation programme under grant agreement No 817729</p>
+            <div class="vf-footer__links-group | vf-grid">
+                <div class="vf-links">
+                    <h4 class="vf-links__heading">The project</h4>
+                    <ul class="vf-links__list | vf-list">
+                        <li class="vf-list__item">
+                            <a class="vf-list__link" href="https://www.holofood.eu">HoloFood project site</a>
+                        </li>
+                    </ul>
+                </div>
 
-          <div class="vf-links">
-            <h4 class="vf-links__heading">Help</h4>
-            <ul class="vf-links__list | vf-list">
-              <li class="vf-list__item">
-                <a class="vf-list__link" href="#">Documentation</a>
-              </li>
-              <li class="vf-list__item">
-                <a class="vf-list__link" href="#">Helpdesk</a>
-              </li>
-            </ul>
-          </div>
+                <div class="vf-links">
+                    <h4 class="vf-links__heading">Help</h4>
+                    <ul class="vf-links__list | vf-list">
+                        <li class="vf-list__item">
+                            <a class="vf-list__link" href="#">Documentation</a>
+                        </li>
+                        <li class="vf-list__item">
+                            <a class="vf-list__link" href="#">Helpdesk</a>
+                        </li>
+                    </ul>
+                </div>
 
-          <div class="vf-links">
-            <h4 class="vf-links__heading">Supporting databases</h4>
-            <ul class="vf-links__list | vf-list">
-              <li class="vf-list__item">
-                <a class="vf-list__link" href="#">ENA</a>
-              </li>
-              <li class="vf-list__item">
-                <a class="vf-list__link" href="#">Biosamples</a>
-              </li>
-              <li class="vf-list__item">
-                <a class="vf-list__link" href="#">Metabolights</a>
-              </li>
-              <li class="vf-list__item">
-                <a class="vf-list__link" href="#">MGnify</a>
-              </li>
-            </ul>
-          </div>
+                <div class="vf-links">
+                    <h4 class="vf-links__heading">Supporting databases</h4>
+                    <ul class="vf-links__list | vf-list">
+                        <li class="vf-list__item">
+                            <a class="vf-list__link" href="#">ENA</a>
+                        </li>
+                        <li class="vf-list__item">
+                            <a class="vf-list__link" href="#">Biosamples</a>
+                        </li>
+                        <li class="vf-list__item">
+                            <a class="vf-list__link" href="#">Metabolights</a>
+                        </li>
+                        <li class="vf-list__item">
+                            <a class="vf-list__link" href="#">MGnify</a>
+                        </li>
+                    </ul>
+                </div>
 
+            </div>
+            <section class="vf-footer__legal | vf-grid vf-grid__col-1">
+                <ul class="vf-footer__list vf-footer__list--legal | vf-list vf-list--inline">
+                    <li class="vf-list__item">
+                        <a href="https://www.holofood.eu/data-policy" class="vf-list__link">Privacy policy</a>
+                    </li>
+                </ul>
+                <p class="vf-footer__legal-text">Project Coordinator: Prof. Tom Gilbert – University of Copenhagen</p>
+                <p class="vf-footer__legal-text">Scientific Managers: Associate Professors Antton Alberdi and Morten
+                    Limborg University of Copenhagen </p>
+                <p class="vf-footer__legal-text">Database Technical support: metagenomics@ebi.ac.uk</p>
+                <a class="vf-footer__link" href="JavaScript:Void(0);">Helpdesk</a>
+            </section>
         </div>
-        <section class="vf-footer__legal | vf-grid vf-grid__col-1">
-          <ul class="vf-footer__list vf-footer__list--legal | vf-list vf-list--inline">
-            <li class="vf-list__item">
-              <a href="https://www.holofood.eu/data-policy" class="vf-list__link">Privacy policy</a>
-            </li>
-          </ul>
-          <p class="vf-footer__legal-text">Project Coordinator: Prof. Tom Gilbert – University of Copenhagen</p>
-          <p class="vf-footer__legal-text">Scientific Managers: Associate Professors Antton Alberdi and Morten Limborg University of Copenhagen </p>
-          <p class="vf-footer__legal-text">Database Technical support: metagenomics@ebi.ac.uk</p>
-          <a class="vf-footer__link" href="JavaScript:Void(0);">Helpdesk</a>
-        </section>
-      </div>
     </footer>
 </div>
 <script src="https://assets.emblstatic.net/vf/v2.5.7/scripts/scripts.js"></script>
