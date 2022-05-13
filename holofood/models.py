@@ -99,24 +99,25 @@ class SampleMetadataMarker(models.Model):
             models.Index(fields=["name"]),
         ]
 
+    def __str__(self):
+        return f"Sample Metadata Marker {self.id}: {self.name}"
+
 
 class BiosamplesPartner(models.Model):
     name = models.CharField(max_length=100)
     iri = models.CharField(max_length=100, null=True)
 
+    def __str__(self):
+        return f"Partner {self.id}: {self.name}"
 
-# class SampleStructuredDatumManager(models.Manager):
-#     def get_queryset(self):
-#         return (
-#             super()
-#             .get_queryset()
-#             .select_related("marker")
-# .prefetch_related("structured_metadata")
-# )
+
+class SampleStructuredDatumManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().select_related("marker", "partner")
 
 
 class SampleStructuredDatum(models.Model):
-    # objects = SampleStructuredDatumManager()
+    objects = SampleStructuredDatumManager()
 
     ENA = "ena"
     BIOSAMPLES = "biosamples"
@@ -130,3 +131,6 @@ class SampleStructuredDatum(models.Model):
     units = models.CharField(max_length=100, null=True)
     partner = models.ForeignKey(BiosamplesPartner, on_delete=models.CASCADE, null=True)
     source = models.CharField(choices=SOURCE_CHOICES, max_length=15)
+
+    def __str__(self):
+        return f"Sample {self.sample.accession} metadata {self.marker.id}: {self.marker.name}"

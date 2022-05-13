@@ -8,8 +8,15 @@ from holofood.models import (
 )
 
 
-@admin.register(
-    Sample, Project, SampleMetadataMarker, BiosamplesPartner, SampleStructuredDatum
-)
-class SampleAdmin(admin.ModelAdmin):
+class SampleMetadataInline(admin.TabularInline):
+    model = SampleStructuredDatum
+
+
+@admin.register(Project, SampleMetadataMarker, BiosamplesPartner, SampleStructuredDatum)
+class GenericAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(Sample)
+class SampleAdmin(admin.ModelAdmin):
+    inlines = [SampleMetadataInline]
