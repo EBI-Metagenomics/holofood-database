@@ -13,7 +13,11 @@
       "PRJEB41657",
       "PRJEB41323",
       "PRJEB39110"
-    ]
+    ],
+    "systems": {
+      "8030": "salmon",
+      "9031": "chicken"
+    }
   },
   "tables": {
     "samples_list": {

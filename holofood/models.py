@@ -89,6 +89,16 @@ class Sample(models.Model):
                 },
             )
 
+        try:
+            tax_id_data = self.structured_metadata.get(marker__name="host taxid")
+            system = holofood_config.ena.systems[tax_id_data.measurement]
+        except (self.DoesNotExist, SampleMetadataMarker.DoesNotExist, KeyError) as e:
+            logging.error(f"Error determining System for Sample {self.accession}")
+            raise e
+        logging.info(f"Setting system to {system} for sample {self.accession}")
+        self.system = system
+        self.save()
+
 
 class SampleMetadataMarker(models.Model):
     name = models.CharField(max_length=100)
