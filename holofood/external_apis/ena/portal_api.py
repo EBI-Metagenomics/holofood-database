@@ -6,8 +6,9 @@ import requests
 from django.conf import settings
 
 from holofood.external_apis.ena.auth import ENA_AUTH
+from holofood.utils import holofood_config
 
-API_ROOT = settings.HOLOFOOD_CONFIG.ena.portal_api_root.rstrip("/")
+API_ROOT = holofood_config.ena.portal_api_root.rstrip("/")
 
 
 def get_holofood_samples() -> dict[List[dict]]:
@@ -26,6 +27,9 @@ def get_holofood_samples() -> dict[List[dict]]:
             samples_list = response.json()
         except JSONDecodeError:
             logging.warning(f"No response for ENA Project {project}")
+            continue
+        if type(samples_list) is not list:
+            logging.warning(f"Bad samples list received for ENA Project {project}")
             continue
         ena_projects_samples[project] = samples_list
 

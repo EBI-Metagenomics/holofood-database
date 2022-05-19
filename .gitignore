@@ -10,3 +10,8 @@ secrets.env
 # Artefacts
 db.sqlite3
 staticfiles
+
+# Testing
+.coverage
+.pytest_cache
+test-results

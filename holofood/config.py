@@ -19,7 +19,7 @@ import json
 from pathlib import Path
 from typing import List, Dict, Any
 
-from pydantic import BaseSettings, AnyHttpUrl, BaseModel, validator
+from pydantic import BaseSettings, AnyHttpUrl, BaseModel
 
 
 def data_config_source(settings: BaseSettings) -> Dict[str, Any]:
@@ -28,7 +28,7 @@ def data_config_source(settings: BaseSettings) -> Dict[str, Any]:
 
 
 class BiosamplesConfig(BaseModel):
-    api_root: AnyHttpUrl = "http://example.com/biosamples"
+    api_root: AnyHttpUrl = "https://www.ebi.ac.uk/biosamples"
     project_id: str = "HF"
 
 

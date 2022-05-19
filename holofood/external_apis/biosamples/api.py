@@ -3,9 +3,10 @@ from json import JSONDecodeError
 from typing import List
 
 import requests
-from django.conf import settings
 
-API_ROOT = settings.HOLOFOOD_CONFIG.biosamples.api_root.rstrip("/")
+from holofood.utils import holofood_config
+
+API_ROOT = holofood_config.biosamples.api_root.rstrip("/")
 
 
 def get_sample_structured_data(sample: str) -> List[dict]:

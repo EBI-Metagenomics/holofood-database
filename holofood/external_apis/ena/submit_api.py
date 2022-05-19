@@ -9,8 +9,9 @@ from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
 
 from holofood.external_apis.ena.auth import ENA_AUTH
+from holofood.utils import holofood_config
 
-API_ROOT = settings.HOLOFOOD_CONFIG.ena.submit_api_root.rstrip("/")
+API_ROOT = holofood_config.ena.submit_api_root.rstrip("/")
 
 
 def get_auth():

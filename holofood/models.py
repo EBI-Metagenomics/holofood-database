@@ -91,7 +91,7 @@ class Sample(models.Model):
 
         try:
             tax_id_data = self.structured_metadata.get(marker__name="host taxid")
-            system = holofood_config.ena.systems[tax_id_data.measurement]
+            system = holofood_config.ena.systems[str(tax_id_data.measurement)]
         except (self.DoesNotExist, SampleMetadataMarker.DoesNotExist, KeyError) as e:
             logging.error(f"Error determining System for Sample {self.accession}")
             raise e

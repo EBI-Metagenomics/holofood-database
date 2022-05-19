@@ -13,7 +13,12 @@ class Command(BaseCommand):
         projects_samples = get_holofood_samples()
         samples_added = 0
         for project_accession, samples in projects_samples.items():
-            project_title = samples[0]["project_name"] if len(samples) else ""
+            logging.info(project_accession)
+            logging.info(samples)
+            if type(samples) is list and samples:
+                project_title = samples[0]["project_name"]
+            else:
+                project_title = ""
             project, created = Project.objects.update_or_create(
                 accession=project_accession, defaults={"title": project_title}
             )
