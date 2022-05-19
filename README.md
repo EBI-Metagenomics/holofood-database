@@ -5,7 +5,8 @@ The database and website to present [Holofood](https://www.holofood.eu) samples,
 and unify the datasets stored in supporting services.
 
 ## Background
-TODO
+HoloFood is a consortium and project focussed on understanding the biomolecular 
+and physiological processes
 
 ## Development
 Install development tools (including pre-commit hooks to run Black code formatting).

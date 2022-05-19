@@ -1,6 +1,5 @@
 import logging
 from json import JSONDecodeError
-from typing import List
 
 import requests
 
@@ -9,7 +8,7 @@ from holofood.utils import holofood_config
 API_ROOT = holofood_config.biosamples.api_root.rstrip("/")
 
 
-def get_sample_structured_data(sample: str) -> List[dict]:
+def get_sample_structured_data(sample: str) -> list[dict]:
     logging.info(f"Fetching {sample} structured data from Biosamples {API_ROOT = }")
 
     response = requests.get(f"{API_ROOT}/structureddata/{sample}")

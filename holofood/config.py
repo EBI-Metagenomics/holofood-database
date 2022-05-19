@@ -17,12 +17,12 @@
 """
 import json
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 
 from pydantic import BaseSettings, AnyHttpUrl, BaseModel
 
 
-def data_config_source(settings: BaseSettings) -> Dict[str, Any]:
+def data_config_source(settings: BaseSettings) -> dict[str, Any]:
     encoding = settings.__config__.env_file_encoding
     return json.loads(Path("config/data_config.json").read_text(encoding))
 
@@ -33,8 +33,8 @@ class BiosamplesConfig(BaseModel):
 
 
 class EnaConfig(BaseModel):
-    projects: List[str] = []
-    systems: Dict = {}
+    projects: list[str] = []
+    systems: dict = {}
     username: str = "Webin-0"
     password: str = "secret"
     portal_api_root: AnyHttpUrl = "https://www.ebi.ac.uk/ena/portal/api"
@@ -43,7 +43,7 @@ class EnaConfig(BaseModel):
 
 
 class SampleTableConfig(BaseModel):
-    default_metadata_marker_columns: List[str]
+    default_metadata_marker_columns: list[str]
 
 
 class TablesConfig(BaseModel):

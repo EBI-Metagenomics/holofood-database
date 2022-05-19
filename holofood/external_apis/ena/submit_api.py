@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 import requests
 from django.conf import settings
@@ -35,7 +35,7 @@ class SampleAttributeSet:
     class Meta:
         name = "SAMPLE_ATTRIBUTES"
 
-    values: List[SampleAttribute] = field(
+    values: list[SampleAttribute] = field(
         default_factory=list, metadata={"name": "SAMPLE_ATTRIBUTE"}
     )
 
@@ -61,7 +61,7 @@ class SampleMetadataSet:
     class Meta:
         name = "SAMPLE_SET"
 
-    samples: List[SampleMetadata] = field(
+    samples: list[SampleMetadata] = field(
         default_factory=list, metadata={"name": "SAMPLE"}
     )
 
@@ -72,7 +72,7 @@ config = ParserConfig(
 )
 
 
-def get_checklist_metadata(sample: str) -> List[SampleAttribute]:
+def get_checklist_metadata(sample: str) -> list[SampleAttribute]:
     logging.info(
         f"Fetching checklist metadata from ENA {API_ROOT = } for sample {sample}"
     )
