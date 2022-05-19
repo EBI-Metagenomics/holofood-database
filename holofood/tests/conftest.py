@@ -5,7 +5,9 @@ from holofood.models import Project, Sample
 
 @pytest.fixture
 def salmon_project():
-    return Project.objects.create(title="HoloFood Donut and Fish")
+    return Project.objects.create(
+        accession="PRJTESTING", title="HoloFood Donut and Fish"
+    )
 
 
 @pytest.fixture()
@@ -2163,3 +2165,25 @@ def salmon_submitted_checklist(salmon_sample):
       </SAMPLE>
     </SAMPLE_SET>
     """
+
+
+@pytest.fixture(scope="class")
+def LiveTests(request):
+    class Fixtures:
+        pass
+
+    Fixtures.projects = [
+        Project.objects.create(accession="PRJTESTING", title="HoloFood Donut and Fish")
+    ]
+
+    Fixtures.samples = [
+        Sample.objects.create(
+            accession="SAMEA00000002",
+            project=Fixtures.projects[0],
+            title="HF_DONUT.SALMON.1",
+            system=Sample.SALMON,
+        )
+    ]
+
+    # set a class attribute on the invoking test context
+    request.cls.hf_fixtures = Fixtures()
