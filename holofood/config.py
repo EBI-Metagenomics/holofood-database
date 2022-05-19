@@ -34,7 +34,7 @@ class BiosamplesConfig(BaseModel):
 
 class EnaConfig(BaseModel):
     projects: List[str] = []
-    systems: dict = {}
+    systems: Dict = {}
     username: str = "Webin-0"
     password: str = "secret"
     portal_api_root: AnyHttpUrl = "https://www.ebi.ac.uk/ena/portal/api"

@@ -1,6 +1,6 @@
 import logging
 from json import JSONDecodeError
-from typing import List
+from typing import List, Dict
 
 import requests
 from django.conf import settings
@@ -11,7 +11,7 @@ from holofood.utils import holofood_config
 API_ROOT = holofood_config.ena.portal_api_root.rstrip("/")
 
 
-def get_holofood_samples() -> dict[List[dict]]:
+def get_holofood_samples() -> Dict[List[Dict]]:
     logging.info(f"Fetching samples from ENA {API_ROOT = }")
     project_ids = settings.HOLOFOOD_CONFIG.ena.projects
     logging.info(project_ids)

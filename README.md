@@ -1,3 +1,5 @@
+[![Testing](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/test.yml/badge.svg)](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/test.yml)
+
 # Holofood Database
 The database and website to present [Holofood](https://www.holofood.eu) samples,
 and unify the datasets stored in supporting services.

@@ -1,5 +1,5 @@
 import logging
-from typing import Union
+from typing import Union, Dict
 
 from django import template
 from holofood.models import Sample
@@ -34,7 +34,7 @@ def metadatum(sample: Sample, marker_name: str) -> Union[str, None]:
 
 
 @register.inclusion_tag("holofood/components/data_type_icons.html", name="data_types")
-def data_type_icons(sample: Sample) -> dict:
+def data_type_icons(sample: Sample) -> Dict:
     if sample:
         return {
             "sample_metadata": True,
