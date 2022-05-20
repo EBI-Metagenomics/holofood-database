@@ -89,6 +89,7 @@ class Sample(models.Model):
                 },
             )
 
+        self.refresh_from_db()
         try:
             tax_id_data = self.structured_metadata.get(marker__name="host taxid")
             system = holofood_config.ena.systems[str(tax_id_data.measurement)]
@@ -97,7 +98,7 @@ class Sample(models.Model):
             raise e
         logging.info(f"Setting system to {system} for sample {self.accession}")
         self.system = system
-        self.save()
+        self.save(update_fields=["system"])
 
 
 class SampleMetadataMarker(models.Model):

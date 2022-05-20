@@ -1,5 +1,5 @@
-from django.conf import settings  # import the settings file
+from holofood.utils import holofood_config
 
 
 def apis(request):
-    return {"ENA_BROWSER_URL": settings.HOLOFOOD_CONFIG.ena.browser_url}
+    return {"ENA_BROWSER_URL": holofood_config.ena.browser_url}

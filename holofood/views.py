@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from holofood.filters import SampleFilter
 from holofood.models import Sample
@@ -24,3 +24,9 @@ class SampleListView(ListFilterView):
     paginate_by = 10
     template_name = "holofood/pages/sample_list.html"
     filterset_class = SampleFilter
+
+
+class SampleDetailView(DetailView):
+    model = Sample
+    context_object_name = "sample"
+    template_name = "holofood/pages/sample_detail.html"

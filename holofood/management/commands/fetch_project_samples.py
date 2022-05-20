@@ -13,8 +13,6 @@ class Command(BaseCommand):
         projects_samples = get_holofood_samples()
         samples_added = 0
         for project_accession, samples in projects_samples.items():
-            logging.info(project_accession)
-            logging.info(samples)
             if type(samples) is list and samples:
                 project_title = samples[0]["project_name"]
             else:

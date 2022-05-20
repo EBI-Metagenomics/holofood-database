@@ -36,7 +36,7 @@
                             <td class="vf-table__cell">{{ sample|metadatum:"trial timepoint"|default:"—" }}</td>
                             <td class="vf-table__cell">{% data_types sample %}</td>
                             <td class="vf-table__cell">
-                                <button class="vf-button vf-button--link vf-button--sm ">View</button>
+                                <a class="vf-button vf-button--link vf-button--sm" href="{% url 'sample_detail' pk=sample.accession  %}">View</a>
                             </td>
                         </tr>
                     {% endfor %}

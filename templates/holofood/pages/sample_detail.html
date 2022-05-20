@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load sample_metadata %}
+
+{% block content %}
+    <h1>{{ sample.accession }}: {{ sample.title }}</h1>
+    <p class="vf-lede">Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample includes: metadata from BioSamples and ENA, metagenomics, metabolomics.
+
+    <details class="vf-details" open>
+      <summary class="vf-details--summary">Sample details</summary>
+      <dl class="vf-list vf-list--definition">
+       <dt class="vf-list__item vf-list--definition__term"> Project </dt>
+          <dd class="vf-list__item vf-list--definition__details">
+              <a class="vf-link" href="{% url 'samples_list'  %}?project__accession__icontains={{ sample.project.accession }}">
+                  {{ sample.project.accession }}: {{ sample.project.title }}
+              </a>
+          </dd>
+       <dt class="vf-list__item vf-list--definition__term"> System </dt>
+       <dd class="vf-list__item vf-list--definition__details">
+           <a class="vf-link" href="{% url 'samples_list'  %}?system={{ sample.system }}">
+              {{ sample.system }}
+          </a> </dd>
+     </dl>
+    </details>
+
+    <details class="vf-details">
+      <summary class="vf-details--summary">Sample metadata</summary>
+        <p class="vf-text-body">Metadata for sample {{ sample.accession }}, stored in BioSamples and ENA.</p>
+        <table class="vf-table scrollable-table">
+            <thead class="vf-table__header">
+            <tr class="vf-table__row">
+                <th class="vf-table__heading" scope="col">Marker</th>
+                <th class="vf-table__heading" scope="col">Measurement</th>
+                <th class="vf-table__heading" scope="col">Units</th>
+            </tr>
+            </thead>
+            <tbody class="vf-table__body">
+                {% for structured_metadatum in sample.structured_metadata.all %}
+                    <tr class="vf-table__row">
+                        <td class="vf-table__cell">{{ structured_metadatum.marker.name }}</td>
+                        <td class="vf-table__cell">{{ structured_metadatum.measurement }}</td>
+                        <td class="vf-table__cell">{{ structured_metadatum.units }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </details>
+
+{% endblock %}
