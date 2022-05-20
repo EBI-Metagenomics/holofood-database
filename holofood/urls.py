@@ -33,12 +33,18 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path, include
 
-from holofood.views import SampleListView, SampleDetailView
+from holofood.views import SampleListView, SampleDetailView, AnnotationDetailView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("martor/", include("martor.urls")),
     path("samples/", SampleListView.as_view(), name="samples_list"),
     path("sample/<str:pk>", SampleDetailView.as_view(), name="sample_detail"),
+    path(
+        "annotation/<str:slug>",
+        AnnotationDetailView.as_view(),
+        name="annotation_detail",
+    ),
 ]
 
 if settings.DEBUG:

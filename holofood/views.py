@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView
 
 from holofood.filters import SampleFilter
-from holofood.models import Sample
+from holofood.models import Sample, SampleAnnotation
 
 
 class ListFilterView(ListView):
@@ -30,3 +30,9 @@ class SampleDetailView(DetailView):
     model = Sample
     context_object_name = "sample"
     template_name = "holofood/pages/sample_detail.html"
+
+
+class AnnotationDetailView(DetailView):
+    model = SampleAnnotation
+    context_object_name = "annotation"
+    template_name = "holofood/pages/annotation_detail.html"

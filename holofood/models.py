@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 from django.db import models
 from django.db.models import Prefetch
+from martor.models import MartorField
 
 from holofood.external_apis.biosamples.api import get_sample_structured_data
 from holofood.external_apis.ena.submit_api import get_checklist_metadata
@@ -12,6 +13,9 @@ from holofood.utils import holofood_config
 class Project(models.Model):
     accession = models.CharField(primary_key=True, max_length=15)
     title = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"Project {self.accession} - {self.title}"
 
 
 class SampleManager(models.Manager):
@@ -44,6 +48,9 @@ class Sample(models.Model):
     system = models.CharField(choices=SYSTEM_CHOICES, max_length=10, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"Sample {self.accession} - {self.title}"
 
     class Meta:
         ordering = ("accession",)
@@ -145,3 +152,22 @@ class SampleStructuredDatum(models.Model):
 
     def __str__(self):
         return f"Sample {self.sample.accession} metadata {self.marker.id}: {self.marker.name}"
+
+
+class SampleAnnotation(models.Model):
+    slug = models.SlugField(
+        primary_key=True, max_length=200
+    )  # TODO: slugify automatically
+    title = models.CharField(max_length=200)
+    content = MartorField(
+        help_text="Markdown document describing an analysis of one or more projects/samples"
+    )
+    samples = models.ManyToManyField(Sample, related_name="annotations", blank=True)
+    projects = models.ManyToManyField(Project, related_name="annotations", blank=True)
+    author = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_created=True, auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    is_published = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.slug} - {self.title}"

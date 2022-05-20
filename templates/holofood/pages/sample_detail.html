@@ -3,7 +3,7 @@
 
 {% block content %}
     <h1>{{ sample.accession }}: {{ sample.title }}</h1>
-    <p class="vf-lede">Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample includes: metadata from BioSamples and ENA, metagenomics, metabolomics.
+    <p class="vf-lede">Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample includes: metadata from BioSamples and ENA, metagenomics, metabolomics.</p>
 
     <details class="vf-details" open>
       <summary class="vf-details--summary">Sample details</summary>
@@ -56,4 +56,21 @@
         <p>View on Metabolights</p>
     </details>
 
+
+
+    <section class="vf-card-container vf-card-container__col-3 | vf-u-background-color--grey--lightest vf-u-fullbleed">
+        <div class="vf-card-container__inner">
+            <div class="vf-section-header">
+                <h2 class="vf-section-header__heading">
+                    Analysis summaries
+                </h2>
+                <p class="vf-section-header__text">
+                    Documents written to HoloFood partners and collaborators relevant to Sample {{ sample.accession }}
+                </p>
+            </div>
+        {% for annotation in sample.annotations.all %}
+            {% include 'holofood/components/annotation_card.html' with annotation=annotation %}
+        {% endfor %}
+        </div>
+    </section>
 {% endblock %}

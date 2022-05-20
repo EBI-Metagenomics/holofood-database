@@ -7,3 +7,4 @@ django-filter==21.1
 django-sass-processor==1.1
 libsass==0.21.0
 django-compressor==4.0
+martor==1.6.13

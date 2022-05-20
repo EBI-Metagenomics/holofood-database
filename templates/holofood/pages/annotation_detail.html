@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ annotation.title }}</h1>
+    <p class="vf-lede">Updated: {{ annotation.updated|date:'Y-m-d H:i' }}</p>
+
+    {% include 'holofood/components/annotation.html' %}
+
+{% endblock %}
