@@ -74,16 +74,16 @@
 <nav class="vf-navigation vf-navigation--main | vf-cluster">
     <ul class="vf-navigation__list | vf-list | vf-cluster__inner">
         <li class="vf-navigation__item">
-            <a href="/samples?system=chicken" class="vf-navigation__link"><img
-                    src="{% static "img/icons/chicken.svg" %}" class="nav-icon"/>Chicken</a>
+            <a href="{% url 'samples_list' %}?system=chicken" class="vf-navigation__link"><img
+                    src="{% static "img/icons/chicken.svg" %}" class="nav-icon" alt="Chicken"/>Chicken</a>
         </li>
         <li class="vf-navigation__item">
-            <a href="/samples?system=salmon" class="vf-navigation__link"><img
-                    src="{% static "img/icons/salmon.svg" %}" class="nav-icon"/>Salmon</a>
+            <a href="{% url 'samples_list' %}?system=salmon" class="vf-navigation__link"><img
+                    src="{% static "img/icons/salmon.svg" %}" class="nav-icon" alt="Salmon"/>Salmon</a>
         </li>
         <li class="vf-navigation__item">
-            <a href="#" class="vf-navigation__link"><img
-                    src="{% static "img/icons/book.svg" %}" class="nav-icon"/>Documentation</a>
+            <a href="{% url 'annotations_list' %}" class="vf-navigation__link"><img
+                    src="{% static "img/icons/book.svg" %}" class="nav-icon" alt="Documents"/>Analysis summaries</a>
         </li>
     </ul>
 </nav>
@@ -111,6 +111,9 @@
                     <ul class="vf-links__list | vf-list">
                         <li class="vf-list__item">
                             <a class="vf-list__link" href="https://www.holofood.eu">HoloFood project site</a>
+                        </li>
+                        <li class="vf-list__item">
+                            <a class="vf-list__link" href="{% url 'admin:index' %}">Admin login</a>
                         </li>
                     </ul>
                 </div>

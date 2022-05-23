@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="vf-stack vf-stack--400">
+        <div/>
+        <h2>Analysis summaries</h2>
+        <section class="vf-card-container vf-card-container__col-3">
+            <div class="vf-card-container__inner">
+                <div class="vf-section-header vf-stack vf-stack--400">
+                    <p class="vf-section-header__text">
+                        Documents written by HoloFood partners and collaborators, based on analyses of the HoloFood Samples.
+                    </p>
+                    <hr class="vf-divider"/>
+                    {% include "holofood/components/search.html" with form=filterset.form method="get" id="annotations_search" only %}
+                </div>
+
+                {% for annotation in annotations.all %}
+                    {% include 'holofood/components/annotation_card.html' with annotation=annotation %}
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

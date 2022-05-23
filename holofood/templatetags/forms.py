@@ -22,6 +22,21 @@ def field_with_class(field: BoundField, classes: str) -> Widget:
     return field.as_widget(attrs={"class": new_class})
 
 
+@register.filter(name="with_attrs")
+def widget_with_attrs(field: Union[Widget, BoundField], attr_values: str) -> Widget:
+    """
+    Adds HTML attrs to a django form field.
+
+    Usage: {{ myform.myfield | with_attrs:"placeholder:enter search terms,class:vf-input" }}
+
+    :param field: The django form field (or its widget).
+    :param attr_values: A string containing pairs of attributes and values, separated by : and pairs separated by ,
+    :return: Form field widget with attr assigned.
+    """
+    attrs = dict(map(lambda x: x.split(":"), attr_values.split(",")))
+    return field.as_widget(attrs=attrs)
+
+
 @register.filter(name="contains_ordering_for")
 def form_can_be_ordered_by(form: Form, param: str) -> bool:
     """
