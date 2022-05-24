@@ -34,6 +34,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path, include
 
 from holofood.api import api
+from holofood.export import export_api
 from holofood.views import (
     SampleListView,
     SampleDetailView,
@@ -55,6 +56,7 @@ urlpatterns = [
         name="annotation_detail",
     ),
     path("api/", api.urls),
+    path("export/", export_api.urls),
 ]
 
 if settings.DEBUG:

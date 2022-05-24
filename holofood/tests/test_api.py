@@ -120,3 +120,12 @@ def test_annotations_list(client, salmon_sample, salmon_annotation_unpub):
     assert data.get("count") == 1
     assert len(data.get("items")) == 1
     assert data.get("items")[0].get("title") == "All about donuts"
+
+
+@pytest.mark.django_db
+def test_annotations_list(client, salmon_sample):
+    response = client.get("/export/samples")
+    assert response.status_code == 200
+    data = response.content.decode()
+    assert "accession" in data
+    assert salmon_sample.accession in data
