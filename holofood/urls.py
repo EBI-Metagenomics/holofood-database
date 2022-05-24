@@ -40,11 +40,13 @@ from holofood.views import (
     SampleDetailView,
     AnnotationDetailView,
     AnnotationListView,
+    HomeView,
 )
 
 admin.site.site_header = "HoloFood Data Portal Admin"
 
 urlpatterns = [
+    path("", HomeView.as_view(), name="home"),
     path("admin/", admin.site.urls),
     path("martor/", include("martor.urls")),
     path("samples/", SampleListView.as_view(), name="samples_list"),

@@ -24,6 +24,12 @@ class WebsiteTests(StaticLiveServerTestCase):
     def test_web(self):
         # TODO: all test must be in one method currently... else fixtures dont work right
 
+        self.selenium.get(self.live_server_url)
+        samples_link = self.selenium.find_element(
+            by=By.LINK_TEXT, value="Browse samples"
+        )
+        assert "/samples" in samples_link.get_attribute("href")
+
         self.selenium.get(self.live_server_url + "/samples")
 
         project = self.hf_fixtures.projects[0]

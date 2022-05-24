@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 
 from holofood.filters import SampleFilter, MultiFieldSearchFilter
 from holofood.models import Sample, SampleAnnotation
@@ -77,3 +77,7 @@ class AnnotationListView(ListFilterView):
 
     def get_queryset(self):
         return super().get_queryset().filter(is_published=True)
+
+
+class HomeView(TemplateView):
+    template_name = "holofood/pages/index.html"
