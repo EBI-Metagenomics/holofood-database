@@ -31,7 +31,7 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import path, include
+from django.urls import path, include, get_resolver
 
 from holofood.api import api
 from holofood.export import export_api

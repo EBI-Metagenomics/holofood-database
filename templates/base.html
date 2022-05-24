@@ -85,6 +85,10 @@
             <a href="{% url 'annotations_list' %}" class="vf-navigation__link"><img
                     src="{% static "img/icons/book.svg" %}" class="nav-icon" alt="Documents"/>Analysis summaries</a>
         </li>
+        <li class="vf-navigation__item">
+            <a href="{% url 'api:openapi-swagger' %}" class="vf-navigation__link"><img
+                    src="{% static "img/icons/code.svg" %}" class="nav-icon" alt="Code"/>API</a>
+        </li>
     </ul>
 </nav>
 {% block content %}

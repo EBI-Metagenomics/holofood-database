@@ -22,9 +22,10 @@ api = NinjaAPI(
     description="The API to browse [HoloFood](https://www.holofood.eu) samples and metadata, "
     "and navigate to datasets stored in public archives. \n\n #### Useful links: \n"
     "- [Documentation](todo)\n"
+    "- [HoloFood Data Portal home](/)\n"
     "- [HoloFood Project Website](https://www.holofood.eu)\n"
     "- [Helpdesk](https://www.ebi.ac.uk/contact)\n",
-    urls_namespace="API",
+    urls_namespace="api",
     default_router=RouterPaginated(),
     csrf=True,
 )
