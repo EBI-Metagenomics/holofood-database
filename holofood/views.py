@@ -74,3 +74,6 @@ class AnnotationListView(ListFilterView):
     template_name = "holofood/pages/annotation_list.html"
     filterset_class = MultiFieldSearchFilter
     ordering = "-updated"
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_published=True)

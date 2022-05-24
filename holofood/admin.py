@@ -27,7 +27,26 @@ class SampleAdmin(admin.ModelAdmin):
 @admin.register(SampleAnnotation)
 class SampleAnnotationAdmin(admin.ModelAdmin):
     readonly_fields = ["created", "updated"]
+    prepopulated_fields = {"slug": ("title",)}
+    fields = (
+        "title",
+        "author",
+        "slug",
+        "content",
+        "samples",
+        "projects",
+        "created",
+        "updated",
+        "is_published",
+    )
     filter_horizontal = (
         "samples",
         "projects",
     )
+
+    def changeform_view(self, request, *args, **kwargs):
+        self.readonly_fields = list(self.readonly_fields)
+        if not request.user.is_superuser:
+            self.readonly_fields = ["created", "updated", "is_published"]
+
+        return super().changeform_view(request, *args, **kwargs)

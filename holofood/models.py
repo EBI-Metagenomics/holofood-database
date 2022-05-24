@@ -1,8 +1,9 @@
 import logging
 
-from django.conf import settings
 from django.db import models
 from django.db.models import Prefetch
+from django.urls import reverse
+from django.utils.text import slugify
 from martor.models import MartorField
 
 from holofood.external_apis.biosamples.api import get_sample_structured_data
@@ -155,9 +156,7 @@ class SampleStructuredDatum(models.Model):
 
 
 class SampleAnnotation(models.Model):
-    slug = models.SlugField(
-        primary_key=True, max_length=200
-    )  # TODO: slugify automatically
+    slug = models.SlugField(primary_key=True, max_length=200, unique=True)
     title = models.CharField(max_length=200)
     content = MartorField(
         help_text="Markdown document describing an analysis of one or more projects/samples"
@@ -171,3 +170,14 @@ class SampleAnnotation(models.Model):
 
     def __str__(self):
         return f"{self.slug} - {self.title}"
+
+    def get_absolute_url(self):
+        return reverse("annotation_detail", kwargs={"slug": self.slug})
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
+
+    class Meta:
+        permissions = [("publish_annotation", "Can publish an annotation")]
