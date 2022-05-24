@@ -1,0 +1,7 @@
+# Admin access for HoloFood partners
+
+## Managing the database
+
+## Authoring new Summary Analysis documents
+
+## Editing and publishing Summary Analysis documents

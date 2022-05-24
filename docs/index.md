@@ -1,0 +1,13 @@
+# HoloFood Data Portal - Documentation
+
+## Holofood Data Portal
+The database and website to present [Holofood](https://www.holofood.eu) samples,
+and unify the datasets stored in supporting services.
+
+## Background
+HoloFood is a consortium and project focussed on understanding the biomolecular 
+and physiological processes  triggered by incorporating feed additives and novel
+sustainable feeds in farmed animals.
+
+The data portal is a public website and API for browsing the Samples and datasets
+created by the project, which are stored in publicly-accessible data repositories. 

@@ -31,6 +31,7 @@ Use [Black](https://black.readthedocs.io/en/stable/).
 
 ## Testing
 ```shell
+pip install -r requirements-dev.txt
 pytest
 ```
 
@@ -52,3 +53,17 @@ python manage.py runserver
 
 ## Deployment
 TODO
+
+## Documentation
+There is an [mkdocs](https://www.mkdocs.org/) based documentation pack in the `docs/` folder
+configured by `mkdocs.yml`.
+This is suitable for serving on [ReadTheDocs](https://readthedocs.org/).
+
+To develop documentation:
+```shell
+pip install -r requirements-docs.txt
+mkdocs serve
+```
+and edit the Markdown files in `docs/*.md`.
+
+If you add a new file (page), add it to the navigation by editing the `nav` field of `mkdocs.yml`.

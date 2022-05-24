@@ -1,0 +1,15 @@
+site_name: HoloFood Data Portal Documentation
+repo_url: https://github.com/EBI-Metagenomics/holofood-database/
+site_description: Documentation for the HoloFood Data Portal – a hub for accessing datasets and samples creating by the HoloFood Project
+site_author: HoloFood Consortium
+
+theme:
+    name: readthedocs
+    highlightjs: true
+
+nav:
+    - 'index.md'
+    - 'data.md'
+    - 'website.md'
+    - 'api.md'
+    - 'partners.md'
