@@ -3,7 +3,6 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 
 
 @pytest.mark.django_db
@@ -13,7 +12,7 @@ class WebsiteTests(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.headless = False
+        options.headless = True
         cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(10)
 

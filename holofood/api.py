@@ -20,8 +20,10 @@ from holofood.utils import holofood_config
 api = NinjaAPI(
     title="HoloFood Data Portal API",
     description="The API to browse [HoloFood](https://www.holofood.eu) samples and metadata, "
-    "and navigate to datasets stored in public archives."
-    "Documentation: TODO",
+    "and navigate to datasets stored in public archives. \n\n #### Useful links: \n"
+    "- [Documentation](todo)\n"
+    "- [HoloFood Project Website](https://www.holofood.eu)\n"
+    "- [Helpdesk](https://www.ebi.ac.uk/contact)\n",
     urls_namespace="API",
     default_router=RouterPaginated(),
     csrf=True,
