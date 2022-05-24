@@ -13,7 +13,7 @@ class WebsiteTests(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.headless = True
+        options.headless = False
         cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(10)
 
@@ -22,12 +22,10 @@ class WebsiteTests(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def setUp(self) -> None:
-        super().setUp()
+    def test_web(self):
+        # TODO: all test must be in one method currently... else fixtures dont work right
 
-    def test_query(self):
         self.selenium.get(self.live_server_url + "/samples")
-        wait = WebDriverWait(self.selenium, 10)
 
         project = self.hf_fixtures.projects[0]
         project_link = self.selenium.find_element(
@@ -35,3 +33,9 @@ class WebsiteTests(StaticLiveServerTestCase):
         )
         self.assertEqual(project_link.text, project.accession)
         assert "ena" in project_link.get_attribute("href")
+
+        self.selenium.get(self.live_server_url + "/api/docs")
+        list_link = self.selenium.find_element(by=By.LINK_TEXT, value="/api/samples")
+        list_link.click()
+        body = self.selenium.find_element(by=By.TAG_NAME, value="body")
+        assert "Try it out" in body.text

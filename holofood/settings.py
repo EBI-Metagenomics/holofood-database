@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "sass_processor",
     "martor",
+    "ninja",
     "holofood",
 ]
 
@@ -210,3 +211,4 @@ MARTOR_TOOLBAR_BUTTONS = [
     "toggle-maximize",
     "help",
 ]
+NINJA_PAGINATION_CLASS: str = "ninja.pagination.PageNumberPagination"

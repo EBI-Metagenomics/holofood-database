@@ -1,6 +1,6 @@
 import pytest
 
-from holofood.models import Project, Sample
+from holofood.models import Project, Sample, SampleMetadataMarker, SampleAnnotation
 
 
 @pytest.fixture
@@ -2172,6 +2172,9 @@ def LiveTests(request):
     class Fixtures:
         pass
 
+    Project.objects.all().delete()
+    Sample.objects.all().delete()
+
     Fixtures.projects = [
         Project.objects.create(accession="PRJTESTING", title="HoloFood Donut and Fish")
     ]
@@ -2187,3 +2190,17 @@ def LiveTests(request):
 
     # set a class attribute on the invoking test context
     request.cls.hf_fixtures = Fixtures()
+
+
+@pytest.fixture()
+def structured_metadata_marker():
+    return SampleMetadataMarker.objects.create(name="Size of donut")
+
+
+@pytest.fixture()
+def salmon_annotation_unpub(salmon_sample):
+    anno = SampleAnnotation.objects.create(
+        title="All about donuts", slug="all-about-donuts", content="# Donuts are a food"
+    )
+    anno.samples.set([salmon_sample])
+    return anno
