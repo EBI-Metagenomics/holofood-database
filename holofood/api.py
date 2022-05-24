@@ -59,7 +59,11 @@ class SampleStructuredDatumSchema(ModelSchema):
 
 
 class RelatedAnnotationSchema(ModelSchema):
-    website_url: str
+    @staticmethod
+    def resolve_canonical_url(obj: SampleAnnotation):
+        return reverse("annotation_detail", kwargs={"slug": obj.slug})
+
+    canonical_url: str
 
     class Config:
         model = SampleAnnotation
@@ -86,11 +90,6 @@ class SampleSchema(SampleSlimSchema):
 
 
 class AnnotationSchema(ModelSchema):
-    @staticmethod
-    def resolve_canonical_url(obj: SampleAnnotation):
-        return reverse("annotation_detail", kwargs={"slug": obj.slug})
-
-    canonical_url: str
     samples: list[SampleSlimSchema]
     projects: list[RelatedProjectSchema]
 
