@@ -37,4 +37,4 @@ class WebsiteTests(StaticLiveServerTestCase):
         list_link = self.selenium.find_element(by=By.LINK_TEXT, value="/api/samples")
         list_link.click()
         body = self.selenium.find_element(by=By.TAG_NAME, value="body")
-        assert "Try it out" in body.text
+        assert "HoloFood Data Portal API" in body.text
