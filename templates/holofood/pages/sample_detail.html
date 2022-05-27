@@ -25,25 +25,41 @@
     <details class="vf-details">
       <summary class="vf-details--summary">Sample metadata</summary>
         <p class="vf-text-body">Metadata for sample {{ sample.accession }}, stored in BioSamples and ENA.</p>
-        <table class="vf-table scrollable-table">
-            <thead class="vf-table__header">
-            <tr class="vf-table__row">
-                <th class="vf-table__heading" scope="col">Marker</th>
-                <th class="vf-table__heading" scope="col">Measurement</th>
-                <th class="vf-table__heading" scope="col">Units</th>
-            </tr>
-            </thead>
-            <tbody class="vf-table__body">
-                {% for structured_metadatum in sample.structured_metadata.all %}
-                    <tr class="vf-table__row">
-                        <td class="vf-table__cell">{{ structured_metadatum.marker.name }}</td>
-                        <td class="vf-table__cell">{{ structured_metadatum.measurement }}</td>
-                        <td class="vf-table__cell">{{ structured_metadatum.units }}</td>
-                    </tr>
+        {% regroup sample.structured_metadata.all by marker.type as metadata_sections  %}
+        <div class="vf-tabs">
+            <ul class="vf-tabs__list" data-vf-js-tabs>
+                {% for metadata_section in metadata_sections %}
+                      <li class="vf-tabs__item">
+                          <a class="vf-tabs__link" href="#vf-tabs__section--{{ metadata_section.grouper|lower|cut:" " }}">{{ metadata_section.grouper|default:"Generic"|title }}</a>
+                      </li>
                 {% endfor %}
-            </tbody>
-        </table>
-
+            </ul>
+        </div>
+        <div class="vf-tabs-content" data-vf-js-tabs-content>
+            {% for metadata_section in metadata_sections %}
+                <section class="vf-tabs__section" id="vf-tabs__section--{{ metadata_section.grouper|lower|cut:" " }}">
+                    <h2>{{ metadata_section.grouper|default:"Generic"|title }} metadata</h2>
+                    <table class="vf-table scrollable-table">
+                        <thead class="vf-table__header">
+                        <tr class="vf-table__row">
+                            <th class="vf-table__heading" scope="col">Marker</th>
+                            <th class="vf-table__heading" scope="col">Measurement</th>
+                            <th class="vf-table__heading" scope="col">Units</th>
+                        </tr>
+                        </thead>
+                        <tbody class="vf-table__body">
+                            {% for structured_metadatum in metadata_section.list %}
+                                <tr class="vf-table__row">
+                                    <td class="vf-table__cell">{{ structured_metadatum.marker.name }}</td>
+                                    <td class="vf-table__cell">{{ structured_metadatum.measurement }}</td>
+                                    <td class="vf-table__cell">{{ structured_metadatum.units }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            {% endfor %}
+        </div>
     </details>
 
     <details class="vf-details">

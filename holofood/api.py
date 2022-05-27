@@ -48,7 +48,7 @@ class SampleMetadataMarkerSchema(ModelSchema):
 
     class Config:
         model = SampleMetadataMarker
-        model_fields = ["name"]
+        model_fields = ["name", "type"]
 
 
 class SampleStructuredDatumSchema(ModelSchema):

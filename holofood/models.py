@@ -59,26 +59,30 @@ class Sample(models.Model):
     def refresh_structureddata(self):
         metadata = get_sample_structured_data(self.accession)
 
-        for metadatum in metadata:
-            marker, created = SampleMetadataMarker.objects.update_or_create(
-                name=metadatum["marker"]["value"],
-                defaults={"iri": metadatum["marker"]["iri"]},
-            )
-            if created:
-                logging.info(f"Created new SampleMetadataMarker {marker.id}")
-            partner, _ = BiosamplesPartner.objects.update_or_create(
-                name=metadatum["partner"]["value"],
-                defaults={"iri": metadatum["partner"]["iri"]},
-            )
-            self.structured_metadata.update_or_create(
-                marker=marker,
-                defaults={
-                    "source": SampleStructuredDatum.BIOSAMPLES,
-                    "measurement": metadatum["measurement"]["value"],
-                    "partner": partner,
-                    "units": metadatum.get("measurement_units", {}).get("value"),
-                },
-            )
+        for metadata_type, metadata_content in metadata.items():
+            for metadatum in metadata_content:
+                marker, created = SampleMetadataMarker.objects.update_or_create(
+                    name=metadatum["marker"]["value"],
+                    defaults={"iri": metadatum["marker"]["iri"], "type": metadata_type},
+                )
+                if created:
+                    logging.info(f"Created new SampleMetadataMarker {marker.id}")
+                if "partner" in metadatum:
+                    partner, _ = BiosamplesPartner.objects.update_or_create(
+                        name=metadatum["partner"]["value"],
+                        defaults={"iri": metadatum["partner"]["iri"]},
+                    )
+                else:
+                    partner = None
+                self.structured_metadata.update_or_create(
+                    marker=marker,
+                    defaults={
+                        "source": SampleStructuredDatum.BIOSAMPLES,
+                        "measurement": metadatum["measurement"]["value"],
+                        "partner": partner,
+                        "units": metadatum.get("measurement_units", {}).get("value"),
+                    },
+                )
 
         checklist_metadata = get_checklist_metadata(self.accession)
 
@@ -112,11 +116,13 @@ class Sample(models.Model):
 class SampleMetadataMarker(models.Model):
     name = models.CharField(max_length=100)
     iri = models.CharField(max_length=100, null=True)
+    type = models.CharField(max_length=100, null=True)
 
     class Meta:
         indexes = [
             models.Index(fields=["name"]),
         ]
+        ordering = ("type",)
 
     def __str__(self):
         return f"Sample Metadata Marker {self.id}: {self.name}"
@@ -153,6 +159,13 @@ class SampleStructuredDatum(models.Model):
 
     def __str__(self):
         return f"Sample {self.sample.accession} metadata {self.marker.id}: {self.marker.name}"
+
+    class Meta:
+        ordering = (
+            "marker__type",
+            "marker__name",
+            "id",
+        )
 
 
 class SampleAnnotation(models.Model):

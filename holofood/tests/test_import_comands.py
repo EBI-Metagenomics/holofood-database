@@ -66,46 +66,5 @@ def test_refresh_structureddata(
     out = _call_command("refresh_structureddata", sample=salmon_sample.accession)
     logging.info(out)
     assert (
-        salmon_sample.structured_metadata.count() == 51
-    )  # 51 = SAMPLE-type markers from structureddata + ENA checklist
-
-    # self.assertEqual(out, "In dry run mode (--write not passed)\n")
-
-    # book_empty.refresh_from_db()
-    # self.assertEqual(book_empty.title, "")
-
-    # def test_write_empty(self):
-    #     book_empty = Book.objects.create(title="")
-    #
-    #     out = self.call_command("--write")
-    #
-    #     self.assertEqual(out, "Updated 1 book(s)\n")
-    #     book_empty.refresh_from_db()
-    #     self.assertEqual(book_empty.title, "Unknown")
-    #
-    # def test_write_lowercase(self):
-    #     book_lowercase = Book.objects.create(title="lowercase")
-    #
-    #     out = self.call_command("--write")
-    #
-    #     self.assertEqual(out, "Updated 1 book(s)\n")
-    #     book_lowercase.refresh_from_db()
-    #     self.assertEqual(book_lowercase.title, "Lowercase")
-    #
-    # def test_write_full_stop(self):
-    #     book_full_stop = Book.objects.create(title="Full Stop.")
-    #
-    #     out = self.call_command("--write")
-    #
-    #     self.assertEqual(out, "Updated 1 book(s)\n")
-    #     book_full_stop.refresh_from_db()
-    #     self.assertEqual(book_full_stop.title, "Full Stop")
-    #
-    # def test_write_ampersand(self):
-    #     book_ampersand = Book.objects.create(title="Dombey & Son")
-    #
-    #     out = self.call_command("--write")
-    #
-    #     self.assertEqual(out, "Updated 1 book(s)\n")
-    #     book_ampersand.refresh_from_db()
-    #     self.assertEqual(book_ampersand.title, "Dombey and Son")
+        salmon_sample.structured_metadata.count() == 168
+    )  # 168 =  markers from structureddata + ENA checklist
