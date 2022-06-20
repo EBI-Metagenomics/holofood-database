@@ -1,15 +1,53 @@
 # Datasets
 
-## ENA Projects
+All HoloFood samples are registered in the [European Nucleotide Archive](https://ebi.ac.uk/ena), 
+which has [extensive documentation](https://ena-docs.readthedocs.io/).
+
+Most analyses of the samples are stored in further appropriate supporting databases, 
+with a small number hosted directly in the HoloFood data portal.
+
+## ENA Studies (Projects)
+An ENA Study (or Project) is part of the [ENA Metadata Model](https://ena-docs.readthedocs.io/en/latest/submit/general-guide/metadata.html#metadata-model).
+> A study (project) groups together data submitted to the archive and controls its release date. A study accession is typically used when citing data submitted to ENA.
 
 ## ENA Samples
+An ENA Sample is part of the [ENA Metadata Model](https://ena-docs.readthedocs.io/en/latest/submit/general-guide/metadata.html#metadata-model).
+> A sample contains information about the sequenced source material. Samples are associated with checklists, which define the fields used to annotate the samples.
 
 ## ENA Checklist Metadata
+An [ENA Checklist](https://ena-docs.readthedocs.io/en/latest/retrieval/ena-project.html?highlight=checklist#sample-checklists) 
+is a set of metadata (some mandatory) for a given sample type.
 
-## Biosamples Metadata
+The HoloFood checklist is [ERC000052](https://www.ebi.ac.uk/ena/browser/view/ERC000052).
+
+## BioSamples Metadata
+BioSamples is an EBI service hosting annotations keyed against an existing sample hosted elsewhere (in HoloFood's case, ENA).
+For HoloFood biosamples, these are registered against a specific ontology.
+
+The majority of HoloFood samples' metadata are hosted in BioSamples.
+
+There is a [BioSamples online training course](https://www.ebi.ac.uk/training/online/courses/biosamples-quick-tour/what-is-biosamples)
+to learn more.
 
 ## MGnify: Metagenomics
+Metagenomic-derived analyses are available for some HoloFood samples.
+
+These datasets and analysis features are hosted by [MGnify](https://ebi.ac.uk/metagenomics), which also has [extensive documentation](https://docs.mgnify.org/).
+
+> MGnify is a freely available hub for the analysis and exploration of metagenomic, metatranscriptomic, amplicon and assembly data.
 
 ## MetaboLights: Metabolomics
+Metabolomics-derived analyses are avaulable for some HoloFood samples.
+
+These datasets are hosted by [MetaboLights](https://www.ebi.ac.uk/metabolights/).
 
 ## Summary analyses
+Summary analyses are higher level analyses of a Sample or collection of Samples; 
+written documents serving as short analysis summaries.
+
+These summaries are hosted directly by the HoloFood data portal.
+
+The documents are written by HoloFood partners and moderated by the HoloFood consortium, 
+but are not peer-reviewed research articles.
+
+Each analysis summary is linked to one or more Samples that were included in the analysis or are relevant to it.
