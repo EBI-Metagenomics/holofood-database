@@ -15,7 +15,7 @@ created by the project, which are stored in publicly-accessible data repositorie
 
 The website is built with Django.
 
-Management commands are used to important a cache of Samples and their metadata
+Management commands are used to import a cache of Samples and their metadata
 from ENA and Biosamples.
 
 There is a normal Django Admin panel as well.
