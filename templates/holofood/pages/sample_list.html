@@ -28,7 +28,9 @@
                     <tbody class="vf-table__body">
                     {% for sample in samples %}
                         <tr class="vf-table__row">
-                            <td class="vf-table__cell">{{ sample.accession }}</td>
+                            <td class="vf-table__cell">
+                                <a class="vf-link" href="{% url 'sample_detail' pk=sample.accession  %}">{{ sample.accession }}</a>
+                            </td>
                             <td class="vf-table__cell"><a href="{{ ENA_BROWSER_URL }}/{{ sample.project.accession }}"
                                                           class="vf-link">{{ sample.project.accession }}</a></td>
                             <td class="vf-table__cell">{{ sample|metadatum:"host storage container"|default:"—" }}</td>

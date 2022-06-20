@@ -104,6 +104,7 @@ class AnnotationSchema(ModelSchema):
     response=SampleSchema,
     summary="Fetch a single Sample from the HoloFood database.",
     description="Retrieve a single Sample by its ENA accession, including all structured metadata available. ",
+    url_name="sample_detail",
 )
 def get_sample(request, sample_accession: str):
     sample = get_object_or_404(Sample, accession=sample_accession)

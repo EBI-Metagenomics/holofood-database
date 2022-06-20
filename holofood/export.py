@@ -2,10 +2,11 @@ import csv
 from io import StringIO
 from typing import MutableMapping
 
+from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI
 from ninja.renderers import BaseRenderer
 
-from holofood.api import SampleSlimSchema
+from holofood.api import SampleSlimSchema, SampleStructuredDatumSchema
 from holofood.models import Sample
 
 
@@ -56,3 +57,15 @@ def list_samples(
     request,
 ):
     return Sample.objects.all()
+
+
+@export_api.get(
+    "/samples/{sample_accession}/metadata",
+    response=list[SampleStructuredDatumSchema],
+    summary="Fetch a list of a Sample's metadata as a TSV.",
+    description="Retrieve a table of metadata for a single Sample by its ENA accession.",
+    url_name="sample_metadata_list",
+)
+def get_sample_metadata(request, sample_accession: str):
+    sample = get_object_or_404(Sample, accession=sample_accession)
+    return sample.structured_metadata.all()
