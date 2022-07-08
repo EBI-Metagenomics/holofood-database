@@ -1,6 +1,10 @@
+import operator
+from functools import reduce
+
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, TemplateView
 
+from holofood.external_apis.mgnify.api import get_metagenomics_analyses_for_run
 from holofood.filters import SampleFilter, MultiFieldSearchFilter
 from holofood.models import Sample, SampleAnnotation
 
@@ -31,6 +35,16 @@ class SampleDetailView(DetailView):
     model = Sample
     context_object_name = "sample"
     template_name = "holofood/pages/sample_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        model: Sample = context["sample"]
+
+        context["analyses"] = reduce(
+            operator.concat, map(get_metagenomics_analyses_for_run, model.runs), []
+        )
+
+        return context
 
 
 class CustomPaginator(Paginator):

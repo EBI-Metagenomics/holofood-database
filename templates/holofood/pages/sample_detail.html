@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'css/icons.css' %}">
     <h1>{{ sample.accession }}: {{ sample.title }}</h1>
     <p class="vf-lede">Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample includes: metadata from BioSamples and ENA, metagenomics, metabolomics.</p>
 
@@ -82,8 +83,48 @@
     </details>
 
     <details class="vf-details">
-      <summary class="vf-details--summary">Metagenomics</summary>
-        <p>View on MGnify</p>
+        <summary class="vf-details--summary">Metagenomics</summary>
+        {% if sample.has_metagenomics %}
+            <p>Sample {{ sample.accession }} has metagenomic datasets available on MGnify.
+            <a class="vf-button vf-button--link vf-button--sm" href="{{ MGNIFY_WEB_URL }}/samples/{{ sample.accession }}">View sample on MGnify</a>
+            </p>
+            <table class="vf-table scrollable-table">
+                <thead class="vf-table__header">
+                    <tr class="vf-table__row">
+                        <th class="vf-table__heading" scope="col">Analysis accession</th>
+                        <th class="vf-table__heading" scope="col">Run accession</th>
+                        <th class="vf-table__heading" scope="col">MGnify pipeline version</th>
+                        <th class="vf-table__heading" scope="col">Experiment type</th>
+                        <th class="vf-table__heading" scope="col">Detail</th>
+                    </tr>
+                </thead>
+
+                <h3>Analyses</h3>
+                <tbody class="vf-table__body">
+                    {% for analysis in analyses %}
+                        <tr class="vf-table__row">
+                            <td class="vf-table__cell">
+                                <a href="{{ MGNIFY_WEB_URL }}/analyses/{{ analysis.id }}" class="vf-link">
+                                    {{ analysis.id }}
+                                </a>
+                            </td>
+                            <td class="vf-table__cell">
+                                <a href="{{ MGNIFY_WEB_URL }}/runs/{{ analysis.relationships.run.data.id }}" class="vf-link">
+                                    {{ analysis.relationships.run.data.id }}
+                                </a>
+                            </td>
+                            <td class="vf-table__cell">{{ analysis.attributes.pipeline_version }}</td>
+                            <td class="vf-table__cell">{{ analysis.attributes.experiment_type }}</td>
+                            <td class="vf-table__cell">
+                                <a class="vf-button vf-button--link vf-button--sm inline" href="{{ MGNIFY_WEB_URL }}/analyses/{{ analysis.id }}">
+                                    View on MGnify
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </details>
 
     <details class="vf-details">

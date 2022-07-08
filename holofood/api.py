@@ -1,6 +1,7 @@
 import operator
 from enum import Enum
 from functools import reduce
+from typing import Optional
 
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -80,9 +81,19 @@ class SampleSlimSchema(ModelSchema):
 
     canonical_url: str
 
+    @staticmethod
+    def resolve_metagenomics_url(obj: Sample):
+        return (
+            f"{holofood_config.mgnify.api_root}/samples/{obj.accession}"
+            if obj.has_metagenomics
+            else None
+        )
+
+    metagenomics_url: Optional[str]
+
     class Config:
         model = Sample
-        model_fields = ["accession", "title", "project", "system"]
+        model_fields = ["accession", "title", "project", "system", "has_metagenomics"]
 
 
 class SampleSchema(SampleSlimSchema):

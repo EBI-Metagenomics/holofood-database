@@ -15,6 +15,7 @@
    limitations under the License.
 
 """
+from datetime import timedelta
 import json
 from pathlib import Path
 from typing import Any
@@ -42,6 +43,12 @@ class EnaConfig(BaseModel):
     submit_api_root: AnyHttpUrl = "https://www.ebi.ac.uk/ena/submit"
 
 
+class MgnifyConfig(BaseModel):
+    api_root: AnyHttpUrl = "https://www.ebi.ac.uk/metagenomics/api/v1"
+    web_url: AnyHttpUrl = "https://www.ebi.ac.uk/metagenomics"
+    request_cadence: timedelta = timedelta(seconds=3)
+
+
 class SampleTableConfig(BaseModel):
     default_metadata_marker_columns: list[str]
 
@@ -55,6 +62,7 @@ class HolofoodConfig(BaseSettings):
 
     biosamples: BiosamplesConfig = BiosamplesConfig()
     ena: EnaConfig = EnaConfig()
+    mgnify: MgnifyConfig = MgnifyConfig()
     tables: TablesConfig = TablesConfig()
 
     class Config:

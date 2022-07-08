@@ -1,8 +1,12 @@
 import pytest
+import requests_mock
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
+
+from holofood.tests.conftest import salmon_metagenomics_analyses_response
+from holofood.utils import holofood_config
 
 
 @pytest.mark.django_db
@@ -21,15 +25,25 @@ class WebsiteTests(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_web(self):
+    @requests_mock.Mocker()
+    def test_web(self, m):
         # TODO: all test must be in one method currently... else fixtures dont work right
 
+        # ---- Home page ---- #
         self.selenium.get(self.live_server_url)
+        self.selenium.add_cookie(
+            {
+                "name": "embl-ebi-public-website-v1.0-data-protection-accepted",
+                "value": "true",
+            }
+        )
+
         samples_link = self.selenium.find_element(
             by=By.LINK_TEXT, value="Browse samples"
         )
         assert "/samples" in samples_link.get_attribute("href")
 
+        # ---- Sample listing page ---- #
         self.selenium.get(self.live_server_url + "/samples")
 
         project = self.hf_fixtures.projects[0]
@@ -38,6 +52,37 @@ class WebsiteTests(StaticLiveServerTestCase):
         )
         self.assertEqual(project_link.text, project.accession)
         assert "ena" in project_link.get_attribute("href")
+
+        # ---- Sample detail page ---- #
+        project = self.hf_fixtures.projects[0]
+        sample = self.hf_fixtures.samples[0]
+        m.get(
+            holofood_config.mgnify.api_root + f"/runs/ERR4918394/analyses",
+            json=salmon_metagenomics_analyses_response(sample),
+        )
+        self.selenium.get(self.live_server_url + "/sample/" + sample.accession)
+        project_link = self.selenium.find_element(
+            by=By.PARTIAL_LINK_TEXT, value=project.accession
+        )
+        self.assertIn(project.title, project_link.text)
+
+        system_link = self.selenium.find_element(by=By.LINK_TEXT, value=sample.system)
+        self.assertIn("salmon", system_link.get_attribute("href"))
+
+        # # todo metadata table test
+        metagenomics_expander_link = self.selenium.find_elements(
+            by=By.TAG_NAME, value="summary"
+        )[2]
+        self.assertEqual(metagenomics_expander_link.text, "Metagenomics")
+        metagenomics_expander_link.click()
+
+        mgnify_link = self.selenium.find_element(
+            by=By.LINK_TEXT, value="View sample on MGnify"
+        )
+        self.assertEqual(
+            mgnify_link.get_attribute("href"),
+            f"https://www.ebi.ac.uk/metagenomics/samples/{sample.accession}",
+        )
 
         self.selenium.get(self.live_server_url + "/api/docs")
         list_link = self.selenium.find_element(by=By.LINK_TEXT, value="/api/samples")

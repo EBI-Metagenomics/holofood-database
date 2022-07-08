@@ -2167,6 +2167,129 @@ def salmon_submitted_checklist(salmon_sample):
     """
 
 
+def salmon_metagenomics_analyses_response(salmon_sample):
+    return {
+        "data": [
+            {
+                "attributes": {
+                    "accession": "MGYA00000001",
+                    "analysis-status": "completed",
+                    "analysis-summary": [
+                        {"key": "Submitted nucleotide sequences", "value": "16576"},
+                        {
+                            "key": "Nucleotide sequences after format-specific filtering",
+                            "value": "15559",
+                        },
+                        {
+                            "key": "Nucleotide sequences after length filtering",
+                            "value": "15559",
+                        },
+                        {
+                            "key": "Nucleotide sequences after undetermined bases filtering",
+                            "value": "15559",
+                        },
+                        {"key": "Predicted SSU sequences", "value": "15566"},
+                        {"key": "Predicted LSU sequences", "value": "0"},
+                    ],
+                    "complete-time": "2020-07-25T20:30:41",
+                    "experiment-type": "amplicon",
+                    "instrument-model": "454 GS FLX Titanium",
+                    "instrument-platform": "LS454",
+                    "pipeline-version": "5.0",
+                },
+                "id": "MGYA00000001",
+                "links": {
+                    "self": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001?format=json"
+                },
+                "relationships": {
+                    "antismash-gene-clusters": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/antismash-gene-clusters?format=json"
+                        }
+                    },
+                    "assembly": {"data": None},
+                    "downloads": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/downloads?format=json"
+                        }
+                    },
+                    "genome-properties": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/genome-properties?format=json"
+                        }
+                    },
+                    "go-slim": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/go-slim?format=json"
+                        }
+                    },
+                    "go-terms": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/go-terms?format=json"
+                        }
+                    },
+                    "interpro-identifiers": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/interpro-identifiers?format=json"
+                        }
+                    },
+                    "run": {
+                        "data": {"id": "ERR227209", "type": "runs"},
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/runs/ERR4918394?format=json"
+                        },
+                    },
+                    "sample": {
+                        "data": {"id": "ERS211823", "type": "samples"},
+                        "links": {
+                            "related": f"https://www.ebi.ac.uk/metagenomics/api/v1/samples/{salmon_sample.accession}?format=json"
+                        },
+                    },
+                    "study": {
+                        "data": {"id": "MGYS00005566", "type": "studies"},
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/studies/MGYD00000001?format=json"
+                        },
+                    },
+                    "taxonomy": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/taxonomy?format=json"
+                        }
+                    },
+                    "taxonomy-itsonedb": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/taxonomy/itsonedb?format=json"
+                        }
+                    },
+                    "taxonomy-itsunite": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/taxonomy/unite?format=json"
+                        }
+                    },
+                    "taxonomy-lsu": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/taxonomy/lsu?format=json"
+                        }
+                    },
+                    "taxonomy-ssu": {
+                        "links": {
+                            "related": "https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00000001/taxonomy/ssu?format=json"
+                        }
+                    },
+                },
+                "type": "analysis-jobs",
+            }
+        ],
+        "links": {
+            "first": "https://www.ebi.ac.uk/metagenomics/api/v1/runs/ERR4918394/analyses?format=json&page=1",
+            "last": "https://www.ebi.ac.uk/metagenomics/api/v1/runs/ERR4918394/analyses?format=json&page=1",
+            "next": None,
+            "prev": None,
+        },
+        "meta": {"pagination": {"count": 1, "page": 1, "pages": 1}},
+    }
+
+
 @pytest.fixture(scope="class")
 def LiveTests(request):
     class Fixtures:
@@ -2185,6 +2308,7 @@ def LiveTests(request):
             project=Fixtures.projects[0],
             title="HF_DONUT.SALMON.1",
             system=Sample.SALMON,
+            has_metagenomics=True,
         )
     ]
 

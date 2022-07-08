@@ -37,8 +37,8 @@ def metadatum(sample: Sample, marker_name: str) -> Union[str, None]:
 def data_type_icons(sample: Sample) -> dict:
     if sample:
         return {
-            "sample_metadata": True,
-            "metagenomics": True,
+            "sample_metadata": sample.structured_metadata.exists(),
+            "metagenomics": sample.has_metagenomics,
             "metabolomics": True,
             "mags": True,
         }

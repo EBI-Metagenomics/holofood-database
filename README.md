@@ -32,8 +32,20 @@ Use [Black](https://black.readthedocs.io/en/stable/).
 
 ## Testing
 ```shell
+# You most likely need (see below):
+#   brew install chromedriver
 pip install -r requirements-dev.txt
 pytest
+```
+
+### Chrome Driver for web interface tests
+The web interface tests need the Chrome browser and `chromedriver` to communicate with the browser.
+To install `chromedriver` on a Mac or Linux machine, [use the Homebrew formula](https://formulae.brew.sh/cask/chromedriver)
+or any other sensible installation method. On GitHub Actions, a "Setup Chromedriver" action step exists for this.
+On a Mac, you’ll probably get Gate Keeper permissions problems running `chromedriver`; so:
+```shell
+which chromedriver  # probably: /usr/local/bin/chromedriver
+spctl --add /usr/local/bin/chromedriver
 ```
 
 ## Configuration
@@ -48,10 +60,28 @@ Configuration is split between:
 source config/secrets.env
 python manage.py migrate
 python manage.py fetch_project_samples
-python manage.py refresh_structureddata
+python manage.py refresh_external_data
 python manage.py create_authors_user_group   
 python manage.py runserver
 ```
+
+### Refreshing external data
+`refresh_external_data` has several options, for fetching data for some or all samples/projects, 
+and for fetching data from some or all supporting APIs.
+
+To (re)fetch sample metadata from ENA and Biosamples only, for a specific sample:
+
+`python manage.py refresh_external_data --samples SAMEA7687881 --types METADATA`
+
+or to (re)fetch sample metadata and metagenomic existence data from ENA, Biosamples, and MGnify, 
+for samples with accessions in a certain range:
+
+`python manage.py refresh_external_data --sample_filters accession__gt=SAMEA7687880 accession__lt=SAMEA7687900 --types METADATA METAGENOMIC`
+
+`--sample_filters...` is expected to be useful in cases where refreshing a large number of samples fails, 
+and you therefore need to retry from a certain accession onwards.
+(If no sample filters are specified, they’re iterated through in ascending order of accession.) 
+
 
 ## Adding users
 Superusers can do everything in the admin panel, including managing other users.

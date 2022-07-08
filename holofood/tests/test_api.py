@@ -105,6 +105,26 @@ def test_samples_api_detail(client, salmon_sample, structured_metadata_marker):
 
 
 @pytest.mark.django_db
+def test_metagenomics(client, salmon_sample):
+    response = client.get(f"/api/samples/{salmon_sample.accession}")
+    assert response.status_code == 200
+    data = response.json()
+    assert not data.get("has_metagenomics")
+    assert data.get("metagenomics_url") is None
+
+    salmon_sample.has_metagenomics = True
+    salmon_sample.save()
+    response = client.get(f"/api/samples/{salmon_sample.accession}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("has_metagenomics")
+    assert (
+        data.get("metagenomics_url")
+        == f"https://www.ebi.ac.uk/metagenomics/api/v1/samples/{salmon_sample.accession}"
+    )
+
+
+@pytest.mark.django_db
 def test_annotations_list(client, salmon_sample, salmon_annotation_unpub):
     response = client.get("/api/annotations")
     assert response.status_code == 200

@@ -8,6 +8,7 @@ from martor.models import MartorField
 
 from holofood.external_apis.biosamples.api import get_sample_structured_data
 from holofood.external_apis.ena.submit_api import get_checklist_metadata
+from holofood.external_apis.mgnify.api import get_metagenomics_existence_for_sample
 from holofood.utils import holofood_config
 
 
@@ -49,6 +50,8 @@ class Sample(models.Model):
     system = models.CharField(choices=SYSTEM_CHOICES, max_length=10, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+
+    has_metagenomics = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Sample {self.accession} - {self.title}"
@@ -111,6 +114,18 @@ class Sample(models.Model):
         logging.info(f"Setting system to {system} for sample {self.accession}")
         self.system = system
         self.save(update_fields=["system"])
+
+    def refresh_metagenomics_metadata(self):
+        logging.debug(f"Checking metagenomics data existence for sample {self}")
+        self.has_metagenomics = get_metagenomics_existence_for_sample(self.accession)
+        logging.debug(f"Sample {self} has metagenomics data? {self.has_metagenomics}")
+        self.save()
+
+    @property
+    def runs(self) -> list[str]:
+        return self.structured_metadata.filter(marker__name="ENA Run ID").values_list(
+            "measurement", flat=True
+        )
 
 
 class SampleMetadataMarker(models.Model):
