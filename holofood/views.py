@@ -2,11 +2,14 @@ import operator
 from functools import reduce
 
 from django.core.paginator import Paginator
-from django.views.generic import ListView, DetailView, TemplateView
+from django.http import Http404
+from django.urls import reverse
+from django.views.generic import ListView, DetailView, TemplateView, RedirectView
+from django.views.generic.list import MultipleObjectMixin
 
 from holofood.external_apis.mgnify.api import get_metagenomics_analyses_for_run
-from holofood.filters import SampleFilter, MultiFieldSearchFilter
-from holofood.models import Sample, SampleAnnotation
+from holofood.filters import SampleFilter, MultiFieldSearchFilter, GenomeFilter
+from holofood.models import Sample, SampleAnnotation, GenomeCatalogue
 
 
 class ListFilterView(ListView):
@@ -103,3 +106,57 @@ class HomeView(TemplateView):
             is_published=True
         ).count()
         return context
+
+
+class DetailViewWithPaginatedRelatedList(DetailView, MultipleObjectMixin):
+    """
+    A detail (single object) view that also supports pagination of a list of related objects
+    E.g., use this for a catalogue detail view which renders a paginated list of entries.
+    Set `related_name = 'entries'` if Entry has a foreign key to Catalogue with related_name='entries'.
+    Set `context_related_objects_name = 'cat_entries'` to use {% for entry in cat_entries %} in the template.
+    """
+
+    related_name = None
+    context_related_objects_name = None
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        detail_obj = self.get_object()
+        assert hasattr(detail_obj, self.related_name)
+        related_objects = getattr(detail_obj, self.related_name)
+        if hasattr(self, "filterset_class"):
+            filterset = self.filterset_class(self.request.GET, queryset=related_objects)
+            related_objects = filterset.qs.all()
+        else:
+            filterset = None
+            related_objects = related_objects.all()
+        context = super().get_context_data(object_list=related_objects, **kwargs)
+        context["filterset"] = filterset
+        context_related_name = self.context_related_objects_name or self.related_name
+        context[context_related_name] = context["object_list"]
+        return context
+
+
+class GenomeCatalogueView(DetailViewWithPaginatedRelatedList):
+    model = GenomeCatalogue
+    context_object_name = "catalogue"
+    paginate_by = 10
+    template_name = "holofood/pages/genome_catalogue_detail.html"
+    filterset_class = GenomeFilter
+
+    related_name = "genomes"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["catalogues"] = GenomeCatalogue.objects.all()
+        return context
+
+
+class GenomeCataloguesView(RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        catalogue = GenomeCatalogue.objects.first()
+        if not catalogue:
+            raise Http404
+        return reverse("genome_catalogue", kwargs={"pk": catalogue.id})

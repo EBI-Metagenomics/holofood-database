@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI
 from ninja.renderers import BaseRenderer
 
-from holofood.api import SampleSlimSchema, SampleStructuredDatumSchema
-from holofood.models import Sample
+from holofood.api import SampleSlimSchema, SampleStructuredDatumSchema, GenomeSchema
+from holofood.models import Sample, GenomeCatalogue
 
 
 class CSVRenderer(BaseRenderer):
@@ -69,3 +69,15 @@ def list_samples(
 def get_sample_metadata(request, sample_accession: str):
     sample = get_object_or_404(Sample, accession=sample_accession)
     return sample.structured_metadata.all()
+
+
+@export_api.get(
+    "/genome-catalogues/{catalogue_id}/genomes",
+    response=list[GenomeSchema],
+    summary="Fetch the list of Genomes from a Catalogue as a TSV",
+    description="Download a TSV export of the Genome Catalogue MAGs",
+    url_name="genomes_list",
+)
+def list_genome_catalogue_genomes(request, catalogue_id: str):
+    catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
+    return catalogue.genomes.all()

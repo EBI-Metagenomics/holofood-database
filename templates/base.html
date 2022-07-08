@@ -75,11 +75,11 @@
     <ul class="vf-navigation__list | vf-list | vf-cluster__inner">
         <li class="vf-navigation__item">
             <a href="{% url 'samples_list' %}?system=chicken" class="vf-navigation__link"><img
-                    src="{% static "img/icons/chicken.svg" %}" class="nav-icon" alt="Chicken"/>Chicken</a>
+                    src="{% static "img/icons/chicken.svg" %}" class="nav-icon" alt="Chicken"/>Chicken samples</a>
         </li>
         <li class="vf-navigation__item">
             <a href="{% url 'samples_list' %}?system=salmon" class="vf-navigation__link"><img
-                    src="{% static "img/icons/salmon.svg" %}" class="nav-icon" alt="Salmon"/>Salmon</a>
+                    src="{% static "img/icons/salmon.svg" %}" class="nav-icon" alt="Salmon"/>Salmon samples</a>
         </li>
         <li class="vf-navigation__item">
             <a href="{% url 'annotations_list' %}" class="vf-navigation__link"><img
@@ -88,6 +88,10 @@
         <li class="vf-navigation__item">
             <a href="{% url 'api:openapi-swagger' %}" class="vf-navigation__link"><img
                     src="{% static "img/icons/code.svg" %}" class="nav-icon" alt="Code"/>API</a>
+        </li>
+        <li class="vf-navigation__item">
+            <a href="{% url 'genome_catalogues' %}" class="vf-navigation__link"><img
+                    src="{% static "img/icons/genome.svg" %}" class="nav-icon" alt="Code"/>Genomes</a>
         </li>
     </ul>
 </nav>

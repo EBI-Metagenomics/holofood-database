@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <nav class="vf-navigation vf-navigation--on-this-page | vf-u-fullbleed | vf-cluster" style="margin-top: 16px;">
+        <ul class="vf-navigation__list | vf-list | vf-cluster__inner" data-vf-js-navigation-on-this-page-container="false">
+            <li class="vf-navigation__item">
+                Catalogues:
+            </li>
+            {% for cat in catalogues %}
+                <li class="vf-navigation__item">
+                    <a href="{% url 'genome_catalogue' pk=cat.id  %}" class="vf-navigation__link" {% if cat.id == catalogue.id %}aria-selected="true" {% endif %}>{{ cat.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    <div class="vf-sidebar vf-sidebar--start vf-sidebar--800">
+        <div class="vf-sidebar__inner">
+            <div>
+                <h2>Filter MAGs</h2>
+                {% include "holofood/components/form.html" with form=filterset.form method="get" submit="Apply" id="genome_filters" only %}
+            </div>
+            <div style="overflow-x: scroll">
+                <h2>{{ catalogue.title }} MAG catalogue</h2>
+                <a class="vf-button vf-button--link vf-button--sm" href="{% url 'export:genomes_list' catalogue_id=catalogue.id %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
+                <a class="vf-button vf-button--link vf-button--sm" href="{{ MGNIFY_WEB_URL }}/genome-catalogues/{{ catalogue.related_mag_catalogue_id }}"><i class="icon icon-common icon-external-link-square-alt"></i>&nbsp;Browse related catalogue on MGnify</a>
+                <table class="vf-table scrollable-table">
+                    <thead class="vf-table__header">
+                        <tr class="vf-table__row">
+                            <th class="vf-table__heading" scope="col">Accession</th>
+                            <th class="vf-table__heading" scope="col">Species representative</th>
+                            <th class="vf-table__heading" scope="col">Taxonomy</th>
+                            <th class="vf-table__heading" scope="col">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody class="vf-table__body">
+                    {% for genome in genomes %}
+                        <tr class="vf-table__row">
+                            <td class="vf-table__cell">
+                                {{ genome.accession }}
+                            </td>
+                            <td class="vf-table__cell">
+                                <a class="vf-link" href="{{ MGNIFY_WEB_URL }}/genomes/{{ genome.cluster_representative }}">{{ genome.cluster_representative }}</a>
+                            </td>
+                            <td class="vf-table__cell">
+                                {{ genome.taxonomy }}
+                            </td>
+                            <td class="vf-table__cell">
+                                <a class="vf-button vf-button--link vf-button--sm inline" href="{{ MGNIFY_WEB_URL }}/genomes/{{ genome.cluster_representative }}">
+                                    View&nbsp;on&nbsp;MGnify
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot class="vf-table__footer">
+                    <tr class="vf-table__row">
+                        <td class="vf-table__cell" colspan="100">
+                            {% include "holofood/components/pagination.html" %}
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

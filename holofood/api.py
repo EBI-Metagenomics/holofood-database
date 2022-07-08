@@ -15,6 +15,8 @@ from holofood.models import (
     SampleStructuredDatum,
     SampleMetadataMarker,
     SampleAnnotation,
+    GenomeCatalogue,
+    Genome,
 )
 from holofood.utils import holofood_config
 
@@ -110,6 +112,24 @@ class AnnotationSchema(ModelSchema):
         model_fields = ["title"]
 
 
+class GenomeCatalogueSchema(ModelSchema):
+    class Config:
+        model = GenomeCatalogue
+        model_fields = ["id", "title", "biome", "related_mag_catalogue_id", "system"]
+
+
+class GenomeSchema(ModelSchema):
+    @staticmethod
+    def resolve_representative_url(obj: Genome):
+        return f"{holofood_config.mgnify.api_root}/genomes/{obj.cluster_representative}"
+
+    representative_url: Optional[str]
+
+    class Config:
+        model = Genome
+        model_fields = ["accession", "cluster_representative", "taxonomy", "metadata"]
+
+
 @api.get(
     "/samples/{sample_accession}",
     response=SampleSchema,
@@ -174,3 +194,39 @@ def list_annotations(
     request,
 ):
     return SampleAnnotation.objects.filter(is_published=True)
+
+
+@api.get(
+    "/genome-catalogues",
+    response=list[GenomeCatalogueSchema],
+    summary="Fetch a list of Genome (MAG) Catalogues",
+)
+def list_genome_catalogues(request):
+    return GenomeCatalogue.objects.all()
+
+
+@api.get(
+    "/genome-catalogues/{catalogue_id}",
+    response=GenomeCatalogueSchema,
+    summary="Fetch a single Genome Catalogue",
+    description="Genome Catalogues are lists of Metagenomic Assembled Genomes (MAGs)."
+    "MAGs originating from HoloFood samples are organised into catalogues."
+    "To list the genomes for a catalogue, use `/genome-catalogues/{catalogue_id}/genomes`.",
+)
+def get_genome_catalogue(request, catalogue_id: str):
+    catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
+    return catalogue
+
+
+@api.get(
+    "/genome-catalogues/{catalogue_id}/genomes",
+    response=list[GenomeSchema],
+    summary="Fetch the list of Genomes within a Catalogue",
+    description="Genome Catalogues are lists of Metagenomic Assembled Genomes (MAGs)."
+    "MAGs listed originate from HoloFood samples."
+    "Each MAG has also been clustered with MAGs from other projects."
+    "Each HoloFood MAG references the best representative of these clusters, in MGnify.",
+)
+def list_genome_catalogue_genomes(request, catalogue_id: str):
+    catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
+    return catalogue.genomes.all()

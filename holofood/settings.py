@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "sass_processor",
     "martor",
     "ninja",
+    "django_admin_inline_paginator",
     "holofood",
 ]
 

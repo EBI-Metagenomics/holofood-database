@@ -143,9 +143,47 @@ def test_annotations_list(client, salmon_sample, salmon_annotation_unpub):
 
 
 @pytest.mark.django_db
-def test_annotations_list(client, salmon_sample):
+def test_annotations_export(client, salmon_sample):
     response = client.get("/export/samples")
     assert response.status_code == 200
     data = response.content.decode()
     assert "accession" in data
     assert salmon_sample.accession in data
+
+
+@pytest.mark.django_db
+def test_mag_catalogues(client, chicken_mag_catalogue):
+    response = client.get("/api/genome-catalogues")
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("count") == 1
+    assert data.get("items")[0]["id"] == chicken_mag_catalogue.id
+
+    response = client.get(f"/api/genome-catalogues/{chicken_mag_catalogue.id}")
+    assert response.status_code == 200
+    data = response.json()
+    assert all(
+        [
+            key in data
+            for key in ["id", "title", "biome", "related_mag_catalogue_id", "system"]
+        ]
+    )
+    assert data.get("system") == "chicken"
+
+    response = client.get(f"/api/genome-catalogues/{chicken_mag_catalogue.id}/genomes")
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("count") == 1
+    assert (
+        data.get("items")[0]["accession"]
+        == chicken_mag_catalogue.genomes.first().accession
+    )
+
+
+@pytest.mark.django_db
+def test_mag_catalogues_export(client, chicken_mag_catalogue):
+    response = client.get(f"/api/genome-catalogues/{chicken_mag_catalogue.id}/genomes")
+    assert response.status_code == 200
+    data = response.content.decode()
+    assert "accession" in data
+    assert chicken_mag_catalogue.genomes.first().accession in data

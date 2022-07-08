@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from holofood.models import (
     Sample,
@@ -7,6 +8,8 @@ from holofood.models import (
     SampleStructuredDatum,
     BiosamplesPartner,
     SampleAnnotation,
+    GenomeCatalogue,
+    Genome,
 )
 
 
@@ -50,3 +53,13 @@ class SampleAnnotationAdmin(admin.ModelAdmin):
             self.readonly_fields = ["created", "updated", "is_published"]
 
         return super().changeform_view(request, *args, **kwargs)
+
+
+class GenomeInline(TabularInlinePaginated):
+    model = Genome
+    per_page = 5
+
+
+@admin.register(GenomeCatalogue)
+class GenomeCatalogueAdmin(admin.ModelAdmin):
+    inlines = [GenomeInline]

@@ -41,6 +41,8 @@ from holofood.views import (
     AnnotationDetailView,
     AnnotationListView,
     HomeView,
+    GenomeCatalogueView,
+    GenomeCataloguesView,
 )
 
 admin.site.site_header = "HoloFood Data Portal Admin"
@@ -57,6 +59,12 @@ urlpatterns = [
         AnnotationDetailView.as_view(),
         name="annotation_detail",
     ),
+    path(
+        "genome-catalogue/<str:pk>",
+        GenomeCatalogueView.as_view(),
+        name="genome_catalogue",
+    ),
+    path("genome-catalogues", GenomeCataloguesView.as_view(), name="genome_catalogues"),
     path("api/", api.urls),
     path("export/", export_api.urls),
 ]

@@ -89,3 +89,31 @@ class WebsiteTests(StaticLiveServerTestCase):
         list_link.click()
         body = self.selenium.find_element(by=By.TAG_NAME, value="body")
         assert "HoloFood Data Portal API" in body.text
+
+        # ---- MAG Catalogues ---- #
+        catalogue = self.hf_fixtures.genome_catalogues[0]
+        #  redirect to first catalogue should work
+        self.selenium.get(self.live_server_url + "/genome-catalogues")
+        self.assertEqual(
+            self.selenium.current_url,
+            self.live_server_url + "/genome-catalogue/" + catalogue.id,
+        )
+
+        export_link = self.selenium.find_element(
+            by=By.PARTIAL_LINK_TEXT, value="Download all as TSV"
+        )
+        self.assertIn("export", export_link.get_attribute("href"))
+
+        mgnify_link = self.selenium.find_element(
+            by=By.PARTIAL_LINK_TEXT, value="Browse related catalogue"
+        )
+        self.assertIn(
+            "metagenomics/genome-catalogues", mgnify_link.get_attribute("href")
+        )
+
+        species_rep_link = self.selenium.find_element(
+            by=By.PARTIAL_LINK_TEXT, value="MGYG"
+        )
+        self.assertEqual(
+            species_rep_link.text, catalogue.genomes.first().cluster_representative
+        )

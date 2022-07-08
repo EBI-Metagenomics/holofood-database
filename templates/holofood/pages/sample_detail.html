@@ -61,11 +61,11 @@
                     <h2>{{ metadata_section.grouper|default:"Generic"|title }} metadata</h2>
                     <table class="vf-table scrollable-table">
                         <thead class="vf-table__header">
-                        <tr class="vf-table__row">
-                            <th class="vf-table__heading" scope="col">Marker</th>
-                            <th class="vf-table__heading" scope="col">Measurement</th>
-                            <th class="vf-table__heading" scope="col">Units</th>
-                        </tr>
+                            <tr class="vf-table__row">
+                                <th class="vf-table__heading" scope="col">Marker</th>
+                                <th class="vf-table__heading" scope="col">Measurement</th>
+                                <th class="vf-table__heading" scope="col">Units</th>
+                            </tr>
                         </thead>
                         <tbody class="vf-table__body">
                             {% for structured_metadatum in metadata_section.list %}

@@ -1,6 +1,13 @@
 import pytest
 
-from holofood.models import Project, Sample, SampleMetadataMarker, SampleAnnotation
+from holofood.models import (
+    Project,
+    Sample,
+    SampleMetadataMarker,
+    SampleAnnotation,
+    GenomeCatalogue,
+    Genome,
+)
 
 
 @pytest.fixture
@@ -2297,6 +2304,7 @@ def LiveTests(request):
 
     Project.objects.all().delete()
     Sample.objects.all().delete()
+    GenomeCatalogue.objects.all().delete()
 
     Fixtures.projects = [
         Project.objects.create(accession="PRJTESTING", title="HoloFood Donut and Fish")
@@ -2311,6 +2319,22 @@ def LiveTests(request):
             has_metagenomics=True,
         )
     ]
+
+    catalogue = GenomeCatalogue.objects.create(
+        id="hf-mag-cat-v1",
+        title="HoloFood MAG Catalogue v1.0",
+        biome="Donut Surface",
+        related_mag_catalogue_id="donuts-v1-0",
+        system="chicken",
+    )
+    Genome.objects.create(
+        accession="MGYG999",
+        cluster_representative="MGYG001",
+        catalogue=catalogue,
+        taxonomy="Root > Foods > Donuts > Sugar Monster",
+        metadata={},
+    )
+    Fixtures.genome_catalogues = [catalogue]
 
     # set a class attribute on the invoking test context
     request.cls.hf_fixtures = Fixtures()
@@ -2328,3 +2352,22 @@ def salmon_annotation_unpub(salmon_sample):
     )
     anno.samples.set([salmon_sample])
     return anno
+
+
+@pytest.fixture()
+def chicken_mag_catalogue():
+    catalogue = GenomeCatalogue.objects.create(
+        id="hf-mag-cat-v1",
+        title="HoloFood MAG Catalogue v1.0",
+        biome="Donut Surface",
+        related_mag_catalogue_id="donuts-v1-0",
+        system="chicken",
+    )
+    Genome.objects.create(
+        accession="MGYG999",
+        cluster_representative="MGYG001",
+        catalogue=catalogue,
+        taxonomy="Root > Foods > Donuts > Sugar Monster",
+        metadata={},
+    )
+    return catalogue

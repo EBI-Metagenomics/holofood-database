@@ -209,3 +209,24 @@ class SampleAnnotation(models.Model):
 
     class Meta:
         permissions = [("publish_annotation", "Can publish an annotation")]
+
+
+class GenomeCatalogue(models.Model):
+    id = models.CharField(primary_key=True, max_length=20)
+    title = models.CharField(max_length=100)
+    biome = models.CharField(max_length=200)
+    related_mag_catalogue_id = models.CharField(max_length=100)
+    system = models.CharField(choices=Sample.SYSTEM_CHOICES, max_length=10, null=False)
+
+
+class Genome(models.Model):
+    accession = models.CharField(primary_key=True, max_length=15)
+    cluster_representative = models.CharField(max_length=15)
+    catalogue = models.ForeignKey(
+        GenomeCatalogue, on_delete=models.CASCADE, related_name="genomes"
+    )
+    taxonomy = models.CharField(max_length=200)
+    metadata = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ("accession",)

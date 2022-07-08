@@ -4,7 +4,7 @@ from functools import reduce
 import django_filters
 from django.db.models import Q, CharField
 
-from holofood.models import Sample
+from holofood.models import Sample, Genome
 
 
 class MultiFieldSearchFilter(django_filters.FilterSet):
@@ -39,4 +39,15 @@ class SampleFilter(django_filters.FilterSet):
             "project__accession": ["icontains"],
             "project__title": ["icontains"],
             "title": ["icontains"],
+        }
+
+
+class GenomeFilter(django_filters.FilterSet):
+    class Meta:
+        model = Genome
+
+        fields = {
+            "accession": ["icontains"],
+            "cluster_representative": ["icontains"],
+            "taxonomy": ["icontains"],
         }
