@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/igv@2.12.6/dist/igv.min.js"></script>
+    {% if selected_viral_fragment %}
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            var igvDiv = document.getElementById("igv-contig-browser");
+
+            const viralRegion =
+                {
+                    color: "rgba(68, 246, 134, 0.15)",
+                    name: "Viral region",
+                    features: [
+                    {
+                        chr: "{{ selected_viral_fragment.contig_id }}",
+                        start: {{ selected_viral_fragment.start_within_contig }},
+                        end: {{ selected_viral_fragment.end_within_contig }},
+                        name: "Viral region"
+                    }]
+                }
+
+            var options =
+                {
+                    reference: {
+                        indexed: false,
+                        fastaURL: "{{ MGNIFY_API_URL }}/analyses/{{ selected_viral_fragment.mgnify_analysis_accession }}/contigs/{{ selected_viral_fragment.contig_id }}"
+                    },
+                    locus: "{{ selected_viral_fragment.contig_id }}:{{ selected_viral_fragment.start_within_contig|add:-100 }}-{{ selected_viral_fragment.end_within_contig|add:100 }}",
+                    roi: [
+                        viralRegion
+                    ],
+                    tracks: [
+                        {
+                            name: "Functional annotations",
+                            format: "gff3",
+                            indexed: false,
+                            url: "{{ MGNIFY_API_URL }}/analyses/{{ selected_viral_fragment.mgnify_analysis_accession }}/contigs/{{ selected_viral_fragment.contig_id }}/annotations",
+                            displayMode: 'expanded',
+                        },
+                        {
+                            name: "ViPhOGs",
+                            format: "gff3",
+                            indexed: false,
+                            url: "data:text/plain;charset=utf-8;base64,RVJaMjI3MTg2Ni4xLU5PREUtMS1sZW5ndGgtMjEzOTYtY292LTUuMTIyNTM0CVZpUGhPZwlDRFMJMTAyMAkyMDUwCS4JLQkuCUlEPUVSWjIyNzE4NjYuMS1OT0RFLTEtbGVuZ3RoLTIxMzk2LWNvdi01LjEyMjUzNDticml0ZT1rbzAwMDAwLGtvMDAwMDEsa28wMTAwMCxrbzAxMDA0LGtvMDAwMDI7Y29nPUk7ZWNudW1iZXI9Mi4zLjEuMzk7ZWdnbm9nPW1hbG9ueWwlMjBDb0EtYWN5bCUyMGNhcnJpZXIlMjBwcm90ZWluJTIwdHJhbnNhY3lsYXNlJTIwO2VnZ25vZ19ldmFsdWU9MTM1LjI7ZWdnbm9nX29ydGhvbG9nPTExMjA5NjYuQVVCVTAxMDAwMDAyX2dlbmUyMjEzO2VnZ25vZ19zY29yZT0xLjRlLTI5O2VnZ25vZ190YXg9ZmFiRDtrZWdnPWtvOkswMDY0NTtvZ3M9TkF8TkF8TkE7aW50ZXJwcm89SVBSMDAxMjI3LElQUjAxNDA0MztwZmFtPVBGMDA2OTgNCkVSWjIyNzE4NjYuMS1OT0RFLTEtbGVuZ3RoLTIxMzk2LWNvdi01LjEyMjUzNAlWaVBoT2cJQ0RTCTIwMDAJMjQwMAkuCS0JLglJRD1FUloyMjcxODY2LjEtTk9ERS0xLWxlbmd0aC0yMTM5Ni1jb3YtNS4xMjI1MzQ7YnJpdGU9a28wMDAwMCxrbzAxMDAwLGtvMDAwMDE7Y29nPUc7ZWNudW1iZXI9My41LjEuNDEsMy41LjEuMTA0O2VnZ25vZz1Qb2x5c2FjY2hhcmlkZSUyMGRlYWNldHlsYXNlJTIwO2VnZ25vZ19ldmFsdWU9MjAwLjM7ZWdnbm9nX29ydGhvbG9nPTY3OTkzNS5BbGZpXzE1Mzg7ZWdnbm9nX3Njb3JlPTguOGUtNDk7ZWdnbm9nX3RheD1wZ2RBO2tlZ2c9a286SzIyMjc4LGtvOkswMTQ1MjtvZ3M9TkF8TkF8TkE7aW50ZXJwcm89SVBSMDAyNTA5O3BmYW09UEYwMTUyMg0KRVJaMjI3MTg2Ni4xLU5PREUtMS1sZW5ndGgtMjEzOTYtY292LTUuMTIyNTM0CVZpUGhPZwlDRFMJMzIwMAk0MDAwCS4JLQkuCUlEPUVSWjIyNzE4NjYuMS1OT0RFLTEtbGVuZ3RoLTIxMzk2LWNvdi01LjEyMjUzNDtjb2c9TTtlZ2dub2c9SGFzJTIwbGlwaWQlMjBBJTIwMy1PLWRlYWN5bGFzZSUyMGFjdGl2aXR5LiUyMEh5ZHJvbHl6ZXMlMjB0aGUlMjBlc3RlciUyMGJvbmQlMjBhdCUyMHRoZSUyMDMlMjBwb3NpdGlvbiUyMG9mJTIwbGlwaWQlMjBBJTJDJTIwYSUyMGJpb2FjdGl2ZSUyMGNvbXBvbmVudCUyMG9mJTIwbGlwb3BvbHlzYWNjaGFyaWRlJTIwJTI4TFBTJTI5JTJDJTIwdGhlcmVieSUyMHJlbGVhc2luZyUyMHRoZSUyMHByaW1hcnklMjBmYXR0eSUyMGFjeWwlMjBtb2lldHklMjA7ZWdnbm9nX2V2YWx1ZT02NS4xO2VnZ25vZ19vcnRob2xvZz0xMTIzMDM3LkFVREUwMTAwMDAxMF9nZW5lMjQzODtlZ2dub2dfc2NvcmU9My44ZS0wODtvZ3M9TkF8TkF8TkE=",
+                            displayMode: 'expanded',
+                            color: '#777722',
+                        }
+                    ],
+                };
+
+            igv.createBrowser(igvDiv, options)
+                .then(function (browser) {
+                    console.log("Created IGV browser");
+                })
+        });
+    </script>
+    {% endif %}
+    <nav class="vf-navigation vf-navigation--on-this-page | vf-u-fullbleed | vf-cluster" style="margin-top: 16px;">
+        <ul class="vf-navigation__list | vf-list | vf-cluster__inner" data-vf-js-navigation-on-this-page-container="false">
+            <li class="vf-navigation__item">
+                Catalogues:
+            </li>
+            {% for cat in catalogues %}
+                <li class="vf-navigation__item">
+                    <a href="{% url 'viral_catalogue' pk=cat.id  %}" class="vf-navigation__link" {% if cat.id == catalogue.id %}aria-selected="true" {% endif %}>{{ cat.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    <section class="vf-card-container | vf-u-background-color-ui--grey--light vf-u-fullbleed">
+        <h2 class="vf-section-header__heading">Viral contig viewer</h2>
+        <div style="background-color: white; width: 100%; padding: 24px" class="vf-stack vf-stack--400">
+            <div id="igv-contig-browser">
+                {% if not selected_viral_fragment %}
+                    <h5>No contig selected</h5>
+                {% endif %}
+            </div>
+            <div class="vf-flag vf-flag--top vf-flag--400">
+
+              <div class="vf-flag__media">
+                  <div style="height: 24px; width: 24px; background-color: rgba(68, 246, 134, 0.25); border-radius: 4px"></div>
+              </div>
+
+              <div class="vf-flag__body">
+                <p class="vf-u-type__text-heading--5 vf-u-margin--0">Viral region</p>
+              </div>
+
+            </div>
+        </div>
+    </section>
+    <div class="vf-sidebar vf-sidebar--start vf-sidebar--800">
+        <div class="vf-sidebar__inner">
+            <div>
+                <h2>Filter viral fragments</h2>
+                {% include "holofood/components/form.html" with form=filterset.form method="get" submit="Apply" id="viral_fragment_filters" only %}
+            </div>
+            <div style="overflow-x: scroll">
+                <h2>{{ catalogue.title }} viral catalogue</h2>
+{#                <a class="vf-button vf-button--link vf-button--sm" href="{% url 'export:genomes_list' catalogue_id=catalogue.id %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>#}
+                <a class="vf-button vf-button--link vf-button--sm" href="#"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
+                <a class="vf-button vf-button--link vf-button--sm" href="{% url 'genome_catalogue' pk=catalogue.related_genome_catalogue.id %}">Browse related MAG catalogue</a>
+                <table class="vf-table scrollable-table">
+                    <thead class="vf-table__header">
+                        <tr class="vf-table__row">
+                            <th class="vf-table__heading" scope="col">Fragment ID</th>
+                            <th class="vf-table__heading" scope="col">Parent contig</th>
+                            <th class="vf-table__heading" scope="col">Taxonomy</th>
+                            <th class="vf-table__heading" scope="col">Host MAG</th>
+                            <th class="vf-table__heading" scope="col">Host taxonomy</th>
+                            <th class="vf-table__heading" scope="col">View</th>
+                        </tr>
+                    </thead>
+                    <tbody class="vf-table__body">
+                    {% for viral_fragment in viral_fragments %}
+                        <tr class="vf-table__row">
+                            <td class="vf-table__cell">
+                                {{ viral_fragment.id }}
+                            </td>
+                            <td class="vf-table__cell">
+                                <a class="vf-link" href="{{ MGNIFY_WEB_URL }}/analyses/{{ viral_fragment.mgnify_analysis_accession }}?selected_contig={{ viral_fragment.contig_id }}#contigs-viewer">{{ viral_fragment.contig_id }}</a>
+                            </td>
+                            <td class="vf-table__cell">
+                                {{ viral_fragment.taxonomy }}
+                            </td>
+
+                            <td class="vf-table__cell">
+                                {% if viral_fragment.host_mag %}
+                                    <a class="vf-button vf-button--link vf-button--sm inline" href="{% url 'genome_catalogue' pk=catalogue.related_genome_catalogue.id %}?accession__icontains={{ viral_fragment.host_mag.accession }}">
+                                        {{ viral_fragment.host_mag.accession }}
+                                    </a>
+                                {% else %}
+                                    &mdash;
+                                {% endif %}
+                            </td>
+
+                            <td class="vf-table__cell">
+                                {% if viral_fragment.host_mag %}
+                                    {{ viral_fragment.host_mag.taxonomy|default:"—" }}
+                                {% else %}
+                                    &mdash;
+                                {% endif %}
+                            </td>
+
+                            <td class="vf-table__cell">
+                                <a class="vf-button vf-button--link vf-button--sm inline" href="{% url 'viral_catalogue_fragment' pk=catalogue.id viral_fragment_pk=viral_fragment.id %}">
+                                    View contig
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        {% if viral_fragment.is_cluster_representative %}
+                        <tr class="vf-table__row">
+                            <td class="vf-table__cell" colspan="6">
+                                Cluster representative of {{ viral_fragment.representative_of_cluster_size }} viral fragments.
+                            </td>
+                        </tr>
+                        {% endif %}
+
+                    {% endfor %}
+                    </tbody>
+                    <tfoot class="vf-table__footer">
+                    <tr class="vf-table__row">
+                        <td class="vf-table__cell" colspan="100">
+                            {% include "holofood/components/pagination.html" %}
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

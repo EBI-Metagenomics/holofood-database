@@ -10,6 +10,8 @@ from holofood.models import (
     SampleAnnotation,
     GenomeCatalogue,
     Genome,
+    ViralFragment,
+    ViralCatalogue,
 )
 
 
@@ -58,8 +60,20 @@ class SampleAnnotationAdmin(admin.ModelAdmin):
 class GenomeInline(TabularInlinePaginated):
     model = Genome
     per_page = 5
+    can_delete = True
 
 
 @admin.register(GenomeCatalogue)
 class GenomeCatalogueAdmin(admin.ModelAdmin):
     inlines = [GenomeInline]
+
+
+class ViralFragmentInline(TabularInlinePaginated):
+    model = ViralFragment
+    per_page = 5
+    can_delete = True
+
+
+@admin.register(ViralCatalogue)
+class ViralCatalogueAdmin(admin.ModelAdmin):
+    inlines = [ViralFragmentInline]

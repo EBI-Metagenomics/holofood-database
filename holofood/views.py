@@ -3,13 +3,25 @@ from functools import reduce
 
 from django.core.paginator import Paginator
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, TemplateView, RedirectView
 from django.views.generic.list import MultipleObjectMixin
 
 from holofood.external_apis.mgnify.api import get_metagenomics_analyses_for_run
-from holofood.filters import SampleFilter, MultiFieldSearchFilter, GenomeFilter
-from holofood.models import Sample, SampleAnnotation, GenomeCatalogue
+from holofood.filters import (
+    SampleFilter,
+    MultiFieldSearchFilter,
+    GenomeFilter,
+    ViralFragmentFilter,
+)
+from holofood.models import (
+    Sample,
+    SampleAnnotation,
+    GenomeCatalogue,
+    ViralCatalogue,
+    ViralFragment,
+)
 
 
 class ListFilterView(ListView):
@@ -160,3 +172,38 @@ class GenomeCataloguesView(RedirectView):
         if not catalogue:
             raise Http404
         return reverse("genome_catalogue", kwargs={"pk": catalogue.id})
+
+
+class ViralCatalogueView(DetailViewWithPaginatedRelatedList):
+    model = ViralCatalogue
+    context_object_name = "catalogue"
+    paginate_by = 10
+    template_name = "holofood/pages/viral_catalogue_detail.html"
+    filterset_class = ViralFragmentFilter
+
+    related_name = "viral_fragments"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["catalogues"] = ViralCatalogue.objects.all()
+        return context
+
+
+class ViralCatalogueFragmentView(ViralCatalogueView):
+    def get_context_data(self, **kwargs):
+        context = super(ViralCatalogueFragmentView, self).get_context_data(**kwargs)
+        fragment = get_object_or_404(
+            ViralFragment, id=self.kwargs.get("viral_fragment_pk")
+        )
+        context["selected_viral_fragment"] = fragment
+        return context
+
+
+class ViralCataloguesView(RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        catalogue = ViralCatalogue.objects.first()
+        if not catalogue:
+            raise Http404
+        return reverse("viral_catalogue", kwargs={"pk": catalogue.id})

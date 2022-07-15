@@ -60,7 +60,7 @@
 <link href="{% sass_src 'scss/site.scss' %}" rel="stylesheet" type="text/css"/>
 <script defer="defer" src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.4/js/script.js"></script>
 
-<section class="vf-hero vf-hero--1200 | vf-u-fullbleed" style="--vf-hero--bg-image: url('{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static "/img/algae-banner.png" %}');">
+<section class="vf-hero vf-hero--1200 | vf-u-fullbleed" style="--vf-hero--bg-image: url('{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static "/img/cartoon-banner.png" %}');">
     <div class="vf-hero__content | vf-box | vf-stack vf-stack--400">
         <p class="vf-hero__kicker"><a href="https://www.holofood.eu">HoloFood</a> | <a href="/">Data Portal</a></p>
         <p class="vf-hero__kicker"><span class="vf-badge vf-badge--primary">alpha</span></p>
@@ -91,7 +91,11 @@
         </li>
         <li class="vf-navigation__item">
             <a href="{% url 'genome_catalogues' %}" class="vf-navigation__link"><img
-                    src="{% static "img/icons/genome.svg" %}" class="nav-icon" alt="Code"/>Genomes</a>
+                    src="{% static "img/icons/genome.svg" %}" class="nav-icon" alt="Genomes"/>Genomes</a>
+        </li>
+        <li class="vf-navigation__item">
+            <a href="{% url 'viral_catalogues' %}" class="vf-navigation__link"><img
+                    src="{% static "img/icons/virus.svg" %}" class="nav-icon" alt="Viruses"/>Viruses</a>
         </li>
     </ul>
 </nav>

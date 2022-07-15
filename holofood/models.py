@@ -230,3 +230,64 @@ class Genome(models.Model):
 
     class Meta:
         ordering = ("accession",)
+
+
+class ViralCatalogue(models.Model):
+    id = models.CharField(primary_key=True, max_length=20)
+    title = models.CharField(max_length=100)
+    biome = models.CharField(max_length=200)
+    related_genome_catalogue = models.ForeignKey(
+        GenomeCatalogue,
+        null=True,
+        blank=True,
+        related_name="viral_catalogues",
+        on_delete=models.SET_NULL,
+    )
+    system = models.CharField(choices=Sample.SYSTEM_CHOICES, max_length=10, null=False)
+
+
+class ViralFragmentClusterManager(models.Manager):
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .annotate(representative_of_cluster_size=models.Count("cluster_members"))
+        )
+
+
+class ViralFragment(models.Model):
+    objects = ViralFragmentClusterManager()
+
+    PROPHAGE = "prophage"
+    PHAGE = "phage"
+    VIRAL_TYPE_CHOICES = [(PHAGE, PHAGE), (PROPHAGE, PROPHAGE)]
+
+    id = models.CharField(primary_key=True, max_length=100, verbose_name="ID")
+    catalogue = models.ForeignKey(
+        ViralCatalogue, on_delete=models.CASCADE, related_name="viral_fragments"
+    )
+    cluster_representative = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="cluster_members",
+    )
+    contig_id = models.CharField(max_length=100, verbose_name="Contig ID")
+    mgnify_analysis_accession = models.CharField(max_length=12)
+    start_within_contig = models.IntegerField()
+    end_within_contig = models.IntegerField()
+    metadata = models.JSONField(default=dict, blank=True)
+    host_mag = models.ForeignKey(
+        Genome,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="viral_fragments",
+        verbose_name="Host MAG",
+    )
+    viral_type = models.CharField(choices=VIRAL_TYPE_CHOICES, max_length=10)
+
+    @property
+    def is_cluster_representative(self):
+        return self.cluster_representative is None
