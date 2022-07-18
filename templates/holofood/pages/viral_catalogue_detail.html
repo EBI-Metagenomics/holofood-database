@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load query_params %}
+{% load taxonomy %}
 
 {% block content %}
     <script src="https://cdn.jsdelivr.net/npm/igv@2.12.6/dist/igv.min.js"></script>
@@ -93,6 +95,7 @@
         <div class="vf-sidebar__inner">
             <div>
                 <h2>Filter viral fragments</h2>
+                {% clear_filters_button %}
                 {% include "holofood/components/form.html" with form=filterset.form method="get" submit="Apply" id="viral_fragment_filters" only %}
             </div>
             <div style="overflow-x: scroll">
@@ -103,7 +106,7 @@
                 <table class="vf-table scrollable-table">
                     <thead class="vf-table__header">
                         <tr class="vf-table__row">
-                            <th class="vf-table__heading" scope="col">Fragment ID</th>
+                            <th class="vf-table__heading" scope="col">Viral&nbsp;sequence&nbsp;ID</th>
                             <th class="vf-table__heading" scope="col">Parent contig</th>
                             <th class="vf-table__heading" scope="col">Taxonomy</th>
                             <th class="vf-table__heading" scope="col">Host MAG</th>
@@ -136,16 +139,20 @@
 
                             <td class="vf-table__cell">
                                 {% if viral_fragment.host_mag %}
-                                    {{ viral_fragment.host_mag.taxonomy|default:"—" }}
+                                    {% taxonomy_tooltip taxonomy=viral_fragment.host_mag.taxonomy %}
                                 {% else %}
                                     &mdash;
                                 {% endif %}
                             </td>
 
                             <td class="vf-table__cell">
-                                <a class="vf-button vf-button--link vf-button--sm inline" href="{% url 'viral_catalogue_fragment' pk=catalogue.id viral_fragment_pk=viral_fragment.id %}">
-                                    View contig
-                                </a>
+                                {% if viral_fragment.id == selected_viral_fragment.id %}
+                                    <b>Viewing</b>
+                                {% else %}
+                                    <a class="vf-button vf-button--link vf-button--sm inline" href="{% url_preserving_params 'viral_catalogue_fragment' pk=catalogue.id viral_fragment_pk=viral_fragment.id %}">
+                                        View&nbsp;contig
+                                    </a>
+                                {% endif %}
                             </td>
 
                         </tr>
@@ -154,6 +161,9 @@
                         <tr class="vf-table__row">
                             <td class="vf-table__cell" colspan="6">
                                 Cluster representative of {{ viral_fragment.representative_of_cluster_size }} viral fragments.
+                                <a class="vf-button vf-button--link vf-button--sm inline" href="?cluster_representative_id_contains={{ viral_fragment.id }}&cluster_visibility={{ SHOWALL }}">
+                                    View&nbsp;cluster
+                                </a>
                             </td>
                         </tr>
                         {% endif %}

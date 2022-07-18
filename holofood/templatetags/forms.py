@@ -2,7 +2,7 @@ from typing import Union
 
 from django import template
 from django.forms import BoundField, Widget, Form
-from django_filters.fields import ChoiceField, ChoiceIterator
+from django_filters.fields import ChoiceField
 
 register = template.Library()
 

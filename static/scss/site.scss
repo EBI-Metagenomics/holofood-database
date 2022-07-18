@@ -18,7 +18,7 @@
 	background-attachment: local, local, scroll, scroll;
 
 	tr {
-        mix-blend-mode: multiply;
+        background-blend-mode: multiply;
 	}
 }
 
@@ -41,4 +41,47 @@ a.inline, button.inline {
     background-color: #e4e4e4;
     padding: 8px;
     border-radius: 2px;
+}
+
+.tooltiped {
+  	position: relative;
+  	display: inline-block;
+  	border-bottom: 1px dotted #a0a0a0;
+	color: #3b6fb6;
+
+	.tooltip-text {
+		visibility: hidden;
+		width: 240px;
+		text-align: center;
+		padding: 1em;
+		position: absolute;
+		z-index: 10;
+		bottom: 120%;
+		font-size: 0.75em;
+		left: 50%;
+		margin-left: -120px;
+		opacity: 0;
+		isolation: isolate;
+		transition: opacity 0.2s;
+		background-color: #373a36;
+			color: white;
+			border-radius: 6px;
+		&:after {
+		  content: "";
+		  position: absolute;
+		  top: 100%;
+		  left: 50%;
+		  margin-left: -5px;
+		  border-width: 5px;
+		  border-style: solid;
+		  border-color: #373a36 transparent transparent transparent;
+		}
+	}
+
+	&:hover {
+		.tooltip-text {
+			visibility: visible;
+			opacity: 1;
+		}
+	}
 }

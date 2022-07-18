@@ -56,6 +56,11 @@ class GenomeFilter(django_filters.FilterSet):
 class ViralFragmentFilter(django_filters.FilterSet):
     ALL = "Include species-cluster members"
     REPS = "Species-cluster representatives only"
+
+    cluster_representative_id_contains = django_filters.CharFilter(
+        method="cluster_representative_id", label="Cluster representative contains"
+    )
+
     cluster_visibility = django_filters.ChoiceFilter(
         choices=[(ALL, ALL), (REPS, REPS)],
         method="cluster_representative_status",
@@ -69,7 +74,6 @@ class ViralFragmentFilter(django_filters.FilterSet):
         fields = {
             "id": ["icontains"],
             "contig_id": ["icontains"],
-            "cluster_representative__id": ["icontains"],
             "viral_type": ["exact"],
             "host_mag__taxonomy": ["icontains"],
             "host_mag__accession": ["icontains"],
@@ -80,6 +84,11 @@ class ViralFragmentFilter(django_filters.FilterSet):
             return queryset
         else:
             return queryset.filter(cluster_representative__isnull=True)
+
+    def cluster_representative_id(self, queryset, name, value):
+        matches_representative = Q(id__icontains=value)
+        matches_member = Q(cluster_representative__id__icontains=value)
+        return queryset.filter(matches_member | matches_representative)
 
     def __init__(self, data=None, *args, **kwargs):
         if data is not None:

@@ -186,6 +186,7 @@ class ViralCatalogueView(DetailViewWithPaginatedRelatedList):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["catalogues"] = ViralCatalogue.objects.all()
+        context["SHOWALL"] = ViralFragmentFilter.ALL
         return context
 
 
