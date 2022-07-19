@@ -100,8 +100,7 @@
             </div>
             <div style="overflow-x: scroll">
                 <h2>{{ catalogue.title }} viral catalogue</h2>
-                {#                <a class="vf-button vf-button--link vf-button--sm" href="{% url 'export:genomes_list' catalogue_id=catalogue.id %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>#}
-                <a class="vf-button vf-button--link vf-button--sm" href="#"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
+                <a class="vf-button vf-button--link vf-button--sm" href="{% url 'export:viral_fragments_list' catalogue_id=catalogue.id %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
                 <a class="vf-button vf-button--link vf-button--sm"
                    href="{% url 'genome_catalogue' pk=catalogue.related_genome_catalogue.id %}">Browse related MAG catalogue</a>
                 <table class="vf-table scrollable-table">
@@ -155,7 +154,7 @@
                             {% if viral_fragment.is_cluster_representative %}
                                 <tr class="vf-table__row">
                                     <td class="vf-table__cell" colspan="6">
-                                        Cluster representative of {{ viral_fragment.representative_of_cluster_size }} viral fragments.
+                                        Cluster representative of {{ viral_fragment.representative_of_cluster_size }} other viral fragment{{ viral_fragment.representative_of_cluster_size|pluralize }}.
                                         <a class="vf-button vf-button--link vf-button--sm inline"
                                            href="?cluster_representative_id_contains={{ viral_fragment.id }}&cluster_visibility={{ SHOWALL }}">
                                             View&nbsp;cluster

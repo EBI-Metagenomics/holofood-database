@@ -6,12 +6,17 @@ from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI
 from ninja.renderers import BaseRenderer
 
-from holofood.api import SampleSlimSchema, SampleStructuredDatumSchema, GenomeSchema
-from holofood.models import Sample, GenomeCatalogue
+from holofood.api import (
+    SampleSlimSchema,
+    SampleStructuredDatumSchema,
+    GenomeSchema,
+    ViralFragmentSchema,
+)
+from holofood.models import Sample, GenomeCatalogue, ViralCatalogue
 
 
 class CSVRenderer(BaseRenderer):
-    media_type = "text/csv"
+    media_type = "text/tab-separated-values"
 
     @classmethod
     def _flatten_data_generator(cls, dict_field: MutableMapping, parent_path: str = ""):
@@ -81,3 +86,15 @@ def get_sample_metadata(request, sample_accession: str):
 def list_genome_catalogue_genomes(request, catalogue_id: str):
     catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
     return catalogue.genomes.all()
+
+
+@export_api.get(
+    "/viral-catalogues/{catalogue_id}/fragments",
+    response=list[ViralFragmentSchema],
+    summary="Fetch the list of Viral Fragments (sequences) from a Catalogue as a TSV",
+    description="Download a TSV export of the Viral Catalogue fragments",
+    url_name="viral_fragments_list",
+)
+def list_viral_catalogue_fragments(request, catalogue_id: str):
+    catalogue = get_object_or_404(ViralCatalogue, id=catalogue_id)
+    return catalogue.viral_fragments.all()
