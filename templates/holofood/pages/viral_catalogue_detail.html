@@ -25,7 +25,8 @@
                 {
                     reference: {
                         indexed: false,
-                        fastaURL: "{{ MGNIFY_API_URL }}/analyses/{{ selected_viral_fragment.mgnify_analysis_accession }}/contigs/{{ selected_viral_fragment.contig_id }}"
+                        fastaURL: "{{ MGNIFY_API_URL }}/analyses/{{ selected_viral_fragment.mgnify_analysis_accession }}/contigs/{{ selected_viral_fragment.contig_id }}",
+                        id: "{{ selected_viral_fragment.contig_id }}"
                     },
                     locus: "{{ selected_viral_fragment.contig_id }}:{{ selected_viral_fragment.start_within_contig|add:-100 }}-{{ selected_viral_fragment.end_within_contig|add:100 }}",
                     roi: [
