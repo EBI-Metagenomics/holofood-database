@@ -35,6 +35,7 @@ from django.urls import path, include, get_resolver
 
 from holofood.api import api
 from holofood.export import export_api
+
 from holofood.views import (
     SampleListView,
     SampleDetailView,
@@ -46,6 +47,7 @@ from holofood.views import (
     ViralCataloguesView,
     ViralCatalogueView,
     ViralCatalogueFragmentView,
+    ViralSequenceAnnotationView,
 )
 
 admin.site.site_header = "HoloFood Data Portal Admin"
@@ -81,6 +83,11 @@ urlpatterns = [
     path("viral-catalogues", ViralCataloguesView.as_view(), name="viral_catalogues"),
     path("api/", api.urls),
     path("export/", export_api.urls),
+    path(
+        "viral-sequence-gff/<str:pk>",
+        ViralSequenceAnnotationView.as_view(),
+        name="viral_fragment_gff",
+    ),
 ]
 
 if settings.DEBUG:

@@ -288,6 +288,8 @@ class ViralFragment(models.Model):
     )
     viral_type = models.CharField(choices=VIRAL_TYPE_CHOICES, max_length=10)
 
+    gff = models.TextField(blank=True, default="")
+
     @property
     def is_cluster_representative(self):
         return self.cluster_representative is None

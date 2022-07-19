@@ -166,6 +166,12 @@ class ViralFragmentSchema(ModelSchema):
 
     mgnify_analysis_url: AnyHttpUrl
 
+    @staticmethod
+    def resolve_gff_url(obj: ViralFragment):
+        return reverse("viral_fragment_gff", kwargs={"pk": obj.id})
+
+    gff_url: str
+
     class Config:
         model = ViralFragment
         model_fields = [
@@ -289,7 +295,8 @@ def list_genome_catalogue_genomes(request, catalogue_id: str):
     "/viral-catalogues",
     response=list[ViralCatalogueSchema],
     summary="Fetch a list of Viral (contig fragment) Catalogues",
-    description="Viral Catalogues are lists of Viral Sequences detected in the assembly contigs of HoloFood samples from a specific biome.",
+    description="Viral Catalogues are lists of Viral Sequences,"
+    "detected in the assembly contigs of HoloFood samples from a specific biome.",
 )
 def list_viral_catalogues(request):
     return ViralCatalogue.objects.all()
@@ -299,7 +306,8 @@ def list_viral_catalogues(request):
     "/viral-catalogues/{catalogue_id}",
     response=ViralCatalogueSchema,
     summary="Fetch a single Viral Catalogue",
-    description="A Viral Catalogue is a list of Viral Sequences detected in the assembly contigs of HoloFood samples from a specific biome."
+    description="A Viral Catalogue is a list of Viral Sequences,"
+    "detected in the assembly contigs of HoloFood samples from a specific biome."
     "To list the viral sequences (“fragments”) for a catalogue, use `/viral-catalogues/{catalogue_id}/fragments`.",
 )
 def get_viral_catalogue(request, catalogue_id: str):
@@ -311,11 +319,13 @@ def get_viral_catalogue(request, catalogue_id: str):
     "/viral-catalogues/{catalogue_id}/fragments",
     response=list[ViralFragmentSchema],
     summary="Fetch the list of viral fragments (sequences) from a Catalogue",
-    description="Viral fragments are sequences predicted to be viral, found in the assembly contigs of HoloFood samples."
+    description="Viral fragments are sequences predicted to be viral, "
+    "found in the assembly contigs of HoloFood samples."
     "The Catalogue’s viral fragments are all from the same biome."
     "Viral sequences are clustered by sequence identity, at a species-level."
     "Both cluster representatives and cluster members are included."
-    "Where a viral sequence is found in a related MAG (metagenome assembly genome, e.g. a bacterial species), this MAG is considered a “host MAG”.",
+    "Where a viral sequence is found in a related MAG (metagenome assembly genome,"
+    " e.g. a bacterial species), this MAG is considered a “host MAG”.",
 )
 def list_viral_catalogue_fragments(request, catalogue_id: str):
     catalogue = get_object_or_404(ViralCatalogue, id=catalogue_id)

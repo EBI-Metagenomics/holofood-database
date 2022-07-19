@@ -43,7 +43,7 @@
                             name: "ViPhOGs",
                             format: "gff3",
                             indexed: false,
-                            url: "data:text/plain;charset=utf-8;base64,RVJaMjI3MTg2Ni4xLU5PREUtMS1sZW5ndGgtMjEzOTYtY292LTUuMTIyNTM0CVZpUGhPZwlDRFMJMTAyMAkyMDUwCS4JLQkuCUlEPUVSWjIyNzE4NjYuMS1OT0RFLTEtbGVuZ3RoLTIxMzk2LWNvdi01LjEyMjUzNDticml0ZT1rbzAwMDAwLGtvMDAwMDEsa28wMTAwMCxrbzAxMDA0LGtvMDAwMDI7Y29nPUk7ZWNudW1iZXI9Mi4zLjEuMzk7ZWdnbm9nPW1hbG9ueWwlMjBDb0EtYWN5bCUyMGNhcnJpZXIlMjBwcm90ZWluJTIwdHJhbnNhY3lsYXNlJTIwO2VnZ25vZ19ldmFsdWU9MTM1LjI7ZWdnbm9nX29ydGhvbG9nPTExMjA5NjYuQVVCVTAxMDAwMDAyX2dlbmUyMjEzO2VnZ25vZ19zY29yZT0xLjRlLTI5O2VnZ25vZ190YXg9ZmFiRDtrZWdnPWtvOkswMDY0NTtvZ3M9TkF8TkF8TkE7aW50ZXJwcm89SVBSMDAxMjI3LElQUjAxNDA0MztwZmFtPVBGMDA2OTgNCkVSWjIyNzE4NjYuMS1OT0RFLTEtbGVuZ3RoLTIxMzk2LWNvdi01LjEyMjUzNAlWaVBoT2cJQ0RTCTIwMDAJMjQwMAkuCS0JLglJRD1FUloyMjcxODY2LjEtTk9ERS0xLWxlbmd0aC0yMTM5Ni1jb3YtNS4xMjI1MzQ7YnJpdGU9a28wMDAwMCxrbzAxMDAwLGtvMDAwMDE7Y29nPUc7ZWNudW1iZXI9My41LjEuNDEsMy41LjEuMTA0O2VnZ25vZz1Qb2x5c2FjY2hhcmlkZSUyMGRlYWNldHlsYXNlJTIwO2VnZ25vZ19ldmFsdWU9MjAwLjM7ZWdnbm9nX29ydGhvbG9nPTY3OTkzNS5BbGZpXzE1Mzg7ZWdnbm9nX3Njb3JlPTguOGUtNDk7ZWdnbm9nX3RheD1wZ2RBO2tlZ2c9a286SzIyMjc4LGtvOkswMTQ1MjtvZ3M9TkF8TkF8TkE7aW50ZXJwcm89SVBSMDAyNTA5O3BmYW09UEYwMTUyMg0KRVJaMjI3MTg2Ni4xLU5PREUtMS1sZW5ndGgtMjEzOTYtY292LTUuMTIyNTM0CVZpUGhPZwlDRFMJMzIwMAk0MDAwCS4JLQkuCUlEPUVSWjIyNzE4NjYuMS1OT0RFLTEtbGVuZ3RoLTIxMzk2LWNvdi01LjEyMjUzNDtjb2c9TTtlZ2dub2c9SGFzJTIwbGlwaWQlMjBBJTIwMy1PLWRlYWN5bGFzZSUyMGFjdGl2aXR5LiUyMEh5ZHJvbHl6ZXMlMjB0aGUlMjBlc3RlciUyMGJvbmQlMjBhdCUyMHRoZSUyMDMlMjBwb3NpdGlvbiUyMG9mJTIwbGlwaWQlMjBBJTJDJTIwYSUyMGJpb2FjdGl2ZSUyMGNvbXBvbmVudCUyMG9mJTIwbGlwb3BvbHlzYWNjaGFyaWRlJTIwJTI4TFBTJTI5JTJDJTIwdGhlcmVieSUyMHJlbGVhc2luZyUyMHRoZSUyMHByaW1hcnklMjBmYXR0eSUyMGFjeWwlMjBtb2lldHklMjA7ZWdnbm9nX2V2YWx1ZT02NS4xO2VnZ25vZ19vcnRob2xvZz0xMTIzMDM3LkFVREUwMTAwMDAxMF9nZW5lMjQzODtlZ2dub2dfc2NvcmU9My44ZS0wODtvZ3M9TkF8TkF8TkE=",
+                            url: "{% url 'viral_fragment_gff' pk=selected_viral_fragment.id %}",
                             displayMode: 'expanded',
                             color: '#777722',
                         }
@@ -81,14 +81,22 @@
                     <p class="vf-text-body vf-text-body--4">Select a viral sequence in the table to view its parent contig</p>
                 {% endif %}
             </div>
-            <div class="vf-flag vf-flag--top vf-flag--400">
-                <div class="vf-flag__media">
-                    <div style="height: 24px; width: 24px; background-color: rgba(68, 246, 134, 0.25); border-radius: 4px"></div>
+            {% if selected_viral_fragment %}
+                <div class="vf-grid vf-grid__col-2">
+                    <div class="vf-flag vf-flag--top vf-flag--400">
+                        <div class="vf-flag__media">
+                            <div style="height: 24px; width: 24px; background-color: rgba(68, 246, 134, 0.25); border-radius: 4px"></div>
+                        </div>
+                        <div class="vf-flag__body">
+                            <p class="vf-u-type__text-heading--5 vf-u-margin--0">Viral region</p>
+                        </div>
+                    </div>
+                    <div>
+                        <a style="float: right" class="vf-button vf-button--link vf-button--sm" href="{% url 'viral_fragment_gff' pk=selected_viral_fragment.id %}">
+                            <i class="icon icon-common icon-download"></i>&nbsp;Download ViPhOGs GFF</a>
+                    </div>
                 </div>
-                <div class="vf-flag__body">
-                    <p class="vf-u-type__text-heading--5 vf-u-margin--0">Viral region</p>
-                </div>
-            </div>
+            {% endif %}
         </div>
     </section>
     <div class="vf-sidebar vf-sidebar--start vf-sidebar--800">

@@ -2,10 +2,11 @@ import operator
 from functools import reduce
 
 from django.core.paginator import Paginator
-from django.http import Http404
+from django.http import Http404, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, TemplateView, RedirectView
+from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import MultipleObjectMixin
 
 from holofood.external_apis.mgnify.api import get_metagenomics_analyses_for_run
@@ -211,3 +212,21 @@ class ViralCataloguesView(RedirectView):
         if not catalogue:
             raise Http404
         return reverse("viral_catalogue", kwargs={"pk": catalogue.id})
+
+
+class ViralSequenceAnnotationView(BaseDetailView):
+    queryset = ViralFragment.objects
+
+    def render_to_response(self, context):
+        obj: ViralFragment = context["object"]
+
+        def stream_annotations(gff: str):
+            annotations = gff.splitlines()
+            for anno in annotations:
+                yield anno + "\n"
+
+        response = StreamingHttpResponse(
+            stream_annotations(obj.gff), content_type="text/x-gff3"
+        )
+        response["Content-Disposition"] = f"attachment; filename={obj.id}.gff"
+        return response
