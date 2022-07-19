@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
     <div class="vf-stack vf-stack--400">
         <div/>
@@ -13,7 +12,6 @@
                     <hr class="vf-divider"/>
                     {% include "holofood/components/search.html" with form=filterset.form method="get" id="annotations_search" only %}
                 </div>
-
                 {% for annotation in annotations.all %}
                     {% include 'holofood/components/annotation_card.html' with annotation=annotation %}
                 {% endfor %}
@@ -21,4 +19,4 @@
             </div>
         </section>
     </div>
-{% endblock %}
+{% endblock content %}

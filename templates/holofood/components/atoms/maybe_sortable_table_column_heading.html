@@ -1,6 +1,5 @@
 {# Returns a table header cell that is sortable, if the `form` variable in context contains an `ordering` field for `param` #}
 {% load forms %}
-
 <th class="vf-table__heading" scope="col">
     {% if form|contains_ordering_for:param %}
         <button onclick="changeOrdering('{{ param }}')"

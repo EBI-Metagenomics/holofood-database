@@ -1,5 +1,7 @@
 [![Testing](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/test.yml/badge.svg)](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/EBI-Metagenomics/holofood-database/branch/main/graph/badge.svg?token=27IVW899W8)](https://codecov.io/gh/EBI-Metagenomics/holofood-database)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Code style: djlint](https://img.shields.io/badge/html%20style-djlint-blue.svg)](https://www.djlint.com)
 
 # Holofood Data Portal / Database
 The database, website, and API to present [Holofood](https://www.holofood.eu) samples,
@@ -29,6 +31,11 @@ pre-commit install
 
 ### Code style
 Use [Black](https://black.readthedocs.io/en/stable/).
+Use [djLint](https://djlint.com/).
+These are both configured if you install the pre-commit tools as above.
+
+To manually run them:
+`black .` and `djlint . --extension=html --lint` (or `--reformat`).
 
 ## Testing
 ```shell

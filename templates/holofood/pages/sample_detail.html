@@ -1,63 +1,75 @@
 {% extends "base.html" %}
 {% load sample_metadata %}
 {% load static %}
-
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icons.css' %}"/>
     <h1>{{ sample.accession }}: {{ sample.title }}</h1>
-    <p class="vf-lede">Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample includes: metadata from BioSamples and ENA, metagenomics, metabolomics.</p>
-
+    <p class="vf-lede">
+        Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample includes: metadata from BioSamples and ENA, metagenomics, metabolomics.
+    </p>
     <details class="vf-details" open>
-        <summary class="vf-details--summary">Sample details</summary>
+        <summary class="vf-details--summary">
+            Sample details
+        </summary>
         <dl class="vf-list vf-list--definition">
-          <dt class="vf-list__item vf-list--definition__term"> Project </dt>
-          <dd class="vf-list__item vf-list--definition__details">
-              <a class="vf-link" href="{% url 'samples_list'  %}?project__accession__icontains={{ sample.project.accession }}">
-                  {{ sample.project.accession }}: {{ sample.project.title }}
-              </a>
-          </dd>
-          <dt class="vf-list__item vf-list--definition__term"> System </dt>
-          <dd class="vf-list__item vf-list--definition__details">
-               <a class="vf-link" href="{% url 'samples_list'  %}?system={{ sample.system }}">
-                  {{ sample.system }}
-               </a>
-           </dd>
-          <dt class="vf-list__item vf-list--definition__term"> API endpoint </dt>
-              {% url 'api:sample_detail' sample_accession=sample.accession as endpoint %}
-              <dd class="vf-list__item vf-list--definition__details">
-                  <span class="api-endpoint">
-                      <a class="vf-link" href="{{ endpoint }}">
-                          {{ endpoint }}
-                      </a>
-                      <button class="vf-button vf-button--link vf-button--sm inline" onclick="copyApiEndpoint()"><img src="{% static 'img/icons/copy.svg' %}" height="16px" alt="Copy"/></button>
-                  </span>
-              </dd>
+            <dt class="vf-list__item vf-list--definition__term">
+                Project
+            </dt>
+            <dd class="vf-list__item vf-list--definition__details">
+                <a class="vf-link"
+                   href="{% url 'samples_list' %}?project__accession__icontains={{ sample.project.accession }}">
+                    {{ sample.project.accession }}: {{ sample.project.title }}
+                </a>
+            </dd>
+            <dt class="vf-list__item vf-list--definition__term">
+                System
+            </dt>
+            <dd class="vf-list__item vf-list--definition__details">
+                <a class="vf-link"
+                   href="{% url 'samples_list' %}?system={{ sample.system }}">{{ sample.system }}</a>
+            </dd>
+            <dt class="vf-list__item vf-list--definition__term">
+                API endpoint
+            </dt>
+            {% url 'api:sample_detail' sample_accession=sample.accession as endpoint %}
+            <dd class="vf-list__item vf-list--definition__details">
+                <span class="api-endpoint">
+                    <a class="vf-link" href="{{ endpoint }}">{{ endpoint }}</a>
+                    <button class="vf-button vf-button--link vf-button--sm inline"
+                            onclick="copyApiEndpoint()">
+                        <img src="{% static 'img/icons/copy.svg' %}" height="16px" alt="Copy"/>
+                    </button>
+                </span>
+            </dd>
         </dl>
     </details>
-
     <script>
         function copyApiEndpoint(e) {
             navigator.clipboard.writeText('{{ endpoint }}');
         }
     </script>
-
     <details class="vf-details">
-      <summary class="vf-details--summary">Sample metadata</summary>
+        <summary class="vf-details--summary">
+            Sample metadata
+        </summary>
         <p class="vf-text-body">Metadata for sample {{ sample.accession }}, stored in BioSamples and ENA.</p>
-        <a class="vf-button vf-button--link vf-button--sm" href="{% url 'export:sample_metadata_list' sample_accession=sample.accession %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
-        {% regroup sample.structured_metadata.all by marker.type as metadata_sections  %}
+        <a class="vf-button vf-button--link vf-button--sm"
+           href="{% url 'export:sample_metadata_list' sample_accession=sample.accession %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
+        {% regroup sample.structured_metadata.all by marker.type as metadata_sections %}
         <div class="vf-tabs">
             <ul class="vf-tabs__list" data-vf-js-tabs>
                 {% for metadata_section in metadata_sections %}
-                      <li class="vf-tabs__item">
-                          <a class="vf-tabs__link" href="#vf-tabs__section--{{ metadata_section.grouper|lower|cut:" " }}">{{ metadata_section.grouper|default:"Generic"|title }}</a>
-                      </li>
+                    <li class="vf-tabs__item">
+                        <a class="vf-tabs__link"
+                           href="#vf-tabs__section--{{ metadata_section.grouper|lower|cut:" " }}">{{ metadata_section.grouper|default:"Generic"|title }}</a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
         <div class="vf-tabs-content" data-vf-js-tabs-content>
             {% for metadata_section in metadata_sections %}
-                <section class="vf-tabs__section" id="vf-tabs__section--{{ metadata_section.grouper|lower|cut:" " }}">
+                <section class="vf-tabs__section"
+                         id="vf-tabs__section--{{ metadata_section.grouper|lower|cut:" " }}">
                     <h2>{{ metadata_section.grouper|default:"Generic"|title }} metadata</h2>
                     <table class="vf-table scrollable-table">
                         <thead class="vf-table__header">
@@ -81,12 +93,15 @@
             {% endfor %}
         </div>
     </details>
-
     <details class="vf-details">
-        <summary class="vf-details--summary">Metagenomics</summary>
+        <summary class="vf-details--summary">
+            Metagenomics
+        </summary>
         {% if sample.has_metagenomics %}
-            <p>Sample {{ sample.accession }} has metagenomic datasets available on MGnify.
-            <a class="vf-button vf-button--link vf-button--sm" href="{{ MGNIFY_WEB_URL }}/samples/{{ sample.accession }}">View sample on MGnify</a>
+            <p>
+                Sample {{ sample.accession }} has metagenomic datasets available on MGnify.
+                <a class="vf-button vf-button--link vf-button--sm"
+                   href="{{ MGNIFY_WEB_URL }}/samples/{{ sample.accession }}">View sample on MGnify</a>
             </p>
             <table class="vf-table scrollable-table">
                 <thead class="vf-table__header">
@@ -98,25 +113,25 @@
                         <th class="vf-table__heading" scope="col">Detail</th>
                     </tr>
                 </thead>
-
                 <h3>Analyses</h3>
                 <tbody class="vf-table__body">
                     {% for analysis in analyses %}
                         <tr class="vf-table__row">
                             <td class="vf-table__cell">
-                                <a href="{{ MGNIFY_WEB_URL }}/analyses/{{ analysis.id }}" class="vf-link">
-                                    {{ analysis.id }}
-                                </a>
+                                <a href="{{ MGNIFY_WEB_URL }}/analyses/{{ analysis.id }}"
+                                   class="vf-link">{{ analysis.id }}</a>
                             </td>
                             <td class="vf-table__cell">
-                                <a href="{{ MGNIFY_WEB_URL }}/runs/{{ analysis.relationships.run.data.id }}" class="vf-link">
+                                <a href="{{ MGNIFY_WEB_URL }}/runs/{{ analysis.relationships.run.data.id }}"
+                                   class="vf-link">
                                     {{ analysis.relationships.run.data.id }}
                                 </a>
                             </td>
                             <td class="vf-table__cell">{{ analysis.attributes.pipeline_version }}</td>
                             <td class="vf-table__cell">{{ analysis.attributes.experiment_type }}</td>
                             <td class="vf-table__cell">
-                                <a class="vf-button vf-button--link vf-button--sm inline" href="{{ MGNIFY_WEB_URL }}/analyses/{{ analysis.id }}">
+                                <a class="vf-button vf-button--link vf-button--sm inline"
+                                   href="{{ MGNIFY_WEB_URL }}/analyses/{{ analysis.id }}">
                                     View on MGnify
                                 </a>
                             </td>
@@ -126,12 +141,14 @@
             </table>
         {% endif %}
     </details>
-
     <details class="vf-details">
-      <summary class="vf-details--summary">Metabolomics</summary>
-        <p>View on Metabolights</p>
+        <summary class="vf-details--summary">
+            Metabolomics
+        </summary>
+        <p>
+            View on Metabolights
+        </p>
     </details>
-
     <section class="vf-card-container vf-card-container__col-3 | vf-u-background-color--grey--lightest vf-u-fullbleed">
         <div class="vf-card-container__inner">
             <div class="vf-section-header">
@@ -142,10 +159,10 @@
                     Documents written by HoloFood partners and collaborators relevant to Sample {{ sample.accession }}
                 </p>
             </div>
-        {% for annotation in sample.annotations.all %}
-            {% include 'holofood/components/annotation_card.html' with annotation=annotation %}
-        {% endfor %}
-        {% include 'holofood/components/atoms/possibly_empty_state.html' with items=sample.annotations empty_text="No summaries mention this sample" colspan=3 %}
+            {% for annotation in sample.annotations.all %}
+                {% include 'holofood/components/annotation_card.html' with annotation=annotation %}
+            {% endfor %}
+            {% include 'holofood/components/atoms/possibly_empty_state.html' with items=sample.annotations empty_text="No summaries mention this sample" colspan=3 %}
         </div>
     </section>
-{% endblock %}
+{% endblock content %}
