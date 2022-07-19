@@ -70,12 +70,13 @@
             {% endfor %}
         </ul>
     </nav>
-    <section class="vf-card-container | vf-u-background-color-ui--grey--light vf-u-fullbleed">
+    <section class="vf-card-container | vf-u-background-color-ui--grey--light vf-u-fullbleed vf-stack">
         <h2 class="vf-section-header__heading">Viral contig viewer</h2>
         <div style="background-color: white; width: 100%; padding: 24px" class="vf-stack vf-stack--400">
             <div id="igv-contig-browser">
                 {% if not selected_viral_fragment %}
-                    <h5>No contig selected</h5>
+                    <h4>No contig selected</h4>
+                    <p class="vf-text-body vf-text-body--4">Select a viral sequence in the table to view its parent contig</p>
                 {% endif %}
             </div>
             <div class="vf-flag vf-flag--top vf-flag--400">

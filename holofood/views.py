@@ -21,6 +21,7 @@ from holofood.models import (
     GenomeCatalogue,
     ViralCatalogue,
     ViralFragment,
+    Genome,
 )
 
 
@@ -114,6 +115,8 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["samples_count"] = Sample.objects.count()
+        context["mags_count"] = Genome.objects.count()
+        context["viral_count"] = ViralFragment.objects.count()
         context["annotations_count"] = SampleAnnotation.objects.filter(
             is_published=True
         ).count()

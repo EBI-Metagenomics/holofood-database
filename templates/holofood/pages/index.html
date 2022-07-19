@@ -2,6 +2,9 @@
 
 {% block content %}
 <section class="vf-grid vf-grid__col-3 | vf-card-container | vf-u-fullbleed vf-u-background-color-ui--grey--light">
+    <div class="vf-section-header vf-grid__col--span-3">
+        <h2 class="vf-section-header__heading">HoloFood data resources</h2>
+    </div>
     <div class="vf-grid__col--span-2">
 
         <div class="vf-grid vf-grid__col-2">
@@ -20,6 +23,24 @@
                       <a class="vf-card__link" href="{% url 'annotations_list' %}">Read analysis summaries</a>
                     </h3>
                     <p class="vf-card__text">{{ annotations_count }} analysis summaries based on HoloFood samples</p>
+                </div>
+            </article>
+
+            <article class="vf-card vf-card--brand vf-card--bordered">
+                <div class="vf-card__content | vf-stack vf-stack--400">
+                    <h3 class="vf-card__heading">
+                      <a class="vf-card__link" href="{% url 'genome_catalogues' %}">Explore genome catalogues</a>
+                    </h3>
+                    <p class="vf-card__text">{{ mags_count }} genomes assembled from HoloFood metagenomic samples</p>
+                </div>
+            </article>
+
+            <article class="vf-card vf-card--brand vf-card--bordered">
+                <div class="vf-card__content | vf-stack vf-stack--400">
+                    <h3 class="vf-card__heading">
+                      <a class="vf-card__link" href="{% url 'viral_catalogues' %}">Explore viral catalogues</a>
+                    </h3>
+                    <p class="vf-card__text">{{ viral_count }} viral sequences predicted in HoloFood samples</p>
                 </div>
             </article>
 
