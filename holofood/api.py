@@ -30,7 +30,8 @@ api = NinjaAPI(
     "- [Documentation](/docs)\n"
     "- [HoloFood Data Portal home](/)\n"
     "- [HoloFood Project Website](https://www.holofood.eu)\n"
-    "- [Helpdesk](https://www.ebi.ac.uk/contact)\n",
+    "- [Helpdesk](https://www.ebi.ac.uk/contact)\n"
+    "- [TSV Export endpoints](/export/docs)",
     urls_namespace="api",
     default_router=RouterPaginated(),
     csrf=True,
@@ -186,21 +187,28 @@ class ViralFragmentSchema(ModelSchema):
         ]
 
 
+SAMPLES = "Samples"
+ANALYSES = "Analyses"
+GENOMES = "Genomes"
+VIRUSES = "Viruses"
+
+
+class System(Enum):
+    salmon: str = Sample.SALMON
+    chicken: str = Sample.CHICKEN
+
+
 @api.get(
     "/samples/{sample_accession}",
     response=SampleSchema,
     summary="Fetch a single Sample from the HoloFood database.",
     description="Retrieve a single Sample by its ENA accession, including all structured metadata available. ",
     url_name="sample_detail",
+    tags=[SAMPLES],
 )
 def get_sample(request, sample_accession: str):
     sample = get_object_or_404(Sample, accession=sample_accession)
     return sample
-
-
-class System(Enum):
-    salmon: str = Sample.SALMON
-    chicken: str = Sample.CHICKEN
 
 
 @api.get(
@@ -211,6 +219,7 @@ class System(Enum):
     "Several filters are available, which mostly perform case-insensitive containment lookups. "
     "Sample metadata are *not* returned for each item. "
     "Use the `/samples/{sample_accession}` endpoint to retrieve those.",
+    tags=[SAMPLES],
 )
 def list_samples(
     request,
@@ -245,6 +254,7 @@ def list_samples(
     "Typically these are aggregative or comparative analyses of the Samples. "
     "These are text and graphic documents. "
     "They are not intended for programmatic consumption, so a website URL is returned for each. ",
+    tags=[ANALYSES],
 )
 def list_annotations(
     request,
@@ -258,6 +268,7 @@ def list_annotations(
     summary="Fetch a list of Genome (MAG) Catalogues",
     description="Genome Catalogues are lists of Metagenomic Assembled Genomes (MAGs)"
     "MAGs originating from HoloFood samples are organised into biome-specific catalogues.",
+    tags=[GENOMES],
 )
 def list_genome_catalogues(request):
     return GenomeCatalogue.objects.all()
@@ -271,6 +282,7 @@ def list_genome_catalogues(request):
     "MAGs originating from HoloFood samples are organised into biome-specific catalogues."
     "To list the genomes for a catalogue, use `/genome-catalogues/{catalogue_id}/genomes`.",
     url_name="get_genome_catalogue",
+    tags=[GENOMES],
 )
 def get_genome_catalogue(request, catalogue_id: str):
     catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
@@ -285,6 +297,7 @@ def get_genome_catalogue(request, catalogue_id: str):
     "MAGs listed originate from HoloFood samples."
     "Each MAG has also been clustered with MAGs from other projects."
     "Each HoloFood MAG references the best representative of these clusters, in MGnify.",
+    tags=[GENOMES],
 )
 def list_genome_catalogue_genomes(request, catalogue_id: str):
     catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
@@ -297,6 +310,7 @@ def list_genome_catalogue_genomes(request, catalogue_id: str):
     summary="Fetch a list of Viral (contig fragment) Catalogues",
     description="Viral Catalogues are lists of Viral Sequences,"
     "detected in the assembly contigs of HoloFood samples from a specific biome.",
+    tags=[VIRUSES],
 )
 def list_viral_catalogues(request):
     return ViralCatalogue.objects.all()
@@ -309,6 +323,7 @@ def list_viral_catalogues(request):
     description="A Viral Catalogue is a list of Viral Sequences,"
     "detected in the assembly contigs of HoloFood samples from a specific biome."
     "To list the viral sequences (“fragments”) for a catalogue, use `/viral-catalogues/{catalogue_id}/fragments`.",
+    tags=[VIRUSES],
 )
 def get_viral_catalogue(request, catalogue_id: str):
     catalogue = get_object_or_404(ViralCatalogue, id=catalogue_id)
@@ -326,6 +341,7 @@ def get_viral_catalogue(request, catalogue_id: str):
     "Both cluster representatives and cluster members are included."
     "Where a viral sequence is found in a related MAG (metagenome assembly genome,"
     " e.g. a bacterial species), this MAG is considered a “host MAG”.",
+    tags=[VIRUSES],
 )
 def list_viral_catalogue_fragments(request, catalogue_id: str):
     catalogue = get_object_or_404(ViralCatalogue, id=catalogue_id)

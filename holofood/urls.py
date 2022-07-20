@@ -71,7 +71,7 @@ urlpatterns = [
     ),
     path("genome-catalogues", GenomeCataloguesView.as_view(), name="genome_catalogues"),
     path(
-        "viral-catalogue/<str:pk>/",
+        "viral-catalogue/<str:pk>",
         ViralCatalogueView.as_view(),
         name="viral_catalogue",
     ),
