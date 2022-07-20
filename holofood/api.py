@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from ninja import ModelSchema, NinjaAPI, Field
 from ninja.pagination import RouterPaginated
+from pydantic import AnyHttpUrl
 
 from holofood.models import (
     Sample,
@@ -17,6 +18,8 @@ from holofood.models import (
     SampleAnnotation,
     GenomeCatalogue,
     Genome,
+    ViralCatalogue,
+    ViralFragment,
 )
 from holofood.utils import holofood_config
 
@@ -24,10 +27,11 @@ api = NinjaAPI(
     title="HoloFood Data Portal API",
     description="The API to browse [HoloFood](https://www.holofood.eu) samples and metadata, "
     "and navigate to datasets stored in public archives. \n\n #### Useful links: \n"
-    "- [Documentation](todo)\n"
+    "- [Documentation](/docs)\n"
     "- [HoloFood Data Portal home](/)\n"
     "- [HoloFood Project Website](https://www.holofood.eu)\n"
-    "- [Helpdesk](https://www.ebi.ac.uk/contact)\n",
+    "- [Helpdesk](https://www.ebi.ac.uk/contact)\n"
+    "- [TSV Export endpoints](/export/docs)",
     urls_namespace="api",
     default_router=RouterPaginated(),
     csrf=True,
@@ -130,21 +134,81 @@ class GenomeSchema(ModelSchema):
         model_fields = ["accession", "cluster_representative", "taxonomy", "metadata"]
 
 
+class ViralCatalogueSchema(ModelSchema):
+    related_genome_catalogue: GenomeCatalogueSchema
+
+    @staticmethod
+    def resolve_related_genome_catalogue_url(obj: ViralCatalogue):
+        return reverse(
+            "api:get_genome_catalogue",
+            kwargs={"catalogue_id": obj.related_genome_catalogue_id},
+        )
+
+    related_genome_catalogue_url: str
+
+    class Config:
+        model = ViralCatalogue
+        model_fields = ["id", "title", "biome", "system"]
+
+
+class ViralFragmentSchema(ModelSchema):
+    cluster_representative: Optional["ViralFragmentSchema"]
+    host_mag: Optional[GenomeSchema]
+
+    @staticmethod
+    def resolve_contig_url(obj: ViralFragment):
+        return f"{holofood_config.mgnify.api_root}/analyses/{obj.mgnify_analysis_accession}/contigs/{obj.contig_id}"
+
+    contig_url: AnyHttpUrl
+
+    @staticmethod
+    def resolve_mgnify_analysis_url(obj: ViralFragment):
+        return f"{holofood_config.mgnify.api_root}/analyses/{obj.mgnify_analysis_accession}"
+
+    mgnify_analysis_url: AnyHttpUrl
+
+    @staticmethod
+    def resolve_gff_url(obj: ViralFragment):
+        return reverse("viral_fragment_gff", kwargs={"pk": obj.id})
+
+    gff_url: str
+
+    class Config:
+        model = ViralFragment
+        model_fields = [
+            "id",
+            "contig_id",
+            "mgnify_analysis_accession",
+            "start_within_contig",
+            "end_within_contig",
+            "metadata",
+            "host_mag",
+            "viral_type",
+        ]
+
+
+SAMPLES = "Samples"
+ANALYSES = "Analyses"
+GENOMES = "Genomes"
+VIRUSES = "Viruses"
+
+
+class System(Enum):
+    salmon: str = Sample.SALMON
+    chicken: str = Sample.CHICKEN
+
+
 @api.get(
     "/samples/{sample_accession}",
     response=SampleSchema,
     summary="Fetch a single Sample from the HoloFood database.",
     description="Retrieve a single Sample by its ENA accession, including all structured metadata available. ",
     url_name="sample_detail",
+    tags=[SAMPLES],
 )
 def get_sample(request, sample_accession: str):
     sample = get_object_or_404(Sample, accession=sample_accession)
     return sample
-
-
-class System(Enum):
-    salmon: str = Sample.SALMON
-    chicken: str = Sample.CHICKEN
 
 
 @api.get(
@@ -155,6 +219,7 @@ class System(Enum):
     "Several filters are available, which mostly perform case-insensitive containment lookups. "
     "Sample metadata are *not* returned for each item. "
     "Use the `/samples/{sample_accession}` endpoint to retrieve those.",
+    tags=[SAMPLES],
 )
 def list_samples(
     request,
@@ -189,6 +254,7 @@ def list_samples(
     "Typically these are aggregative or comparative analyses of the Samples. "
     "These are text and graphic documents. "
     "They are not intended for programmatic consumption, so a website URL is returned for each. ",
+    tags=[ANALYSES],
 )
 def list_annotations(
     request,
@@ -200,6 +266,9 @@ def list_annotations(
     "/genome-catalogues",
     response=list[GenomeCatalogueSchema],
     summary="Fetch a list of Genome (MAG) Catalogues",
+    description="Genome Catalogues are lists of Metagenomic Assembled Genomes (MAGs)"
+    "MAGs originating from HoloFood samples are organised into biome-specific catalogues.",
+    tags=[GENOMES],
 )
 def list_genome_catalogues(request):
     return GenomeCatalogue.objects.all()
@@ -209,9 +278,11 @@ def list_genome_catalogues(request):
     "/genome-catalogues/{catalogue_id}",
     response=GenomeCatalogueSchema,
     summary="Fetch a single Genome Catalogue",
-    description="Genome Catalogues are lists of Metagenomic Assembled Genomes (MAGs)."
-    "MAGs originating from HoloFood samples are organised into catalogues."
+    description="A Genome Catalogue is a list of Metagenomic Assembled Genomes (MAGs)."
+    "MAGs originating from HoloFood samples are organised into biome-specific catalogues."
     "To list the genomes for a catalogue, use `/genome-catalogues/{catalogue_id}/genomes`.",
+    url_name="get_genome_catalogue",
+    tags=[GENOMES],
 )
 def get_genome_catalogue(request, catalogue_id: str):
     catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
@@ -226,7 +297,52 @@ def get_genome_catalogue(request, catalogue_id: str):
     "MAGs listed originate from HoloFood samples."
     "Each MAG has also been clustered with MAGs from other projects."
     "Each HoloFood MAG references the best representative of these clusters, in MGnify.",
+    tags=[GENOMES],
 )
 def list_genome_catalogue_genomes(request, catalogue_id: str):
     catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
     return catalogue.genomes.all()
+
+
+@api.get(
+    "/viral-catalogues",
+    response=list[ViralCatalogueSchema],
+    summary="Fetch a list of Viral (contig fragment) Catalogues",
+    description="Viral Catalogues are lists of Viral Sequences,"
+    "detected in the assembly contigs of HoloFood samples from a specific biome.",
+    tags=[VIRUSES],
+)
+def list_viral_catalogues(request):
+    return ViralCatalogue.objects.all()
+
+
+@api.get(
+    "/viral-catalogues/{catalogue_id}",
+    response=ViralCatalogueSchema,
+    summary="Fetch a single Viral Catalogue",
+    description="A Viral Catalogue is a list of Viral Sequences,"
+    "detected in the assembly contigs of HoloFood samples from a specific biome."
+    "To list the viral sequences (“fragments”) for a catalogue, use `/viral-catalogues/{catalogue_id}/fragments`.",
+    tags=[VIRUSES],
+)
+def get_viral_catalogue(request, catalogue_id: str):
+    catalogue = get_object_or_404(ViralCatalogue, id=catalogue_id)
+    return catalogue
+
+
+@api.get(
+    "/viral-catalogues/{catalogue_id}/fragments",
+    response=list[ViralFragmentSchema],
+    summary="Fetch the list of viral fragments (sequences) from a Catalogue",
+    description="Viral fragments are sequences predicted to be viral, "
+    "found in the assembly contigs of HoloFood samples."
+    "The Catalogue’s viral fragments are all from the same biome."
+    "Viral sequences are clustered by sequence identity, at a species-level."
+    "Both cluster representatives and cluster members are included."
+    "Where a viral sequence is found in a related MAG (metagenome assembly genome,"
+    " e.g. a bacterial species), this MAG is considered a “host MAG”.",
+    tags=[VIRUSES],
+)
+def list_viral_catalogue_fragments(request, catalogue_id: str):
+    catalogue = get_object_or_404(ViralCatalogue, id=catalogue_id)
+    return catalogue.viral_fragments.all()

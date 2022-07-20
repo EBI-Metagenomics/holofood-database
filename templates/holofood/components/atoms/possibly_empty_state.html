@@ -1,11 +1,13 @@
 {% load static %}
-
 {% if items.count == 0 %}
     <article class="vf-card vf-card--hf vf-card--bordered vf-grid__col--span-{{ colspan|default:1 }}">
         <div class="vf-card__content | vf-stack vf-stack--400">
             <div class="vf-flag vf-flag--middle vf-flag--400">
                 <div class="vf-flag__media">
-                    <img src="{% static 'img/icons/empty-bowl.svg' %}" height="36px" alt="Empty set icon"/>
+                    <img src="{% static 'img/icons/empty-bowl.svg' %}"
+                         height="36px"
+                         width="36px"
+                         alt="Empty set icon"/>
                 </div>
                 <div class="vf-flag__body">
                     <p class="vf-card__subheading">{{ empty_text|default:"None found" }}</p>

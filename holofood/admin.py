@@ -1,4 +1,6 @@
+from django import forms
 from django.contrib import admin
+from django.db import models
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from holofood.models import (
@@ -10,6 +12,8 @@ from holofood.models import (
     SampleAnnotation,
     GenomeCatalogue,
     Genome,
+    ViralFragment,
+    ViralCatalogue,
 )
 
 
@@ -58,8 +62,41 @@ class SampleAnnotationAdmin(admin.ModelAdmin):
 class GenomeInline(TabularInlinePaginated):
     model = Genome
     per_page = 5
+    can_delete = True
+    show_change_link = True
+    show_full_result_count = True
 
 
 @admin.register(GenomeCatalogue)
 class GenomeCatalogueAdmin(admin.ModelAdmin):
     inlines = [GenomeInline]
+
+
+class ViralFragmentInline(TabularInlinePaginated):
+    model = ViralFragment
+    fields = ["id", "cluster_representative", "viral_type"]
+    per_page = 5
+    can_delete = True
+    show_change_link = True
+    show_full_result_count = True
+
+
+@admin.register(ViralCatalogue)
+class ViralCatalogueAdmin(admin.ModelAdmin):
+    inlines = [ViralFragmentInline]
+
+
+@admin.register(ViralFragment)
+class ViralFragmentAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {
+            "widget": forms.Textarea(
+                attrs={"cols": 180, "style": "font-family: monospace;"}
+            )
+        },
+        models.JSONField: {
+            "widget": forms.Textarea(
+                attrs={"cols": 180, "style": "font-family: monospace;"}
+            )
+        },
+    }

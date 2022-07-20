@@ -182,8 +182,62 @@ def test_mag_catalogues(client, chicken_mag_catalogue):
 
 @pytest.mark.django_db
 def test_mag_catalogues_export(client, chicken_mag_catalogue):
-    response = client.get(f"/api/genome-catalogues/{chicken_mag_catalogue.id}/genomes")
+    response = client.get(
+        f"/export/genome-catalogues/{chicken_mag_catalogue.id}/genomes"
+    )
     assert response.status_code == 200
     data = response.content.decode()
     assert "accession" in data
     assert chicken_mag_catalogue.genomes.first().accession in data
+
+
+@pytest.mark.django_db
+def test_viral_catalogues(client, chicken_viral_catalogue):
+    response = client.get("/api/viral-catalogues")
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("count") == 1
+    assert data.get("items")[0]["id"] == chicken_viral_catalogue.id
+
+    response = client.get(f"/api/viral-catalogues/{chicken_viral_catalogue.id}")
+    assert response.status_code == 200
+    data = response.json()
+    assert all(
+        [
+            key in data
+            for key in [
+                "id",
+                "title",
+                "biome",
+                "related_genome_catalogue_url",
+                "related_genome_catalogue",
+                "system",
+            ]
+        ]
+    )
+    assert data.get("system") == "chicken"
+    assert (
+        data.get("related_genome_catalogue", {}).get("id")
+        == chicken_viral_catalogue.related_genome_catalogue.id
+    )
+
+    response = client.get(
+        f"/api/viral-catalogues/{chicken_viral_catalogue.id}/fragments"
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("count") == 2
+    assert (
+        data.get("items")[0]["id"] == chicken_viral_catalogue.viral_fragments.first().id
+    )
+
+
+@pytest.mark.django_db
+def test_viral_catalogues_export(client, chicken_viral_catalogue):
+    response = client.get(
+        f"/export/viral-catalogues/{chicken_viral_catalogue.id}/fragments"
+    )
+    assert response.status_code == 200
+    data = response.content.decode()
+    assert "id" in data
+    assert chicken_viral_catalogue.viral_fragments.first().id in data

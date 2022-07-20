@@ -2,14 +2,28 @@ import operator
 from functools import reduce
 
 from django.core.paginator import Paginator
-from django.http import Http404
+from django.http import Http404, StreamingHttpResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, TemplateView, RedirectView
+from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import MultipleObjectMixin
 
 from holofood.external_apis.mgnify.api import get_metagenomics_analyses_for_run
-from holofood.filters import SampleFilter, MultiFieldSearchFilter, GenomeFilter
-from holofood.models import Sample, SampleAnnotation, GenomeCatalogue
+from holofood.filters import (
+    SampleFilter,
+    MultiFieldSearchFilter,
+    GenomeFilter,
+    ViralFragmentFilter,
+)
+from holofood.models import (
+    Sample,
+    SampleAnnotation,
+    GenomeCatalogue,
+    ViralCatalogue,
+    ViralFragment,
+    Genome,
+)
 
 
 class ListFilterView(ListView):
@@ -102,6 +116,8 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["samples_count"] = Sample.objects.count()
+        context["mags_count"] = Genome.objects.count()
+        context["viral_count"] = ViralFragment.objects.count()
         context["annotations_count"] = SampleAnnotation.objects.filter(
             is_published=True
         ).count()
@@ -160,3 +176,57 @@ class GenomeCataloguesView(RedirectView):
         if not catalogue:
             raise Http404
         return reverse("genome_catalogue", kwargs={"pk": catalogue.id})
+
+
+class ViralCatalogueView(DetailViewWithPaginatedRelatedList):
+    model = ViralCatalogue
+    context_object_name = "catalogue"
+    paginate_by = 10
+    template_name = "holofood/pages/viral_catalogue_detail.html"
+    filterset_class = ViralFragmentFilter
+
+    related_name = "viral_fragments"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["catalogues"] = ViralCatalogue.objects.all()
+        context["SHOWALL"] = ViralFragmentFilter.ALL
+        return context
+
+
+class ViralCatalogueFragmentView(ViralCatalogueView):
+    def get_context_data(self, **kwargs):
+        context = super(ViralCatalogueFragmentView, self).get_context_data(**kwargs)
+        fragment = get_object_or_404(
+            ViralFragment, id=self.kwargs.get("viral_fragment_pk")
+        )
+        context["selected_viral_fragment"] = fragment
+        return context
+
+
+class ViralCataloguesView(RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        catalogue = ViralCatalogue.objects.first()
+        if not catalogue:
+            raise Http404
+        return reverse("viral_catalogue", kwargs={"pk": catalogue.id})
+
+
+class ViralSequenceAnnotationView(BaseDetailView):
+    queryset = ViralFragment.objects
+
+    def render_to_response(self, context):
+        obj: ViralFragment = context["object"]
+
+        def stream_annotations(gff: str):
+            annotations = gff.splitlines()
+            for anno in annotations:
+                yield anno + "\n"
+
+        response = StreamingHttpResponse(
+            stream_annotations(obj.gff), content_type="text/x-gff3"
+        )
+        response["Content-Disposition"] = f"attachment; filename={obj.id}.gff"
+        return response

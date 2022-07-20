@@ -1,4 +1,5 @@
 from django import template
+from django.urls import reverse
 
 register = template.Library()
 
@@ -40,3 +41,30 @@ def url_for_param(context, param, value):
     to[param] = value
 
     return f"?{to.urlencode()}"
+
+
+@register.simple_tag(takes_context=True)
+def url_preserving_params(context, viewname, **kwargs):
+    """
+    Construct a URL for view_name whilst preserving the current URL Query Parameters.
+
+    Usage:  <a href="{% url_preserving_params 'viral_catalogue_fragment' pk=catalogue.id %}">3</a>
+
+    :param context: Django template context
+    :param viewname: The Django URL pattern name to be reversed.
+    :param kwargs: Dict of arguments for the URL.
+    :return: URL string.
+    """
+    base_url = reverse(viewname, kwargs=kwargs)
+    return f'{base_url}?{context["request"].GET.copy().urlencode()}'
+
+
+@register.inclusion_tag(
+    "holofood/components/atoms/clear_filters.html", takes_context=True
+)
+def clear_filters_button(context):
+    request = context["request"]
+    return {
+        "has_query_params": len(request.GET) > 0,
+        "url": request.build_absolute_uri(request.path),
+    }
