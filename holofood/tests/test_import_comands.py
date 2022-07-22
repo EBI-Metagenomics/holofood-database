@@ -1,4 +1,5 @@
 import logging
+import os.path
 from io import StringIO
 
 
@@ -10,7 +11,7 @@ from holofood.external_apis.ena.portal_api import API_ROOT as ENAAPIROOT
 from holofood.external_apis.biosamples.api import API_ROOT as BSAPIROOT
 from holofood.external_apis.ena.submit_api import API_ROOT as DBAPIROOT
 from holofood.external_apis.mgnify.api import API_ROOT as MGAPIROOT
-from holofood.models import Sample, Project
+from holofood.models import Sample, Project, ViralCatalogue
 
 
 def _call_command(command, *args, **kwargs):
@@ -97,3 +98,31 @@ def test_refresh_external_data(
     logging.info(out)
     salmon_sample.refresh_from_db()
     assert salmon_sample.has_metagenomics
+
+
+@pytest.mark.django_db
+def test_import_viral_catalogue(chicken_mag_catalogue):
+    tests_path = os.path.dirname(__file__)
+    out = _call_command(
+        "import_viral_catalogue",
+        "hf-donut-vir-cat-1",
+        f"{tests_path}/static_fixtures/viral_catalogue/viral_cat.tsv",
+        f"{tests_path}/static_fixtures/viral_catalogue",
+        "Donut Viral Catalogue",
+        chicken_mag_catalogue.id,
+    )
+    logging.info(out)
+
+    assert ViralCatalogue.objects.filter(id="hf-donut-vir-cat-1").exists()
+
+    created_catalogue = ViralCatalogue.objects.get(id="hf-donut-vir-cat-1")
+    assert created_catalogue.title == "Donut Viral Catalogue"
+    assert created_catalogue.biome == chicken_mag_catalogue.biome
+    assert created_catalogue.system == chicken_mag_catalogue.system
+    assert created_catalogue.viral_fragments.count() == 2
+
+    fragment = created_catalogue.viral_fragments.get(id="MGYC003-start-512-end-768")
+    assert fragment.cluster_representative.id == "MGYC001-start-256-end-512"
+    assert "ViPhOG2" in fragment.gff
+    assert fragment.start_within_contig == 512
+    assert fragment.end_within_contig == 768
