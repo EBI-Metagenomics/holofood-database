@@ -4,6 +4,11 @@
 The database and website to present [Holofood](https://www.holofood.eu) samples,
 and unify the datasets stored in supporting services.
 
+<figure markdown>
+  ![Diagram of HoloFood data flow](/img/index/data-flow.png)
+  <figcaption>Diagram of data flow from HoloFood samples into public repositories</figcaption>
+</figure>
+
 ## Background
 HoloFood is a consortium and project focussed on understanding the biomolecular 
 and physiological processes  triggered by incorporating feed additives and novel

@@ -4,12 +4,25 @@ site_description: Documentation for the HoloFood Data Portal – a hub for acces
 site_author: HoloFood Consortium
 
 theme:
-    name: readthedocs
-    highlightjs: true
+    name: material
+    palette:
+        primary: teal
+    font:
+        text: IBM Plex Sans
+        code: IBM Plex Mono
+    logo: img/hf-logo-white.png
+    favicon: img/hf-logo-brand.png
+
+markdown_extensions:
+  - md_in_html
 
 nav:
     - 'index.md'
     - 'data.md'
     - 'website.md'
     - 'api.md'
+    - 'tutorial.md'
     - 'partners.md'
+
+extra_css:
+  - stylesheets/brand.css
