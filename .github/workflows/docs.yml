@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
   push:
-    branches: [main, quarto]
+    branches: [main]
     paths:
       - 'docs/**'
 

@@ -117,7 +117,9 @@ To develop documentation:
 
 ### To make some small text changes
 Just edit the `.qmd` (essentially just Markdown) files, and commit to GitHub.
-GitHub Actions will render your changes.
+GitHub Actions will render your changes to the 
+[GitHub Pages site](https://ebi-metagenomics.github.io/holofood-database/).
+(Because there is a `.github/workflows/docs.yml` action to do this.)
 
 ### To preview changes, or change a Jupyter Notebook
 [Install Quarto](https://quarto.org/docs/get-started/) on your system.
