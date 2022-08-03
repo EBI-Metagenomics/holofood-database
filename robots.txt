@@ -1,0 +1,1 @@
+Sitemap: https://github.com/EBI-Metagenomics/holofood-database/sitemap.xml

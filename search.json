@@ -1,0 +1,114 @@
+[
+  {
+    "objectID": "website.html",
+    "href": "website.html",
+    "title": "Browsing the website",
+    "section": "",
+    "text": "Downloading sample lists and metadata\n\n\nFinding analysis summaries"
+  },
+  {
+    "objectID": "partners.html#authoring-new-summary-analysis-documents",
+    "href": "partners.html#authoring-new-summary-analysis-documents",
+    "title": "Admin access for HoloFood partners",
+    "section": "Authoring new Summary Analysis documents",
+    "text": "Authoring new Summary Analysis documents"
+  },
+  {
+    "objectID": "partners.html#editing-and-publishing-summary-analysis-documents",
+    "href": "partners.html#editing-and-publishing-summary-analysis-documents",
+    "title": "Admin access for HoloFood partners",
+    "section": "Editing and publishing Summary Analysis documents",
+    "text": "Editing and publishing Summary Analysis documents"
+  },
+  {
+    "objectID": "tutorial.html",
+    "href": "tutorial.html",
+    "title": "Tutorial",
+    "section": "",
+    "text": "import requests\n\n\nrequests.get('https://ebi.ac.uk')\n\n<Response [200]>"
+  },
+  {
+    "objectID": "api.html",
+    "href": "api.html",
+    "title": "API for Programmatic Access",
+    "section": "",
+    "text": "APIs (Application Programming Interfaces) allow programmatic access to data resources. If you need to fetch and analyse metadata for many Samples, you can write a script to fetch data in this way.\nThe HoloFood Data Portal API gives programmatic access to the HoloFood Samples and their metadata, as well as URLs for where datasets are stored in public archives."
+  },
+  {
+    "objectID": "api.html#canonical-urls",
+    "href": "api.html#canonical-urls",
+    "title": "API for Programmatic Access",
+    "section": "Canonical URLs",
+    "text": "Canonical URLs\nThroughout the API, canonical_urls are returned which point to the canonical database entry, i.e. the authoritative source, for each data object.\nThese are: - The European Nucleotide Archive Browser for Samples and Projects. - MGnify for metagenomic-derived analyses and MAGs (metagenome assembled genomes) - MetaboLights for metabolomic analyses - The websites of various partner institutions and registries where an IRI has been supplied with a metadata entry. - The HoloFood Data Portal itself for “Annotations”, which are documents hosted only by this website."
+  },
+  {
+    "objectID": "api.html#api-endpoints-and-playground",
+    "href": "api.html#api-endpoints-and-playground",
+    "title": "API for Programmatic Access",
+    "section": "API Endpoints and Playground",
+    "text": "API Endpoints and Playground\nTODO"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "HoloFood Data Portal",
+    "section": "",
+    "text": "Background\nHoloFood is a consortium and project focussed on understanding the biomolecular and physiological processes triggered by incorporating feed additives and novel sustainable feeds in farmed animals.\nThe data portal is a public website and API for browsing the Samples and datasets created by the project, which are stored in publicly-accessible data repositories."
+  },
+  {
+    "objectID": "datasets.html",
+    "href": "datasets.html",
+    "title": "Datasets",
+    "section": "",
+    "text": "All HoloFood samples are registered in the European Nucleotide Archive, which has extensive documentation.\nMost analyses of the samples are stored in further appropriate supporting databases, with a small number hosted directly in the HoloFood data portal."
+  },
+  {
+    "objectID": "datasets.html#ena-studies-projects",
+    "href": "datasets.html#ena-studies-projects",
+    "title": "Datasets",
+    "section": "ENA Studies (Projects)",
+    "text": "ENA Studies (Projects)\nAn ENA Study (or Project) is part of the ENA Metadata Model. > A study (project) groups together data submitted to the archive and controls its release date. A study accession is typically used when citing data submitted to ENA."
+  },
+  {
+    "objectID": "datasets.html#ena-samples",
+    "href": "datasets.html#ena-samples",
+    "title": "Datasets",
+    "section": "ENA Samples",
+    "text": "ENA Samples\nAn ENA Sample is part of the ENA Metadata Model. > A sample contains information about the sequenced source material. Samples are associated with checklists, which define the fields used to annotate the samples."
+  },
+  {
+    "objectID": "datasets.html#ena-checklist-metadata",
+    "href": "datasets.html#ena-checklist-metadata",
+    "title": "Datasets",
+    "section": "ENA Checklist Metadata",
+    "text": "ENA Checklist Metadata\nAn ENA Checklist is a set of metadata (some mandatory) for a given sample type.\nThe HoloFood checklist is ERC000052."
+  },
+  {
+    "objectID": "datasets.html#biosamples-metadata",
+    "href": "datasets.html#biosamples-metadata",
+    "title": "Datasets",
+    "section": "BioSamples Metadata",
+    "text": "BioSamples Metadata\nBioSamples is an EBI service hosting annotations keyed against an existing sample hosted elsewhere (in HoloFood’s case, ENA). For HoloFood biosamples, these are registered against a specific ontology.\nThe majority of HoloFood samples’ metadata are hosted in BioSamples.\nThere is a BioSamples online training course to learn more."
+  },
+  {
+    "objectID": "datasets.html#mgnify-metagenomics",
+    "href": "datasets.html#mgnify-metagenomics",
+    "title": "Datasets",
+    "section": "MGnify: Metagenomics",
+    "text": "MGnify: Metagenomics\nMetagenomic-derived analyses are available for some HoloFood samples.\nThese datasets and analysis features are hosted by MGnify, which also has extensive documentation.\n\nMGnify is a freely available hub for the analysis and exploration of metagenomic, metatranscriptomic, amplicon and assembly data."
+  },
+  {
+    "objectID": "datasets.html#metabolights-metabolomics",
+    "href": "datasets.html#metabolights-metabolomics",
+    "title": "Datasets",
+    "section": "MetaboLights: Metabolomics",
+    "text": "MetaboLights: Metabolomics\nMetabolomics-derived analyses are avaulable for some HoloFood samples.\nThese datasets are hosted by MetaboLights."
+  },
+  {
+    "objectID": "datasets.html#summary-analyses",
+    "href": "datasets.html#summary-analyses",
+    "title": "Datasets",
+    "section": "Summary analyses",
+    "text": "Summary analyses\nSummary analyses are higher level analyses of a Sample or collection of Samples; written documents serving as short analysis summaries.\nThese summaries are hosted directly by the HoloFood data portal.\nThe documents are written by HoloFood partners and moderated by the HoloFood consortium, but are not peer-reviewed research articles.\nEach analysis summary is linked to one or more Samples that were included in the analysis or are relevant to it."
+  }
+]
