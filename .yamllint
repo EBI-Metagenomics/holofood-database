@@ -1,6 +1,8 @@
----
 extends: default
 
 rules:
   line-length:
     max: 100
+
+  # quarto is not compatible with document-start on its yalm file ---
+  document-start: disable
