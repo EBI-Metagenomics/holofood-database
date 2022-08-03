@@ -1,0 +1,24 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/icons.css' %}"/>
+<div class="vf-grid vf-grid__col-4 icons-container">
+    {% if sample_metadata %}
+        <img src="{% static "img/icons/sample.svg" %}"
+             alt="Has sample metadata"
+             class="data-type-icon"/>
+    {% endif %}
+    {% if metagenomics %}
+        <img src="{% static "img/icons/bacteria.svg" %}"
+             alt="Has microbiome metadata"
+             class="data-type-icon"/>
+    {% endif %}
+    {% if metabolomics %}
+        <img src="{% static "img/icons/molecule.svg" %}"
+             alt="Has metabolomics data"
+             class="data-type-icon"/>
+    {% endif %}
+    {% if mags %}
+        <img src="{% static "img/icons/genome.svg" %}"
+             alt="Has genome data"
+             class="data-type-icon"/>
+    {% endif %}
+</div>

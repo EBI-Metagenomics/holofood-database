@@ -1,0 +1,13 @@
+{# Returns a table header cell that is sortable, if the `form` variable in context contains an `ordering` field for `param` #}
+{% load forms %}
+<th class="vf-table__heading" scope="col">
+    {% if form|contains_ordering_for:param %}
+        <button onclick="changeOrdering('{{ param }}')"
+                class="vf-button vf-button--sm vf-button--icon vf-table__button vf-table__button--sortable">
+            {{ title }}
+            {% include "holofood/components/atoms/table_sort_arrows.html" %}
+        </button>
+    {% else %}
+        {{ title }}
+    {% endif %}
+</th>

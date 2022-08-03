@@ -1,0 +1,91 @@
+.vf-table__cell {
+    font-size: 16px;
+}
+
+.scrollable-table {
+    overflow: auto;
+    display: block;
+    background:
+		linear-gradient(90deg, white 30%, rgba(255,255,255,0)),
+		linear-gradient(90deg, rgba(255,255,255,0), white 70%) 0 100%,
+		radial-gradient(farthest-side at 0% 50%, rgba(0,0,0, 0.2), white),
+		radial-gradient(farthest-side at 100% 50%, rgba(0,0,0, 0.2), white) 0 100%;
+
+	background-repeat: no-repeat;
+	background-color: white;
+	background-position: top left, top right, top left, top right;
+	background-size: 40px 100%, 40px 100%, 20px 100%, 20px 100%;
+	background-attachment: local, local, scroll, scroll;
+
+	tr {
+        background-blend-mode: multiply;
+	}
+}
+
+img.nav-icon {
+    height: 0.8em;
+    width: 0.8em;
+	padding-right: 0.2em;
+}
+
+a.inline, button.inline {
+	margin: 0;
+	padding: 0;
+}
+
+.vf-card--hf {
+    border-bottom-color: #3b6fb6;
+}
+
+.api-endpoint {
+    background-color: #e4e4e4;
+    padding: 8px;
+    border-radius: 2px;
+}
+
+.tooltiped {
+  	position: relative;
+  	display: inline-block;
+  	border-bottom: 1px dotted #a0a0a0;
+	color: #3b6fb6;
+
+	.tooltip-text {
+		visibility: hidden;
+		width: 240px;
+		text-align: center;
+		padding: 1em;
+		position: absolute;
+		z-index: 10;
+		bottom: 120%;
+		font-size: 0.75em;
+		left: 50%;
+		margin-left: -120px;
+		opacity: 0;
+		isolation: isolate;
+		transition: opacity 0.2s;
+		background-color: #373a36;
+			color: white;
+			border-radius: 6px;
+		&:after {
+		  content: "";
+		  position: absolute;
+		  top: 100%;
+		  left: 50%;
+		  margin-left: -5px;
+		  border-width: 5px;
+		  border-style: solid;
+		  border-color: #373a36 transparent transparent transparent;
+		}
+	}
+
+	&:hover {
+		.tooltip-text {
+			visibility: visible;
+			opacity: 1;
+		}
+	}
+}
+
+.space-below-20 {
+	margin-bottom: 20px;
+}

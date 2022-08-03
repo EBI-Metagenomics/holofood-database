@@ -1,0 +1,3 @@
+sequence_id	contig	viral_type	viral_taxonomy	host_mgyg	sequence_start	sequence_end	cluster_representative	mgya
+MGYC001-start-256-end-512	MGYC001	prophage	Caudovirales	MGYG999	256	512		MGYA001
+MGYC003-start-512-end-768	MGYC003	prophage	Caudovirales	MGYG999	512	768	MGYC001-start-256-end-512	MGYA002

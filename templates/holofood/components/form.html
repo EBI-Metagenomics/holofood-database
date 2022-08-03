@@ -1,0 +1,26 @@
+{% load forms %}
+<form action="{{ action }}"
+      method="{{ method }}"
+      class="vf-stack vf-stack--800"
+      id="{{ id }}">
+    {{ form.non_field_errors }}
+    {% for field in form %}
+        <div class="vf-form__item vf-stack">
+            <label for="text" class="vf-form__label">{{ field.label }}</label>
+            {% if field.help_text %}<p class="vf-form__helper">{{ field.help_text }}</p>{% endif %}
+            {% if field.widget_type == 'text' %}
+                {{ field | with_classes:"vf-form__input" }}
+            {% elif field.widget_type == 'select' or field.widget_type == 'csvselect' %}
+                {{ field | with_classes:"vf-form__select" }}
+            {% else %}
+                {{ field }}
+            {% endif %}
+            {% for error in field.errors %}<p class="vf-form__helper vf-form__helper--error">{{ error }}</p>{% endfor %}
+        </div>
+    {% endfor %}
+    <div style="display: flex; justify-content: flex-end;">
+        <input type="submit"
+               class="vf-button vf-button--primary vf-button--sm"
+               value="{{ submit }}"/>
+    </div>
+</form>

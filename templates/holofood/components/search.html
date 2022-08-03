@@ -1,0 +1,22 @@
+{% load forms %}
+<form action="{{ action }}"
+      method="{{ method }}"
+      class="vf-form vf-form--search vf-form--search--responsive | vf-sidebar vf-sidebar--end"
+      id="{{ id }}">
+    <div class="vf-sidebar__inner">
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="vf-form__item">
+                <label class="vf-form__label vf-u-sr-only | vf-search__label"
+                       for="searchitem">{{ field.label }}</label>
+                {{ field | with_attrs:"placeholder:Search for anything,class:vf-form__input" }}
+                {% for error in field.errors %}<p class="vf-form__helper vf-form__helper--error">{{ error }}</p>{% endfor %}
+            </div>
+        {% endfor %}
+        <div>
+            <input type="submit"
+                   class="vf-button vf-button--primary vf-button--sm"
+                   value="Search"/>
+        </div>
+    </div>
+</form>

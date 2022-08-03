@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+    <section class="vf-grid vf-grid__col-3 | vf-card-container | vf-u-fullbleed vf-u-background-color-ui--grey--light">
+        <div class="vf-section-header vf-grid__col--span-3">
+            <h2 class="vf-section-header__heading">HoloFood data resources</h2>
+        </div>
+        <div class="vf-grid__col--span-2">
+            <div class="vf-grid vf-grid__col-2">
+                <article class="vf-card vf-card--brand vf-card--bordered">
+                    <div class="vf-card__content | vf-stack vf-stack--400">
+                        <h3 class="vf-card__heading">
+                            <a class="vf-card__link" href="{% url 'samples_list' %}">Browse samples</a>
+                        </h3>
+                        <p class="vf-card__text">{{ samples_count }} samples created by the HoloFood project</p>
+                    </div>
+                </article>
+                <article class="vf-card vf-card--brand vf-card--bordered">
+                    <div class="vf-card__content | vf-stack vf-stack--400">
+                        <h3 class="vf-card__heading">
+                            <a class="vf-card__link" href="{% url 'annotations_list' %}">Read analysis summaries</a>
+                        </h3>
+                        <p class="vf-card__text">{{ annotations_count }} analysis summaries based on HoloFood samples</p>
+                    </div>
+                </article>
+                <article class="vf-card vf-card--brand vf-card--bordered">
+                    <div class="vf-card__content | vf-stack vf-stack--400">
+                        <h3 class="vf-card__heading">
+                            <a class="vf-card__link" href="{% url 'genome_catalogues' %}">Explore genome catalogues</a>
+                        </h3>
+                        <p class="vf-card__text">{{ mags_count }} genomes assembled from HoloFood metagenomic samples</p>
+                    </div>
+                </article>
+                <article class="vf-card vf-card--brand vf-card--bordered">
+                    <div class="vf-card__content | vf-stack vf-stack--400">
+                        <h3 class="vf-card__heading">
+                            <a class="vf-card__link" href="{% url 'viral_catalogues' %}">Explore viral catalogues</a>
+                        </h3>
+                        <p class="vf-card__text">{{ viral_count }} viral sequences predicted in HoloFood samples</p>
+                    </div>
+                </article>
+                <article class="vf-card vf-card--brand vf-card--bordered">
+                    <div class="vf-card__content | vf-stack vf-stack--400">
+                        <h3 class="vf-card__heading">
+                            <a class="vf-card__link" href="{% url 'api:openapi-swagger' %}">Discover the API</a>
+                        </h3>
+                        <p class="vf-card__text">Programmatically access HoloFood datasets</p>
+                    </div>
+                </article>
+                <article class="vf-card vf-card--brand vf-card--bordered">
+                    <div class="vf-card__content | vf-stack vf-stack--400">
+                        <h3 class="vf-card__heading">
+                            {# djlint:off D018 #}
+                            <a class="vf-card__link" href="docs">Read the documentation</a>
+                            {# djlint:on #}
+                        </h3>
+                        <p class="vf-card__text">How to use the website, API, and how to access datasets archived in supporting databases</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div>
+            <article class="vf-card vf-card--brand vf-card--striped">
+                <div class="vf-card__content | vf-stack vf-stack--400">
+                    <h3 class="vf-card__heading">
+                        <a class="vf-card__link" href="https://www.holofood.eu">The HoloFood Project
+                            <svg aria-hidden="true"
+                                 class="vf-card__heading__icon | vf-icon vf-icon-arrow--inline-end"
+                                 width="1em"
+                                 height="1em"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12S18.627 0 12 0C5.376.008.008 5.376 0 12zm13.707-5.209l4.5 4.5a1 1 0 010 1.414l-4.5 4.5a1 1 0 01-1.414-1.414l2.366-2.367a.25.25 0 00-.177-.424H6a1 1 0 010-2h8.482a.25.25 0 00.177-.427l-2.366-2.368a1 1 0 011.414-1.414z" fill="currentColor" fill-rule="nonzero"/>
+                            </svg>
+                        </a>
+                    </h3>
+                    <p class="vf-card__text">
+                        HoloFood is a 'hologenomic' approach that will improve the efficiency of food production systems by understanding the biomolecular and physiological processes affected by incorporating feed additives and novel sustainable feeds in farmed animals.
+                    </p>
+                </div>
+            </article>
+        </div>
+    </section>
+{% endblock content %}
