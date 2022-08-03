@@ -1,4 +1,6 @@
-# Admin access for HoloFood partners
+---
+title: "Admin access for HoloFood partners"
+---
 
 ## Managing the database
 
