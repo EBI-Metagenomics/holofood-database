@@ -1,5 +1,6 @@
 [![Testing](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/test.yml/badge.svg)](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/EBI-Metagenomics/holofood-database/branch/main/graph/badge.svg?token=27IVW899W8)](https://codecov.io/gh/EBI-Metagenomics/holofood-database)
+[![Build & Publish Docs](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/docs.yml/badge.svg)](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/docs.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Code style: djlint](https://img.shields.io/badge/html%20style-djlint-blue.svg)](https://www.djlint.com)
 
