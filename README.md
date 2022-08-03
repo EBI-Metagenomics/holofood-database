@@ -106,15 +106,40 @@ Note that this relies on having run `python manage.py create_authors_user_group`
 TODO
 
 ## Documentation
-There is an [mkdocs](https://www.mkdocs.org/) based documentation pack in the `docs/` folder
-configured by `mkdocs.yml`.
-This is suitable for serving on [ReadTheDocs](https://readthedocs.org/).
+There is an [Quarto](https://www.quarto.org/) based documentation pack in the `docs/` folder,
+configured by `docs/_quarto.yml`.
+
+This uses a mixture of [Markdown](https://quarto.org/docs/authoring/markdown-basics.html) 
+and rendered [Jupyter Notebooks](https://jupyter.org/).
+(This choice allows a code-based tutorial to be included in the docs as well as run by users.)
 
 To develop documentation:
+
+### To make some small text changes
+Just edit the `.qmd` (essentially just Markdown) files, and commit to GitHub.
+GitHub Actions will render your changes.
+
+### To preview changes, or change a Jupyter Notebook
+[Install Quarto](https://quarto.org/docs/get-started/) on your system.
+
 ```shell
 pip install -r requirements-docs.txt
-mkdocs serve
+jupyter lab
 ```
-and edit the Markdown files in `docs/*.md`.
+and edit the `.qmd` or `.ipynb` files in `docs/`.
 
-If you add a new file (page), add it to the navigation by editing the `nav` field of `mkdocs.yml`.
+Run
+```shell
+quarto preview docs
+```
+to open a live-preview of the documentation site that updates as you save changes.
+
+If you add a new file (page), add it to the navigation by editing the 
+`website.sidebar.contents` list in `docs/_quarto.yml`.
+
+**Note**: any Jupyter Notebooks will be rendered to the documentation site _exactly_ as you leave them.
+This is because 
+[Quarto defaults to not executing Jupyter Notebooks during rendering](https://quarto.org/docs/projects/code-execution.html#notebooks)
+which is a good thing.
+If you've added any executable Quarto docs other than Jupyter Notebooks (like an R script...) run `quarto render docs`
+and commit the `docs/_freeze/` dir.
