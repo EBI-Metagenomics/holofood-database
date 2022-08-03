@@ -1,6 +1,9 @@
 on:
+  workflow_dispatch:
   push:
     branches: [main, quarto]
+    paths:
+      - 'docs/**'
 
 name: Build & Publish Docs
 
