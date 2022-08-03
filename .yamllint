@@ -6,3 +6,10 @@ rules:
 
   # quarto is not compatible with document-start on its yalm file ---
   document-start: disable
+
+  truthy:
+    ignore: .github/workflows/
+
+ignore: |
+  docs/.ipynb_checkpoints/
+  docs/.quarto
