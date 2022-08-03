@@ -1,52 +1,56 @@
+---
 project:
-  type: website
+    type: website
 
 execute:
-  freeze: auto
+    freeze: auto
 
 website:
-  title: "HoloFood Data Portal Documentation"
-  page-footer: "This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 817729"
-  favicon: img/hf-logo-brand.png
-  page-navigation: true
-  repo-url: https://github.com/ebi-metagenomics/holofood-database
-  repo-subdir: docs
-  repo-actions: [edit, issue]
-  navbar:
-    right:
-      - href: 'ebi.ac.uk'
-        text: "Data Portal"
-  sidebar:
-    style: "docked"
-    search: true
-    contents:
-        - href: index.qmd
-          text: Docs home
-          icon: box
-        - href: datasets.qmd
-        - href: website.qmd
-        - href: api.ipynb
-        - text: '---'
-        - href: tutorial.ipynb
-        - text: '---'
-        - href: partners.qmd
-    tools:
-      - icon: github
-        menu:
-          - text: Data Portal Repository
-            url: https://github.com/ebi-metagenomics/holofood-database
-          - text: Documentation source
-            url: https://github.com/ebi-metagenomics/holofood-database/docs
-      - icon: question-circle-fill
-        text: "Help"
-        href: "mailto:holofood-help@ebi.ac.uk"
-      
+    title: HoloFood Data Portal Documentation
+    page-footer: This project has received funding from the European Union’s
+        Horizon 2020 research and innovation programme under grant agreement
+        No 817729
+    favicon: img/hf-logo-brand.png
+    page-navigation: true
+
+    repo-url: https://github.com/ebi-metagenomics/holofood-database
+    repo-subdir: docs
+    repo-actions: [edit, issue]
+
+    navbar:
+        right:
+            - href: ebi.ac.uk
+              text: Data Portal
+
+    sidebar:
+        style: docked
+        search: true
+
+        contents:
+            - href: index.qmd
+              text: Docs home
+              icon: box
+            - href: datasets.qmd
+            - href: website.qmd
+            - href: api.ipynb
+            - text: '---'
+            - href: tutorial.ipynb
+            - text: '---'
+            - href: partners.qmd
+
+        tools:
+            - icon: github
+              menu:
+                  - text: Data Portal Repository
+                    url: https://github.com/ebi-metagenomics/holofood-database
+                  - text: Documentation source
+                    url: https://github.com/ebi-metagenomics/holofood-database/docs
+            - icon: question-circle-fill
+              text: Help
+              href: mailto:holofood-help@ebi.ac.uk
 format:
-  html:
-    theme: 
-      - zephyr
-      - styles.scss
-    toc: true
-
-
-
+    html:
+        theme:
+            - zephyr
+            - styles.scss
+        toc: true
