@@ -1,12 +1,12 @@
-django==4.0.6
+django==4.1
 requests==2.28.1
 pydantic==1.9.1
 python-dotenv==0.20.0
-xsdata==22.5
+xsdata==22.7
 django-filter==22.1
 django-sass-processor==1.2.1
 libsass==0.21.0
-django-compressor==4.0
+django-compressor==4.1
 martor==1.6.13
 django-ninja==0.17.0
 django-admin-inline-paginator==0.3.0
