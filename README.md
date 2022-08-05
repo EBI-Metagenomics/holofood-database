@@ -69,7 +69,6 @@ source config/secrets.env
 python manage.py migrate
 python manage.py fetch_project_samples
 python manage.py refresh_external_data
-python manage.py create_authors_user_group   
 python manage.py runserver
 ```
 
@@ -100,7 +99,6 @@ Superusers can go to e.g. http://localhost:8000/admin and create other users the
 
 "Staff" users can access the admin panel, but won't by default have permissions to do anything there.
 Add them to the "authors" user group to give them permissions to author "Annotation" documents via the admin panel.
-Note that this relies on having run `python manage.py create_authors_user_group` to create such a permissioned group.
 
 
 ## Deployment
