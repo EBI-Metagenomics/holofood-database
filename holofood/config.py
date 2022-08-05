@@ -19,7 +19,7 @@ from __future__ import annotations
 from datetime import timedelta
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, List
 
 from pydantic import BaseSettings, AnyHttpUrl, BaseModel
 
@@ -35,7 +35,7 @@ class BiosamplesConfig(BaseModel):
 
 
 class EnaConfig(BaseModel):
-    projects: list[str] = []
+    projects: List[str] = []
     systems: dict = {}
     username: str = "Webin-0"
     password: str = "secret"
@@ -51,7 +51,7 @@ class MgnifyConfig(BaseModel):
 
 
 class SampleTableConfig(BaseModel):
-    default_metadata_marker_columns: list[str]
+    default_metadata_marker_columns: List[str]
 
 
 class TablesConfig(BaseModel):

@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from django.db import models
 from django.db.models import Prefetch
@@ -122,7 +123,7 @@ class Sample(models.Model):
         self.save()
 
     @property
-    def runs(self) -> list[str]:
+    def runs(self) -> List[str]:
         return self.structured_metadata.filter(marker__name="ENA Run ID").values_list(
             "measurement", flat=True
         )

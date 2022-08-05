@@ -1,6 +1,6 @@
 import csv
 from io import StringIO
-from typing import MutableMapping
+from typing import MutableMapping, List
 
 from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI
@@ -54,7 +54,7 @@ export_api = NinjaAPI(
 
 @export_api.get(
     "/samples",
-    response=list[SampleSlimSchema],
+    response=List[SampleSlimSchema],
     summary="Fetch a list of Samples as a TSV",
     url_name="samples_list",
 )
@@ -66,7 +66,7 @@ def list_samples(
 
 @export_api.get(
     "/samples/{sample_accession}/metadata",
-    response=list[SampleStructuredDatumSchema],
+    response=List[SampleStructuredDatumSchema],
     summary="Fetch a list of a Sample's metadata as a TSV.",
     description="Retrieve a table of metadata for a single Sample by its ENA accession.",
     url_name="sample_metadata_list",
@@ -78,7 +78,7 @@ def get_sample_metadata(request, sample_accession: str):
 
 @export_api.get(
     "/genome-catalogues/{catalogue_id}/genomes",
-    response=list[GenomeSchema],
+    response=List[GenomeSchema],
     summary="Fetch the list of Genomes from a Catalogue as a TSV",
     description="Download a TSV export of the Genome Catalogue MAGs",
     url_name="genomes_list",
@@ -90,7 +90,7 @@ def list_genome_catalogue_genomes(request, catalogue_id: str):
 
 @export_api.get(
     "/viral-catalogues/{catalogue_id}/fragments",
-    response=list[ViralFragmentSchema],
+    response=List[ViralFragmentSchema],
     summary="Fetch the list of Viral Fragments (sequences) from a Catalogue as a TSV",
     description="Download a TSV export of the Viral Catalogue fragments",
     url_name="viral_fragments_list",

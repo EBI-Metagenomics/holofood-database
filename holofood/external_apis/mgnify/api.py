@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 import requests
 
@@ -25,7 +26,7 @@ def get_metagenomics_existence_for_sample(sample: str) -> bool:
     return response.status_code == requests.codes.ok
 
 
-def get_metagenomics_analyses_for_run(run: str) -> list[dict]:
+def get_metagenomics_analyses_for_run(run: str) -> List[dict]:
     logging.info(f"Fetching analyses for {run = } from MGnify {API_ROOT = }")
 
     response = requests.get(f"{API_ROOT}/runs/{run}/analyses?page_size=50")

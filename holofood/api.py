@@ -1,7 +1,7 @@
 import operator
 from enum import Enum
 from functools import reduce
-from typing import Optional
+from typing import Optional, List
 
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -103,13 +103,13 @@ class SampleSlimSchema(ModelSchema):
 
 
 class SampleSchema(SampleSlimSchema):
-    structured_metadata: list[SampleStructuredDatumSchema]
-    annotations: list[RelatedAnnotationSchema]
+    structured_metadata: List[SampleStructuredDatumSchema]
+    annotations: List[RelatedAnnotationSchema]
 
 
 class AnnotationSchema(ModelSchema):
-    samples: list[SampleSlimSchema]
-    projects: list[RelatedProjectSchema]
+    samples: List[SampleSlimSchema]
+    projects: List[RelatedProjectSchema]
 
     class Config:
         model = SampleAnnotation
@@ -213,7 +213,7 @@ def get_sample(request, sample_accession: str):
 
 @api.get(
     "/samples",
-    response=list[SampleSlimSchema],
+    response=List[SampleSlimSchema],
     summary="Fetch a list of Samples.",
     description="Long lists will be paginated, so use the `page=` query parameter to get more pages. "
     "Several filters are available, which mostly perform case-insensitive containment lookups. "
@@ -247,7 +247,7 @@ def list_samples(
 
 @api.get(
     "/annotations",
-    response=list[AnnotationSchema],
+    response=List[AnnotationSchema],
     summary="Fetch a list of Annotation documents.",
     description="Annotation documents are summaries of analyses conduced by HoloFood partners and collaborators. "
     "Each annotation is tagged as involving 1 or more Samples or Projects. "
@@ -264,7 +264,7 @@ def list_annotations(
 
 @api.get(
     "/genome-catalogues",
-    response=list[GenomeCatalogueSchema],
+    response=List[GenomeCatalogueSchema],
     summary="Fetch a list of Genome (MAG) Catalogues",
     description="Genome Catalogues are lists of Metagenomic Assembled Genomes (MAGs)"
     "MAGs originating from HoloFood samples are organised into biome-specific catalogues.",
@@ -291,7 +291,7 @@ def get_genome_catalogue(request, catalogue_id: str):
 
 @api.get(
     "/genome-catalogues/{catalogue_id}/genomes",
-    response=list[GenomeSchema],
+    response=List[GenomeSchema],
     summary="Fetch the list of Genomes within a Catalogue",
     description="Genome Catalogues are lists of Metagenomic Assembled Genomes (MAGs)."
     "MAGs listed originate from HoloFood samples."
@@ -306,7 +306,7 @@ def list_genome_catalogue_genomes(request, catalogue_id: str):
 
 @api.get(
     "/viral-catalogues",
-    response=list[ViralCatalogueSchema],
+    response=List[ViralCatalogueSchema],
     summary="Fetch a list of Viral (contig fragment) Catalogues",
     description="Viral Catalogues are lists of Viral Sequences,"
     "detected in the assembly contigs of HoloFood samples from a specific biome.",
@@ -332,7 +332,7 @@ def get_viral_catalogue(request, catalogue_id: str):
 
 @api.get(
     "/viral-catalogues/{catalogue_id}/fragments",
-    response=list[ViralFragmentSchema],
+    response=List[ViralFragmentSchema],
     summary="Fetch the list of viral fragments (sequences) from a Catalogue",
     description="Viral fragments are sequences predicted to be viral, "
     "found in the assembly contigs of HoloFood samples."
