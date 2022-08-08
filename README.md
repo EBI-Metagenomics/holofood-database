@@ -125,6 +125,13 @@ To log into the lead instance e.g. to run management commands: `eb ssh`
 Secret environment variables can be configured in the 
 [AWS EB Console](https://eu-west-1.console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/environments).
 
+#### EBI-specific info
+If using the EBI AWS cloud, via an SSO login.
+Refer to 
+[the Confluence page on AWS SSO](https://www.ebi.ac.uk/seqdb/confluence/display/CCT/AWS+SSO+Authentication+and+Authorisation)
+for the SSO parameters. Use `aws configure sso --profile eb-cli` to sign in.
+Occasionally you’ll need `aws sso login --profile eb-cli` to get a new token.
+
 ### Centos VM
 `TODO`
 
