@@ -162,7 +162,11 @@ ul.task-list{list-style: none;}
   <li><a href="#finding-samples" id="toc-finding-samples" class="nav-link active" data-scroll-target="#finding-samples">Finding Samples</a></li>
   <li><a href="#downloading-sample-lists-and-metadata" id="toc-downloading-sample-lists-and-metadata" class="nav-link" data-scroll-target="#downloading-sample-lists-and-metadata">Downloading sample lists and metadata</a></li>
   <li><a href="#finding-analysis-summaries" id="toc-finding-analysis-summaries" class="nav-link" data-scroll-target="#finding-analysis-summaries">Finding analysis summaries</a></li>
-  <li><a href="#using-the-catalogues" id="toc-using-the-catalogues" class="nav-link" data-scroll-target="#using-the-catalogues">Using the catalogues</a></li>
+  <li><a href="#using-the-catalogues" id="toc-using-the-catalogues" class="nav-link" data-scroll-target="#using-the-catalogues">Using the catalogues</a>
+  <ul class="collapse">
+  <li><a href="#mag-catalogues" id="toc-mag-catalogues" class="nav-link" data-scroll-target="#mag-catalogues">MAG Catalogues</a></li>
+  <li><a href="#viral-catalogues" id="toc-viral-catalogues" class="nav-link" data-scroll-target="#viral-catalogues">Viral Catalogues</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/ebi-metagenomics/holofood-database/edit/main/docs/website.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/ebi-metagenomics/holofood-database/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -205,9 +209,31 @@ ul.task-list{list-style: none;}
 </section>
 <section id="using-the-catalogues" class="level1">
 <h1>Using the catalogues</h1>
-<p>TODO</p>
+<section id="mag-catalogues" class="level2">
+<h2 class="anchored" data-anchor-id="mag-catalogues">MAG Catalogues</h2>
+<p>Metagenome Assembled Genome (MAG) Catalogues are available for selected biomes. HoloFood MAGs are those created using only reads from HoloFood samples. However, there are other non-HoloFood public data available for the same biomes sampled by this project.</p>
+<p>Each HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify, which is a superset of the HoloFood data and other public data. This is linked from each catalogue page on the HoloFood Data Portal site.</p>
+<p>Each MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species. In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG points to itself on the MGnify website. In other cases, a more complete, less contaminated, or isolate genome exists representing the same species, so the HoloFood MAG points to this better representative on MGnify.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/website/mag-catalogue.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of a MAG catalogue</figcaption><p></p>
+</figure>
+</div>
+<p>MAG Catalogues can be found from the “Genomes” navigation item, and then selecting a catalogue in the “Catalogues” sub-navigation. MAGs can be found by searching on accession or taxonomy, or for the accession of the cluster representative.</p>
+<p>The MAGs in a catalogue can be downloaded as a TSV file, using the “Download all as TSV” button.</p>
+</section>
+<section id="viral-catalogues" class="level2">
+<h2 class="anchored" data-anchor-id="viral-catalogues">Viral Catalogues</h2>
+<p><img src="./img/website/viral-catalogue.png" class="img-fluid" alt="Screenshot of a viral catalogue"> Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples. Viral catalogues can be found from the “Viruses” navigation item, and then selecting a catalogue in the “Catalogues” sub-navigation.</p>
+<p>Viral fragment can be searched in various ways, like the parent contig ID, or the taxonomy of the host MAG. Host MAGs are only assigned where there is an exact match between the viral sequence and a host MAG.</p>
+<p>By default, only species-level clusters are shown (a representative viral fragment is shown).</p>
+<p>This can be changed either by clicking the “View cluster” link within the table, to see the remainder of that specific cluster, or by changing the “Cluster visibility” dropdown in the filters to the left of the table.</p>
+<p>Pressing “View contig” on a viral fragment in the table opens the contig viewer. This loads the contig from MGnify, as well as MGnify’s annotations on the contig. These can be explored in more detail by clicking the parent contig in the table, which links to MGnify.</p>
+<p>In the contig viewer, ViPhOG annotations are shown. These are unique to the data portal. The viral region is highlighted in green. The GFF containing the ViPhOG(s) can also be downloaded, by viewing a viral fragment and pressing “Download ViPhOGs GFF”.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
