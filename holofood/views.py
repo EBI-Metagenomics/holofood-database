@@ -1,3 +1,4 @@
+import logging
 import operator
 from functools import reduce
 
@@ -57,9 +58,16 @@ class SampleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         model: Sample = context["sample"]
 
-        context["analyses"] = reduce(
-            operator.concat, map(get_metagenomics_analyses_for_run, model.runs), []
-        )
+        try:
+            context["analyses"] = reduce(
+                operator.concat, map(get_metagenomics_analyses_for_run, model.runs), []
+            )
+
+        except Exception as e:
+            logging.error(f"Could not retrieve analyses from MGnify for {model}")
+            logging.error(e)
+            context["analyses"] = []
+            context["analyses_error"] = True
 
         return context
 

@@ -120,6 +120,23 @@
                 </thead>
                 <h3>Analyses</h3>
                 <tbody class="vf-table__body">
+                    {% if analyses_error %}
+                        <article class="vf-card vf-card--hf vf-card--bordered vf-grid__col--span-{{ colspan|default:1 }}">
+                            <div class="vf-card__content | vf-stack vf-stack--400">
+                                <div class="vf-flag vf-flag--middle vf-flag--400">
+                                    <div class="vf-flag__media">
+                                        <img src="{% static 'img/icons/empty-bowl.svg' %}"
+                                             height="36px"
+                                             width="36px"
+                                             alt="Empty set icon"/>
+                                    </div>
+                                    <div class="vf-flag__body">
+                                        <p class="vf-card__subheading">Could not connect to MGnify right now. Please try later.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    {% endif %}
                     {% for analysis in analyses %}
                         <tr class="vf-table__row">
                             <td class="vf-table__cell">
@@ -144,6 +161,8 @@
                     {% endfor %}
                 </tbody>
             </table>
+        {% else %}
+            <p>Sample has no metagenomics data</p>
         {% endif %}
     </details>
     <details class="vf-details">
