@@ -29,7 +29,6 @@ def metadatum(sample: Sample, marker_name: str) -> Union[str, None]:
 
     if datum is None:
         return None
-    logging.info(datum)
     return f'{datum.measurement}{datum.units or ""}'
 
 
@@ -37,7 +36,10 @@ def metadatum(sample: Sample, marker_name: str) -> Union[str, None]:
 def data_type_icons(sample: Sample) -> dict:
     if sample:
         return {
-            "sample_metadata": sample.structured_metadata.exists(),
+            "sample_metadata": (
+                hasattr(sample, "primary_metadata") and len(sample.primary_metadata)
+            )
+            or sample.structured_metadata.exists(),
             "metagenomics": sample.has_metagenomics,
             "metabolomics": True,
             "mags": True,

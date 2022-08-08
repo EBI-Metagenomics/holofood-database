@@ -22,9 +22,8 @@
   "tables": {
     "samples_list": {
       "default_metadata_marker_columns": [
-        "host storage container",
         "host diet treatment concentration",
-        "host diet",
+        "host diet treatment",
         "trial timepoint"
       ]
     }
