@@ -8,7 +8,6 @@ from holofood.models import (
     Project,
     SampleMetadataMarker,
     SampleStructuredDatum,
-    BiosamplesPartner,
     SampleAnnotation,
     GenomeCatalogue,
     Genome,
@@ -21,7 +20,7 @@ class SampleMetadataInline(admin.TabularInline):
     model = SampleStructuredDatum
 
 
-@admin.register(Project, SampleMetadataMarker, BiosamplesPartner, SampleStructuredDatum)
+@admin.register(Project, SampleMetadataMarker, SampleStructuredDatum)
 class GenericAdmin(admin.ModelAdmin):
     pass
 

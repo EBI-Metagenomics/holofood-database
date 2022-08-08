@@ -71,19 +71,13 @@ class Sample(models.Model):
                 )
                 if created:
                     logging.info(f"Created new SampleMetadataMarker {marker.id}")
-                if "partner" in metadatum:
-                    partner, _ = BiosamplesPartner.objects.update_or_create(
-                        name=metadatum["partner"]["value"],
-                        defaults={"iri": metadatum["partner"]["iri"]},
-                    )
-                else:
-                    partner = None
                 self.structured_metadata.update_or_create(
                     marker=marker,
                     defaults={
                         "source": SampleStructuredDatum.BIOSAMPLES,
                         "measurement": metadatum["measurement"]["value"],
-                        "partner": partner,
+                        "partner_name": metadatum.get("partner", {}).get("value"),
+                        "partner_iri": metadatum.get("partner", {}).get("iri"),
                         "units": metadatum.get("measurement_units", {}).get("value"),
                     },
                 )
@@ -144,17 +138,9 @@ class SampleMetadataMarker(models.Model):
         return f"Sample Metadata Marker {self.id}: {self.name}"
 
 
-class BiosamplesPartner(models.Model):
-    name = models.CharField(max_length=100)
-    iri = models.CharField(max_length=100, null=True)
-
-    def __str__(self):
-        return f"Partner {self.id}: {self.name}"
-
-
 class SampleStructuredDatumManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().select_related("marker", "partner")
+        return super().get_queryset().select_related("marker")
 
 
 class SampleStructuredDatum(models.Model):
@@ -170,7 +156,10 @@ class SampleStructuredDatum(models.Model):
     marker = models.ForeignKey(SampleMetadataMarker, on_delete=models.CASCADE)
     measurement = models.CharField(max_length=100)
     units = models.CharField(max_length=100, null=True)
-    partner = models.ForeignKey(BiosamplesPartner, on_delete=models.CASCADE, null=True)
+
+    partner_name = models.CharField(max_length=100, null=True)
+    partner_iri = models.CharField(max_length=100, null=True)
+
     source = models.CharField(choices=SOURCE_CHOICES, max_length=15)
 
     def __str__(self):

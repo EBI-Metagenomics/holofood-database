@@ -125,6 +125,8 @@ To log into the lead instance e.g. to run management commands:
 eb ssh
 cd /var/app/current
 source ../venv/*/bin/activate
+export $(/opt/elasticbeanstalk/bin/get-config --output YAML environment |  sed -r 's/: /=/' | xargs)
+# ^ this sources the env vars
 python manage.py ...
 ```
 
