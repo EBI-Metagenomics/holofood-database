@@ -41,4 +41,45 @@ Analysis summaries also link back to the samples and/or projects they refer to.
 A complete list of analysis summaries can also be found from the navigation bar.
 
 # Using the catalogues
-TODO
+## MAG Catalogues
+Metagenome Assembled Genome (MAG) Catalogues are available for selected biomes.
+HoloFood MAGs are those created using only reads from HoloFood samples.
+However, there are other non-HoloFood public data available for the same biomes sampled by this project.
+
+Each HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify,
+which is a superset of the HoloFood data and other public data.
+This is linked from each catalogue page on the HoloFood Data Portal site.
+
+Each MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species.
+In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG
+points to itself on the MGnify website.
+In other cases, a more complete, less contaminated, or isolate genome exists representing the same species,
+so the HoloFood MAG points to this better representative on MGnify.
+
+![Screenshot of a MAG catalogue](/img/website/mag-catalogue.png)
+
+MAG Catalogues can be found from the "Genomes" navigation item, and then selecting a catalogue in the "Catalogues" sub-navigation.
+MAGs can be found by searching on accession or taxonomy, or for the accession of the cluster representative.
+
+The MAGs in a catalogue can be downloaded as a TSV file, using the "Download all as TSV" button.
+
+## Viral Catalogues
+![Screenshot of a viral catalogue](/img/website/viral-catalogue.png)
+Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples.
+Viral catalogues can be found from the "Viruses" navigation item, and then selecting a catalogue in the "Catalogues" sub-navigation.
+
+Viral fragment can be searched in various ways, like the parent contig ID, or the taxonomy of the host MAG.
+Host MAGs are only assigned where there is an exact match between the viral sequence and a host MAG.
+
+By default, only species-level clusters are shown (a representative viral fragment is shown).
+
+This can be changed either by clicking the "View cluster" link within the table, to see the remainder of that specific cluster,
+or by changing the "Cluster visibility" dropdown in the filters to the left of the table.
+
+Pressing "View contig" on a viral fragment in the table opens the contig viewer.
+This loads the contig from MGnify, as well as MGnify's annotations on the contig.
+These can be explored in more detail by clicking the parent contig in the table, which links to MGnify.
+
+In the contig viewer, ViPhOG annotations are shown. These are unique to the data portal.
+The viral region is highlighted in green.
+The GFF containing the ViPhOG(s) can also be downloaded, by viewing a viral fragment and pressing "Download ViPhOGs GFF".
