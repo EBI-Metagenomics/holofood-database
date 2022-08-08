@@ -159,7 +159,7 @@ class SampleStructuredDatum(models.Model):
         Sample, on_delete=models.CASCADE, related_name="structured_metadata"
     )
     marker = models.ForeignKey(SampleMetadataMarker, on_delete=models.CASCADE)
-    measurement = models.CharField(max_length=100)
+    measurement = models.CharField(max_length=200)
     units = models.CharField(max_length=100, null=True)
 
     partner_name = models.CharField(max_length=100, null=True)
