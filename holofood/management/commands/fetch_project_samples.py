@@ -9,8 +9,20 @@ from holofood.models import Sample, Project
 class Command(BaseCommand):
     help = "(Re)fetches the list of Holofood samples from the ENA API"
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--projects",
+            type=str,
+            help="Project accessions, if only some should be updated",
+            nargs="+",
+            metavar="ACCESSION",
+        )
+
     def handle(self, *args, **options):
-        projects_samples = get_holofood_samples()
+        if options["projects"]:
+            projects_samples = get_holofood_samples(options["projects"])
+        else:
+            projects_samples = get_holofood_samples()
         samples_added = 0
         for project_accession, samples in projects_samples.items():
             if type(samples) is list and samples:
