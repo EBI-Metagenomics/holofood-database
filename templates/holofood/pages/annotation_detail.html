@@ -3,10 +3,10 @@
     <h1>{{ annotation.title }}</h1>
     <p class="vf-text-body--4">Written by: {{ annotation.author }}</p>
     <p class="vf-text-body--4">Updated: {{ annotation.updated|date:'Y-m-d H:i' }}</p>
-    <div class="vf-sidebar vf-sidebar--end vf-sidebar--800">
+    <div class="vf-sidebar vf-sidebar--end vf-sidebar--600">
         <div class="vf-sidebar__inner">
             <div>{% include 'holofood/components/annotation.html' %}</div>
-            <div>
+            <div class="desktop-enforced-side-bar">
                 <div class="vf-tabs">
                     <ul class="vf-tabs__list" data-vf-js-tabs>
                         <li class="vf-tabs__item">

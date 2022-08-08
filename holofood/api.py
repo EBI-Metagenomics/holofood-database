@@ -106,6 +106,12 @@ class SampleSchema(SampleSlimSchema):
     structured_metadata: List[SampleStructuredDatumSchema]
     annotations: List[RelatedAnnotationSchema]
 
+    @staticmethod
+    def resolve_project_annotations(obj: Sample):
+        return obj.project.annotations.all()
+
+    project_annotations: List[RelatedAnnotationSchema]
+
 
 class AnnotationSchema(ModelSchema):
     samples: List[SampleSlimSchema]
