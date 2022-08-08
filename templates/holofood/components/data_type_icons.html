@@ -2,23 +2,35 @@
 <link rel="stylesheet" href="{% static 'css/icons.css' %}"/>
 <div class="vf-grid vf-grid__col-4 icons-container">
     {% if sample_metadata %}
-        <img src="{% static "img/icons/sample.svg" %}"
+        <div class="tooltiped">
+            <img src="{% static "img/icons/sample.svg" %}"
              alt="Has sample metadata"
              class="data-type-icon"/>
+            <span class="tooltip-text">Has sample metadata</span>
+        </div>
     {% endif %}
     {% if metagenomics %}
-        <img src="{% static "img/icons/bacteria.svg" %}"
-             alt="Has microbiome metadata"
+        <div class="tooltiped">
+            <img src="{% static "img/icons/bacteria.svg" %}"
+             alt="Has microbiome data"
              class="data-type-icon"/>
+            <span class="tooltip-text">Has microbiome data</span>
+        </div>
     {% endif %}
     {% if metabolomics %}
-        <img src="{% static "img/icons/molecule.svg" %}"
+        <div class="tooltiped">
+            <img src="{% static "img/icons/molecule.svg" %}"
              alt="Has metabolomics data"
              class="data-type-icon"/>
+            <span class="tooltip-text">Has metabolomics data</span>
+        </div>
     {% endif %}
     {% if mags %}
-        <img src="{% static "img/icons/genome.svg" %}"
+        <div class="tooltiped">
+            <img src="{% static "img/icons/genome.svg" %}"
              alt="Has genome data"
              class="data-type-icon"/>
+            <span class="tooltip-text">Has genome data</span>
+        </div>
     {% endif %}
 </div>

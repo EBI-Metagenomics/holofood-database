@@ -35,10 +35,14 @@
             <dd class="vf-list__item vf-list--definition__details">
                 <span class="api-endpoint">
                     <a class="vf-link" href="{{ endpoint }}">{{ endpoint }}</a>
-                    <button class="vf-button vf-button--link vf-button--sm inline"
+                    <div class="tooltiped">
+                        <button class="vf-button vf-button--link vf-button--sm inline"
                             onclick="copyApiEndpoint()">
-                        <img src="{% static 'img/icons/copy.svg' %}" height="16px" alt="Copy"/>
-                    </button>
+                            <img src="{% static 'img/icons/copy.svg' %}" height="16px" alt="Copy"/>
+                        </button>
+                        <span id="endpoint-copy-tooltip" class="tooltip-text">Copy API Endpoint</span>
+                    </div>
+
                 </span>
             </dd>
         </dl>
@@ -46,6 +50,7 @@
     <script>
         function copyApiEndpoint(e) {
             navigator.clipboard.writeText('{{ endpoint }}');
+            window.document.getElementById('endpoint-copy-tooltip').textContent = "Copied!";
         }
     </script>
     <details class="vf-details">
