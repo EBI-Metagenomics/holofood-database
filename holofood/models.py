@@ -64,6 +64,11 @@ class Sample(models.Model):
         metadata = get_sample_structured_data(self.accession)
 
         for metadata_type, metadata_content in metadata.items():
+            if not metadata_content:
+                logging.warning(
+                    f"{metadata_type=} from {self.accession} was null – skipping"
+                )
+                continue
             for metadatum in metadata_content:
                 marker, created = SampleMetadataMarker.objects.update_or_create(
                     name=metadatum["marker"]["value"],
