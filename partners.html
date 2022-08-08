@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.37">
+<meta name="generator" content="quarto-1.0.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -185,12 +185,46 @@ ul.task-list{list-style: none;}
 
 <section id="managing-the-database" class="level2">
 <h2 class="anchored" data-anchor-id="managing-the-database">Managing the database</h2>
+<p>Bulk activities, like importing projects, samples, and metadata, are covered in the <a href="https://github.com/EBI-Metagenomics/holofood-database#use">repository README</a>.</p>
+<p>There is also an Admin Panel where individual database entries can be managed.</p>
 </section>
 <section id="authoring-new-summary-analysis-documents" class="level2">
 <h2 class="anchored" data-anchor-id="authoring-new-summary-analysis-documents">Authoring new Summary Analysis documents</h2>
+<p>Navigate to the site admin panel, and log in.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you do not have the link or credentials, please <a href="mailto:holofood-help@ebi.ac.uk">contact the helpdesk</a>.</p>
+</div>
+</div>
+<p><img src="./img/partners/add-sample-annotation.png" class="img-fluid" alt="Screenshot of admin panel landing page"> Click “Add” on the “Sample annotation” entry. Depending on your permission level, you may see different objects than shown in the screenshot.</p>
+<p><img src="./img/partners/author-analysis-summary.png" class="img-fluid" alt="Screenshot of a sample summary in edit mode"> Analysis summaries require a title (which is automatically converted into the URL slug). The document itself can be written as <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a>. To include images, upload them to a hosting site or GitHub repository, and include them via their URL. There are toolbar buttons in the markdown editor to help you with this syntax.</p>
+<p><img src="./img/partners/link-analysis-summary.png" class="img-fluid" alt="Screenshot of a sample summary in edit mode"> Analysis summaries must be linked to samples and/or entire projects. To link them, select the relevant samples and/or projects from the lists on the left, and hit the <code>-&gt;</code> button to move the selected samples/projects to the right-hand list.</p>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Don’t forget to press “Save and continue editing” now and then!</p>
+</div>
+</div>
 </section>
 <section id="editing-and-publishing-summary-analysis-documents" class="level2">
 <h2 class="anchored" data-anchor-id="editing-and-publishing-summary-analysis-documents">Editing and publishing Summary Analysis documents</h2>
+<p>Superuser credentials are required to <strong>publish</strong> analysis summaries. Until published, the documents do not appear on the public website. As a superuser, tick the “Is published” checkbox on an analysis summary edit page in the admin panel, and press Save.</p>
+<p>If you believe you should have superuser credentials, <a href="mailto:holofood-help@ebi.ac.uk">contact the helpdesk</a>.</p>
 
 
 </section>

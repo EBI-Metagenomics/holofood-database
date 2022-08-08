@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.37">
+<meta name="generator" content="quarto-1.0.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -163,7 +163,11 @@ ul.task-list{list-style: none;}
   <li><a href="#ena-samples" id="toc-ena-samples" class="nav-link" data-scroll-target="#ena-samples">ENA Samples</a></li>
   <li><a href="#ena-checklist-metadata" id="toc-ena-checklist-metadata" class="nav-link" data-scroll-target="#ena-checklist-metadata">ENA Checklist Metadata</a></li>
   <li><a href="#biosamples-metadata" id="toc-biosamples-metadata" class="nav-link" data-scroll-target="#biosamples-metadata">BioSamples Metadata</a></li>
-  <li><a href="#mgnify-metagenomics" id="toc-mgnify-metagenomics" class="nav-link" data-scroll-target="#mgnify-metagenomics">MGnify: Metagenomics</a></li>
+  <li><a href="#mgnify-metagenomics" id="toc-mgnify-metagenomics" class="nav-link" data-scroll-target="#mgnify-metagenomics">MGnify: Metagenomics</a>
+  <ul class="collapse">
+  <li><a href="#metagenome-assembled-genome-mag-catalogues" id="toc-metagenome-assembled-genome-mag-catalogues" class="nav-link" data-scroll-target="#metagenome-assembled-genome-mag-catalogues">Metagenome Assembled Genome (MAG) Catalogues</a></li>
+  <li><a href="#viral-fragment-catalogues" id="toc-viral-fragment-catalogues" class="nav-link" data-scroll-target="#viral-fragment-catalogues">Viral (fragment) Catalogues</a></li>
+  </ul></li>
   <li><a href="#metabolights-metabolomics" id="toc-metabolights-metabolomics" class="nav-link" data-scroll-target="#metabolights-metabolomics">MetaboLights: Metabolomics</a></li>
   <li><a href="#summary-analyses" id="toc-summary-analyses" class="nav-link" data-scroll-target="#summary-analyses">Summary analyses</a></li>
   </ul>
@@ -216,10 +220,21 @@ ul.task-list{list-style: none;}
 <blockquote class="blockquote">
 <p>MGnify is a freely available hub for the analysis and exploration of metagenomic, metatranscriptomic, amplicon and assembly data.</p>
 </blockquote>
+<section id="metagenome-assembled-genome-mag-catalogues" class="level3">
+<h3 class="anchored" data-anchor-id="metagenome-assembled-genome-mag-catalogues">Metagenome Assembled Genome (MAG) Catalogues</h3>
+<p>MAG Catalogues are available for selected biomes. MAGs are draft genomes created by binning assembled metagenomic reads. These MAGs are created using the <a href="https://github.com/EBI-Metagenomics/genomes-pipeline">MGnify Genomes Pipeline</a>. MAGs are annotated using various functional and taxonomic characterisation tools.</p>
+<p>HoloFood MAGs are those created using only reads from HoloFood samples. However, there are other non-HoloFood public data available for the same biomes sampled by this project.</p>
+<p>Each HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify, which is a superset of the HoloFood data and other public data.</p>
+<p>Each MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species. In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG points to itself on the MGnify website. In other cases, a more complete, less contaminated, or isolate genome exists representing the same species, so the HoloFood MAG points to this better representative on MGnify.</p>
+</section>
+<section id="viral-fragment-catalogues" class="level3">
+<h3 class="anchored" data-anchor-id="viral-fragment-catalogues">Viral (fragment) Catalogues</h3>
+<p>Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples. Viral sequences are detected using <a href="https://github.com/EBI-Metagenomics/emg-viral-pipeline">VIRify</a>. Viruses are shown as fragments (regions) of the parent contigs in which they were found. The contigs are those stored in MGnify, from the HoloFood Sample sequencing. Annotations are available on the contigs from the <a href="https://github.com/EBI-Metagenomics/pipeline-v5">MGnify analysis pipeline</a>.</p>
+</section>
 </section>
 <section id="metabolights-metabolomics" class="level2">
 <h2 class="anchored" data-anchor-id="metabolights-metabolomics">MetaboLights: Metabolomics</h2>
-<p>Metabolomics-derived analyses are avaulable for some HoloFood samples.</p>
+<p>Metabolomics-derived analyses are available for some HoloFood samples.</p>
 <p>These datasets are hosted by <a href="https://www.ebi.ac.uk/metabolights/">MetaboLights</a>.</p>
 </section>
 <section id="summary-analyses" class="level2">
