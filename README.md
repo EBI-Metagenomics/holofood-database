@@ -120,7 +120,13 @@ Run `eb use <whatever-the-name-of-your-elastic-beanstalk-environment-is>`, e.g.
 
 Deploy the latest git commit with `eb deploy`
 
-To log into the lead instance e.g. to run management commands: `eb ssh`
+To log into the lead instance e.g. to run management commands: 
+```shell
+eb ssh
+cd /var/app/current
+source ../venv/*/bin/activate
+python manage.py ...
+```
 
 Secret environment variables can be configured in the 
 [AWS EB Console](https://eu-west-1.console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/environments).
