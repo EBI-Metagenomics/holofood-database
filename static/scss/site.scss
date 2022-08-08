@@ -89,3 +89,9 @@ a.inline, button.inline {
 .space-below-20 {
 	margin-bottom: 20px;
 }
+
+.desktop-enforced-side-bar {
+	@media (min-width: 768px) {
+  		max-width: 45%;
+	}
+}

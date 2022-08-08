@@ -102,7 +102,46 @@ Add them to the "authors" user group to give them permissions to author "Annotat
 
 
 ## Deployment
-TODO
+### AWS Elastic Beanstalk
+The Django application can be deployed to AWS Cloud via [Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/),
+a scalable web app deployment service.
+
+There is an Elastic Beanstalk configuration in `.ebextensions/django.config`.
+This config will migrate the db on deployment, as well as compile scss styles and collect static files.
+
+Run `pip install -r requirements-aws.txt` to install the CLI tool for EB.
+
+Create an 
+[Elastic Beanstalk environment](https://eu-west-1.console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/environments).
+You need a `Python 3.8 on Amazon Linux 2` platform, and an RDS Postgres database (a `db.t4g.micro` instance is fine).
+
+Run `eb use <whatever-the-name-of-your-elastic-beanstalk-environment-is>`, e.g.
+`eb use holofood-data-portal-dev-env`.
+
+Deploy the latest git commit with `eb deploy`
+
+To log into the lead instance e.g. to run management commands: 
+```shell
+eb ssh
+cd /var/app/current
+source ../venv/*/bin/activate
+export $(/opt/elasticbeanstalk/bin/get-config --output YAML environment |  sed -r 's/: /=/' | xargs)
+# ^ this sources the env vars
+python manage.py ...
+```
+
+Secret environment variables can be configured in the 
+[AWS EB Console](https://eu-west-1.console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/environments).
+
+#### EBI-specific info
+If using the EBI AWS cloud, via an SSO login.
+Refer to 
+[the Confluence page on AWS SSO](https://www.ebi.ac.uk/seqdb/confluence/display/CCT/AWS+SSO+Authentication+and+Authorisation)
+for the SSO parameters. Use `aws configure sso --profile eb-cli` to sign in.
+Occasionally you’ll need `aws sso login --profile eb-cli` to get a new token.
+
+### Centos VM
+`TODO`
 
 ## Documentation
 There is an [Quarto](https://www.quarto.org/) based documentation pack in the `docs/` folder,

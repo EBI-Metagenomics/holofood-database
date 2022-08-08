@@ -22,7 +22,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--projects",
             type=str,
-            help="Project accession, if only one should be updated",
+            help="Project accessions, if only some should be updated",
             nargs="+",
             metavar="ACCESSION",
         )

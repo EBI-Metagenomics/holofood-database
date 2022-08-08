@@ -3,7 +3,42 @@ title: "Browsing the website"
 ---
 
 # Finding Samples
+![Screenshot of sample listing webpage](/img/website/find-samples.png)
+Samples can be found from the "Chicken samples" and "Salmon samples" navigation items.
+On the samples listing pages, there are various filters available to limit which samples are shown in the table.
+For example, you can find all samples from a particular project.
+
+The table shows an icon-key detailing which data types are available for each sample.
+Samples may be linked to metadata (almost always), metagenomic, or metabolomic datasets.
+
+To view detail about a particular sample, click "View" on its row of the table.
+
+The sample detail page contains information help about the sample in the various supporting databases.
+Metadata is shown in full, in a table.
+Metagenomic and metabolomic data are shown in summary form, with links to the respective public websites where those analyses are held.
+
+The [API](api.ipynb) section shows the API endpoint for this particular sample.
+You can copy this into a script, for example, to programmatically pull the data.
 
 # Downloading sample lists and metadata
+The complete sample list can be exported to TSV using the "Download all as TSV" button.
+:::{.callout-note}
+The "Download all as TSV" button does reflect any filters on the website table – it contains the complete list.
+:::
+
+![Screenshot of a sample detail page with TSV export option](/img/website/tsv-export.png)
+The complete metadata for a sample can be downloaded using the "Download all as TSV" button within the "Sample metadata" section
+of a sample detail page.
+
 
 # Finding analysis summaries
+![Screenshot of a sample detail page with analysis documents links](/img/website/sample-analysis-summaries.png)
+[Analysis summaries](datasets.qmd#summary%20analyses) are linked to samples (or whole projects).
+Any analysis summaries that mention a sample, or its project, are shown at the bottom of the sample's detail page.
+
+![Screenshot of an analysis document](/img/website/analysis-summary.png)
+Analysis summaries also link back to the samples and/or projects they refer to.
+A complete list of analysis summaries can also be found from the navigation bar.
+
+# Using the catalogues
+TODO

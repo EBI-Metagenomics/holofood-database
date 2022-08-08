@@ -13,9 +13,10 @@ from holofood.utils import holofood_config
 API_ROOT = holofood_config.ena.portal_api_root.rstrip("/")
 
 
-def get_holofood_samples() -> dict[List[dict]]:
+def get_holofood_samples(
+    project_ids=settings.HOLOFOOD_CONFIG.ena.projects,
+) -> dict[List[dict]]:
     logging.info(f"Fetching samples from ENA {API_ROOT = }")
-    project_ids = settings.HOLOFOOD_CONFIG.ena.projects
     logging.info(project_ids)
     assert project_ids is not None
 

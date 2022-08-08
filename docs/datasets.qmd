@@ -37,8 +37,33 @@ These datasets and analysis features are hosted by [MGnify](https://ebi.ac.uk/me
 
 > MGnify is a freely available hub for the analysis and exploration of metagenomic, metatranscriptomic, amplicon and assembly data.
 
+### Metagenome Assembled Genome (MAG) Catalogues
+MAG Catalogues are available for selected biomes.
+MAGs are draft genomes created by binning assembled metagenomic reads.
+These MAGs are created using the [MGnify Genomes Pipeline](https://github.com/EBI-Metagenomics/genomes-pipeline).
+MAGs are annotated using various functional and taxonomic characterisation tools.
+
+HoloFood MAGs are those created using only reads from HoloFood samples.
+However, there are other non-HoloFood public data available for the same biomes sampled by this project.
+
+Each HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify,
+which is a superset of the HoloFood data and other public data.
+
+Each MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species.
+In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG
+points to itself on the MGnify website.
+In other cases, a more complete, less contaminated, or isolate genome exists representing the same species,
+so the HoloFood MAG points to this better representative on MGnify.
+
+### Viral (fragment) Catalogues
+Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples.
+Viral sequences are detected using [VIRify](https://github.com/EBI-Metagenomics/emg-viral-pipeline).
+Viruses are shown as fragments (regions) of the parent contigs in which they were found.
+The contigs are those stored in MGnify, from the HoloFood Sample sequencing.
+Annotations are available on the contigs from the [MGnify analysis pipeline](https://github.com/EBI-Metagenomics/pipeline-v5).
+
 ## MetaboLights: Metabolomics
-Metabolomics-derived analyses are avaulable for some HoloFood samples.
+Metabolomics-derived analyses are available for some HoloFood samples.
 
 These datasets are hosted by [MetaboLights](https://www.ebi.ac.uk/metabolights/).
 

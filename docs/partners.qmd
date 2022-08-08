@@ -3,7 +3,41 @@ title: "Admin access for HoloFood partners"
 ---
 
 ## Managing the database
+Bulk activities, like importing projects, samples, and metadata, are covered in the
+[repository README](https://github.com/EBI-Metagenomics/holofood-database#use).
+
+There is also an Admin Panel where individual database entries can be managed.
 
 ## Authoring new Summary Analysis documents
+Navigate to the site admin panel, and log in.
+
+:::{.callout-tip}
+If you do not have the link or credentials, please [contact the helpdesk](mailto:holofood-help@ebi.ac.uk).
+:::
+
+![Screenshot of admin panel landing page](/img/partners/add-sample-annotation.png)
+Click "Add" on the "Sample annotation" entry.
+Depending on your permission level, you may see different objects than shown in the screenshot.
+
+![Screenshot of a sample summary in edit mode](/img/partners/author-analysis-summary.png)
+Analysis summaries require a title (which is automatically converted into the URL slug).
+The document itself can be written as
+[Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+To include images, upload them to a hosting site or GitHub repository, and include them via their URL.
+There are toolbar buttons in the markdown editor to help you with this syntax.
+
+![Screenshot of a sample summary in edit mode](/img/partners/link-analysis-summary.png)
+Analysis summaries must be linked to samples and/or entire projects.
+To link them, select the relevant samples and/or projects from the lists on the left,
+and hit the `->` button to move the selected samples/projects to the right-hand list.
+
+:::{.callout-warning}
+Don’t forget to press "Save and continue editing" now and then!
+:::
 
 ## Editing and publishing Summary Analysis documents
+Superuser credentials are required to **publish** analysis summaries.
+Until published, the documents do not appear on the public website.
+As a superuser, tick the "Is published" checkbox on an analysis summary edit page in the admin panel, and press Save.
+
+If you believe you should have superuser credentials, [contact the helpdesk](mailto:holofood-help@ebi.ac.uk).

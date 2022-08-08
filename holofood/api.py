@@ -27,7 +27,7 @@ api = NinjaAPI(
     title="HoloFood Data Portal API",
     description="The API to browse [HoloFood](https://www.holofood.eu) samples and metadata, "
     "and navigate to datasets stored in public archives. \n\n #### Useful links: \n"
-    "- [Documentation](/docs)\n"
+    "- [Documentation](https://ebi-metagenomics.github.io/holofood-database/)\n"
     "- [HoloFood Data Portal home](/)\n"
     "- [HoloFood Project Website](https://www.holofood.eu)\n"
     "- [Helpdesk](https://www.ebi.ac.uk/contact)\n"
@@ -105,6 +105,12 @@ class SampleSlimSchema(ModelSchema):
 class SampleSchema(SampleSlimSchema):
     structured_metadata: List[SampleStructuredDatumSchema]
     annotations: List[RelatedAnnotationSchema]
+
+    @staticmethod
+    def resolve_project_annotations(obj: Sample):
+        return obj.project.annotations.all()
+
+    project_annotations: List[RelatedAnnotationSchema]
 
 
 class AnnotationSchema(ModelSchema):
