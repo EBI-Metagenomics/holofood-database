@@ -162,7 +162,7 @@
                 </tbody>
             </table>
         {% else %}
-            <p>Sample has no metagenomics data</p>
+            <p>Sample {{ sample.accession }} has no metagenomics data</p>
         {% endif %}
     </details>
     <details class="vf-details">
@@ -170,8 +170,9 @@
             Metabolomics
         </summary>
         <p>
-            View on Metabolights
+            Sample {{ sample.accession }} may have metabolomics analysis on MetaboLights.
         </p>
+        <a href="{{ METABOLIGHTS_WEB_URL }}" class="vf-button vf-button--primary vf-button--sm" target="_blank">Open MetaboLights</a>
     </details>
     <section class="vf-card-container vf-card-container__col-3 | vf-u-background-color--grey--lightest vf-u-fullbleed">
         <div class="vf-card-container__inner">

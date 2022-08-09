@@ -50,6 +50,10 @@ class MgnifyConfig(BaseModel):
     request_cadence: timedelta = timedelta(seconds=3)
 
 
+class MetabolightsConfig(BaseModel):
+    web_url: AnyHttpUrl = "https://www.ebi.ac.uk/metabolights"
+
+
 class SampleTableConfig(BaseModel):
     default_metadata_marker_columns: List[str]
 
@@ -64,6 +68,7 @@ class HolofoodConfig(BaseSettings):
     biosamples: BiosamplesConfig = BiosamplesConfig()
     ena: EnaConfig = EnaConfig()
     mgnify: MgnifyConfig = MgnifyConfig()
+    metabolights: MetabolightsConfig = MetabolightsConfig()
     tables: TablesConfig = TablesConfig()
 
     class Config:
