@@ -223,7 +223,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul>
   <li><a href="#a-guide-to-using-the-holofood-data-portal" id="toc-a-guide-to-using-the-holofood-data-portal" class="nav-link active" data-scroll-target="#a-guide-to-using-the-holofood-data-portal">A guide to using the HoloFood Data Portal</a>
   <ul class="collapse">
-  <li><a href="#finding-samples-using-the-website" id="toc-finding-samples-using-the-website" class="nav-link" data-scroll-target="#finding-samples-using-the-website">Finding samples using the website</a></li>
+  <li><a href="#objective-1-finding-samples-using-the-website" id="toc-objective-1-finding-samples-using-the-website" class="nav-link" data-scroll-target="#objective-1-finding-samples-using-the-website">Objective 1: Finding samples using the website</a></li>
+  <li><a href="#objective-2-find-metadata-for-a-specific-sample" id="toc-objective-2-find-metadata-for-a-specific-sample" class="nav-link" data-scroll-target="#objective-2-find-metadata-for-a-specific-sample">Objective 2: Find metadata for a specific sample</a></li>
+  <li><a href="#objective-3-find-mag-metadata-from-mgnify" id="toc-objective-3-find-mag-metadata-from-mgnify" class="nav-link" data-scroll-target="#objective-3-find-mag-metadata-from-mgnify">Objective 3: Find MAG metadata from MGnify</a></li>
+  <li><a href="#objective-4-find-viral-fragments-within-a-mag" id="toc-objective-4-find-viral-fragments-within-a-mag" class="nav-link" data-scroll-target="#objective-4-find-viral-fragments-within-a-mag">Objective 4: Find viral fragments within a MAG</a></li>
+  <li><a href="#objective-5-use-python-to-analyse-data-from-the-api" id="toc-objective-5-use-python-to-analyse-data-from-the-api" class="nav-link" data-scroll-target="#objective-5-use-python-to-analyse-data-from-the-api">Objective 5: Use Python to analyse data from the API</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ebi-metagenomics/holofood-database/blob/main/docs/tutorial.ipynb" class="toc-action">Edit this page</a></p><p><a href="https://github.com/ebi-metagenomics/holofood-database/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -249,15 +253,206 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="a-guide-to-using-the-holofood-data-portal" class="level1">
 <h1>A guide to using the HoloFood Data Portal</h1>
-<section id="finding-samples-using-the-website" class="level2">
-<h2 class="anchored" data-anchor-id="finding-samples-using-the-website">Finding samples using the website</h2>
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This tutorial showcases the core uses of the Data Portal. There is a solution to each learning objective.</p>
+<section id="objective-1-finding-samples-using-the-website" class="level2">
+<h2 class="anchored" data-anchor-id="objective-1-finding-samples-using-the-website">Objective 1: Finding samples using the website</h2>
+<p>Open the <a href="http://data.holofood.eu:8000">HoloFood Data Portal</a>.</p>
+<p>Find all <em>Salmon</em> samples from the project <code>PRJEB41657</code>.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>requests.get(<span class="st">'https://ebi.ac.uk'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<pre><code>&lt;Response [200]&gt;</code></pre>
+<div class="callout-caption-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Type <code>PRJEB41657</code> into the <code>Project accession contains</code> filter next to the table, and press <code>Apply</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="objective-2-find-metadata-for-a-specific-sample" class="level2">
+<h2 class="anchored" data-anchor-id="objective-2-find-metadata-for-a-specific-sample">Objective 2: Find metadata for a specific sample</h2>
+<ul>
+<li>Find the <em>Chicken</em> sample <code>SAMEA7025251</code>.</li>
+<li>From the sample’s metadata, find the average daily feed intake of chicken’s in that pen in the first trial week.</li>
+</ul>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Click <code>Chicken samples</code> in the navigation bar.</li>
+<li>Type <code>SAMEA7025251</code> into the <code>Accession contains</code> filter, press <code>Apply</code>.</li>
+<li>Click <code>View</code> in the single row of the table.</li>
+<li>Open the <code>Sample metadata</code> section of the sample detail page.</li>
+<li>Switch to the <code>Pen</code> tab of metadata.</li>
+<li>Find the <code>Average Daily Feed intake: Day 00 - 07</code> row (measurement = 18.59g).</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="objective-3-find-mag-metadata-from-mgnify" class="level2">
+<h2 class="anchored" data-anchor-id="objective-3-find-mag-metadata-from-mgnify">Objective 3: Find MAG metadata from MGnify</h2>
+<div class="callout-caution callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Fake data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Currently this example is based on fake data that does not originate from the HoloFood project.</p>
+</div>
+</div>
+<ul>
+<li>Find the <code>HoloFood Cow Rumen v1</code> genome <code>MGYG1</code></li>
+<li>Using the genome’s species representative, find the genome’s most prevalent <a href="https://www.ncbi.nlm.nih.gov/research/cog">COG category</a> with a known function.</li>
+</ul>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Click <code>Genomes</code> in the navigation bar.</li>
+<li>Select the <code>HoloFood Cow Rumen v1</code> catalogue in the sub navigation</li>
+<li>Type <code>MGYG1</code> in the <code>Accession contains</code> filter.</li>
+<li>Click <code>View on MGnify</code> in the single row of the table.</li>
+<li>On the MGnify page that opens, switch to the <code>COG analysis</code> sub-tab.</li>
+<li>Look at the bar chart. Ignoring cataegory <code>S (Function unknown)</code>, category <code>M (Cell wall/membrane/envelope biogenesis)</code> is the most prevalent COG category in this genome.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="objective-4-find-viral-fragments-within-a-mag" class="level2">
+<h2 class="anchored" data-anchor-id="objective-4-find-viral-fragments-within-a-mag">Objective 4: Find viral fragments within a MAG</h2>
+<div class="callout-caution callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Fake data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Currently this example is based on fake data that does not originate from the HoloFood project.</p>
+</div>
+</div>
+<ul>
+<li>Find the <code>HoloFood Cow Rumen Viruses v0</code> catalogue`</li>
+<li>Find a viral sequence present in the host MAG with taxonomy <code>Prevotella sp902792635</code></li>
+<li>Find all of the <a href="https://osf.io/2zd9r/">ViPhOG</a> viral annotations on that viral sequence</li>
+</ul>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Click <code>Viruses</code> in the navigation bar.</li>
+<li>Select the <code>HoloFood Cow Rumen Viruses v0</code> catalogue in the sub navigation</li>
+<li>Type <code>Prevotella sp902792635</code> in the <code>Host MAG taxonomy contains</code> filter.</li>
+<li>Click <code>View contig</code> in the first/only row of the table.</li>
+<li>In the contig viewer now shown above the table, find the <code>ViPhOGs</code> annotation track</li>
+<li>Click on each ViPhOG annotation (dark green), and find the <code>ViPhOG ID</code> from the popup</li>
+<li>You should have found two: <code>[ViPhOG1, ViPhOG2]</code></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="objective-5-use-python-to-analyse-data-from-the-api" class="level2">
+<h2 class="anchored" data-anchor-id="objective-5-use-python-to-analyse-data-from-the-api">Objective 5: Use Python to analyse data from the API</h2>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Packages required
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install requests pandas matplotlib</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<ul>
+<li>Use the <a href="http://data.holofood.eu:8000/api">API</a> to fetch the complete list of HoloFood samples as a Pandas dataframe (the <a href="./api.html#from-python">API docs will be very helpful</a>)</li>
+<li>Filter the dataframe to only include samples from project <code>PRJEB41657</code> with sample titles starting <code>SA01</code> (which happen to be those from Trial A, tank 1)</li>
+<li>Make two histograms, showing the distribution of fish lengths (<code>host length</code> metadata values) at timepoints <code>0 days</code> and <code>60 days</code></li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>samples_endpoint_base <span class="op">=</span> <span class="st">'http://data.holofood.eu:8000/api/samples'</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="78">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>page <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> page:</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#    print(f'Fetching {page=}')</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    samples_page <span class="op">=</span> requests.get(<span class="ss">f'</span><span class="sc">{</span>samples_endpoint_base<span class="sc">}</span><span class="ss">?</span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">'</span>).json()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    samples_page_df <span class="op">=</span> pd.json_normalize(samples_page[<span class="st">'items'</span>])</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> page <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        samples_df <span class="op">=</span> samples_page_df</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        samples_df <span class="op">=</span> pd.concat([samples_df, samples_page_df])</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    page <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(samples_df) <span class="op">&gt;=</span> samples_page[<span class="st">'count'</span>]:</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>trial_samples <span class="op">=</span> samples_df[(samples_df[<span class="st">'project.accession'</span>] <span class="op">==</span> <span class="st">'PRJEB41657'</span>) <span class="op">&amp;</span> (samples_df.title.<span class="bu">str</span>.startswith(<span class="st">'SA01'</span>))]</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_host_length_and_timepoint(sample):</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#    print(f'Finding metadata for {sample.accession}')</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    sample_detail <span class="op">=</span> requests.get(<span class="ss">f'</span><span class="sc">{</span>samples_endpoint_base<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>sample<span class="sc">.</span>accession<span class="sc">}</span><span class="ss">'</span>).json()</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    metadata <span class="op">=</span> sample_detail[<span class="st">'structured_metadata'</span>]</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    host_length <span class="op">=</span> <span class="bu">next</span>(metadatum <span class="cf">for</span> metadatum <span class="kw">in</span> metadata <span class="cf">if</span> metadatum[<span class="st">'marker'</span>][<span class="st">'name'</span>] <span class="op">==</span> <span class="st">'host length'</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    timepoint <span class="op">=</span> <span class="bu">next</span>(metadatum <span class="cf">for</span> metadatum <span class="kw">in</span> metadata <span class="cf">if</span> metadatum[<span class="st">'marker'</span>][<span class="st">'name'</span>] <span class="op">==</span> <span class="st">'trial timepoint'</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> host_length[<span class="st">'measurement'</span>], timepoint[<span class="st">'measurement'</span>]</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>metadata <span class="op">=</span> trial_samples.<span class="bu">apply</span>(get_host_length_and_timepoint, axis<span class="op">=</span><span class="st">'columns'</span>, result_type<span class="op">=</span><span class="st">'expand'</span>).rename(columns<span class="op">=</span>{<span class="dv">0</span>: <span class="st">'host_length_cm'</span>, <span class="dv">1</span>: <span class="st">'trial_timepoint_days'</span>})</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>trial_samples <span class="op">=</span> pd.concat([trial_samples, metadata])</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>trial_samples.groupby(<span class="st">'trial_timepoint_days'</span>).host_length_cm.hist(legend<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span><span class="dv">5</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Host length / cm'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="tutorial_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 
