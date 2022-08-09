@@ -1,5 +1,5 @@
 portal:
-  root_url: http://data.holofood.eu:8000
+  root_url: http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com
 
 helpdesk:
   email: holofood-help@ebi.ac.uk
