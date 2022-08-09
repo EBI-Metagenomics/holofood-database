@@ -42,12 +42,10 @@ def data_type_icons(sample: Sample) -> dict:
             or sample.structured_metadata.exists(),
             "metagenomics": sample.has_metagenomics,
             "metabolomics": False,
-            "mags": False,
         }
     else:
         return {
             "sample_metadata": False,
             "metagenomics": False,
             "metabolomics": False,
-            "mags": False,
         }

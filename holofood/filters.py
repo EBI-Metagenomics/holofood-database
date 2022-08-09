@@ -26,6 +26,16 @@ class MultiFieldSearchFilter(django_filters.FilterSet):
 
 
 class SampleFilter(django_filters.FilterSet):
+    has_metagenomics = django_filters.ChoiceFilter(
+        choices=[(True, "Yes"), (False, "No")],
+        label="Has metagenomics data",
+    )
+
+    has_metabolomics = django_filters.ChoiceFilter(
+        choices=[(True, "Yes"), (False, "No")],
+        label="Has metabolomics data",
+    )
+
     ordering = django_filters.OrderingFilter(
         fields=("accession", "project__accession", "title"),
     )

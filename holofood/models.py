@@ -53,6 +53,7 @@ class Sample(models.Model):
     title = models.CharField(max_length=200)
 
     has_metagenomics = models.BooleanField(default=False)
+    has_metabolomics = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Sample {self.accession} - {self.title}"
