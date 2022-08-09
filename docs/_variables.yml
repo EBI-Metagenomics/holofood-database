@@ -1,0 +1,5 @@
+portal:
+  root_url: http://data.holofood.eu:8000
+
+helpdesk:
+  email: holofood-help@ebi.ac.uk

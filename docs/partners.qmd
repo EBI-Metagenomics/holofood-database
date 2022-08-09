@@ -12,7 +12,7 @@ There is also an Admin Panel where individual database entries can be managed.
 Navigate to the site admin panel, and log in.
 
 :::{.callout-tip}
-If you do not have the link or credentials, please [contact the helpdesk](mailto:holofood-help@ebi.ac.uk).
+If you do not have the link or credentials, please [contact the helpdesk](mailto:{{< var helpdesk.email >}}).
 :::
 
 ![Screenshot of admin panel landing page](/img/partners/add-sample-annotation.png)
@@ -40,4 +40,4 @@ Superuser credentials are required to **publish** analysis summaries.
 Until published, the documents do not appear on the public website.
 As a superuser, tick the "Is published" checkbox on an analysis summary edit page in the admin panel, and press Save.
 
-If you believe you should have superuser credentials, [contact the helpdesk](mailto:holofood-help@ebi.ac.uk).
+If you believe you should have superuser credentials, [contact the helpdesk](mailto:{{< var helpdesk.email >}}).
