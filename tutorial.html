@@ -256,7 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This tutorial showcases the core uses of the Data Portal. There is a solution to each learning objective.</p>
 <section id="objective-1-finding-samples-using-the-website" class="level2">
 <h2 class="anchored" data-anchor-id="objective-1-finding-samples-using-the-website">Objective 1: Finding samples using the website</h2>
-<p>Open the <a href="http://data.holofood.eu:8000">HoloFood Data Portal</a>.</p>
+<p>Open the <a href="http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com">HoloFood Data Portal</a>.</p>
 <p>Find all <em>Salmon</em> samples from the project <code>PRJEB41657</code>.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -409,11 +409,11 @@ Packages required
 </div>
 </div>
 <ul>
-<li>Use the <a href="http://data.holofood.eu:8000/api">API</a> to fetch the complete list of HoloFood samples as a Pandas dataframe (the <a href="./api.html#from-python">API docs will be very helpful</a>)</li>
+<li>Use the <a href="http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com/api">API</a> to fetch the complete list of HoloFood samples as a Pandas dataframe (the <a href="./api.html#from-python">API docs will be very helpful</a>)</li>
 <li>Filter the dataframe to only include samples from project <code>PRJEB41657</code> with sample titles starting <code>SA01</code> (which happen to be those from Trial A, tank 1)</li>
 <li>Make two histograms, showing the distribution of fish lengths (<code>host length</code> metadata values) at timepoints <code>0 days</code> and <code>60 days</code></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>samples_endpoint_base <span class="op">=</span> <span class="st">'http://data.holofood.eu:8000/api/samples'</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>samples_endpoint_base <span class="op">=</span> <span class="st">'http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com/api/samples'</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
