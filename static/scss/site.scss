@@ -95,3 +95,30 @@ a.inline, button.inline {
   		max-width: 45%;
 	}
 }
+
+.typeahead-results {
+	z-index: 2000 !important;
+}
+
+.highlight-tab-match {
+	&:after {
+		position: absolute;
+		left: 4px;
+		top: 4px;
+		height: 16px;
+		width: 16px;
+		background-color: var(--vf-color--red);
+		border-radius: 8px;
+
+		content: '';
+	}
+	&:not(.highlight-tab-select) {
+		&:after {
+			opacity: 0.4;
+		}
+	}
+}
+
+.autoComplete_wrapper {
+	float: right;
+}
