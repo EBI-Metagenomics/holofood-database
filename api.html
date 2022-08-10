@@ -237,6 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#from-the-command-line" id="toc-from-the-command-line" class="nav-link" data-scroll-target="#from-the-command-line">From the command line</a></li>
   <li><a href="#from-python" id="toc-from-python" class="nav-link" data-scroll-target="#from-python">From Python</a></li>
   </ul></li>
+  <li><a href="#filters-using-query-parameters" id="toc-filters-using-query-parameters" class="nav-link" data-scroll-target="#filters-using-query-parameters">Filters using query parameters</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ebi-metagenomics/holofood-database/blob/main/docs/api.ipynb" class="toc-action">Edit this page</a></p><p><a href="https://github.com/ebi-metagenomics/holofood-database/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -281,7 +282,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In brief, the top-level endpoints are:</p>
 <section id="apisamples" class="level3">
 <h3 class="anchored" data-anchor-id="apisamples"><code>/api/samples</code></h3>
-<p>List samples, or fetch details about a specific sample (like its metadata).</p>
+<p>List samples, or fetch details about a specific sample (like its metadata). List all possible metadata markers (i.e.&nbsp;keys).</p>
 </section>
 <section id="apiannotations" class="level3">
 <h3 class="anchored" data-anchor-id="apiannotations"><code>/api/annotations</code></h3>
@@ -332,7 +333,7 @@ Packages required
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install requests pandas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div class="cell" data-execution_count="24">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -429,7 +430,7 @@ Paginated data
 </div>
 </div>
 <div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>samples_endpoint_base <span class="op">=</span> <span class="st">'http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com/api/samples'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell" data-execution_count="56">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>page <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> page:</span>
@@ -453,22 +454,22 @@ Fetching page=4
 Fetching page=5</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="50">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(samples_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="50">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>429</code></pre>
 </div>
 </div>
 <section id="find-all-salmon-samples" class="level4">
 <h4 class="anchored" data-anchor-id="find-all-salmon-samples">Find all <em>salmon</em> samples:</h4>
-<div class="cell" data-execution_count="54">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>salmon <span class="op">=</span> samples_df[samples_df.system <span class="op">==</span> <span class="st">'salmon'</span>]</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(salmon))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>salmon.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>359</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="54">
+<div class="cell-output cell-output-display" data-execution_count="10">
 
 <div>
 
@@ -529,10 +530,44 @@ Fetching page=5</code></pre>
 </div>
 </div>
 </div>
-
-
 </section>
 </section>
+</section>
+<section id="filters-using-query-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="filters-using-query-parameters">Filters using query parameters</h2>
+<p>We didn’t need to fetch all the samples to then select only the Salmon ones. We can instead fetch only the salmon ones using a <strong>query parameter filter</strong>. (If you’re familiar with SQL, this eventually maps to a <code>WHERE</code> clause on the database.)</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>page <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> page:</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'Fetching </span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    salmon_page <span class="op">=</span> requests.get(<span class="ss">f'</span><span class="sc">{</span>samples_endpoint_base<span class="sc">}</span><span class="ss">?</span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">&amp;system=salmon'</span>).json()</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    salmon_page_df <span class="op">=</span> pd.json_normalize(salmon_page[<span class="st">'items'</span>])</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> page <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        salmon_df <span class="op">=</span> salmon_page_df</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>        salmon_df <span class="op">=</span> pd.concat([salmon_df, salmon_page_df])</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    page <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(salmon_df) <span class="op">&gt;=</span> salmon_page[<span class="st">'count'</span>]:</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fetching page=1
+Fetching page=2
+Fetching page=3
+Fetching page=4</code></pre>
+</div>
+</div>
+<p>And so, we’ve more efficiently fetched the same set of (salmon) samples:</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>salmon_df.size <span class="op">==</span> samples_df[samples_df.system <span class="op">==</span> <span class="st">'salmon'</span>].size</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>True</code></pre>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->
