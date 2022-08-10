@@ -3,7 +3,9 @@ from enum import Enum
 from functools import reduce
 from typing import Optional, List
 
+from django.db import models
 from django.db.models import Q
+from django.db.models.functions import Lower
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from ninja import ModelSchema, NinjaAPI, Field
@@ -56,6 +58,10 @@ class SampleMetadataMarkerSchema(ModelSchema):
     class Config:
         model = SampleMetadataMarker
         model_fields = ["name", "type"]
+
+
+class SampleCountedMetadataMarkerSchema(SampleMetadataMarkerSchema):
+    samples_count: int
 
 
 class SampleStructuredDatumSchema(ModelSchema):
@@ -224,7 +230,10 @@ def get_sample(request, sample_accession: str):
     description="Long lists will be paginated, so use the `page=` query parameter to get more pages. "
     "Several filters are available, which mostly perform case-insensitive containment lookups. "
     "Sample metadata are *not* returned for each item. "
-    "Use the `/samples/{sample_accession}` endpoint to retrieve those.",
+    "Use the `/samples/{sample_accession}` endpoint to retrieve those. "
+    "Sample metadata *can* be filtered for with `require_metadata_marker=`: this finds samples where "
+    "the named metadata marker is present and none of `['0', 'false', 'unknown', 'n/a', 'null]`. "
+    "Use `/sample_metadata_markers` to find the exact marker name of interest.",
     tags=[SAMPLES],
 )
 def list_samples(
@@ -234,6 +243,9 @@ def list_samples(
     project_accession: str = None,
     project_title: str = None,
     title: str = None,
+    require_metagenomics: bool = False,
+    require_metabolomics: bool = False,
+    require_metadata_marker: str = None,
 ):
     q_objects = []
     if system:
@@ -246,9 +258,53 @@ def list_samples(
         q_objects.append(Q(project__title__icontains=project_title))
     if title:
         q_objects.append(Q(title__icontains=title))
+    if require_metagenomics:
+        q_objects.append(Q(has_metagenomics=True))
+    if require_metabolomics:
+        q_objects.append(Q(has_metabolomics=True))
+    if require_metadata_marker:
+        sample_ids_with_metadata = (
+            SampleStructuredDatum.objects.filter(
+                marker__name__iexact=require_metadata_marker
+            )
+            .annotate(measurement_lower=Lower("measurement"))
+            .exclude(measurement_lower__in=("0", "false", "unknown", "n/a", "null"))
+            .values_list("sample_id", flat=True)
+        )
+        q_objects.append(Q(accession__in=sample_ids_with_metadata))
     if not q_objects:
         return Sample.objects.all()
     return Sample.objects.filter(reduce(operator.and_, q_objects))
+
+
+@api.get(
+    "/sample_metadata_markers",
+    response=List[SampleCountedMetadataMarkerSchema],
+    summary="Fetch a list of structured metadata markers (i.e. keys).",
+    description="Each marker is present in the metadata of at least one sample. "
+    "Not every sample will have every metadata marker. "
+    "Long lists will be paginated, so use the `page=` query parameter to get more pages. "
+    "Use `name=` to search for a marker by name (case insensitive partial matches). "
+    "Use `min_samples=` to search for markers present on at least that many samples.",
+    tags=[SAMPLES],
+)
+def list_sample_metadata_markers(
+    request,
+    name: str = None,
+    min_samples: int = None,
+):
+    q_objects = []
+    if name:
+        q_objects.append(Q(name__icontains=name))
+    if min_samples:
+        q_objects.append(Q(samples_count__gte=min_samples))
+
+    annotated_markers = SampleMetadataMarker.objects.annotate(
+        samples_count=models.Count("samplestructureddatum")
+    )
+    if not q_objects:
+        return annotated_markers.all()
+    return annotated_markers.filter(reduce(operator.and_, q_objects))
 
 
 @api.get(

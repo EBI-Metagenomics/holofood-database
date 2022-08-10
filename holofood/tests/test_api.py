@@ -1,6 +1,6 @@
 import pytest
 
-from holofood.models import SampleStructuredDatum
+from holofood.models import SampleStructuredDatum, SampleMetadataMarker
 
 
 @pytest.mark.django_db
@@ -74,6 +74,34 @@ def test_samples_api_list_filters(client, salmon_sample):
     assert len(data.get("items")) == 1
     assert data.get("count") == 1
 
+    response = client.get("/api/samples?require_metadata_marker=roundness")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data.get("items")) == 0
+    assert data.get("count") == 0
+
+    roundness = SampleMetadataMarker.objects.create(name="roundness")
+    response = client.get("/api/samples?require_metadata_marker=roundness")
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("count") == 0
+
+    salmon_roundness = SampleStructuredDatum.objects.create(
+        sample=salmon_sample, marker=roundness, measurement="unknown"
+    )
+    response = client.get("/api/samples?require_metadata_marker=roundness")
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("count") == 0
+
+    salmon_roundness.measurement = 3.14
+    salmon_roundness.save()
+
+    response = client.get("/api/samples?require_metadata_marker=roundness")
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("count") == 1
+
 
 @pytest.mark.django_db
 def test_samples_api_detail(client, salmon_sample, structured_metadata_marker):
@@ -102,6 +130,35 @@ def test_samples_api_detail(client, salmon_sample, structured_metadata_marker):
     data = response.json()
     assert len(data.get("structured_metadata")) == 1
     assert data.get("structured_metadata")[0].get("measurement") == "really quite big"
+
+
+@pytest.mark.django_db
+def test_sample_metadata_markers_api_list_filters(
+    client, salmon_sample, structured_metadata_marker
+):
+    response = client.get("/api/sample_metadata_markers")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data.get("items")) == 1
+    assert data.get("count") == 1
+
+    response = client.get("/api/sample_metadata_markers?name=donut")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data.get("items")) == 1
+    assert data.get("count") == 1
+
+    response = client.get("/api/sample_metadata_markers?name=donut&min_samples=2")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data.get("items")) == 0
+    assert data.get("count") == 0
+
+    response = client.get("/api/sample_metadata_markers?name=cronut")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data.get("items")) == 0
+    assert data.get("count") == 0
 
 
 @pytest.mark.django_db
