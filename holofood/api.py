@@ -119,7 +119,7 @@ class SampleSchema(SampleSlimSchema):
     project_annotations: List[RelatedAnnotationSchema]
 
 
-class AnnotationSchema(ModelSchema):
+class AnnotationSchema(RelatedAnnotationSchema):
     samples: List[SampleSlimSchema]
     projects: List[RelatedProjectSchema]
 
