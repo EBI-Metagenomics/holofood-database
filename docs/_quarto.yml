@@ -18,7 +18,7 @@ website:
 
     navbar:
         right:
-            - href: ebi.ac.uk
+            - href: http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com
               text: Data Portal
 
     sidebar:
