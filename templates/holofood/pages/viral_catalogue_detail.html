@@ -54,7 +54,7 @@
             igv.createBrowser(igvDiv, options)
                 .then(function (browser) {
                     console.log("Created IGV browser");
-                })
+                });
         });
         </script>
     {% endif %}
@@ -117,6 +117,7 @@
                         <tr class="vf-table__row">
                             <th class="vf-table__heading" scope="col">Viral&nbsp;sequence&nbsp;ID</th>
                             <th class="vf-table__heading" scope="col">Parent contig</th>
+                            <th class="vf-table__heading" scope="col">Type</th>
                             <th class="vf-table__heading" scope="col">Taxonomy</th>
                             <th class="vf-table__heading" scope="col">Host MAG</th>
                             <th class="vf-table__heading" scope="col">Host taxonomy</th>
@@ -131,7 +132,10 @@
                                     <a class="vf-link"
                                        href="{{ MGNIFY_WEB_URL }}/analyses/{{ viral_fragment.mgnify_analysis_accession }}?selected_contig={{ viral_fragment.contig_id }}#contigs-viewer">{{ viral_fragment.contig_id }}</a>
                                 </td>
-                                <td class="vf-table__cell">{{ viral_fragment.taxonomy }}</td>
+                                <td class="vf-table__cell">
+                                    {{ viral_fragment.viral_type }}
+                                </td>
+                                <td class="vf-table__cell">{% taxonomy_tooltip taxonomy=viral_fragment.taxonomy %}</td>
                                 <td class="vf-table__cell">
                                     {% if viral_fragment.host_mag %}
                                         <a class="vf-button vf-button--link vf-button--sm inline"
