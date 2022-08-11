@@ -35,13 +35,13 @@
             <dd class="vf-list__item vf-list--definition__details">
                 <span class="api-endpoint">
                     <a class="vf-link" href="{{ endpoint }}">{{ endpoint }}</a>
-                    <div class="tooltiped">
+                    <span class="tooltiped">
                         <button class="vf-button vf-button--link vf-button--sm inline"
                             onclick="copyApiEndpoint()">
                             <img src="{% static 'img/icons/copy.svg' %}" height="16px" alt="Copy"/>
                         </button>
                         <span id="endpoint-copy-tooltip" class="tooltip-text">Copy API Endpoint</span>
-                    </div>
+                    </span>
 
                 </span>
             </dd>
@@ -90,10 +90,21 @@
                         selection: (event) => {
                             const selection = event.detail.selection.value.name;
                             autoCompleteJS.input.value = selection;
+
+                            const tabPanels = document.querySelectorAll(
+                                "[data-vf-js-tabs-content] [id^=\"vf-tabs__section\"]"
+                            );
+                            const tabForSelectedMarker = document.querySelector(
+                                `[data-vf-js-tabs] .vf-tabs__link[data-metadata-type-key="${event.detail.selection.value.type}"] `
+                            );
+                            vfTabsSwitch(tabForSelectedMarker, tabPanels);
+
                         },
                         navigate: (event) => {
-                            Array.from(document.querySelectorAll('.highlight-tab-match')).forEach((el) => el.classList.remove('highlight-tab-match'));
-                            Array.from(document.querySelectorAll('.highlight-tab-select')).forEach((el) => el.classList.remove('highlight-tab-select'));
+                            Array.from(document.querySelectorAll('.highlight-tab-match'))
+                                .forEach((el) => el.classList.remove('highlight-tab-match'));
+                            Array.from(document.querySelectorAll('.highlight-tab-select'))
+                                .forEach((el) => el.classList.remove('highlight-tab-select'));
 
                             const matchingDataTypes = [... new Set(event.detail.matches.map(match => match.value.type))];
                             matchingDataTypes.forEach((metadataKey => {
@@ -101,7 +112,9 @@
                                 tabs.classList.add("highlight-tab-match");
                             }));
 
-                            document.querySelector(`[data-metadata-type-key="${event.detail.selection.value.type}"]`).classList.add("highlight-tab-select");
+                            document.querySelector(
+                                `[data-metadata-type-key="${event.detail.selection.value.type}"]`
+                            ).classList.add("highlight-tab-select");
                         }
                     }
                 }
@@ -112,8 +125,9 @@
         <div class="vf-tabs">
             <ul class="vf-tabs__list" data-vf-js-tabs id="metadata-sections-tabs">
                 {% for metadata_section in metadata_sections %}
-                    <li class="vf-tabs__item" data-metadata-type-key="{{ metadata_section.grouper }}">
+                    <li class="vf-tabs__item">
                         <a class="vf-tabs__link"
+                           data-metadata-type-key="{{ metadata_section.grouper }}"
                            href="#vf-tabs__section--{{ metadata_section.grouper|lower|cut:" " }}">{{ metadata_section.grouper|default:"Generic"|title }}</a>
                     </li>
                 {% endfor %}

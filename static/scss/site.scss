@@ -97,7 +97,8 @@ a.inline, button.inline {
 }
 
 .typeahead-results {
-	z-index: 2000 !important;
+	// Typeahead results list must be above vf-tabs active item
+	z-index: 6000 !important;
 }
 
 .highlight-tab-match {
