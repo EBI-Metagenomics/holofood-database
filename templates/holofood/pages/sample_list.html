@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load sample_metadata %}
 {% block content %}
     <div class="vf-sidebar vf-sidebar--start vf-sidebar--800">
@@ -28,7 +29,18 @@
                         {% for sample in samples %}
                             <tr class="vf-table__row">
                                 <td class="vf-table__cell">
-                                    <a class="vf-link" href="{% url 'sample_detail' pk=sample.accession %}">{{ sample.accession }}</a>
+                                    <div style="display:flex">
+                                        {% if sample.system == 'chicken' %}
+                                           <img src="{% static "img/icons/chicken.svg" %}"
+                                             class="system-icon"
+                                             alt="Chicken"/>
+                                        {% elif sample.system == 'salmon' %}
+                                            <img src="{% static "img/icons/salmon.svg" %}"
+                                             class="system-icon"
+                                             alt="Salmon"/>
+                                        {% endif %}
+                                        <a class="vf-link" href="{% url 'sample_detail' pk=sample.accession %}">{{ sample.accession }}</a>
+                                    </div>
                                 </td>
                                 <td class="vf-table__cell">
                                     <a href="{{ ENA_BROWSER_URL }}/{{ sample.project.accession }}"

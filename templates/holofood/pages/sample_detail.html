@@ -2,7 +2,6 @@
 {% load sample_metadata %}
 {% load static %}
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/icons.css' %}"/>
     <h1>{{ sample.accession }}: {{ sample.title }}</h1>
     <p class="vf-lede">
         Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample includes: metadata from BioSamples and ENA, metagenomics, metabolomics.

@@ -123,3 +123,21 @@ a.inline, button.inline {
 .autoComplete_wrapper {
 	float: right;
 }
+
+.data-type-icon {
+    height: 16px;
+    width: 16px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.icons-container {
+    gap: 4px;
+}
+
+.system-icon {
+	height: 16px;
+    width: 16px;
+	padding: 4px;
+}
