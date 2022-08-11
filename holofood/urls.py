@@ -32,6 +32,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path, include, get_resolver
+from django.views.defaults import page_not_found
 
 from holofood.api import api
 from holofood.export import export_api
@@ -55,6 +56,7 @@ admin.site.site_header = "HoloFood Data Portal Admin"
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
     path("admin/", admin.site.urls),
+    path("404/", page_not_found, {"exception": Exception()}),
     path("martor/", include("martor.urls")),
     path("samples/", SampleListView.as_view(), name="samples_list"),
     path("sample/<str:pk>", SampleDetailView.as_view(), name="sample_detail"),
