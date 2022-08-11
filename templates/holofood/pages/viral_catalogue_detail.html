@@ -93,8 +93,13 @@
                         </div>
                     </div>
                     <div>
-                        <a style="float: right" class="vf-button vf-button--link vf-button--sm" href="{% url 'viral_fragment_gff' pk=selected_viral_fragment.id %}">
-                            <i class="icon icon-common icon-download"></i>&nbsp;Download ViPhOGs GFF</a>
+                        <div style="float: right">
+                            <a class="vf-button vf-button--link vf-button--sm"
+                               href="{{ MGNIFY_API_URL }}/analyses/{{ selected_viral_fragment.mgnify_analysis_accession }}/contigs/{{ selected_viral_fragment.contig_id }}/annotations">
+                                <i class="icon icon-common icon-download"></i>&nbsp;Download Analysis GFF</a>
+                            <a class="vf-button vf-button--link vf-button--sm" href="{% url 'viral_fragment_gff' pk=selected_viral_fragment.id %}">
+                                <i class="icon icon-common icon-download"></i>&nbsp;Download ViPhOGs GFF</a>
+                        </div>
                     </div>
                 </div>
             {% endif %}
