@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load taxonomy %}
 {% block content %}
     <nav class="vf-navigation vf-navigation--on-this-page | vf-u-fullbleed | vf-cluster"
          style="margin-top: 16px;">
@@ -32,7 +33,7 @@
                             <th class="vf-table__heading" scope="col">Accession</th>
                             <th class="vf-table__heading" scope="col">Species representative</th>
                             <th class="vf-table__heading" scope="col">Taxonomy</th>
-                            <th class="vf-table__heading" scope="col">Detail</th>
+                            <th class="vf-table__heading" scope="col">Species rep. detail</th>
                         </tr>
                     </thead>
                     <tbody class="vf-table__body">
@@ -43,7 +44,7 @@
                                     <a class="vf-link"
                                        href="{{ MGNIFY_WEB_URL }}/genomes/{{ genome.cluster_representative }}">{{ genome.cluster_representative }}</a>
                                 </td>
-                                <td class="vf-table__cell">{{ genome.taxonomy }}</td>
+                                <td class="vf-table__cell">{% taxonomy_tooltip taxonomy=genome.taxonomy %}</td>
                                 <td class="vf-table__cell">
                                     <a class="vf-button vf-button--link vf-button--sm inline"
                                        href="{{ MGNIFY_WEB_URL }}/genomes/{{ genome.cluster_representative }}">
