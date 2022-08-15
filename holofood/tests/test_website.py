@@ -47,7 +47,7 @@ class WebsiteTests(StaticLiveServerTestCase):
         self.selenium.get(self.live_server_url)
         self.selenium.add_cookie(
             {
-                "name": "embl-ebi-public-website-v1.0-data-protection-accepted",
+                "name": "emblContentHub27360_224467",
                 "value": "true",
             }
         )

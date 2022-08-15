@@ -9,7 +9,7 @@ from django.core.management import call_command
 
 from holofood.external_apis.ena.portal_api import API_ROOT as ENAAPIROOT
 from holofood.external_apis.biosamples.api import API_ROOT as BSAPIROOT
-from holofood.external_apis.ena.submit_api import API_ROOT as DBAPIROOT
+from holofood.external_apis.ena.browser_api import API_ROOT as DBAPIROOT
 from holofood.models import Sample, Project, ViralCatalogue
 from holofood.utils import holofood_config
 
@@ -64,7 +64,7 @@ def test_refresh_external_data(
         json=salmon_structureddata_response,
     )
     requests_mock.get(
-        f"{DBAPIROOT}/drop-box/samples/{salmon_sample.accession}",
+        f"{DBAPIROOT}/xml/samples/{salmon_sample.accession}",
         text=salmon_submitted_checklist,
     )
     out = _call_command(
