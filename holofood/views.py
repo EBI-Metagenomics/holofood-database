@@ -1,12 +1,21 @@
 import logging
 import operator
 from functools import reduce
+from typing import List, Type
 
+import requests
 from django.core.paginator import Paginator
+from django.db.models import Q, Model, CharField, QuerySet
 from django.http import Http404, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, TemplateView, RedirectView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    TemplateView,
+    RedirectView,
+    FormView,
+)
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import MultipleObjectMixin
 
@@ -24,7 +33,9 @@ from holofood.models import (
     ViralCatalogue,
     ViralFragment,
     Genome,
+    Project,
 )
+from holofood.utils import holofood_config
 
 
 class ListFilterView(ListView):
@@ -242,3 +253,56 @@ class ViralSequenceAnnotationView(BaseDetailView):
         )
         response["Content-Disposition"] = f"attachment; filename={obj.id}.gff"
         return response
+
+
+class GlobalSearchView(TemplateView):
+    template_name = "holofood/pages/search.html"
+
+    def multi_search_model(
+        self, model: Type[Model], fields: List[str] = None, limit: int = 10
+    ) -> QuerySet:
+        query = self.request.GET.get("query")
+        if not query:
+            return model.objects.none()
+
+        fields = fields or map(
+            lambda field: field.name,
+            filter(lambda field: isinstance(field, CharField), model._meta.fields),
+        )
+
+        return model.objects.filter(
+            reduce(
+                operator.or_,
+                (Q(**{f"{field}__icontains": query}) for field in fields),
+            )
+        )
+
+    def get_docs_results(self) -> List[dict]:
+        query = self.request.GET.get("query")
+        try:
+            quarto_search_response = requests.get(
+                holofood_config.docs.docs_url + "/search.json"
+            )
+            quarto_sections = quarto_search_response.json()
+        except Exception as e:
+            logging.error("Failed to retrieve docs search items from Quarto")
+            logging.error(e)
+            return []
+        matches = filter(
+            lambda sec: query.lower() in sec.get("text", "").lower(), quarto_sections
+        )
+        return list(matches)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["query"] = self.request.GET.get("query")
+        context["samples"] = self.multi_search_model(Sample)
+        context["projects"] = self.multi_search_model(Project)
+        context["mag_catalogues"] = self.multi_search_model(GenomeCatalogue)
+        context["mags"] = self.multi_search_model(Genome)
+        context["viral_catalogues"] = self.multi_search_model(ViralCatalogue)
+        context["viral_fragments"] = self.multi_search_model(ViralFragment)
+        context["annotations"] = self.multi_search_model(SampleAnnotation)
+        context["docs_sections"] = self.get_docs_results()
+
+        return context

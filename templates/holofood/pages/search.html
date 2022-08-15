@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="vf-stack vf-stack--400">
+        <div/>
+        <h2>Search results</h2>
+        <p class="lead">
+            HoloFood data objects matching "{{ query }}"
+        </p>
+
+        <section>
+            <h4 class="vf-text vf-text-heading--5">Matching Samples ({{ samples.count }})</h4>
+            {% for sample in samples.all|slice:":10" %}
+                <article class="vf-summary hf-search-result">
+                    <p class="vf-summary__date">
+                          {{ sample.accession }}
+                      <span class="vf-summary__meta">
+                          {{ sample.system }}
+                      </span>
+                    </p>
+                    <h3 class="vf-summary__title">
+                        <a href="{% url 'sample_detail' pk=sample.accession %}" class="vf-summary__link">
+                            {{ sample.title }}
+                        </a>
+                    </h3>
+                    <p class="vf-summary__text">
+                      A {{ sample.system }} sample from the {{ sample.project.title }} project
+                    </p>
+                </article>
+            {% endfor %}
+            {% if samples.count > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'samples_list' %}">See more samples</a>
+            {% endif %}
+        </section>
+
+        <section>
+            <h4 class="vf-text vf-text-heading--5">Matching Projects ({{ projects.count }})</h4>
+            {% for project in projects.all|slice:":10" %}
+                <article class="vf-summary hf-search-result">
+                    <p class="vf-summary__date">
+                          {{ project.accession }}
+                      <span class="vf-summary__meta">
+                          {{ project.system }}
+                      </span>
+                    </p>
+                    <h3 class="vf-summary__title">
+                        <a href="{% url 'samples_list' %}?project__accession__icontains={{ project.accession }}" class="vf-summary__link">
+                            {{ project.title }}
+                        </a>
+                    </h3>
+                    <p class="vf-summary__text">
+                      A project with {{ project.sample_set.count }} samples
+                    </p>
+                </article>
+            {% endfor %}
+            {% if projects.count > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'samples_list' %}">See more projects</a>
+            {% endif %}
+        </section>
+
+        <section>
+            <h4 class="vf-text vf-text-heading--5">Matching Genome Catalogues ({{ mag_catalogues.count }})</h4>
+            {% for cat in mag_cataogues.all|slice:":10" %}
+                <article class="vf-summary hf-search-result">
+                    <p class="vf-summary__date">
+                          {{ cat.biome }}
+                      <span class="vf-summary__meta">
+                          {{ cat.system }}
+                      </span>
+                    </p>
+                    <h3 class="vf-summary__title">
+                        <a href="{% url 'genome_catalogue' pk=cat.id %}" class="vf-summary__link">
+                            {{ cat.title }}
+                        </a>
+                    </h3>
+                    <p class="vf-summary__text">
+                      A genome catalogue with {{ cat.genomes.count }} genomes, matched to the public {{ cat.related_mag_catalogue_id }} catalogue
+                    </p>
+                </article>
+            {% endfor %}
+            {% if mag_catalogues.count > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'genome_catalogues' %}">See all catalogues</a>
+            {% endif %}
+        </section>
+
+        <section>
+            <h4 class="vf-text vf-text-heading--5">Matching Genomes ({{ mags.count }})</h4>
+            {% for mag in mags.all|slice:":10" %}
+                <article class="vf-summary hf-search-result">
+                    <p class="vf-summary__date">
+                          {{ mag.catalogue.biome }}
+                      <span class="vf-summary__meta">
+                          {{ mag.catalogue.title }}
+                      </span>
+                    </p>
+                    <h3 class="vf-summary__title">
+                        <a href="{% url 'genome_catalogue' pk=mag.catalogue.id %}" class="vf-summary__link">
+                            {{ mag.accession }}
+                        </a>
+                    </h3>
+                    <p class="vf-summary__text">
+                      A genome from the {{ mag.catalogue.title }} catalogue with taxonomy: {{ mag.taxonomy }}
+                    </p>
+                </article>
+            {% endfor %}
+            {% if mags.count > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'genome_catalogues' %}">See all genomes</a>
+            {% endif %}
+        </section>
+
+        <section>
+            <h4 class="vf-text vf-text-heading--5">Matching Viral Catalogues ({{ viral_catalogues.count }})</h4>
+            {% for cat in viral_catalogues.all|slice:":10" %}
+                <article class="vf-summary hf-search-result">
+                    <p class="vf-summary__date">
+                          {{ cat.biome }}
+                      <span class="vf-summary__meta">
+                          {{ cat.system }}
+                      </span>
+                    </p>
+                    <h3 class="vf-summary__title">
+                        <a href="{% url 'genome_catalogue' pk=cat.id %}" class="vf-summary__link">
+                            {{ cat.title }}
+                        </a>
+                    </h3>
+                    <p class="vf-summary__text">
+                      A viral catalogue with {{ cat.viral_fragments.count }} viral fragment,
+                        related to the {{ cat.related_genome_catalogue.title }} genome catalogue
+                    </p>
+                </article>
+            {% endfor %}
+            {% if viral_cats.count > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'viral_catalogues' %}">See all catalogues</a>
+            {% endif %}
+        </section>
+
+        <section>
+            <h4 class="vf-text vf-text-heading--5">Matching Viral Fragments ({{ viral_fragments.count }})</h4>
+            {% for frag in viral_fragments.all|slice:":10" %}
+                <article class="vf-summary hf-search-result">
+                    <p class="vf-summary__date">
+                          {{ frag.catalogue.biome }}
+                      <span class="vf-summary__meta">
+                          {{ frag.viral_type }}
+                      </span>
+                    </p>
+                    <h3 class="vf-summary__title">
+                        <a href="{% url 'viral_catalogue_fragment' pk=frag.catalogue.id viral_fragment_pk=frag.id %}" class="vf-summary__link">
+                            {{ frag.id }}
+                        </a>
+                    </h3>
+                    <p class="vf-summary__text">
+                      A {{ frag.viral_type }} viral fragment from the {{ frag.catalogue.title }} catalogue.
+                        From the {{ frag.contig_id }} contig in MGnify analysis {{ frag.mgnify_analysis_accession }}.
+                    </p>
+                </article>
+            {% endfor %}
+            {% if viruses.count > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'viral_catalogues' %}">See all viruses</a>
+            {% endif %}
+        </section>
+
+        <section>
+            <h4 class="vf-text vf-text-heading--5">Matching Summary Analyses ({{ annotations.count }})</h4>
+            {% for annotation in annotations.all|slice:":10" %}
+                <article class="vf-summary hf-search-result">
+                    <p class="vf-summary__date">
+                          {{ annotation.updated }}
+                      <span class="vf-summary__meta">
+                          {{ annotation.author }}
+                      </span>
+                    </p>
+                    <h3 class="vf-summary__title">
+                        <a href="{% url 'annotation_detail' slug=annotation.slug %}" class="vf-summary__link">
+                            {{ annotation.title }}
+                        </a>
+                    </h3>
+                    <p class="vf-summary__text">
+                        {{ annotation.content|truncatechars:200 }}
+                    </p>
+                </article>
+            {% endfor %}
+            {% if annotations.count > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'annotations_list' %}">See all analyses</a>
+            {% endif %}
+        </section>
+
+        <section>
+            <h4 class="vf-text vf-text-heading--5">Matching Documentation ({{ docs_sections|length }})</h4>
+            {% for doc in docs_sections|slice:":10" %}
+                <article class="vf-summary hf-search-result">
+                    <p class="vf-summary__date">
+                          Documentation
+                      <span class="vf-summary__meta">
+                          {{ doc.title }}
+                      </span>
+                    </p>
+                    <h3 class="vf-summary__title">
+                        <a href="{{ DOCS_URL }}/{{ doc.href }}" class="vf-summary__link">
+                            {{ doc.section|default:doc.title }}
+                        </a>
+                    </h3>
+                    <p class="vf-summary__text">
+                      {{ doc.text|truncatechars:200 }}
+                    </p>
+                </article>
+            {% endfor %}
+            {% if docs_sections|length > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{{ DOCS_URL }}">See more documentation</a>
+            {% endif %}
+        </section>
+
+    </div>
+{% endblock content %}

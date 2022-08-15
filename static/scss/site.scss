@@ -1,3 +1,7 @@
+.vf-hero {
+	margin-top: 0;
+}
+
 .vf-table__cell {
     font-size: 16px;
 }
@@ -144,4 +148,9 @@ a.inline, button.inline {
 	height: 16px;
     width: 16px;
 	padding: 4px;
+}
+
+.hf-search-result {
+	padding-bottom: 16px;
+	border-bottom: 1px solid #ddd;
 }

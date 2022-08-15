@@ -36,7 +36,6 @@ from django.views.defaults import page_not_found
 
 from holofood.api import api
 from holofood.export import export_api
-
 from holofood.views import (
     SampleListView,
     SampleDetailView,
@@ -49,6 +48,7 @@ from holofood.views import (
     ViralCatalogueView,
     ViralCatalogueFragmentView,
     ViralSequenceAnnotationView,
+    GlobalSearchView,
 )
 
 admin.site.site_header = "HoloFood Data Portal Admin"
@@ -83,6 +83,7 @@ urlpatterns = [
         name="viral_catalogue_fragment",
     ),
     path("viral-catalogues", ViralCataloguesView.as_view(), name="viral_catalogues"),
+    path("search/", GlobalSearchView.as_view(), name="global_search"),
     path("api/", api.urls),
     path("export/", export_api.urls),
     path(

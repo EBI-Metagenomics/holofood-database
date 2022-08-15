@@ -69,12 +69,17 @@ class TablesConfig(BaseModel):
     metadata_list: MetadataTableConfig = []
 
 
+class DocsConfig(BaseModel):
+    docs_url: AnyHttpUrl = "https://ebi-metagenomics.github.io/holofood-database"
+
+
 class HolofoodConfig(BaseSettings):
     mock_apis: bool = False
 
     biosamples: BiosamplesConfig = BiosamplesConfig()
     ena: EnaConfig = EnaConfig()
     mgnify: MgnifyConfig = MgnifyConfig()
+    docs: DocsConfig = DocsConfig()
     metabolights: MetabolightsConfig = MetabolightsConfig()
     tables: TablesConfig = TablesConfig()
 
