@@ -64,7 +64,7 @@ def test_refresh_external_data(
         json=salmon_structureddata_response,
     )
     requests_mock.get(
-        f"{DBAPIROOT}/xml/samples/{salmon_sample.accession}",
+        f"{DBAPIROOT}/xml/{salmon_sample.accession}",
         text=salmon_submitted_checklist,
     )
     out = _call_command(
@@ -72,8 +72,8 @@ def test_refresh_external_data(
     )
     logging.info(out)
     assert (
-        salmon_sample.structured_metadata.count() == 168
-    )  # 168 =  markers from structureddata + ENA checklist
+        salmon_sample.structured_metadata.count() == 182
+    )  # 182 =  distincted (per section) markers from structureddata + ENA checklist
 
     requests_mock.get(
         f"{MGAPIROOT}/samples/{salmon_sample.accession}",
