@@ -72,9 +72,9 @@ class MgnifyApi:
 
     def get_metagenomics_analyses_for_run(self, run: str) -> List[dict]:
         logging.info(f"Fetching analyses for {run = } from {self}")
-
-        self._request_slower()
-        response = self.get(f"runs/{run}/analyses?page_size=50")
+        response = requests.get(
+            f"{self.api_root}/runs/{run}/analyses?page_size=50", timeout=5
+        )
         self.assert_response_is_acceptable(response)
 
         return clean_keys(response.json()).get("data", [])

@@ -26,6 +26,11 @@
         "host diet treatment",
         "trial timepoint"
       ]
+    },
+    "metadata_list": {
+      "bring_to_top_if_metadata_marker_name_contains": [
+        "sum"
+      ]
     }
   }
 }

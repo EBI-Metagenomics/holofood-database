@@ -60,8 +60,13 @@ class SampleTableConfig(BaseModel):
     default_metadata_marker_columns: List[str]
 
 
+class MetadataTableConfig(BaseModel):
+    bring_to_top_if_metadata_marker_name_contains: List[str]
+
+
 class TablesConfig(BaseModel):
     samples_list: SampleTableConfig = []
+    metadata_list: MetadataTableConfig = []
 
 
 class HolofoodConfig(BaseSettings):

@@ -146,7 +146,7 @@
                             </tr>
                         </thead>
                         <tbody class="vf-table__body">
-                            {% for structured_metadatum in metadata_section.list %}
+                            {% for structured_metadatum in metadata_section.list|holofood_ordering_rules %}
                                 <tr class="vf-table__row">
                                     <td class="vf-table__cell">{{ structured_metadatum.marker.name }}</td>
                                     <td class="vf-table__cell">{{ structured_metadatum.measurement }}</td>

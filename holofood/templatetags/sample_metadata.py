@@ -1,8 +1,7 @@
-import logging
-from typing import Union
+from typing import Union, List
 
 from django import template
-from holofood.models import Sample
+from holofood.models import Sample, SampleStructuredDatum
 from holofood.utils import holofood_config
 
 register = template.Library()
@@ -49,3 +48,20 @@ def data_type_icons(sample: Sample) -> dict:
             "metagenomics": False,
             "metabolomics": False,
         }
+
+
+@register.filter(name="holofood_ordering_rules")
+def order_metadata_by_holofood_rules(
+    metadata: List[SampleStructuredDatum],
+) -> List[SampleStructuredDatum]:
+    def metadata_priority(metadatum: SampleStructuredDatum):
+        marker_name_lower = metadatum.marker.name.lower()
+        rules = (
+            holofood_config.tables.metadata_list.bring_to_top_if_metadata_marker_name_contains
+        )
+        for idx, rule in enumerate(rules):
+            if rule in marker_name_lower:
+                return idx
+        return len(rules) + 1
+
+    return sorted(metadata, key=metadata_priority)
