@@ -225,9 +225,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#objective-1-finding-samples-using-the-website" id="toc-objective-1-finding-samples-using-the-website" class="nav-link" data-scroll-target="#objective-1-finding-samples-using-the-website">Objective 1: Finding samples using the website</a></li>
   <li><a href="#objective-2-find-metadata-for-a-specific-sample" id="toc-objective-2-find-metadata-for-a-specific-sample" class="nav-link" data-scroll-target="#objective-2-find-metadata-for-a-specific-sample">Objective 2: Find metadata for a specific sample</a></li>
-  <li><a href="#objective-3-find-mag-metadata-from-mgnify" id="toc-objective-3-find-mag-metadata-from-mgnify" class="nav-link" data-scroll-target="#objective-3-find-mag-metadata-from-mgnify">Objective 3: Find MAG metadata from MGnify</a></li>
-  <li><a href="#objective-4-find-viral-fragments-within-a-mag" id="toc-objective-4-find-viral-fragments-within-a-mag" class="nav-link" data-scroll-target="#objective-4-find-viral-fragments-within-a-mag">Objective 4: Find viral fragments within a MAG</a></li>
-  <li><a href="#objective-5-use-python-to-analyse-data-from-the-api" id="toc-objective-5-use-python-to-analyse-data-from-the-api" class="nav-link" data-scroll-target="#objective-5-use-python-to-analyse-data-from-the-api">Objective 5: Use Python to analyse data from the API</a></li>
+  <li><a href="#objective-3-find-functional-information-for-a-sample-from-mgnify" id="toc-objective-3-find-functional-information-for-a-sample-from-mgnify" class="nav-link" data-scroll-target="#objective-3-find-functional-information-for-a-sample-from-mgnify">Objective 3: Find functional information for a sample from MGnify</a></li>
+  <li><a href="#objective-4-find-mag-metadata-from-mgnify" id="toc-objective-4-find-mag-metadata-from-mgnify" class="nav-link" data-scroll-target="#objective-4-find-mag-metadata-from-mgnify">Objective 4: Find MAG metadata from MGnify</a></li>
+  <li><a href="#objective-5-find-viral-fragments-within-a-mag" id="toc-objective-5-find-viral-fragments-within-a-mag" class="nav-link" data-scroll-target="#objective-5-find-viral-fragments-within-a-mag">Objective 5: Find viral fragments within a MAG</a></li>
+  <li><a href="#objective-6-compare-metadata-between-samples-using-tsv-files-in-a-spreadsheet" id="toc-objective-6-compare-metadata-between-samples-using-tsv-files-in-a-spreadsheet" class="nav-link" data-scroll-target="#objective-6-compare-metadata-between-samples-using-tsv-files-in-a-spreadsheet">Objective 6: Compare metadata between samples, using TSV files in a Spreadsheet</a></li>
+  <li><a href="#objective-7-use-python-to-analyse-data-from-the-api" id="toc-objective-7-use-python-to-analyse-data-from-the-api" class="nav-link" data-scroll-target="#objective-7-use-python-to-analyse-data-from-the-api">Objective 7: Use Python to analyse data from the API</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ebi-metagenomics/holofood-database/blob/main/docs/tutorial.ipynb" class="toc-action">Edit this page</a></p><p><a href="https://github.com/ebi-metagenomics/holofood-database/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -305,8 +307,54 @@ Solution
 </div>
 </div>
 </section>
-<section id="objective-3-find-mag-metadata-from-mgnify" class="level2">
-<h2 class="anchored" data-anchor-id="objective-3-find-mag-metadata-from-mgnify">Objective 3: Find MAG metadata from MGnify</h2>
+<section id="objective-3-find-functional-information-for-a-sample-from-mgnify" class="level2">
+<h2 class="anchored" data-anchor-id="objective-3-find-functional-information-for-a-sample-from-mgnify">Objective 3: Find functional information for a sample from MGnify</h2>
+<div class="callout-caution callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Private data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This example refers to data that is not yet accessible to people outside the HoloFood collaboration</p>
+</div>
+</div>
+<ul>
+<li>Find salmon sample <code>SAMEA7678310</code> on the data portal</li>
+<li>Follow the links to the sample’s metagenomics analyses on MGnify</li>
+<li>What is <code>SAMEA7688029</code>’s top Pfam entry (from MGnify’s functional analysis of it)?</li>
+</ul>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Click <code>Salmon samples</code> in the navigation bar.</li>
+<li>Type <code>SAMEA7678310</code> into the <code>Accession contain</code> filter, press <code>Apply</code></li>
+<li>Click <code>View</code> in the single row of the table.</li>
+<li>Open the <code>Metagenomics</code> section of the sample detail page.</li>
+<li>Click the assembly analysis in the table</li>
+<li>On MGnify, switch to the <code>Functional analysis</code> tab.</li>
+<li>Find the <code>Pfam</code> subtab</li>
+<li>Find the first row of the table (the biggest bar in the bar chart)</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="objective-4-find-mag-metadata-from-mgnify" class="level2">
+<h2 class="anchored" data-anchor-id="objective-4-find-mag-metadata-from-mgnify">Objective 4: Find MAG metadata from MGnify</h2>
 <div class="callout-caution callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -325,7 +373,7 @@ Fake data
 <li>Using the genome’s species representative, find the genome’s most prevalent <a href="https://www.ncbi.nlm.nih.gov/research/cog">COG category</a> with a known function.</li>
 </ul>
 <div class="callout-tip callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -334,7 +382,7 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>Click <code>Genomes</code> in the navigation bar.</li>
@@ -348,8 +396,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="objective-4-find-viral-fragments-within-a-mag" class="level2">
-<h2 class="anchored" data-anchor-id="objective-4-find-viral-fragments-within-a-mag">Objective 4: Find viral fragments within a MAG</h2>
+<section id="objective-5-find-viral-fragments-within-a-mag" class="level2">
+<h2 class="anchored" data-anchor-id="objective-5-find-viral-fragments-within-a-mag">Objective 5: Find viral fragments within a MAG</h2>
 <div class="callout-caution callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -369,7 +417,7 @@ Fake data
 <li>Find all of the <a href="https://osf.io/2zd9r/">ViPhOG</a> viral annotations on that viral sequence</li>
 </ul>
 <div class="callout-tip callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -378,7 +426,7 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>Click <code>Viruses</code> in the navigation bar.</li>
@@ -393,8 +441,52 @@ Solution
 </div>
 </div>
 </section>
-<section id="objective-5-use-python-to-analyse-data-from-the-api" class="level2">
-<h2 class="anchored" data-anchor-id="objective-5-use-python-to-analyse-data-from-the-api">Objective 5: Use Python to analyse data from the API</h2>
+<section id="objective-6-compare-metadata-between-samples-using-tsv-files-in-a-spreadsheet" class="level2">
+<h2 class="anchored" data-anchor-id="objective-6-compare-metadata-between-samples-using-tsv-files-in-a-spreadsheet">Objective 6: Compare metadata between samples, using TSV files in a Spreadsheet</h2>
+<ul>
+<li>Find chicken sample <code>SAMEA14099422</code> on the data portal, and download the sample’s metadata TSV file</li>
+<li>Do the same for sample <code>SAMEA7025235</code></li>
+<li>Notice that the samples are from chickens in different pens, fed different diets (<code>Control</code>, and <code>Probiotic</code>respectively)</li>
+<li>Pick a spreadsheet application like <a href="https://sheets.google.com">Google Sheets</a>, Excel, or LibreOffice Calc, (or write some code)</li>
+<li>Make a plot comparing the average weight gain of chickens in each of the two pens over time</li>
+</ul>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Open the <code>Chicken samples</code> navigation item</li>
+<li>Type <code>SAMEA14099422</code> into the <code>Accession contains</code> filter and press <code>Apply</code></li>
+<li>Click <code>View</code> in the only row in the table</li>
+<li>Scroll down and open the <code>Sample metadata</code> section</li>
+<li>Press <code>Download all as TSV</code></li>
+<li>Rename the downloaded file (<code>metadata.tsv</code>) to something useful like <code>control.tsv</code></li>
+<li>Repeat the previous steps for <code>SAMEA7025235</code>, getting to a file called e.g.&nbsp;<code>probiotic.tsv</code></li>
+<li>Open/import both files in your spreadsheet application</li>
+<li>Find the rows labelled <code>Average body weight at day 00.....35</code></li>
+<li>Copy and paste the rows from each sheet next to each other</li>
+<li>In Google Sheets, press <code>Insert &gt; Chart</code> (or similar in other applications)</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/tutorial/weight-chart.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of spreadsheet chart comparing average weight of chickens in two pens fed Control and Probiotic diets respectively</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="objective-7-use-python-to-analyse-data-from-the-api" class="level2">
+<h2 class="anchored" data-anchor-id="objective-7-use-python-to-analyse-data-from-the-api">Objective 7: Use Python to analyse data from the API</h2>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
