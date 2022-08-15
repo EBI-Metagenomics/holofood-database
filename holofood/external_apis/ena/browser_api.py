@@ -3,27 +3,17 @@ from dataclasses import dataclass, field
 from typing import Optional, List
 
 import requests
-from django.conf import settings
-from requests.auth import HTTPBasicAuth
-from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
+from xsdata.formats.dataclass.parsers import XmlParser
 
 from holofood.external_apis.ena.auth import ENA_AUTH
 from holofood.utils import holofood_config
 
-API_ROOT = holofood_config.ena.submit_api_root.rstrip("/")
-
-
-def get_auth():
-    return HTTPBasicAuth(
-        settings.HOLOFOOD_CONFIG.ena.username, settings.HOLOFOOD_CONFIG.ena.password
-    )
+API_ROOT = holofood_config.ena.browser_api_root.rstrip("/")
 
 
 @dataclass
 class SampleAttribute:
-    # class Meta:
-    #     name = "SAMPLE_ATTRIBUTE"
 
     tag: str = field(metadata={"name": "TAG"})
     value: str = field(metadata={"name": "VALUE"})
@@ -76,7 +66,7 @@ def get_checklist_metadata(sample: str) -> List[SampleAttribute]:
     logging.info(
         f"Fetching checklist metadata from ENA {API_ROOT = } for sample {sample}"
     )
-    response = requests.get(f"{API_ROOT}/drop-box/samples/{sample}", auth=ENA_AUTH)
+    response = requests.get(f"{API_ROOT}/xml/{sample}", auth=ENA_AUTH)
     if response.status_code != requests.codes.ok:
         logging.info(
             f"No metadata available for {sample}. Status code {response.status_code}"

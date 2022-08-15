@@ -10,8 +10,10 @@ from django.core.management import call_command
 from holofood.external_apis.ena.portal_api import API_ROOT as ENAAPIROOT
 from holofood.external_apis.biosamples.api import API_ROOT as BSAPIROOT
 from holofood.external_apis.ena.submit_api import API_ROOT as DBAPIROOT
-from holofood.external_apis.mgnify.api import API_ROOT as MGAPIROOT
 from holofood.models import Sample, Project, ViralCatalogue
+from holofood.utils import holofood_config
+
+MGAPIROOT = holofood_config.mgnify.api_root.rstrip("/")
 
 
 def _call_command(command, *args, **kwargs):
@@ -29,7 +31,7 @@ def _call_command(command, *args, **kwargs):
 @pytest.mark.django_db
 def test_fetch_project_samples(requests_mock):
     requests_mock.get(
-        f"{ENAAPIROOT}/search?format=json&dataPortal=metagenome&result=read_run&query=study_accession=PRJTESTING&fields=sample_accession,project_name,sample_title,checklist",
+        f"{ENAAPIROOT}/search?format=json&dataPortal=ena&result=read_run&query=study_accession=PRJTESTING&fields=sample_accession,project_name,sample_title,checklist",
         json=[
             {
                 "run_accession": "ERR0000001",
@@ -66,7 +68,7 @@ def test_refresh_external_data(
         text=salmon_submitted_checklist,
     )
     out = _call_command(
-        "refresh_external_data", samples=salmon_sample.accession, types=["METADATA"]
+        "refresh_external_data", samples=[salmon_sample.accession], types=["METADATA"]
     )
     logging.info(out)
     assert (
@@ -80,7 +82,7 @@ def test_refresh_external_data(
     )
     out = _call_command(
         "refresh_external_data",
-        samples=salmon_sample.accession,
+        samples=[salmon_sample.accession],
         types=["METADATA", "METAGENOMIC"],
     )
     logging.info(out)
@@ -93,7 +95,9 @@ def test_refresh_external_data(
         text="anything",
     )
     out = _call_command(
-        "refresh_external_data", samples=salmon_sample.accession, types=["METAGENOMIC"]
+        "refresh_external_data",
+        samples=[salmon_sample.accession],
+        types=["METAGENOMIC"],
     )
     logging.info(out)
     salmon_sample.refresh_from_db()

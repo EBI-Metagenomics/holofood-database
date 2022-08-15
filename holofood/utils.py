@@ -1,3 +1,6 @@
+import logging
+import time
+from datetime import timedelta
 from typing import Any
 
 from django.conf import settings
@@ -21,3 +24,23 @@ def clean_keys(data: Any) -> Any:
             for k, v in data.items()
         }
     return data
+
+
+class CadenceEnforcer:
+    def __init__(self, min_period: timedelta = timedelta(0)):
+        """
+        Ensures that at least min_period time has passed between invocations.
+        :param min_period: Any timedelta e.g. datetime.timedelta(seconds=3)
+        """
+        self.cadence_seconds = min_period.total_seconds()
+        self.prev_return = None
+
+    def __call__(self):
+        now = time.time()
+        if self.prev_return:
+            since = now - self.prev_return
+            if since < self.cadence_seconds:
+                logging.debug(f"Sleeping for {self.cadence_seconds - since:.2f}s")
+                time.sleep(self.cadence_seconds - since)
+        self.prev_return = now
+        return

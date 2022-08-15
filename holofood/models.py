@@ -8,9 +8,11 @@ from django.utils.text import slugify
 from martor.models import MartorField
 
 from holofood.external_apis.biosamples.api import get_sample_structured_data
-from holofood.external_apis.ena.submit_api import get_checklist_metadata
-from holofood.external_apis.mgnify.api import get_metagenomics_existence_for_sample
+from holofood.external_apis.ena.browser_api import get_checklist_metadata
+from holofood.external_apis.mgnify.api import MgnifyApi
 from holofood.utils import holofood_config
+
+_mgnify = MgnifyApi()
 
 
 class Project(models.Model):
@@ -19,6 +21,17 @@ class Project(models.Model):
 
     def __str__(self):
         return f"Project {self.accession} - {self.title}"
+
+    def refresh_metagenomics_metadata(self):
+        logging.info(
+            f"Checking metagenomics data existence for samples in project {self}"
+        )
+        mgnify_samples = _mgnify.get_metagenomics_samples_for_project(self.accession)
+        samples_to_update = self.sample_set.filter(accession__in=mgnify_samples)
+        samples_to_update.update(has_metagenomics=True)
+        logging.info(
+            f"Project {self} has {len(mgnify_samples)} samples with metagenomics data."
+        )
 
 
 class SampleManager(models.Manager):
@@ -54,6 +67,8 @@ class Sample(models.Model):
 
     has_metagenomics = models.BooleanField(default=False)
     has_metabolomics = models.BooleanField(default=False)
+
+    ena_run_accessions = models.JSONField(default=list)
 
     def __str__(self):
         return f"Sample {self.accession} - {self.title}"
@@ -118,21 +133,17 @@ class Sample(models.Model):
 
     def refresh_metagenomics_metadata(self):
         logging.debug(f"Checking metagenomics data existence for sample {self}")
-        self.has_metagenomics = get_metagenomics_existence_for_sample(self.accession)
+        self.has_metagenomics = _mgnify.get_metagenomics_existence_for_sample(
+            self.accession
+        )
         logging.debug(f"Sample {self} has metagenomics data? {self.has_metagenomics}")
         self.save()
-
-    @property
-    def runs(self) -> List[str]:
-        return self.structured_metadata.filter(marker__name="ENA Run ID").values_list(
-            "measurement", flat=True
-        )
 
 
 class SampleMetadataMarker(models.Model):
     name = models.CharField(max_length=100)
-    iri = models.CharField(max_length=100, null=True)
-    type = models.CharField(max_length=100, null=True)
+    iri = models.CharField(max_length=100, null=True, blank=True)
+    type = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         indexes = [
@@ -161,10 +172,10 @@ class SampleStructuredDatum(models.Model):
     )
     marker = models.ForeignKey(SampleMetadataMarker, on_delete=models.CASCADE)
     measurement = models.CharField(max_length=200)
-    units = models.CharField(max_length=100, null=True)
+    units = models.CharField(max_length=100, null=True, blank=True)
 
-    partner_name = models.CharField(max_length=100, null=True)
-    partner_iri = models.CharField(max_length=100, null=True)
+    partner_name = models.CharField(max_length=100, null=True, blank=True)
+    partner_iri = models.CharField(max_length=100, null=True, blank=True)
 
     source = models.CharField(choices=SOURCE_CHOICES, max_length=15)
 

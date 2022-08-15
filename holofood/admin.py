@@ -16,8 +16,12 @@ from holofood.models import (
 )
 
 
-class SampleMetadataInline(admin.TabularInline):
+class SampleMetadataInline(TabularInlinePaginated):
     model = SampleStructuredDatum
+    per_page = 5
+    can_delete = True
+    show_change_link = True
+    show_full_result_count = True
 
 
 @admin.register(Project, SampleMetadataMarker, SampleStructuredDatum)
@@ -28,6 +32,8 @@ class GenericAdmin(admin.ModelAdmin):
 @admin.register(Sample)
 class SampleAdmin(admin.ModelAdmin):
     inlines = [SampleMetadataInline]
+    list_filter = ("system", "project", "has_metagenomics", "has_metabolomics")
+    search_fields = ("accession", "title")
 
 
 @admin.register(SampleAnnotation)

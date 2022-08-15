@@ -175,9 +175,8 @@ def test_metagenomics(client, salmon_sample):
     assert response.status_code == 200
     data = response.json()
     assert data.get("has_metagenomics")
-    assert (
-        data.get("metagenomics_url")
-        == f"https://www.ebi.ac.uk/metagenomics/api/v1/samples/{salmon_sample.accession}"
+    assert data.get("metagenomics_url").endswith(
+        f"ebi.ac.uk/metagenomics/api/v1/samples/{salmon_sample.accession}"
     )
 
 

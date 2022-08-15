@@ -10,7 +10,7 @@ from django.views.generic import ListView, DetailView, TemplateView, RedirectVie
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import MultipleObjectMixin
 
-from holofood.external_apis.mgnify.api import get_metagenomics_analyses_for_run
+from holofood.external_apis.mgnify.api import MgnifyApi
 from holofood.filters import (
     SampleFilter,
     MultiFieldSearchFilter,
@@ -58,9 +58,13 @@ class SampleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         model: Sample = context["sample"]
 
+        mgnify = MgnifyApi()
+
         try:
             context["analyses"] = reduce(
-                operator.concat, map(get_metagenomics_analyses_for_run, model.runs), []
+                operator.concat,
+                map(mgnify.get_metagenomics_analyses_for_run, model.ena_run_accessions),
+                [],
             )
 
         except Exception as e:

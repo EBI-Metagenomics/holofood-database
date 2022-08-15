@@ -37,17 +37,19 @@ class BiosamplesConfig(BaseModel):
 class EnaConfig(BaseModel):
     projects: List[str] = []
     systems: dict = {}
-    username: str = "Webin-0"
-    password: str = "secret"
+    username: str = ""
+    password: str = ""
     portal_api_root: AnyHttpUrl = "https://www.ebi.ac.uk/ena/portal/api"
+    browser_api_root: AnyHttpUrl = "https://www.ebi.ac.uk/ena/browser/api"
     browser_url: AnyHttpUrl = "https://www.ebi.ac.uk/ena/browser/view"
-    submit_api_root: AnyHttpUrl = "https://www.ebi.ac.uk/ena/submit"
 
 
 class MgnifyConfig(BaseModel):
     api_root: AnyHttpUrl = "https://www.ebi.ac.uk/metagenomics/api/v1"
     web_url: AnyHttpUrl = "https://www.ebi.ac.uk/metagenomics"
     request_cadence: timedelta = timedelta(seconds=3)
+    request_timeout: timedelta = timedelta(seconds=15.05)
+    request_retries: int = 3
 
 
 class MetabolightsConfig(BaseModel):

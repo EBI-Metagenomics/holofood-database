@@ -1,7 +1,8 @@
-from django.conf import settings
 from requests.auth import HTTPBasicAuth
 
+from holofood.utils import holofood_config
 
-ENA_AUTH = HTTPBasicAuth(
-    settings.HOLOFOOD_CONFIG.ena.username, settings.HOLOFOOD_CONFIG.ena.password
-)
+if holofood_config.ena.username:
+    ENA_AUTH = HTTPBasicAuth(holofood_config.ena.username, holofood_config.ena.password)
+else:
+    ENA_AUTH = None
