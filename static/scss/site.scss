@@ -35,6 +35,10 @@ a.inline, button.inline {
 
 .vf-card--hf {
     border-bottom-color: #3b6fb6;
+
+	&.error {
+		border-bottom-color: var(--vf-color--red);
+	}
 }
 
 .api-endpoint {
