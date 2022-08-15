@@ -88,7 +88,8 @@ class Sample(models.Model):
             for metadatum in metadata_content:
                 marker, created = SampleMetadataMarker.objects.update_or_create(
                     name=metadatum["marker"]["value"],
-                    defaults={"iri": metadatum["marker"]["iri"], "type": metadata_type},
+                    type=metadata_type,
+                    defaults={"iri": metadatum["marker"]["iri"]},
                 )
                 if created:
                     logging.info(f"Created new SampleMetadataMarker {marker.id}")
@@ -107,7 +108,7 @@ class Sample(models.Model):
 
         for metadatum in checklist_metadata:
             marker, created = SampleMetadataMarker.objects.update_or_create(
-                name=metadatum.tag,
+                name=metadatum.tag, type="ENA Checklist"
             )
             if created:
                 logging.info(f"Created new SampleMetadataMarker {marker.id}")
@@ -121,10 +122,12 @@ class Sample(models.Model):
             )
 
         self.refresh_from_db()
+        tax_id_data = self.structured_metadata.filter(marker__name="host taxid").first()
+        if not tax_id_data:
+            raise Exception(f"Error determining System for Sample {self.accession}")
         try:
-            tax_id_data = self.structured_metadata.get(marker__name="host taxid")
             system = holofood_config.ena.systems[str(tax_id_data.measurement)]
-        except (self.DoesNotExist, SampleMetadataMarker.DoesNotExist, KeyError) as e:
+        except KeyError as e:
             logging.error(f"Error determining System for Sample {self.accession}")
             raise e
         logging.info(f"Setting system to {system} for sample {self.accession}")
@@ -150,9 +153,10 @@ class SampleMetadataMarker(models.Model):
             models.Index(fields=["name"]),
         ]
         ordering = ("type",)
+        unique_together = [("name", "type")]
 
     def __str__(self):
-        return f"Sample Metadata Marker {self.id}: {self.name}"
+        return f"Sample Metadata Marker {self.id}: {self.name} ({self.type})"
 
 
 class SampleStructuredDatumManager(models.Manager):
