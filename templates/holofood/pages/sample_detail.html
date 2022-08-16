@@ -4,8 +4,35 @@
 {% block content %}
     <h1>{{ sample.accession }}: {{ sample.title }}</h1>
     <p class="vf-lede">
-        Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample includes: metadata from BioSamples and ENA, metagenomics, metabolomics.
+        Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample
     </p>
+    <div/>
+    {% if sample.structured_metadata.exists %}
+        <a href="#metadata" class="vf-link">
+            <span class="vf-badge hf-badge-has-data">
+                <img src="{% static "img/icons/sample.svg" %}" alt="Has sample metadata"/>
+                Includes metadata
+            </span>
+        </a>
+    {% endif %}
+
+    {% if sample.has_metagenomics %}
+        <a href="#metagenomics" class="vf-link">
+            <span class="vf-badge hf-badge-has-data">
+                <img src="{% static "img/icons/bacteria.svg" %}" alt="Has metagenomics"/>
+                Includes metagenomics
+            </span>
+        </a>
+    {% endif %}
+
+    {% if sample.has_metabolomics %}
+        <a href="#metabolomics" class="vf-link">
+            <span class="vf-badge hf-badge-has-data"><img src="{% static "img/icons/molecule.svg" %}" alt="Has metabolomics"/>
+                Includes metabolomics
+            </span>
+        </a>
+    {% endif %}
+
     <details class="vf-details" open>
         <summary class="vf-details--summary">
             Sample details
@@ -56,6 +83,7 @@
         <summary class="vf-details--summary">
             Sample metadata
         </summary>
+        <a id="metadata"/>
         <p class="vf-text-body">Metadata for sample {{ sample.accession }}, stored in BioSamples and ENA.</p>
         <a class="vf-button vf-button--link vf-button--sm"
            href="{% url 'export:sample_metadata_list' sample_accession=sample.accession %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
@@ -163,6 +191,7 @@
         <summary class="vf-details--summary">
             Metagenomics
         </summary>
+        <a id="metagenomics"/>
         {% if sample.has_metagenomics %}
             <p>
                 Sample {{ sample.accession }} has metagenomic datasets available on MGnify.
@@ -230,6 +259,7 @@
         <summary class="vf-details--summary">
             Metabolomics
         </summary>
+        <a id="metabolomics"/>
         <p>
             Sample {{ sample.accession }} may have metabolomics analysis on MetaboLights.
         </p>

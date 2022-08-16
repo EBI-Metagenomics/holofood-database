@@ -161,3 +161,14 @@ img.hf-hero-logo {
     top: 16px;
     width: 48px;
 }
+
+.vf-badge.hf-badge-has-data {
+	color: var(--vf-color__link);
+	background-color: var(--vf-color__interactive--background);
+	text-decoration: none;
+	img {
+		filter: invert(41%) sepia(50%) saturate(560%) hue-rotate(174deg) brightness(94%) contrast(105%);
+		width: 1em;
+		padding-right: 0.5em;
+	}
+}
