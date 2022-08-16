@@ -48,6 +48,7 @@
                                  style="--vf-hero--bg-image: url('{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'img/rendered-banner.png' %}')">
         <!-- djlint:on -->
         <div class="vf-hero__content | vf-box | vf-stack vf-stack--400">
+            <img class="hf-hero-logo" src="{% static 'img/icons/hf-logo-full-colour.png' %}" alt="HoloFood logo"/>
             {% if request.resolver_match.url_name in 'home' %}
                 <p class="vf-hero__kicker">
                     <a href="https://www.holofood.eu">HoloFood</a> | <a href="{% url 'home' %}">Data Portal</a>
