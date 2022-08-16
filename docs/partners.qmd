@@ -9,7 +9,7 @@ Bulk activities, like importing projects, samples, and metadata, are covered in 
 There is also an Admin Panel where individual database entries can be managed.
 
 ## Authoring new Summary Analysis documents
-Navigate to the site admin panel, and log in.
+Navigate to the [site admin panel]({{< var portal.root_url >}}/admin), and log in.
 
 :::{.callout-tip}
 If you do not have the link or credentials, please [contact the helpdesk](mailto:{{< var helpdesk.email >}}).

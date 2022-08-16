@@ -2,7 +2,7 @@
 title: "Browsing the website"
 ---
 
-# Finding Samples
+## Finding Samples
 ![Screenshot of sample listing webpage](/img/website/find-samples.png)
 Samples can be found from the "Chicken samples" and "Salmon samples" navigation items.
 On the samples listing pages, there are various filters available to limit which samples are shown in the table.
@@ -21,7 +21,7 @@ Metagenomic and metabolomic data are shown in summary form, with links to the re
 The [API](api.ipynb) section shows the API endpoint for this particular sample.
 You can copy this into a script, for example, to programmatically pull the data.
 
-# Downloading sample lists and metadata
+## Downloading sample lists and metadata
 The complete sample list can be exported to TSV using the "Download all as TSV" button.
 
 :::{.callout-note}
@@ -33,7 +33,7 @@ The complete metadata for a sample can be downloaded using the "Download all as 
 of a sample detail page.
 
 
-# Finding analysis summaries
+## Finding analysis summaries
 ![Screenshot of a sample detail page with analysis documents links](/img/website/sample-analysis-summaries.png)
 [Analysis summaries](datasets.qmd#summary-analyses) are linked to samples (or whole projects).
 Any analysis summaries that mention a sample, or its project, are shown at the bottom of the sample's detail page.
@@ -42,8 +42,8 @@ Any analysis summaries that mention a sample, or its project, are shown at the b
 Analysis summaries also link back to the samples and/or projects they refer to.
 A complete list of analysis summaries can also be found from the navigation bar.
 
-# Using the catalogues
-## MAG Catalogues
+## Using the catalogues
+### MAG Catalogues
 Metagenome Assembled Genome (MAG) Catalogues are available for selected biomes.
 HoloFood MAGs are those created using only reads from HoloFood samples.
 However, there are other non-HoloFood public data available for the same biomes sampled by this project.
@@ -65,7 +65,7 @@ MAGs can be found by searching on accession or taxonomy, or for the accession of
 
 The MAGs in a catalogue can be downloaded as a TSV file, using the "Download all as TSV" button.
 
-## Viral Catalogues
+### Viral Catalogues
 ![Screenshot of a viral catalogue](/img/website/viral-catalogue.png)
 Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples.
 Viral catalogues can be found from the "Viruses" navigation item, and then selecting a catalogue in the "Catalogues" sub-navigation.
