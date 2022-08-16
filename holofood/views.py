@@ -7,14 +7,13 @@ import requests
 from django.core.paginator import Paginator
 from django.db.models import Q, Model, CharField, QuerySet
 from django.http import Http404, StreamingHttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import (
     ListView,
     DetailView,
     TemplateView,
     RedirectView,
-    FormView,
 )
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import MultipleObjectMixin
@@ -292,6 +291,39 @@ class GlobalSearchView(TemplateView):
             lambda sec: query.lower() in sec.get("text", "").lower(), quarto_sections
         )
         return list(matches)
+
+    @staticmethod
+    def get_detail_url_if_accession(query: str):
+        query_upper = query.upper()
+        if " " in query:
+            return
+        if (
+            query_upper.startswith("SAM")
+            and Sample.objects.filter(accession=query_upper).exists()
+        ):
+            return reverse("sample_detail", args=[query_upper])
+        if (
+            query_upper.startswith("PRJ")
+            and Project.objects.filter(accession=query_upper).exists()
+        ):
+            return (
+                reverse("samples_list")
+                + f"?project__accession__icontains={query_upper}"
+            )
+        if query_upper.startswith("MGYG"):
+            mag = Genome.objects.filter(accession=query_upper).first()
+            if mag:
+                return (
+                    reverse("genome_catalogue", args=[mag.catalogue_id])
+                    + f"?accession__icontains={mag.accession}"
+                )
+
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get("query")
+        detail_url = self.get_detail_url_if_accession(query)
+        if detail_url:
+            return redirect(detail_url)
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

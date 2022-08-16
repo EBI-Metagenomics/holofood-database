@@ -1,6 +1,7 @@
 import pytest
 import requests_mock
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -247,3 +248,49 @@ class WebsiteTests(StaticLiveServerTestCase):
         # One row for the species rep, one row for the link to cluster, one additional row for the cluster member
 
         del self.selenium.request_interceptor
+
+        # ---- Global Search ---- #
+        project = self.hf_fixtures.projects[0]
+        sample = self.hf_fixtures.samples[0]
+
+        m.get(
+            f"{holofood_config.docs.docs_url}/search.json",
+            json=[],
+        )
+
+        # Partial search should work
+        def get_search_box():
+            return self.selenium.find_element(
+                by=By.XPATH, value="//input[@placeholder='Search data and docs']"
+            )
+
+        get_search_box().send_keys(project.title.lower())
+        get_search_box().send_keys(Keys.ENTER)
+        self.assertEqual(
+            self.selenium.current_url,
+            f"{self.live_server_url}/search/?query={project.title.lower().replace(' ', '+')}",
+        )
+        self.assertIn(
+            project.accession,
+            self.selenium.find_element(by=By.TAG_NAME, value="body").text,
+        )
+
+        # Searching for exact sample accession should go straight to detail page
+        get_search_box().send_keys(sample.accession)
+        get_search_box().send_keys(Keys.ENTER)
+        self.assertEqual(
+            self.selenium.current_url,
+            f"{self.live_server_url}/sample/{sample.accession}",
+        )
+
+        # Searching for exact project accession should go straight to sample listing filtered by project
+        get_search_box().send_keys(project.accession)
+        get_search_box().send_keys(Keys.ENTER)
+        self.assertEqual(
+            self.selenium.current_url,
+            f"{self.live_server_url}/samples/?project__accession__icontains={project.accession}",
+        )
+        project_filter_box = self.selenium.find_element(
+            by=By.NAME, value="project__accession__icontains"
+        )
+        self.assertEqual(project_filter_box.get_attribute("value"), project.accession)
