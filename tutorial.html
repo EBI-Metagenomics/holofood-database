@@ -225,7 +225,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#objective-1-finding-samples-using-the-website" id="toc-objective-1-finding-samples-using-the-website" class="nav-link" data-scroll-target="#objective-1-finding-samples-using-the-website">Objective 1: Finding samples using the website</a></li>
   <li><a href="#objective-2-find-metadata-for-a-specific-sample" id="toc-objective-2-find-metadata-for-a-specific-sample" class="nav-link" data-scroll-target="#objective-2-find-metadata-for-a-specific-sample">Objective 2: Find metadata for a specific sample</a></li>
-  <li><a href="#objective-3-find-functional-information-for-a-sample-from-mgnify" id="toc-objective-3-find-functional-information-for-a-sample-from-mgnify" class="nav-link" data-scroll-target="#objective-3-find-functional-information-for-a-sample-from-mgnify">Objective 3: Find functional information for a sample from MGnify</a></li>
+  <li><a href="#objective-3-find-functional-information-for-a-sample-in-mgnify" id="toc-objective-3-find-functional-information-for-a-sample-in-mgnify" class="nav-link" data-scroll-target="#objective-3-find-functional-information-for-a-sample-in-mgnify">Objective 3: Find functional information for a sample in MGnify</a></li>
   <li><a href="#objective-4-find-mag-metadata-from-mgnify" id="toc-objective-4-find-mag-metadata-from-mgnify" class="nav-link" data-scroll-target="#objective-4-find-mag-metadata-from-mgnify">Objective 4: Find MAG metadata from MGnify</a></li>
   <li><a href="#objective-5-find-viral-fragments-within-a-mag" id="toc-objective-5-find-viral-fragments-within-a-mag" class="nav-link" data-scroll-target="#objective-5-find-viral-fragments-within-a-mag">Objective 5: Find viral fragments within a MAG</a></li>
   <li><a href="#objective-6-compare-metadata-between-samples-using-tsv-files-in-a-spreadsheet" id="toc-objective-6-compare-metadata-between-samples-using-tsv-files-in-a-spreadsheet" class="nav-link" data-scroll-target="#objective-6-compare-metadata-between-samples-using-tsv-files-in-a-spreadsheet">Objective 6: Compare metadata between samples, using TSV files in a Spreadsheet</a></li>
@@ -307,8 +307,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="objective-3-find-functional-information-for-a-sample-from-mgnify" class="level2">
-<h2 class="anchored" data-anchor-id="objective-3-find-functional-information-for-a-sample-from-mgnify">Objective 3: Find functional information for a sample from MGnify</h2>
+<section id="objective-3-find-functional-information-for-a-sample-in-mgnify" class="level2">
+<h2 class="anchored" data-anchor-id="objective-3-find-functional-information-for-a-sample-in-mgnify">Objective 3: Find functional information for a sample in MGnify</h2>
 <div class="callout-caution callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -323,9 +323,9 @@ Private data
 </div>
 </div>
 <ul>
-<li>Find salmon sample <code>SAMEA7678310</code> on the data portal</li>
+<li>Find salmon sample <code>SAMEA7025242</code> on the data portal</li>
 <li>Follow the links to the sample’s metagenomics analyses on MGnify</li>
-<li>What is <code>SAMEA7688029</code>’s top Pfam entry (from MGnify’s functional analysis of it)?</li>
+<li>What is <code>SAMEA7025242</code>’s top Pfam entry (from MGnify’s functional analysis of it)?</li>
 </ul>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -340,14 +340,14 @@ Solution
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
-<li>Click <code>Salmon samples</code> in the navigation bar.</li>
-<li>Type <code>SAMEA7678310</code> into the <code>Accession contain</code> filter, press <code>Apply</code></li>
-<li>Click <code>View</code> in the single row of the table.</li>
+<li>Type <code>SAMEA7025242</code> into the <code>Search data and docs</code> search bar at the top of the data portal</li>
+<li>The sample detail page for <code>SAMEA7025242</code> will open directly</li>
 <li>Open the <code>Metagenomics</code> section of the sample detail page.</li>
 <li>Click the assembly analysis in the table</li>
 <li>On MGnify, switch to the <code>Functional analysis</code> tab.</li>
 <li>Find the <code>Pfam</code> subtab</li>
 <li>Find the first row of the table (the biggest bar in the bar chart)</li>
+<li>It is <code>ABC Transporter</code> <a href="https://pfam.xfam.org/family/PF00005">PF00005</a> (this is often the case)</li>
 </ul>
 </div>
 </div>
@@ -487,6 +487,19 @@ Solution
 </section>
 <section id="objective-7-use-python-to-analyse-data-from-the-api" class="level2">
 <h2 class="anchored" data-anchor-id="objective-7-use-python-to-analyse-data-from-the-api">Objective 7: Use Python to analyse data from the API</h2>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Coding required
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This objective takes a lot longer than the others – it involves coding and the API.</p>
+</div>
+</div>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

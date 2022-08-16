@@ -159,7 +159,8 @@ ul.task-list{list-style: none;}
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#finding-samples" id="toc-finding-samples" class="nav-link active" data-scroll-target="#finding-samples">Finding Samples</a></li>
+  <li><a href="#global-search" id="toc-global-search" class="nav-link active" data-scroll-target="#global-search">Global Search</a></li>
+  <li><a href="#finding-samples" id="toc-finding-samples" class="nav-link" data-scroll-target="#finding-samples">Finding Samples</a></li>
   <li><a href="#downloading-sample-lists-and-metadata" id="toc-downloading-sample-lists-and-metadata" class="nav-link" data-scroll-target="#downloading-sample-lists-and-metadata">Downloading sample lists and metadata</a></li>
   <li><a href="#finding-analysis-summaries" id="toc-finding-analysis-summaries" class="nav-link" data-scroll-target="#finding-analysis-summaries">Finding analysis summaries</a></li>
   <li><a href="#using-the-catalogues" id="toc-using-the-catalogues" class="nav-link" data-scroll-target="#using-the-catalogues">Using the catalogues</a>
@@ -189,16 +190,33 @@ ul.task-list{list-style: none;}
 
 </header>
 
-<section id="finding-samples" class="level1">
-<h1>Finding Samples</h1>
-<p><img src="./img/website/find-samples.png" class="img-fluid" alt="Screenshot of sample listing webpage"> Samples can be found from the “Chicken samples” and “Salmon samples” navigation items. On the samples listing pages, there are various filters available to limit which samples are shown in the table. For example, you can find all samples from a particular project, or all samples with <a href="./datasets.html#metabolights-metabolomics">metabolomics</a> data.</p>
+<section id="global-search" class="level2">
+<h2 class="anchored" data-anchor-id="global-search">Global Search</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/website/global-search.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of the global search box</figcaption><p></p>
+</figure>
+</div>
+<p>There is a a site-wide (“global”) search box at the top of the data portal landing page and most other pages. This searches over <a href="./datasets.html#ena-studies-projects">project</a> accession and titles; <a href="./datasets.html#ena-samples">sample</a> systems, accessions, and titles; <a href="./datasets.html#metagenome-assembled-genome-mag-catalogues">genome</a> and <a href="./datasets.html#viral-fragment-catalogues">viral</a> catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.</p>
+<p>If you search for valid sample, project, or MAG accessions, the search will take you straight to an appropriate view in the portal. Otherwise, you’ll see a normal list of search results.</p>
+</section>
+<section id="finding-samples" class="level2">
+<h2 class="anchored" data-anchor-id="finding-samples">Finding Samples</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/website/find-samples.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of sample listing webpage</figcaption><p></p>
+</figure>
+</div>
+<p>Samples can be found from the “Chicken samples” and “Salmon samples” navigation items. On the samples listing pages, there are various filters available to limit which samples are shown in the table. For example, you can find all samples from a particular project, or all samples with <a href="./datasets.html#metabolights-metabolomics">metabolomics</a> data.</p>
 <p>The table shows an icon-key detailing which data types are available for each sample. Samples may be linked to metadata (almost always), metagenomic, or metabolomic datasets.</p>
 <p>To view detail about a particular sample, click “View” on its row of the table.</p>
 <p>The sample detail page contains information help about the sample in the various supporting databases. Metadata is shown in full, in a table. Metagenomic and metabolomic data are shown in summary form, with links to the respective public websites where those analyses are held.</p>
 <p>The <a href="./api.html">API</a> section shows the API endpoint for this particular sample. You can copy this into a script, for example, to programmatically pull the data.</p>
 </section>
-<section id="downloading-sample-lists-and-metadata" class="level1">
-<h1>Downloading sample lists and metadata</h1>
+<section id="downloading-sample-lists-and-metadata" class="level2">
+<h2 class="anchored" data-anchor-id="downloading-sample-lists-and-metadata">Downloading sample lists and metadata</h2>
 <p>The complete sample list can be exported to TSV using the “Download all as TSV” button.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -213,17 +231,35 @@ Note
 <p>The “Download all as TSV” button does reflect any filters on the website table – it contains the complete list.</p>
 </div>
 </div>
-<p><img src="./img/website/tsv-export.png" class="img-fluid" alt="Screenshot of a sample detail page with TSV export option"> The complete metadata for a sample can be downloaded using the “Download all as TSV” button within the “Sample metadata” section of a sample detail page.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/website/tsv-export.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of a sample detail page with TSV export option</figcaption><p></p>
+</figure>
+</div>
+<p>The complete metadata for a sample can be downloaded using the “Download all as TSV” button within the “Sample metadata” section of a sample detail page.</p>
 </section>
-<section id="finding-analysis-summaries" class="level1">
-<h1>Finding analysis summaries</h1>
-<p><img src="./img/website/sample-analysis-summaries.png" class="img-fluid" alt="Screenshot of a sample detail page with analysis documents links"> <a href="./datasets.html#summary-analyses">Analysis summaries</a> are linked to samples (or whole projects). Any analysis summaries that mention a sample, or its project, are shown at the bottom of the sample’s detail page.</p>
-<p><img src="./img/website/analysis-summary.png" class="img-fluid" alt="Screenshot of an analysis document"> Analysis summaries also link back to the samples and/or projects they refer to. A complete list of analysis summaries can also be found from the navigation bar.</p>
+<section id="finding-analysis-summaries" class="level2">
+<h2 class="anchored" data-anchor-id="finding-analysis-summaries">Finding analysis summaries</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/website/sample-analysis-summaries.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of a sample detail page with analysis documents links</figcaption><p></p>
+</figure>
+</div>
+<p><a href="./datasets.html#summary-analyses">Analysis summaries</a> are linked to samples (or whole projects). Any analysis summaries that mention a sample, or its project, are shown at the bottom of the sample’s detail page.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/website/analysis-summary.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of an analysis document</figcaption><p></p>
+</figure>
+</div>
+<p>Analysis summaries also link back to the samples and/or projects they refer to. A complete list of analysis summaries can also be found from the navigation bar.</p>
 </section>
-<section id="using-the-catalogues" class="level1">
-<h1>Using the catalogues</h1>
-<section id="mag-catalogues" class="level2">
-<h2 class="anchored" data-anchor-id="mag-catalogues">MAG Catalogues</h2>
+<section id="using-the-catalogues" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-catalogues">Using the catalogues</h2>
+<section id="mag-catalogues" class="level3">
+<h3 class="anchored" data-anchor-id="mag-catalogues">MAG Catalogues</h3>
 <p>Metagenome Assembled Genome (MAG) Catalogues are available for selected biomes. HoloFood MAGs are those created using only reads from HoloFood samples. However, there are other non-HoloFood public data available for the same biomes sampled by this project.</p>
 <p>Each HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify, which is a superset of the HoloFood data and other public data. This is linked from each catalogue page on the HoloFood Data Portal site.</p>
 <p>Each MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species. In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG points to itself on the MGnify website. In other cases, a more complete, less contaminated, or isolate genome exists representing the same species, so the HoloFood MAG points to this better representative on MGnify.</p>
@@ -236,8 +272,8 @@ Note
 <p>MAG Catalogues can be found from the “Genomes” navigation item, and then selecting a catalogue in the “Catalogues” sub-navigation. MAGs can be found by searching on accession or taxonomy, or for the accession of the cluster representative.</p>
 <p>The MAGs in a catalogue can be downloaded as a TSV file, using the “Download all as TSV” button.</p>
 </section>
-<section id="viral-catalogues" class="level2">
-<h2 class="anchored" data-anchor-id="viral-catalogues">Viral Catalogues</h2>
+<section id="viral-catalogues" class="level3">
+<h3 class="anchored" data-anchor-id="viral-catalogues">Viral Catalogues</h3>
 <p><img src="./img/website/viral-catalogue.png" class="img-fluid" alt="Screenshot of a viral catalogue"> Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples. Viral catalogues can be found from the “Viruses” navigation item, and then selecting a catalogue in the “Catalogues” sub-navigation.</p>
 <p>Viral fragment can be searched in various ways, like the parent contig ID, or the taxonomy of the host MAG. Host MAGs are only assigned where there is an exact match between the viral sequence and a host MAG.</p>
 <p>By default, only species-level clusters are shown (a representative viral fragment is shown).</p>
