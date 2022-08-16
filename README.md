@@ -80,14 +80,21 @@ To (re)fetch sample metadata from ENA and Biosamples only, for a specific sample
 
 `python manage.py refresh_external_data --samples SAMEA7687881 --types METADATA`
 
-or to (re)fetch sample metadata and metagenomic existence data from ENA, Biosamples, and MGnify, 
+or to refresh metagenomic data for all sample in a project:
+
+`python manage.py refresh_external_data --projects PRJEB39110 --types METAGENOMIC`
+
+(Note that it is **much** more efficient to fetch metagenomics data on a per-project basis than a per-sample basis
+– this is because it uses many fewer API calls and the MGnify API has strict rate-limits.)
+
+Or to (re)fetch sample metadata and metagenomic existence data from ENA, Biosamples, and MGnify, 
 for samples with accessions in a certain range:
 
 `python manage.py refresh_external_data --sample_filters accession__gt=SAMEA7687880 accession__lt=SAMEA7687900 --types METADATA METAGENOMIC`
 
 `--sample_filters...` is expected to be useful in cases where refreshing a large number of samples fails, 
 and you therefore need to retry from a certain accession onwards.
-(If no sample filters are specified, they’re iterated through in ascending order of accession.) 
+(Because samples are iterated through in ascending order of accession.) 
 
 
 ## Adding users
