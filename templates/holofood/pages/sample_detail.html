@@ -6,7 +6,7 @@
     <p class="vf-lede">
         Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample
     </p>
-    <div/>
+    <br/>
     {% if sample.structured_metadata.exists %}
         <a href="#metadata" class="vf-link">
             <span class="vf-badge hf-badge-has-data">
@@ -83,7 +83,7 @@
         <summary class="vf-details--summary">
             Sample metadata
         </summary>
-        <a id="metadata"/>
+        <a id="metadata"></a>
         <p class="vf-text-body">Metadata for sample {{ sample.accession }}, stored in BioSamples and ENA.</p>
         <a class="vf-button vf-button--link vf-button--sm"
            href="{% url 'export:sample_metadata_list' sample_accession=sample.accession %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
@@ -115,8 +115,7 @@
                 events: {
                     input: {
                         selection: (event) => {
-                            const selection = event.detail.selection.value.name;
-                            autoCompleteJS.input.value = selection;
+                            autoCompleteJS.input.value = event.detail.selection.value.name;
 
                             const tabPanels = document.querySelectorAll(
                                 "[data-vf-js-tabs-content] [id^=\"vf-tabs__section\"]"
@@ -191,7 +190,7 @@
         <summary class="vf-details--summary">
             Metagenomics
         </summary>
-        <a id="metagenomics"/>
+        <a id="metagenomics"></a>
         {% if sample.has_metagenomics %}
             <p>
                 Sample {{ sample.accession }} has metagenomic datasets available on MGnify.
@@ -252,18 +251,50 @@
                 </tbody>
             </table>
         {% else %}
-            <p>Sample {{ sample.accession }} has no metagenomics data</p>
+            <p>
+                Sample {{ sample.accession }} has no metagenomics data.
+                <a href="{{ MGNIFY_WEB_URL }}" class="vf-button vf-button--link vf-button--sm inline" target="_blank">Open MGnify</a>
+            </p>
         {% endif %}
     </details>
     <details class="vf-details">
         <summary class="vf-details--summary">
             Metabolomics
         </summary>
-        <a id="metabolomics"/>
-        <p>
-            Sample {{ sample.accession }} may have metabolomics analysis on MetaboLights.
-        </p>
-        <a href="{{ METABOLIGHTS_WEB_URL }}" class="vf-button vf-button--primary vf-button--sm" target="_blank">Open MetaboLights</a>
+        <a id="metabolomics"></a>
+        {% if sample.has_metabolomics %}
+            <p>
+                Sample {{ sample.accession }} has metabolomics analysis on MetaboLights.
+                <a href="{{ METABOLIGHTS_WEB_URL }}/{{ sample.metabolights_project }}" class="vf-button vf-button--link vf-button--sm inline">View project {{ sample.metabolights_project }} on MetaboLights</a>
+            </p>
+            <h3>Sample files</h3>
+            <table class="vf-table scrollable-table">
+                <thead class="vf-table__header">
+                    <tr class="vf-table__row">
+                        <th class="vf-table__heading" scope="col">Sample name</th>
+                        <th class="vf-table__heading" scope="col">Filename</th>
+                    </tr>
+                </thead>
+                <tbody class="vf-table__body">
+                    {% for file in sample.metabolights_files %}
+                        <tr class="vf-table__row">
+                            <td class="vf-table__cell">
+                                {{ file.sample_name }}
+                            </td>
+                            <td class="vf-table__cell">
+                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_project }}/download/public?file={{ file.file_name }}"
+                                   class="vf-link">{{ file.file_name }}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>
+                Sample {{ sample.accession }} does not appear to have metabolomics analysis on MetaboLights.
+                <a href="{{ METABOLIGHTS_WEB_URL }}" class="vf-button vf-button--link vf-button--sm inline" target="_blank">Open MetaboLights</a>
+            </p>
+        {% endif %}
     </details>
     <section class="vf-card-container vf-card-container__col-3 | vf-u-background-color--grey--lightest vf-u-fullbleed">
         <div class="vf-card-container__inner">

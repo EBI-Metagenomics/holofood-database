@@ -24,9 +24,14 @@ class SampleMetadataInline(TabularInlinePaginated):
     show_full_result_count = True
 
 
-@admin.register(Project, SampleMetadataMarker, SampleStructuredDatum)
+@admin.register(Project, SampleMetadataMarker)
 class GenericAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(SampleStructuredDatum)
+class SampleStructuredDatumAdmin(admin.ModelAdmin):
+    search_fields = ("sample__accession", "marker__name")
 
 
 @admin.register(Sample)

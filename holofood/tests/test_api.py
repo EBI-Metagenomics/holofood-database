@@ -1,6 +1,7 @@
 import pytest
 
 from holofood.models import SampleStructuredDatum, SampleMetadataMarker
+from holofood.tests.conftest import set_metabolights_project_for_sample
 
 
 @pytest.mark.django_db
@@ -177,6 +178,25 @@ def test_metagenomics(client, salmon_sample):
     assert data.get("has_metagenomics")
     assert data.get("metagenomics_url").endswith(
         f"ebi.ac.uk/metagenomics/api/v1/samples/{salmon_sample.accession}"
+    )
+
+
+@pytest.mark.django_db
+def test_metabolomics(client, salmon_sample):
+    response = client.get(f"/api/samples/{salmon_sample.accession}")
+    assert response.status_code == 200
+    data = response.json()
+    assert not data.get("has_metabolomics")
+    assert data.get("metabolomics_url") is None
+
+    set_metabolights_project_for_sample(salmon_sample)
+
+    response = client.get(f"/api/samples/{salmon_sample.accession}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("has_metabolomics")
+    assert data.get("metabolomics_url").endswith(
+        f"ebi.ac.uk/metabolights/ws/studies/MTBLSDONUT"
     )
 
 

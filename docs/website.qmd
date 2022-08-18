@@ -45,6 +45,27 @@ The complete metadata for a sample can be downloaded using the "Download all as 
 of a sample detail page.
 
 
+## Finding sample data in other public repositories
+### Metagenomics
+Some samples have [metagenomics](datasets.qmd#mgnify-metagenomics) data, in [MGnify](https://www.ebi.ac.uk/metagenomics).
+These can be found from the samples listing page by setting the `Has metagenomics` filter to `Yes`.
+
+MGnify analyses of a sample (identified with `MGYA` accessions) are listed and linked to from the sample detail page.
+
+![Screenshot of a sample detail page with metagenomics data](/img/website/sample-with-metagenomics.png)
+
+### Metabolomics
+Some other samples have [metabolomics](datasets.qmd#metabolights-metabolomics) data, in [MetaboLights](https://www.ebi.ac.uk/metabolights).
+These can be found form the samples listing page by setting the `Has metabolomics` filter to `Yes`.
+
+MetaboLights data are identified at a Project level, with `MTBLS` accessions.
+MetaboLights does not store samples as independent objects, instead it stores lists of samples and files (and more) for the project.
+So, the HoloFood data portal sample detail page shows a filtered table of the MetaboLights project's files,
+that relate to this sample.
+Following these file links will download the file.
+
+![Screenshot of a sample detail page with metabolomics data](/img/website/sample-with-metabolomics.png)
+
 ## Finding analysis summaries
 ![Screenshot of a sample detail page with analysis documents links](/img/website/sample-analysis-summaries.png)
 

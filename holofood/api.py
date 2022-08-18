@@ -103,9 +103,26 @@ class SampleSlimSchema(ModelSchema):
 
     metagenomics_url: Optional[str]
 
+    @staticmethod
+    def resolve_metabolomics_url(obj: Sample):
+        return (
+            f"{holofood_config.metabolights.api_root}/studies/{obj.metabolights_project}"
+            if obj.has_metabolomics
+            else None
+        )
+
+    metabolomics_url: Optional[str]
+
     class Config:
         model = Sample
-        model_fields = ["accession", "title", "project", "system", "has_metagenomics"]
+        model_fields = [
+            "accession",
+            "title",
+            "project",
+            "system",
+            "has_metagenomics",
+            "has_metabolomics",
+        ]
 
 
 class SampleSchema(SampleSlimSchema):

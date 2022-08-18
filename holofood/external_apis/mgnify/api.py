@@ -2,7 +2,7 @@ import logging
 from typing import List
 
 import requests
-from requests.adapters import HTTPAdapter
+from requests.adapters import HTTPAdapter, Retry
 
 from holofood.utils import holofood_config, clean_keys, CadenceEnforcer
 
@@ -13,7 +13,9 @@ class MgnifyApi:
         self.api_root = holofood_config.mgnify.api_root.rstrip("/")
         self.session.mount(
             self.api_root,
-            HTTPAdapter(max_retries=holofood_config.mgnify.request_retries),
+            HTTPAdapter(
+                max_retries=Retry(total=holofood_config.mgnify.request_retries)
+            ),
         )
         self.request_options = {
             "timeout": holofood_config.mgnify.request_timeout.total_seconds(),

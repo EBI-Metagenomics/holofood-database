@@ -53,7 +53,10 @@ class MgnifyConfig(BaseModel):
 
 
 class MetabolightsConfig(BaseModel):
+    api_root: AnyHttpUrl = "https://www.ebi.ac.uk/metabolights/ws"
     web_url: AnyHttpUrl = "https://www.ebi.ac.uk/metabolights"
+    user_token: str = None
+    metabolights_accession_marker_in_biosamples: str = "Metabolights accession"
 
 
 class SampleTableConfig(BaseModel):

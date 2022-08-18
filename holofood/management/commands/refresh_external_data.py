@@ -6,6 +6,7 @@ from holofood.models import Sample, Project
 
 METADATA = "METADATA"
 METAGENOMIC = "METAGENOMIC"
+METABOLOMIC = "METABOLOMIC"
 
 
 class Command(BaseCommand):
@@ -29,11 +30,11 @@ class Command(BaseCommand):
         parser.add_argument(
             "--types",
             type=str,
-            help=f"Which data types to fetch: {[METADATA, METAGENOMIC]}",
+            help=f"Which data types to fetch: {[METADATA, METAGENOMIC, METABOLOMIC]}",
             nargs="+",
             metavar="DATATYPE",
-            choices=[METADATA, METAGENOMIC],
-            default=[METADATA, METAGENOMIC],
+            choices=[METADATA, METAGENOMIC, METABOLOMIC],
+            default=[METADATA, METAGENOMIC, METABOLOMIC],
         )
         parser.add_argument(
             "--sample_filters",
@@ -52,9 +53,16 @@ class Command(BaseCommand):
         if METAGENOMIC in options["types"]:
             logging.info(f"Refreshing metagenomics data for sample {sample.accession}")
             sample.refresh_metagenomics_metadata()
+        if METABOLOMIC in options["types"]:
+            logging.info(f"Refreshing metabolomics data for sample {sample.accession}")
+            logging.warning(
+                f"It is inefficient, so usually wrong, to refresh metabolights data on a per-sample basis"
+            )
+            sample.refresh_metabolomics_metadata()
 
     @staticmethod
     def _refresh_project(project: Project, options: dict):
+        logging.info(f"Refreshing project {project}")
         if METADATA in options["types"]:
             logging.info(f"Refreshing structureddata for project {project.accession}")
             for sample in project.sample_set.all():
@@ -64,6 +72,11 @@ class Command(BaseCommand):
                 f"Refreshing metagenomics data for samples in project {project.accession}"
             )
             project.refresh_metagenomics_metadata()
+        if METABOLOMIC in options["types"]:
+            logging.info(
+                f"Refreshing metabolomics data for samples in projects {project.accession}"
+            )
+            project.refresh_metabolomics_metadata()
 
     def handle(self, *args, **options):
         if options["samples"]:

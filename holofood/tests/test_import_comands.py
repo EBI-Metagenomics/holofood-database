@@ -10,7 +10,9 @@ from django.core.management import call_command
 from holofood.external_apis.ena.portal_api import API_ROOT as ENAAPIROOT
 from holofood.external_apis.biosamples.api import API_ROOT as BSAPIROOT
 from holofood.external_apis.ena.browser_api import API_ROOT as DBAPIROOT
+from holofood.external_apis.metabolights.api import API_ROOT as MTBLSAPIROOT
 from holofood.models import Sample, Project, ViralCatalogue
+from holofood.tests.conftest import set_metabolights_project_for_sample
 from holofood.utils import holofood_config
 
 MGAPIROOT = holofood_config.mgnify.api_root.rstrip("/")
@@ -58,6 +60,7 @@ def test_refresh_external_data(
     salmon_sample: Sample,
     salmon_structureddata_response,
     salmon_submitted_checklist,
+    salmon_sample_metabolights_response,
 ):
     requests_mock.get(
         f"{BSAPIROOT}/structureddata/{salmon_sample.accession}",
@@ -102,6 +105,27 @@ def test_refresh_external_data(
     logging.info(out)
     salmon_sample.refresh_from_db()
     assert salmon_sample.has_metagenomics
+
+    set_metabolights_project_for_sample(salmon_sample)
+    salmon_sample.refresh_from_db()
+    logging.warning(
+        f"WILLBE{MTBLSAPIROOT}/studies/{salmon_sample.metabolights_project}/files/samples"
+    )
+    requests_mock.get(
+        f"{MTBLSAPIROOT}/studies/{salmon_sample.metabolights_project}/files/samples",
+        status_code=200,
+        json=salmon_sample_metabolights_response,
+    )
+    out = _call_command(
+        "refresh_external_data",
+        samples=[salmon_sample.accession],
+        types=["METABOLOMIC"],
+    )
+    logging.info(out)
+    salmon_sample.refresh_from_db()
+    assert salmon_sample.has_metabolomics
+    assert len(salmon_sample.metabolights_files) == 2
+    assert "donut" in salmon_sample.metabolights_files[0]["file_name"]
 
 
 @pytest.mark.django_db

@@ -9,7 +9,9 @@ from holofood.models import (
     Genome,
     ViralCatalogue,
     ViralFragment,
+    SampleStructuredDatum,
 )
+from holofood.utils import holofood_config
 
 
 @pytest.fixture
@@ -44,7 +46,7 @@ def salmon_structureddata_response(salmon_sample):
                 "content": [
                     {
                         "marker": {"value": "Metabolights accession", "iri": None},
-                        "measurement": {"value": "MTBLSXXXXX", "iri": None},
+                        "measurement": {"value": "MTBLSDONUT", "iri": None},
                     },
                     {
                         "marker": {"value": "ENA Run ID", "iri": None},
@@ -2012,6 +2014,24 @@ def salmon_structureddata_response(salmon_sample):
 
 
 @pytest.fixture()
+def salmon_sample_metabolights_response(salmon_sample):
+    return {
+        "sample_files": [
+            {
+                "file_name": "donut.zip",
+                "reliability": "1.0",
+                "sample_name": salmon_sample.accession,
+            },
+            {
+                "file_name": "donut.nmrML",
+                "reliability": "1.0",
+                "sample_name": salmon_sample.accession,
+            },
+        ]
+    }
+
+
+@pytest.fixture()
 def salmon_submitted_checklist(salmon_sample):
     return f"""
     <SAMPLE_SET>
@@ -2365,6 +2385,17 @@ def mgnify_contig_annotations_response(viral_fragment: ViralFragment) -> str:
 {viral_fragment.contig_id}	eggNOG-v2	CDS	2554	3879	.	-	.	ID={viral_fragment.contig_id};brite=ko00000,ko01000,ko00001;cog=IQ;ecnumber=6.2.1.41;eggnog=AMP-binding%20enzyme%20C-terminal%20domain%20;eggnog_evalue=445.7;eggnog_ortholog=1122978.AUFP01000001_gene932;eggnog_score=2.6e-122;kegg=ko:K18687;ogs=NA|NA|NA;interpro=IPR000873,IPR042099,IPR025110;pfam=PF13193,PF00501"""
 
 
+def set_metabolights_project_for_sample(sample: Sample, mtbls: str = "MTBLSDONUT"):
+    mtbls_marker, _ = SampleMetadataMarker.objects.get_or_create(
+        name=holofood_config.metabolights.metabolights_accession_marker_in_biosamples
+    )
+    SampleStructuredDatum.objects.create(
+        marker=mtbls_marker, sample=sample, measurement=mtbls
+    )
+    sample.has_metabolomics = True
+    sample.save()
+
+
 @pytest.fixture()
 def chicken_mag_catalogue():
     return create_genome_objects()
@@ -2396,8 +2427,14 @@ def LiveTests(request):
             title="HF_DONUT.SALMON.1",
             system=Sample.SALMON,
             has_metagenomics=True,
+            has_metabolomics=True,
+            metabolights_files=[
+                {"file_name": "donut.zip", "sample_name": "SAMEA00000002"}
+            ],
         )
     ]
+
+    set_metabolights_project_for_sample(Fixtures.samples[0])
 
     Fixtures.genome_catalogues = [create_genome_objects()]
     Fixtures.viral_catalogues = [create_viral_objects()]

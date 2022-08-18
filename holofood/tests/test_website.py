@@ -99,6 +99,27 @@ class WebsiteTests(StaticLiveServerTestCase):
             f"https://www.ebi.ac.uk/metagenomics/samples/{sample.accession}",
         )
 
+        metabolomics_expander_link = self.selenium.find_elements(
+            by=By.TAG_NAME, value="summary"
+        )[3]
+        self.assertEqual(metabolomics_expander_link.text, "Metabolomics")
+        metabolomics_expander_link.click()
+
+        metabolights_link = self.selenium.find_element(
+            by=By.LINK_TEXT, value="View project MTBLSDONUT on MetaboLights"
+        )
+        self.assertEqual(
+            metabolights_link.get_attribute("href"),
+            f"https://www.ebi.ac.uk/metabolights/MTBLSDONUT",
+        )
+
+        download_link = self.selenium.find_element(by=By.LINK_TEXT, value="donut.zip")
+        self.assertEqual(
+            download_link.get_attribute("href"),
+            "https://www.ebi.ac.uk/metabolights/ws/studies/MTBLSDONUT/download/public?file=donut.zip",
+        )
+
+        # ---- API Docs ---- #
         self.selenium.get(self.live_server_url + "/api/docs")
         list_link = self.selenium.find_element(by=By.LINK_TEXT, value="/api/samples")
         list_link.click()
