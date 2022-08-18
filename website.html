@@ -162,6 +162,11 @@ ul.task-list{list-style: none;}
   <li><a href="#global-search" id="toc-global-search" class="nav-link active" data-scroll-target="#global-search">Global Search</a></li>
   <li><a href="#finding-samples" id="toc-finding-samples" class="nav-link" data-scroll-target="#finding-samples">Finding Samples</a></li>
   <li><a href="#downloading-sample-lists-and-metadata" id="toc-downloading-sample-lists-and-metadata" class="nav-link" data-scroll-target="#downloading-sample-lists-and-metadata">Downloading sample lists and metadata</a></li>
+  <li><a href="#finding-sample-data-in-other-public-repositories" id="toc-finding-sample-data-in-other-public-repositories" class="nav-link" data-scroll-target="#finding-sample-data-in-other-public-repositories">Finding sample data in other public repositories</a>
+  <ul class="collapse">
+  <li><a href="#metagenomics" id="toc-metagenomics" class="nav-link" data-scroll-target="#metagenomics">Metagenomics</a></li>
+  <li><a href="#metabolomics" id="toc-metabolomics" class="nav-link" data-scroll-target="#metabolomics">Metabolomics</a></li>
+  </ul></li>
   <li><a href="#finding-analysis-summaries" id="toc-finding-analysis-summaries" class="nav-link" data-scroll-target="#finding-analysis-summaries">Finding analysis summaries</a></li>
   <li><a href="#using-the-catalogues" id="toc-using-the-catalogues" class="nav-link" data-scroll-target="#using-the-catalogues">Using the catalogues</a>
   <ul class="collapse">
@@ -238,6 +243,31 @@ Note
 </figure>
 </div>
 <p>The complete metadata for a sample can be downloaded using the “Download all as TSV” button within the “Sample metadata” section of a sample detail page.</p>
+</section>
+<section id="finding-sample-data-in-other-public-repositories" class="level2">
+<h2 class="anchored" data-anchor-id="finding-sample-data-in-other-public-repositories">Finding sample data in other public repositories</h2>
+<section id="metagenomics" class="level3">
+<h3 class="anchored" data-anchor-id="metagenomics">Metagenomics</h3>
+<p>Some samples have <a href="./datasets.html#mgnify-metagenomics">metagenomics</a> data, in <a href="https://www.ebi.ac.uk/metagenomics">MGnify</a>. These can be found from the samples listing page by setting the <code>Has metagenomics</code> filter to <code>Yes</code>.</p>
+<p>MGnify analyses of a sample (identified with <code>MGYA</code> accessions) are listed and linked to from the sample detail page.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/website/sample-with-metagenomics.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of a sample detail page with metagenomics data</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="metabolomics" class="level3">
+<h3 class="anchored" data-anchor-id="metabolomics">Metabolomics</h3>
+<p>Some other samples have <a href="./datasets.html#metabolights-metabolomics">metabolomics</a> data, in <a href="https://www.ebi.ac.uk/metabolights">MetaboLights</a>. These can be found form the samples listing page by setting the <code>Has metabolomics</code> filter to <code>Yes</code>.</p>
+<p>MetaboLights data are identified at a Project level, with <code>MTBLS</code> accessions. MetaboLights does not store samples as independent objects, instead it stores lists of samples and files (and more) for the project. So, the HoloFood data portal sample detail page shows a filtered table of the MetaboLights project’s files, that relate to this sample. Following these file links will download the file.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/website/sample-with-metabolomics.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of a sample detail page with metabolomics data</figcaption><p></p>
+</figure>
+</div>
+</section>
 </section>
 <section id="finding-analysis-summaries" class="level2">
 <h2 class="anchored" data-anchor-id="finding-analysis-summaries">Finding analysis summaries</h2>
