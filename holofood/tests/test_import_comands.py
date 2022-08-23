@@ -11,7 +11,7 @@ from holofood.external_apis.ena.portal_api import API_ROOT as ENAAPIROOT
 from holofood.external_apis.biosamples.api import API_ROOT as BSAPIROOT
 from holofood.external_apis.ena.browser_api import API_ROOT as DBAPIROOT
 from holofood.external_apis.metabolights.api import API_ROOT as MTBLSAPIROOT
-from holofood.models import Sample, Project, ViralCatalogue
+from holofood.models import Sample, Project, ViralCatalogue, GenomeCatalogue
 from holofood.tests.conftest import set_metabolights_project_for_sample
 from holofood.utils import holofood_config
 
@@ -154,3 +154,31 @@ def test_import_viral_catalogue(chicken_mag_catalogue):
     assert "ViPhOG2" in fragment.gff
     assert fragment.start_within_contig == 512
     assert fragment.end_within_contig == 768
+
+
+@pytest.mark.django_db
+def test_import_mag_catalogue():
+    tests_path = os.path.dirname(__file__)
+    out = _call_command(
+        "import_mag_catalogue",
+        "hf-donut-mag-cat-1",
+        f"{tests_path}/static_fixtures/mag-catalogue.tsv",
+        "Donut MAG Catalogue",
+        "public-donut-v1-0",
+        "Donut Surface",
+        "chicken",
+    )
+    logging.info(out)
+
+    assert GenomeCatalogue.objects.filter(id="hf-donut-mag-cat-1").exists()
+
+    created_catalogue = GenomeCatalogue.objects.get(id="hf-donut-mag-cat-1")
+    assert created_catalogue.title == "Donut MAG Catalogue"
+    assert created_catalogue.biome == "Donut Surface"
+    assert created_catalogue.system == "chicken"
+    assert created_catalogue.related_mag_catalogue_id == "public-donut-v1-0"
+    assert created_catalogue.genomes.count() == 11
+    assert (
+        created_catalogue.genomes.order_by("-accession").first().taxonomy
+        == "Bacteria > Firmicutes_A > Clostridia > Oscillospirales > Acutalibacteraceae > RUG420 > RUG420 sp900317985"
+    )

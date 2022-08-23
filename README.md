@@ -96,8 +96,28 @@ for samples with accessions in a certain range:
 and you therefore need to retry from a certain accession onwards.
 (Because samples are iterated through in ascending order of accession.) 
 
+### Import catalogues
+MAG and Viral catalogues can be imported using management commands.
+Each MAG catalogue needs to relate to a single public MAG catalogue on MGnify; 
+in that the species representative of each MAG must exist on MGnify.
+Each Viral Catalogue must relate (biome-wise) to a single MAG catalogue on the portal.
+In other words, the order of data insertion needs to be:
 
-## Adding users
+- public MAG catalogue into MGnify
+- MAG catalogue into this data portal
+- Viral catalogue into this data portal
+
+The uploaders expect TSV files (and a folder of GFFs in the case of viral catalogue).
+For the format / column naming, inspect the files in `holofood/tests/static_fixtures`.
+
+Run `python manage.py import_mag_catalogue` or `import_viral_catalogue` for help, but essentially:
+
+```shell
+python manage.py import_mag_catalogue hf-salmon-mags-v1 ./salmon.tsv "HoloFood Salmon V1" mgnify-salmon-v1-0 "Some:Biome:String" salmon
+python manage.py import_viral_catalogue hf-salmon-vir-v1 ./salmon_viral_cat.tsv ./salmon_viral_gffs "HoloFood Salmon Viruses V1" hf-salmon-mags-v1
+```
+
+### Adding users
 Superusers can do everything in the admin panel, including managing other users.
 ```shell
 python manage.py createsuperuser
