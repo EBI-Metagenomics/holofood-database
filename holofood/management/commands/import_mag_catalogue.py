@@ -49,9 +49,8 @@ class Command(BaseCommand):
             return (
                 re.sub("(;?[a-z]__)", " > ", lineage_string)
                 .strip()
-                .lstrip(">")
-                .rstrip(">")
-                .strip()
+                .lstrip("> ")
+                .rstrip("> ")
             )
         return lineage_string
 
