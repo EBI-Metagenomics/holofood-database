@@ -2,7 +2,7 @@ import operator
 from functools import reduce
 
 import django_filters
-from django.db.models import Q, CharField
+from django.db.models import Q, CharField, TextField
 
 from holofood.models import Sample, Genome, ViralFragment
 
@@ -15,7 +15,8 @@ class MultiFieldSearchFilter(django_filters.FilterSet):
 
     def multiple_icontains(self, queryset, name, value):
         fields = filter(
-            lambda field: isinstance(field, CharField), self.queryset.model._meta.fields
+            lambda field: isinstance(field, CharField) or isinstance(field, TextField),
+            self.queryset.model._meta.fields,
         )
         return queryset.filter(
             reduce(

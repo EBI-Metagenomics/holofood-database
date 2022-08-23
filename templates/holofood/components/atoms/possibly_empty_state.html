@@ -1,5 +1,5 @@
 {% load static %}
-{% if items.count == 0 %}
+{% if items.count == 0 or items|length_is:0 %}
     <article class="vf-card vf-card--hf vf-card--bordered vf-grid__col--span-{{ colspan|default:1 }}">
         <div class="vf-card__content | vf-stack vf-stack--400">
             <div class="vf-flag vf-flag--middle vf-flag--400">

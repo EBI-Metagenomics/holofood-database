@@ -13,6 +13,7 @@
                 </svg>
             </a>
         </h3>
-        <p class="vf-card__text">{{ annotation.updated | date:'Y-m-d H:i' }}</p>
+        <p class="vf-card__subheading">{{ annotation.author }}</p>
+        <p class="vf-card__text">{{ annotation.updated | date:'d M Y' }}</p>
     </div>
 </article>

@@ -5,7 +5,7 @@ from typing import List, Type
 
 import requests
 from django.core.paginator import Paginator
-from django.db.models import Q, Model, CharField, QuerySet
+from django.db.models import Q, Model, CharField, QuerySet, TextField
 from django.http import Http404, StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -110,6 +110,7 @@ class AnnotationDetailView(DetailView):
         )
         samples_page = samples_paginated.page(kwargs.get("samples_page", 1))
         context["samples"] = samples_page
+        context["has_samples"] = samples.exists()
 
         projects = model.projects.all()
         projects_paginated = CustomPaginator(
@@ -117,6 +118,7 @@ class AnnotationDetailView(DetailView):
         )
         projects_page = projects_paginated.page(kwargs.get("projects_page", 1))
         context["projects"] = projects_page
+        context["has_projects"] = projects.exists()
 
         return context
 
@@ -266,7 +268,11 @@ class GlobalSearchView(TemplateView):
 
         fields = fields or map(
             lambda field: field.name,
-            filter(lambda field: isinstance(field, CharField), model._meta.fields),
+            filter(
+                lambda field: isinstance(field, CharField)
+                or isinstance(field, TextField),
+                model._meta.fields,
+            ),
         )
 
         return model.objects.filter(
