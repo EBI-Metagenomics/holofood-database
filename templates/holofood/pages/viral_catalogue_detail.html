@@ -171,7 +171,7 @@
                             </tr>
                             {% if viral_fragment.is_cluster_representative %}
                                 <tr class="vf-table__row">
-                                    <td class="vf-table__cell" colspan="6">
+                                    <td class="vf-table__cell" colspan="7">
                                         Cluster representative of {{ viral_fragment.representative_of_cluster_size }} other viral fragment{{ viral_fragment.representative_of_cluster_size|pluralize }}.
                                         <a class="vf-button vf-button--link vf-button--sm inline"
                                            href="?cluster_representative_id_contains={{ viral_fragment.id }}&cluster_visibility={{ SHOWALL }}">
