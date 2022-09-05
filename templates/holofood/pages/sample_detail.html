@@ -176,7 +176,7 @@
                             {% for structured_metadatum in metadata_section.list|holofood_ordering_rules %}
                                 <tr class="vf-table__row">
                                     <td class="vf-table__cell">{{ structured_metadatum.marker.name }}</td>
-                                    <td class="vf-table__cell">{{ structured_metadatum.measurement }}</td>
+                                    <td class="vf-table__cell">{{ structured_metadatum.measurement|significant_digits:"5" }}</td>
                                     <td class="vf-table__cell">{{ structured_metadatum.units }}</td>
                                 </tr>
                             {% endfor %}

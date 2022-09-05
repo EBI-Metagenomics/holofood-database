@@ -65,3 +65,13 @@ def order_metadata_by_holofood_rules(
         return len(rules) + 1
 
     return sorted(metadata, key=metadata_priority)
+
+
+@register.filter(name="significant_digits")
+def format_significant_digits_if_number(value, sig_digits: int = 5) -> str:
+    if type(value) is not str:
+        return value
+    try:
+        return f"{float(value):.{sig_digits}g}"
+    except ValueError:
+        return value
