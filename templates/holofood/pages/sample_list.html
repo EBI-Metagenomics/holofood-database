@@ -18,6 +18,7 @@
                         <tr class="vf-table__row">
                             {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Sample accession" param='accession' %}
                             {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Project" param='project__accession' %}
+                            {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Animal code" param='' %}
                             {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Treatment code" param='' %}
                             {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Inclusion level" param='' %}
                             {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Trial timepoint" param='' %}
@@ -46,6 +47,7 @@
                                     <a href="{{ ENA_BROWSER_URL }}/{{ sample.project.accession }}"
                                        class="vf-link">{{ sample.project.accession }}</a>
                                 </td>
+                                <td class="vf-table__cell">{{ sample|metadatum:"host subject id"|default:"—" }}</td>
                                 <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment"|default:"—" }}</td>
                                 <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment concentration"|default:"—" }}</td>
                                 <td class="vf-table__cell">{{ sample|metadatum:"trial timepoint"|default:"—" }}</td>

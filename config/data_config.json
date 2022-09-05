@@ -24,7 +24,8 @@
       "default_metadata_marker_columns": [
         "host diet treatment concentration",
         "host diet treatment",
-        "trial timepoint"
+        "trial timepoint",
+        "host subject id"
       ]
     },
     "metadata_list": {
