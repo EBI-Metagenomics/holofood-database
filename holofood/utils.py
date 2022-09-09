@@ -4,6 +4,7 @@ from datetime import timedelta
 from typing import Any
 
 from django.conf import settings
+from django.db.models import Aggregate
 
 from holofood.config import HolofoodConfig
 
@@ -44,3 +45,15 @@ class CadenceEnforcer:
                 time.sleep(self.cadence_seconds - since)
         self.prev_return = now
         return
+
+
+class StringAgg(Aggregate):
+    dbengine = settings.DATABASES["default"]["ENGINE"].lower()
+    if "postgres" in dbengine:
+        function = "STRING_AGG"
+        template = "%(function)s(%(distinct)s%(expressions)s, ',')"
+    elif "sqlite" in dbengine:
+        function = "GROUP_CONCAT"
+    else:
+        function = "MIN"
+    name = "Concat"

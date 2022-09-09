@@ -4,9 +4,8 @@ from functools import reduce
 from typing import List, Type
 
 import requests
-from django.conf import settings
 from django.core.paginator import Paginator
-from django.db.models import Q, Model, CharField, QuerySet, TextField, Count, Aggregate
+from django.db.models import Q, Model, CharField, QuerySet, TextField, Count
 from django.http import Http404, StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -35,7 +34,7 @@ from holofood.models import (
     Genome,
     Project,
 )
-from holofood.utils import holofood_config
+from holofood.utils import holofood_config, StringAgg
 
 
 class ListFilterView(ListView):
@@ -345,17 +344,6 @@ class GlobalSearchView(TemplateView):
         context["docs_sections"] = self.get_docs_results()
 
         return context
-
-
-class StringAgg(Aggregate):
-    dbengine = settings.DATABASES["default"]["ENGINE"].lower()
-    if "postgres" in dbengine:
-        function = "STRING_AGG"
-    elif "sqlite" in dbengine:
-        function = "GROUP_CONCAT"
-    else:
-        function = "MIN"
-    name = "Concat"
 
 
 class AnimalCodeListView(TemplateView):
