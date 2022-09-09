@@ -103,6 +103,7 @@ class Sample(models.Model):
     system = models.CharField(choices=SYSTEM_CHOICES, max_length=10, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+    animal_code = models.CharField(max_length=20)
 
     has_metagenomics = models.BooleanField(default=False)
     has_metabolomics = models.BooleanField(default=False)
@@ -172,6 +173,16 @@ class Sample(models.Model):
             raise e
         logging.info(f"Setting system to {system} for sample {self.accession}")
         self.system = system
+
+        animal_code = self.structured_metadata.filter(
+            marker__name="host subject id"
+        ).first()
+        if not animal_code:
+            raise Exception(
+                f"Error determining animal code for Sample {self.accession}"
+            )
+        self.animal_code = animal_code.measurement
+
         self.save(update_fields=["system"])
 
     def refresh_metagenomics_metadata(self):

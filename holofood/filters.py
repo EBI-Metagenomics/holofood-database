@@ -3,6 +3,7 @@ from functools import reduce
 
 import django_filters
 from django.db.models import Q, CharField, TextField
+from django.utils.safestring import mark_safe
 
 from holofood.models import Sample, Genome, ViralFragment
 
@@ -27,6 +28,15 @@ class MultiFieldSearchFilter(django_filters.FilterSet):
 
 
 class SampleFilter(django_filters.FilterSet):
+    animal_code__icontains = django_filters.CharFilter(
+        field_name="animal_code",
+        label="Animal code contains",
+        lookup_expr="icontains",
+        help_text=mark_safe(
+            f'See <a class="vf-link" href="/animals">the list of animals</a> for details'
+        ),
+    )
+
     has_metagenomics = django_filters.ChoiceFilter(
         choices=[(True, "Yes"), (False, "No")],
         label="Has metagenomics data",

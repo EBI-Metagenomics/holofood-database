@@ -4,8 +4,9 @@ from functools import reduce
 from typing import List, Type
 
 import requests
+from django.conf import settings
 from django.core.paginator import Paginator
-from django.db.models import Q, Model, CharField, QuerySet, TextField
+from django.db.models import Q, Model, CharField, QuerySet, TextField, Count, Aggregate
 from django.http import Http404, StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -343,4 +344,34 @@ class GlobalSearchView(TemplateView):
         context["annotations"] = self.multi_search_model(SampleAnnotation)
         context["docs_sections"] = self.get_docs_results()
 
+        return context
+
+
+class StringAgg(Aggregate):
+    dbengine = settings.DATABASES["default"]["ENGINE"].lower()
+    if "postgres" in dbengine:
+        function = "STRING_AGG"
+    elif "sqlite" in dbengine:
+        function = "GROUP_CONCAT"
+    else:
+        function = "MIN"
+    name = "Concat"
+
+
+class AnimalCodeListView(TemplateView):
+    template_name = "holofood/pages/animal_code_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        animals_qs = (
+            Sample.objects.all()
+            .values("animal_code")
+            .annotate(
+                samples_count=Count("pk", distinct=True),
+                sample_accessions=StringAgg("accession"),
+            )
+            .order_by()
+        )
+        animals_paginated = CustomPaginator(animals_qs, per_page=10)
+        context["animals"] = animals_paginated.page(self.request.GET.get("page", 1))
         return context

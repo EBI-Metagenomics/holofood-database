@@ -11,6 +11,7 @@
             </div>
             <div style="overflow-x: scroll">
                 <h2>Samples</h2>
+                <p class="vf-text-body vf-text-body--5">Find individual samples from the <a class="vf-link" href="{% url 'animals_list' %}">animals</a> across HoloFood trials.</p>
                 <a class="vf-button vf-button--link vf-button--sm"
                    href="{% url 'export:samples_list' %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
                 <table class="vf-table scrollable-table">
@@ -47,7 +48,7 @@
                                     <a href="{{ ENA_BROWSER_URL }}/{{ sample.project.accession }}"
                                        class="vf-link">{{ sample.project.accession }}</a>
                                 </td>
-                                <td class="vf-table__cell">{{ sample|metadatum:"host subject id"|default:"—" }}</td>
+                                <td class="vf-table__cell">{{ sample.animal_code|default:"—" }}</td>
                                 <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment"|default:"—" }}</td>
                                 <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment concentration"|default:"—" }}</td>
                                 <td class="vf-table__cell">{{ sample|metadatum:"trial timepoint"|default:"—" }}</td>

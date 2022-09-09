@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% load string_utils %}
+{% block content %}
+    <div class="vf-stack vf-stack--400">
+        <div/>
+        <h2>Animals from all HoloFood trials</h2>
+        <p class="vf-text-body vf-text-body--5">Each HoloFood trial involves multiple animals, house in multiple pens/tanks. Animals may have been sampled more than once.</p>
+        <table class="vf-table scrollable-table">
+            <thead class="vf-table__header">
+                <tr class="vf-table__row">
+                    <td class="vf-table__cell">Animal code</td>
+                    <td class="vf-table__cell">Samples count</td>
+                    <td class="vf-table__cell">Samples</td>
+                </tr>
+            </thead>
+            <tbody class="vf-table__body">
+                {% for animal in animals %}
+                    <tr class="vf-table__row">
+                        <td class="vf-table__cell">
+                            <div style="display:flex">
+                                {% if animal.animal_code|slice:":1" == 'C' %}
+                                   <img src="{% static "img/icons/chicken.svg" %}"
+                                     class="system-icon"
+                                     alt="Chicken"/>
+                                {% elif animal.animal_code|slice:":1" == 'S' %}
+                                    <img src="{% static "img/icons/salmon.svg" %}"
+                                     class="system-icon"
+                                     alt="Salmon"/>
+                                {% endif %}
+                                <a class="vf-link" href="{% url 'samples_list' %}?animal_code__icontains={{ animal.animal_code }}">{{ animal.animal_code }}</a>
+                            </div>
+                        </td>
+                        <td class="vf-table__cell">
+                            <a class="vf-link" href="{% url 'samples_list' %}?animal_code__icontains={{ animal.animal_code }}">{{ animal.samples_count }}</a>
+                        </td>
+                        <td class="vf-table__cell">
+                            {% for sample_accession in animal.sample_accessions|split_by %}
+                                <a class="vf-link" href="{% url 'sample_detail' pk=sample_accession %}">{{ sample_accession }}</a><br/>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="vf-table__footer">
+                <tr class="vf-table__row">
+                    <td class="vf-table__cell" colspan="100">
+                        {% include "holofood/components/pagination.html" with page_obj=animals %}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock content %}

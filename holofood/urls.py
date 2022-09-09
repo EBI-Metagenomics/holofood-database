@@ -49,6 +49,7 @@ from holofood.views import (
     ViralCatalogueFragmentView,
     ViralSequenceAnnotationView,
     GlobalSearchView,
+    AnimalCodeListView,
 )
 
 admin.site.site_header = "HoloFood Data Portal Admin"
@@ -60,6 +61,7 @@ urlpatterns = [
     path("martor/", include("martor.urls")),
     path("samples/", SampleListView.as_view(), name="samples_list"),
     path("sample/<str:pk>", SampleDetailView.as_view(), name="sample_detail"),
+    path("animals/", AnimalCodeListView.as_view(), name="animals_list"),
     path("annotations/", AnnotationListView.as_view(), name="annotations_list"),
     path(
         "annotation/<str:slug>",
