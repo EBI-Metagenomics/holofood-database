@@ -1,16 +1,16 @@
-django==4.1
+django==4.1.2
 requests==2.28.1
-pydantic==1.9.2
-python-dotenv==0.20.0
-xsdata==22.7
+pydantic==1.10.2
+python-dotenv==0.21.0
+xsdata==22.9
 django-filter==22.1
 django-sass-processor==1.2.1
 libsass==0.21.0
 django-compressor==4.1
-martor==1.6.13
+martor==1.6.14
 django-ninja==0.19.1
 django-admin-inline-paginator==0.3.0
 
 # AWS EB requirements
 gunicorn==20.1.0
-psycopg2-binary==2.9.3
+psycopg2-binary==2.9.4

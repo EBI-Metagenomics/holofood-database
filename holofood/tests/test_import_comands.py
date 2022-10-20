@@ -135,9 +135,9 @@ def test_import_viral_catalogue(chicken_mag_catalogue):
         "import_viral_catalogue",
         "hf-donut-vir-cat-1",
         f"{tests_path}/static_fixtures/viral_catalogue/viral_cat.tsv",
-        f"{tests_path}/static_fixtures/viral_catalogue",
-        "Donut Viral Catalogue",
-        chicken_mag_catalogue.id,
+        f"{tests_path}/static_fixtures/viral_catalogue/viral_cat.gff",
+        title="Donut Viral Catalogue",
+        related_mag_catalogue_id=chicken_mag_catalogue.id,
     )
     logging.info(out)
 

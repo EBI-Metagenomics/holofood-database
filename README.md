@@ -55,6 +55,7 @@ On a Mac, you’ll probably get Gate Keeper permissions problems running `chrome
 which chromedriver  # probably: /usr/local/bin/chromedriver
 spctl --add /usr/local/bin/chromedriver
 ```
+If this doesn't work, `open /usr/local/bin`, then find `chromedriver` in Finder, right click, Open.
 
 ## Configuration
 We use [Pydantic](https://pydantic-docs.helpmanual.io/) to formalise Config files.
