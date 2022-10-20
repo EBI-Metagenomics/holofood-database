@@ -114,8 +114,10 @@ Run `python manage.py import_mag_catalogue` or `import_viral_catalogue` for help
 
 ```shell
 python manage.py import_mag_catalogue hf-salmon-mags-v1 ./salmon.tsv "HoloFood Salmon V1" mgnify-salmon-v1-0 "Some:Biome:String" salmon
-python manage.py import_viral_catalogue hf-salmon-vir-v1 ./salmon_viral_cat.tsv ./salmon_viral_gffs "HoloFood Salmon Viruses V1" hf-salmon-mags-v1
+python manage.py import_viral_catalogue hf-salmon-vir-v1 './salmon_viral_cat.tsv' './salmon_viral_annotations.gff' --title="HoloFood Salmon Viruses V1" --related_mag_catalogue_id=hf-salmon-mags-v1
 ```
+The `import_viral_catalogue` command can be run multiple times to populate the catalogue with several TSV/GFF combinations if needed –
+fragments are appended to the existing catalogue if it already exists.
 
 ### Adding users
 Superusers can do everything in the admin panel, including managing other users.

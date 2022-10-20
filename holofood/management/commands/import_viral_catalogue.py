@@ -1,20 +1,10 @@
 import argparse
 import logging
-import os
-import pathlib
 from csv import DictReader
 
 from django.core.management.base import BaseCommand, CommandError
 
 from holofood.models import ViralCatalogue, GenomeCatalogue
-
-
-class DirFileType:
-    def __call__(self, path):
-        if os.path.isdir(path):
-            return pathlib.Path(path)
-        else:
-            raise argparse.ArgumentTypeError(f"{path} is not a Directory")
 
 
 class Command(BaseCommand):
@@ -32,19 +22,21 @@ class Command(BaseCommand):
             help="Path to the TSV file listing viral sequences",
         )
         parser.add_argument(
-            "gffs_dir",
-            type=DirFileType(),
-            help="Path to a directory containing GFFs for each sequence, each named {sequence_id}.gff",
+            "gff_file",
+            type=argparse.FileType("r"),
+            help="Path to the GFF file with annotations for contigs in the catalogue",
         )
         parser.add_argument(
-            "title",
+            "--title",
             type=str,
-            help="Title of the catalogue",
+            help="Title of the catalogue. Must be provided if catalogue does not yet exist.",
+            default=None,
         )
         parser.add_argument(
-            "related_mag_catalogue_id",
+            "--related_mag_catalogue_id",
             type=str,
-            help="ID of the related MAG catalogue in the HoloFood database",
+            help="ID of the related MAG catalogue in the HoloFood database. Must be provided if catalogue does not yet exist.",
+            default=None,
         )
         parser.add_argument(
             "--biome",
@@ -61,15 +53,31 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         tsv_file = options["catalogue_file"]
+        gff_file = options["gff_file"]
 
-        try:
-            mag_catalogue = GenomeCatalogue.objects.get(
-                id=options["related_mag_catalogue_id"]
-            )
-        except GenomeCatalogue.DoesNotExist:
-            raise CommandError(
-                f"Mag Catalogue {options['related_mag_catalogue_id']} does not yet exist."
-            )
+        existing_catalogue = ViralCatalogue.objects.filter(id=options["catalogue_id"])
+
+        if not existing_catalogue.exists():
+            if not options["title"]:
+                raise CommandError(
+                    f"--title must be provided since catalogue does not yet exist"
+                )
+
+            if not options["related_mag_catalogue_id"]:
+                raise CommandError(
+                    f"--related_mag_catalogue_id must be provided since catalogue does not yet exist"
+                )
+
+            try:
+                mag_catalogue = GenomeCatalogue.objects.get(
+                    id=options["related_mag_catalogue_id"]
+                )
+            except GenomeCatalogue.DoesNotExist:
+                raise CommandError(
+                    f"Mag Catalogue {options['related_mag_catalogue_id']} does not yet exist."
+                )
+        else:
+            mag_catalogue = existing_catalogue.first().related_genome_catalogue
 
         logging.info(f"Related MAG catalogue is {mag_catalogue}")
 
@@ -79,7 +87,7 @@ class Command(BaseCommand):
         system = options["system"] or mag_catalogue.system
         logging.info(f"Setting {system=}")
 
-        reader = DictReader(tsv_file, delimiter="\t")
+        tsv_reader = DictReader(tsv_file, delimiter="\t")
         column_mapping = {
             "sequence_id": "id",
             "sequence_start": "start_within_contig",
@@ -89,38 +97,51 @@ class Command(BaseCommand):
             "host_mgyg": "host_mag_id",
             "viral_type": "viral_type",
             "contig": "contig_id",
+            "viral_taxonomy": "taxonomy",
         }
-        missing = set(column_mapping.keys()).difference(reader.fieldnames)
+        missing = set(column_mapping.keys()).difference(tsv_reader.fieldnames)
         if missing:
             raise CommandError(
                 f"Not all expected columns were found in the TSV. {missing=}"
             )
 
-        catalogue = ViralCatalogue.objects.create(
+        catalogue, created = ViralCatalogue.objects.get_or_create(
             id=options["catalogue_id"],
-            title=options["title"],
-            related_genome_catalogue=mag_catalogue,
-            biome=biome,
-            system=system,
+            defaults={
+                "title": options["title"],
+                "related_genome_catalogue": mag_catalogue,
+                "biome": biome,
+                "system": system,
+            },
         )
-        logging.info(f"Created viral {catalogue=}")
+        if created:
+            logging.info(f"Created viral {catalogue=}")
+        else:
+            logging.info(f"Adding sequences to existing viral {catalogue=}")
 
-        for sequence in reader:
+        annotations_per_contig = {}
+        for annotation in gff_file:
+            contig_id = annotation.split()[0]
+            annotations_per_contig.setdefault(contig_id, []).append(annotation.strip())
+
+        for sequence in tsv_reader:
             vir_data = {
                 field_name: sequence[col_name]
                 for col_name, field_name in column_mapping.items()
                 if sequence[col_name] != ""
             }
-            gff_path: pathlib.Path = (
-                options["gffs_dir"] / f'{sequence["sequence_id"]}.gff'
+
+            vir_data["taxonomy"] = (
+                vir_data["taxonomy"]
+                .replace(";", " > ")
+                .strip()
+                .lstrip(" >")
+                .rstrip(" >")
             )
 
-            if not gff_path.is_file():
-                raise CommandError(f"No GFF file found for {sequence['sequence_id']}")
-            with open(
-                options["gffs_dir"] / f'{sequence["sequence_id"]}.gff', "r"
-            ) as gff_stream:
-                gff = gff_stream.read()
+            contig_id = sequence["contig"]
+
+            gff = "\n".join(annotations_per_contig.get(contig_id, []))
 
             frag = catalogue.viral_fragments.create(
                 catalogue=catalogue, gff=gff, **vir_data

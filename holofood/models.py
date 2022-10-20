@@ -399,6 +399,7 @@ class ViralFragment(models.Model):
         verbose_name="Host MAG",
     )
     viral_type = models.CharField(choices=VIRAL_TYPE_CHOICES, max_length=10)
+    taxonomy = models.CharField(null=True, blank=True, max_length=100)
 
     gff = models.TextField(blank=True, default="")
 
