@@ -4,7 +4,7 @@ from holofood.models import (
     Project,
     Sample,
     SampleMetadataMarker,
-    SampleAnnotation,
+    AnalysisSummary,
     GenomeCatalogue,
     Genome,
     ViralCatalogue,
@@ -2449,9 +2449,9 @@ def structured_metadata_marker():
 
 
 @pytest.fixture()
-def salmon_annotation_unpub(salmon_sample):
-    anno = SampleAnnotation.objects.create(
+def salmon_analysis_summary_unpub(salmon_sample):
+    summary = AnalysisSummary.objects.create(
         title="All about donuts", slug="all-about-donuts", content="# Donuts are a food"
     )
-    anno.samples.set([salmon_sample])
-    return anno
+    summary.samples.set([salmon_sample])
+    return summary

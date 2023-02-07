@@ -17,7 +17,7 @@ from holofood.models import (
     Project,
     SampleStructuredDatum,
     SampleMetadataMarker,
-    SampleAnnotation,
+    AnalysisSummary,
     GenomeCatalogue,
     Genome,
     ViralCatalogue,
@@ -72,15 +72,15 @@ class SampleStructuredDatumSchema(ModelSchema):
         model_fields = ["marker", "measurement", "units"]
 
 
-class RelatedAnnotationSchema(ModelSchema):
+class RelatedAnalysisSummarySchema(ModelSchema):
     @staticmethod
-    def resolve_canonical_url(obj: SampleAnnotation):
-        return reverse("annotation_detail", kwargs={"slug": obj.slug})
+    def resolve_canonical_url(obj: AnalysisSummary):
+        return reverse("analysis_summary_detail", kwargs={"slug": obj.slug})
 
     canonical_url: str
 
     class Config:
-        model = SampleAnnotation
+        model = AnalysisSummary
         model_fields = ["title"]
 
 
@@ -127,21 +127,21 @@ class SampleSlimSchema(ModelSchema):
 
 class SampleSchema(SampleSlimSchema):
     structured_metadata: List[SampleStructuredDatumSchema]
-    annotations: List[RelatedAnnotationSchema]
+    analysis_summaries: List[RelatedAnalysisSummarySchema]
 
     @staticmethod
-    def resolve_project_annotations(obj: Sample):
-        return obj.project.annotations.all()
+    def resolve_project_analysis_summaries(obj: Sample):
+        return obj.project.analysis_summaries.all()
 
-    project_annotations: List[RelatedAnnotationSchema]
+    project_analysis_summaries: List[RelatedAnalysisSummarySchema]
 
 
-class AnnotationSchema(RelatedAnnotationSchema):
+class AnalysisSummarySchema(RelatedAnalysisSummarySchema):
     samples: List[SampleSlimSchema]
     projects: List[RelatedProjectSchema]
 
     class Config:
-        model = SampleAnnotation
+        model = AnalysisSummary
         model_fields = ["title"]
 
 
@@ -217,7 +217,7 @@ class ViralFragmentSchema(ModelSchema):
 
 
 SAMPLES = "Samples"
-ANALYSES = "Analyses"
+ANALYSES = "Analysis Summaries"
 GENOMES = "Genomes"
 VIRUSES = "Viruses"
 
@@ -325,20 +325,20 @@ def list_sample_metadata_markers(
 
 
 @api.get(
-    "/annotations",
-    response=List[AnnotationSchema],
-    summary="Fetch a list of Annotation documents.",
-    description="Annotation documents are summaries of analyses conduced by HoloFood partners and collaborators. "
-    "Each annotation is tagged as involving 1 or more Samples or Projects. "
+    "/analysis-summaries",
+    response=List[AnalysisSummarySchema],
+    summary="Fetch a list of Analysis Summary documents.",
+    description="Analysis Summary documents are produced by HoloFood partners and collaborators. "
+    "Each summary is tagged as involving 1 or more Samples, Projects, or Catalogues. "
     "Typically these are aggregative or comparative analyses of the Samples. "
     "These are text and graphic documents. "
     "They are not intended for programmatic consumption, so a website URL is returned for each. ",
     tags=[ANALYSES],
 )
-def list_annotations(
+def list_analysis_summaries(
     request,
 ):
-    return SampleAnnotation.objects.filter(is_published=True)
+    return AnalysisSummary.objects.filter(is_published=True)
 
 
 @api.get(

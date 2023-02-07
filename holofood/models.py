@@ -295,14 +295,24 @@ class SampleStructuredDatum(models.Model):
         )
 
 
-class SampleAnnotation(models.Model):
+class AnalysisSummary(models.Model):
     slug = models.SlugField(primary_key=True, max_length=200, unique=True)
     title = models.CharField(max_length=200)
     content = MartorField(
         help_text="Markdown document describing an analysis of one or more projects/samples"
     )
-    samples = models.ManyToManyField(Sample, related_name="annotations", blank=True)
-    projects = models.ManyToManyField(Project, related_name="annotations", blank=True)
+    samples = models.ManyToManyField(
+        Sample, related_name="analysis_summaries", blank=True
+    )
+    projects = models.ManyToManyField(
+        Project, related_name="analysis_summaries", blank=True
+    )
+    genome_catalogues = models.ManyToManyField(
+        "GenomeCatalogue", related_name="analysis_summaries", blank=True
+    )
+    viral_catalogues = models.ManyToManyField(
+        "ViralCatalogue", related_name="analysis_summaries", blank=True
+    )
     author = models.CharField(max_length=200)
     created = models.DateTimeField(auto_created=True, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -312,7 +322,7 @@ class SampleAnnotation(models.Model):
         return f"{self.slug} - {self.title}"
 
     def get_absolute_url(self):
-        return reverse("annotation_detail", kwargs={"slug": self.slug})
+        return reverse("analysis_summary_detail", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):  # new
         if not self.slug:
@@ -320,7 +330,8 @@ class SampleAnnotation(models.Model):
         return super().save(*args, **kwargs)
 
     class Meta:
-        permissions = [("publish_annotation", "Can publish an annotation")]
+        verbose_name_plural = "analysis summaries"
+        permissions = [("publish_annotation", "Can publish an analysis summary")]
 
 
 class GenomeCatalogue(models.Model):

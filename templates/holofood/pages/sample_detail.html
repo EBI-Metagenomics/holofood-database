@@ -306,20 +306,20 @@
                     Documents written by HoloFood partners and collaborators relevant to Sample {{ sample.accession }}
                 </p>
             </div>
-            {% for annotation in sample.annotations.all %}
-                {% include 'holofood/components/annotation_card.html' with annotation=annotation %}
+            {% for analysis_summary in sample.analysis_summaries.all %}
+                {% include "holofood/components/analysis_summary_card.html" with analysis_summary=analysis_summary %}
             {% endfor %}
-            {% include 'holofood/components/atoms/possibly_empty_state.html' with items=sample.annotations empty_text="No summaries mention this sample directly" colspan=3 %}
+            {% include "holofood/components/atoms/possibly_empty_state.html" with items=sample.analysis_summaries empty_text="No summaries mention this sample directly" colspan=3 %}
 
             <div class="vf-section-header">
                 <p class="vf-section-header__text">
                     Documents relevant to Sample’s Project {{ sample.project.accession }}
                 </p>
             </div>
-            {% for annotation in sample.project.annotations.all %}
-                {% include 'holofood/components/annotation_card.html' with annotation=annotation %}
+            {% for analysis_summary in sample.project.analysis_summaries.all %}
+                {% include "holofood/components/analysis_summary_card.html" with analysis_summary=analysis_summary %}
             {% endfor %}
-            {% include 'holofood/components/atoms/possibly_empty_state.html' with items=sample.project.annotations empty_text="No summaries mention this sample’s project" colspan=3 %}
+            {% include "holofood/components/atoms/possibly_empty_state.html" with items=sample.project.annotations empty_text="No summaries mention this sample’s project" colspan=3 %}
         </div>
     </section>
 {% endblock content %}

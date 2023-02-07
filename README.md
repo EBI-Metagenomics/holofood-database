@@ -128,7 +128,7 @@ python manage.py createsuperuser
 Superusers can go to e.g. http://localhost:8000/admin and create other users there.
 
 "Staff" users can access the admin panel, but won't by default have permissions to do anything there.
-Add them to the "authors" user group to give them permissions to author "Annotation" documents via the admin panel.
+Add them to the "authors" user group to give them permissions to author "Analysis Summary" documents via the admin panel.
 
 
 ## Deployment

@@ -2,8 +2,8 @@
     <div class="vf-card__content | vf-stack vf-stack--400">
         <h3 class="vf-card__heading">
             <a class="vf-card__link"
-               href="{% url 'annotation_detail' slug=annotation.slug %}">
-                {{ annotation.title }}&nbsp;
+               href="{% url 'analysis_summary_detail' slug=analysis_summary.slug %}">
+                {{ analysis_summary.title }}&nbsp;
                 <svg aria-hidden="true"
                      class="vf-card__heading__icon | vf-icon vf-icon-arrow--inline-end"
                      width="1em"
@@ -13,7 +13,7 @@
                 </svg>
             </a>
         </h3>
-        <p class="vf-card__subheading">{{ annotation.author }}</p>
-        <p class="vf-card__text">{{ annotation.updated | date:'d M Y' }}</p>
+        <p class="vf-card__subheading">{{ analysis_summary.author }}</p>
+        <p class="vf-card__text">{{ analysis_summary.updated | date:'d M Y' }}</p>
     </div>
 </article>

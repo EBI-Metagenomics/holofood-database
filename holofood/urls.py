@@ -39,8 +39,8 @@ from holofood.export import export_api
 from holofood.views import (
     SampleListView,
     SampleDetailView,
-    AnnotationDetailView,
-    AnnotationListView,
+    AnalysisSummaryDetailView,
+    AnalysisSummaryListView,
     HomeView,
     GenomeCatalogueView,
     GenomeCataloguesView,
@@ -62,11 +62,15 @@ urlpatterns = [
     path("samples/", SampleListView.as_view(), name="samples_list"),
     path("sample/<str:pk>", SampleDetailView.as_view(), name="sample_detail"),
     path("animals/", AnimalCodeListView.as_view(), name="animals_list"),
-    path("annotations/", AnnotationListView.as_view(), name="annotations_list"),
     path(
-        "annotation/<str:slug>",
-        AnnotationDetailView.as_view(),
-        name="annotation_detail",
+        "analysis-summaries/",
+        AnalysisSummaryListView.as_view(),
+        name="analysis_summary_list",
+    ),
+    path(
+        "analysis-summary/<str:slug>",
+        AnalysisSummaryDetailView.as_view(),
+        name="analysis_summary_detail",
     ),
     path(
         "genome-catalogue/<str:pk>",

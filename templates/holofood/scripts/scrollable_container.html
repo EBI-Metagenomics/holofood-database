@@ -1,0 +1,41 @@
+<script>
+    function isScrolledToRightEdge(el) {
+        return (el.scrollLeft + el.clientWidth + 5) > el.scrollWidth;
+    }
+
+    function showScrollableWidget(el) {
+        el.style.setProperty('--scroll-widget-opacity', 1);
+    }
+
+    function hideScrollableWidget(el) {
+        el.style.setProperty('--scroll-widget-opacity', 0);
+    }
+
+    function showScrollableWidgetIfNotAtEdge(el) {
+        if (isScrolledToRightEdge(el)) {
+            hideScrollableWidget(el);
+        } else {
+            showScrollableWidget(el);
+        }
+    }
+
+    const scrollableContainers = document.getElementsByClassName('scrollable-container');
+    const body = document.getRootNode();
+
+    [].forEach.call(scrollableContainers, function (el) {
+        el.addEventListener("scroll", () => {
+            showScrollableWidgetIfNotAtEdge(el);
+        });
+
+        body.addEventListener("scroll", (event) => {
+            const rect = el.getBoundingClientRect();
+            const scrollWidgetY = window.innerHeight / 2;
+
+            if (rect.top < scrollWidgetY - 24 && rect.bottom > scrollWidgetY + 24) {
+                showScrollableWidgetIfNotAtEdge(el);
+            } else {
+                hideScrollableWidget(el);
+            }
+        })
+    });
+</script>

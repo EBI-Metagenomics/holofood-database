@@ -6,24 +6,36 @@
     font-size: 16px;
 }
 
-.scrollable-table {
-    overflow: auto;
-    display: block;
-    background:
-		linear-gradient(90deg, white 30%, rgba(255,255,255,0)),
-		linear-gradient(90deg, rgba(255,255,255,0), white 70%) 0 100%,
-		radial-gradient(farthest-side at 0% 50%, rgba(0,0,0, 0.2), white),
-		radial-gradient(farthest-side at 100% 50%, rgba(0,0,0, 0.2), white) 0 100%;
+.scrollable-container {
+    overflow-x: scroll;
+	width: 100%;
+	box-sizing: border-box;
 
-	background-repeat: no-repeat;
-	background-color: white;
-	background-position: top left, top right, top left, top right;
-	background-size: 40px 100%, 40px 100%, 20px 100%, 20px 100%;
-	background-attachment: local, local, scroll, scroll;
+	--scroll-widget-opacity: 0;
 
-	tr {
-        background-blend-mode: multiply;
+	&:after {
+		content: "⟫";
+		box-sizing: inherit;
+		position: fixed;
+		right: 20px;
+		top: 50%;
+		overflow: hidden;
+		height: 48px;
+		width: 48px;
+		border-radius: 24px;
+		background-color: rgba(200, 200, 200, 0.6);
+		color: rgba(50, 50, 50, 0.6);
+		display: flex;
+		align-items: center;
+  		justify-content: center;
+		font-size: 24px;
+		opacity: var(--scroll-widget-opacity);
+		transition: opacity 0.3s ease-in-out;
 	}
+}
+
+table.full-width {
+	width: 100%;
 }
 
 img.nav-icon {
@@ -100,7 +112,7 @@ a.inline, button.inline {
 
 .desktop-enforced-side-bar {
 	@media (min-width: 768px) {
-  		max-width: 45%;
+  		width: 45%;
 	}
 }
 

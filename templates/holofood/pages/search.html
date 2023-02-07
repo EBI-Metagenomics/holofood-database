@@ -160,27 +160,27 @@
         </section>
 
         <section>
-            <h4 class="vf-text vf-text-heading--5">Matching Summary Analyses ({{ annotations.count }})</h4>
-            {% for annotation in annotations.all|slice:":10" %}
+            <h4 class="vf-text vf-text-heading--5">Matching Analysis Summaries ({{ analysis_summaries.count }})</h4>
+            {% for analysis_summary in analysis_summaries.all|slice:":10" %}
                 <article class="vf-summary hf-search-result">
                     <p class="vf-summary__date">
-                          {{ annotation.updated }}
+                          {{ analysis_summary.updated }}
                       <span class="vf-summary__meta">
-                          {{ annotation.author }}
+                          {{ analysis_summary.author }}
                       </span>
                     </p>
                     <h3 class="vf-summary__title">
-                        <a href="{% url 'annotation_detail' slug=annotation.slug %}" class="vf-summary__link">
-                            {{ annotation.title }}
+                        <a href="{% url 'analysis_summary_detail' slug=analysis_summary.slug %}" class="vf-summary__link">
+                            {{ analysis_summary.title }}
                         </a>
                     </h3>
                     <p class="vf-summary__text">
-                        {{ annotation.content|truncatechars:200 }}
+                        {{ analysis_summary.content|truncatechars:200 }}
                     </p>
                 </article>
             {% endfor %}
-            {% if annotations.count > 10 %}
-                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'annotations_list' %}">See all analyses</a>
+            {% if analysis_summaries.count > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'analysis_summary_list' %}">See all analysis summaries</a>
             {% endif %}
         </section>
 

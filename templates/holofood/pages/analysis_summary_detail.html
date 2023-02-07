@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>{{ analysis_summary.title }}</h1>
+    <div class="vf-sidebar vf-sidebar--end vf-sidebar--600">
+        <div class="vf-sidebar__inner">
+            <div>
+                <p class="vf-text-body--4">Written by: {{ analysis_summary.author }}</p>
+                <p class="vf-text-body--4">Updated: {{ analysis_summary.updated|date:'Y-m-d H:i' }}</p>
+
+                <div>{% include "holofood/components/analysis_summary.html" %}</div>
+            </div>
+            <div class="desktop-enforced-side-bar">
+                <div class="vf-tabs">
+                    <ul class="vf-tabs__list" data-vf-js-tabs>
+                        {% if has_samples %}
+                            <li class="vf-tabs__item">
+                                <a class="vf-tabs__link" href="#vf-tabs__section--samples">Related Samples</a>
+                            </li>
+                        {% endif %}
+                        {% if has_projects %}
+                            <li class="vf-tabs__item">
+                                <a class="vf-tabs__link" href="#vf-tabs__section--projects">Related Projects</a>
+                            </li>
+                        {% endif %}
+                        {% if has_genome_catalogues or has_viral_catalogues %}
+                            <li class="vf-tabs__item">
+                                <a class="vf-tabs__link" href="#vf-tabs__section--catalogues">Related Catalogues</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="vf-tabs-content" data-vf-js-tabs-content>
+                    {% if has_samples %}
+                        <section class="vf-tabs__section" id="vf-tabs__section--samples">
+                            <table class="vf-table full-width">
+                                <thead class="vf-table__header">
+                                    <tr class="vf-table__row">
+                                        <th class="vf-table__heading" scope="col">Accession</th>
+                                        <th class="vf-table__heading" scope="col">Project</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="vf-table__body">
+                                    {% for sample in samples %}
+                                        <tr class="vf-table__row">
+                                            <td class="vf-table__cell">
+                                                <a class="vf-button vf-button--link vf-button--sm inline"
+                                                   href="{% url 'sample_detail' pk=sample.accession %}">{{ sample.accession }}</a>
+                                            </td>
+                                            <td class="vf-table__cell">
+                                                <a href="{{ ENA_BROWSER_URL }}/{{ sample.project.accession }}"
+                                                   class="vf-link inline">{{ sample.project.accession }}</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot class="vf-table__footer">
+                                    <tr class="vf-table__row">
+                                        <td class="vf-table__cell" colspan="100">{% include "holofood/components/pagination.html" with page_obj=samples %}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </section>
+                    {% endif %}
+                    {% if has_projects %}
+                        <section class="vf-tabs__section" id="vf-tabs__section--projects">
+                            <table class="vf-table full-width">
+                                <thead class="vf-table__header">
+                                    <tr class="vf-table__row">
+                                        <th class="vf-table__heading" scope="col">Accession</th>
+                                        <th class="vf-table__heading" scope="col">Title</th>
+                                        <th class="vf-table__heading" scope="col">Samples</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="vf-table__body">
+                                    {% for project in projects %}
+                                        <tr class="vf-table__row">
+                                            <td class="vf-table__cell">
+                                                <a href="{{ ENA_BROWSER_URL }}/{{ project.accession }}"
+                                                   class="vf-link inline">{{ project.accession }}</a>
+                                            </td>
+                                            <td class="vf-table__cell">{{ project.title }}</td>
+                                            <td class="vf-table__cell">
+                                                <a class="vf-button vf-button--link vf-button--sm inline"
+                                                   href="{% url 'samples_list' %}?project__accession__icontains={{ project.accession }}">Samples</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot class="vf-table__footer">
+                                    <tr class="vf-table__row">
+                                        <td class="vf-table__cell" colspan="100">
+                                            {% include "holofood/components/pagination.html" with page_obj=projects %}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </section>
+                    {% endif %}
+                    {% if has_genome_catalogues or has_viral_catalogues %}
+                        <section class="vf-tabs__section" id="vf-tabs__section--catalogues">
+                            <table class="vf-table full-width">
+                                <thead class="vf-table__header">
+                                    <tr class="vf-table__row">
+                                        <th class="vf-table__heading" scope="col">Type</th>
+                                        <th class="vf-table__heading" scope="col">Title</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="vf-table__body">
+                                    {% for catalogue in genome_catalogues %}
+                                        <tr class="vf-table__row">
+                                            <td class="vf-table__cell">Genomes</td>
+                                            <td class="vf-table__cell">
+                                                <a class="vf-button vf-button--link vf-button--sm inline"
+                                                   href="{% url 'genome_catalogue' pk=catalogue.id %}">{{ catalogue.title }}</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% for catalogue in viral_catalogues %}
+                                        <tr class="vf-table__row">
+                                            <td class="vf-table__cell">Viruses</td>
+                                            <td class="vf-table__cell">
+                                                <a class="vf-button vf-button--link vf-button--sm inline"
+                                                   href="{% url 'viral_catalogue' pk=catalogue.id %}">{{ catalogue.title }}</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot class="vf-table__footer">
+                                    {# No pagination – assume we never linked to more than 10 catalogues #}
+                                </tfoot>
+                            </table>
+                        </section>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -201,16 +201,16 @@ def test_metabolomics(client, salmon_sample):
 
 
 @pytest.mark.django_db
-def test_annotations_list(client, salmon_sample, salmon_annotation_unpub):
-    response = client.get("/api/annotations")
+def test_analysis_summaries_list(client, salmon_sample, salmon_analysis_summary_unpub):
+    response = client.get("/api/analysis-summaries")
     assert response.status_code == 200
     data = response.json()
     assert data.get("count") == 0
     assert len(data.get("items")) == 0
 
-    salmon_annotation_unpub.is_published = True
-    salmon_annotation_unpub.save()
-    response = client.get("/api/annotations")
+    salmon_analysis_summary_unpub.is_published = True
+    salmon_analysis_summary_unpub.save()
+    response = client.get("/api/analysis-summaries")
     assert response.status_code == 200
     data = response.json()
     assert data.get("count") == 1
@@ -219,7 +219,7 @@ def test_annotations_list(client, salmon_sample, salmon_annotation_unpub):
 
 
 @pytest.mark.django_db
-def test_annotations_export(client, salmon_sample):
+def test_samples_export(client, salmon_sample):
     response = client.get("/export/samples")
     assert response.status_code == 200
     data = response.content.decode()

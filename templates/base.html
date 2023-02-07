@@ -104,7 +104,7 @@
                 Salmon samples</a>
             </li>
             <li class="vf-navigation__item">
-                <a href="{% url 'annotations_list' %}" class="vf-navigation__link">
+                <a href="{% url 'analysis_summary_list' %}" class="vf-navigation__link">
                     <img src="{% static "img/icons/book.svg" %}"
                          class="nav-icon"
                          alt="Documents"/>
@@ -225,5 +225,6 @@
         </footer>
     </div>
     <script src="https://assets.emblstatic.net/vf/v2.5.7/scripts/scripts.js"></script>
+    {% include "holofood/scripts/scrollable_container.html" %}
 </body>
 </html>

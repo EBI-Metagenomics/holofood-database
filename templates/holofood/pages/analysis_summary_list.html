@@ -10,12 +10,12 @@
                         Documents written by HoloFood partners and collaborators, based on analyses of the HoloFood Samples.
                     </p>
                     <hr class="vf-divider"/>
-                    {% include "holofood/components/search.html" with form=filterset.form method="get" id="annotations_search" only %}
+                    {% include "holofood/components/search.html" with form=filterset.form method="get" id="analysis_summaries_search" only %}
                 </div>
-                {% for annotation in annotations.all %}
-                    {% include 'holofood/components/annotation_card.html' with annotation=annotation %}
+                {% for analysis_summary in analysis_summaries.all %}
+                    {% include "holofood/components/analysis_summary_card.html" with analysis_summary=analysis_summary %}
                 {% endfor %}
-                {% include 'holofood/components/atoms/possibly_empty_state.html' with items=annotations empty_text="No summaries found" colspan=3 %}
+                {% include "holofood/components/atoms/possibly_empty_state.html" with items=analysis_summaries empty_text="No summaries found" colspan=3 %}
             </div>
         </section>
     </div>

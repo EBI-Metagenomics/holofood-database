@@ -27,7 +27,7 @@ from holofood.filters import (
 )
 from holofood.models import (
     Sample,
-    SampleAnnotation,
+    AnalysisSummary,
     GenomeCatalogue,
     ViralCatalogue,
     ViralFragment,
@@ -95,38 +95,38 @@ class CustomPaginator(Paginator):
         super().__init__(*args, **kwargs)
 
 
-class AnnotationDetailView(DetailView):
-    model = SampleAnnotation
-    context_object_name = "annotation"
-    template_name = "holofood/pages/annotation_detail.html"
+class AnalysisSummaryDetailView(DetailView):
+    model = AnalysisSummary
+    context_object_name = "analysis_summary"
+    template_name = "holofood/pages/analysis_summary_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        model: SampleAnnotation = context["annotation"]
+        model: AnalysisSummary = context["analysis_summary"]
 
-        samples = model.samples.all()
-        samples_paginated = CustomPaginator(
-            samples, per_page=10, page_param="samples_page"
-        )
-        samples_page = samples_paginated.page(kwargs.get("samples_page", 1))
-        context["samples"] = samples_page
-        context["has_samples"] = samples.exists()
-
-        projects = model.projects.all()
-        projects_paginated = CustomPaginator(
-            projects, per_page=10, page_param="projects_page"
-        )
-        projects_page = projects_paginated.page(kwargs.get("projects_page", 1))
-        context["projects"] = projects_page
-        context["has_projects"] = projects.exists()
-
+        for related_object_type in [
+            "samples",
+            "projects",
+            "genome_catalogues",
+            "viral_catalogues",
+        ]:
+            objects = getattr(model, related_object_type).all()
+            objects_paginated = CustomPaginator(
+                objects, per_page=10, page_param=f"{related_object_type}_page"
+            )
+            objects_page = objects_paginated.page(
+                kwargs.get(f"{related_object_type}_page", 1)
+            )
+            context[related_object_type] = objects_page
+            context[f"has_{related_object_type}"] = objects.exists()
+        print(context)
         return context
 
 
-class AnnotationListView(ListFilterView):
-    model = SampleAnnotation
-    context_object_name = "annotations"
-    template_name = "holofood/pages/annotation_list.html"
+class AnalysisSummaryListView(ListFilterView):
+    model = AnalysisSummary
+    context_object_name = "analysis_summaries"
+    template_name = "holofood/pages/analysis_summary_list.html"
     filterset_class = MultiFieldSearchFilter
     ordering = "-updated"
 
@@ -142,7 +142,7 @@ class HomeView(TemplateView):
         context["samples_count"] = Sample.objects.count()
         context["mags_count"] = Genome.objects.count()
         context["viral_count"] = ViralFragment.objects.count()
-        context["annotations_count"] = SampleAnnotation.objects.filter(
+        context["analysis_summaries_count"] = AnalysisSummary.objects.filter(
             is_published=True
         ).count()
         return context
@@ -340,7 +340,7 @@ class GlobalSearchView(TemplateView):
         context["mags"] = self.multi_search_model(Genome)
         context["viral_catalogues"] = self.multi_search_model(ViralCatalogue)
         context["viral_fragments"] = self.multi_search_model(ViralFragment)
-        context["annotations"] = self.multi_search_model(SampleAnnotation)
+        context["analysis_summaries"] = self.multi_search_model(AnalysisSummary)
         context["docs_sections"] = self.get_docs_results()
 
         return context

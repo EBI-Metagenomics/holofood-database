@@ -15,11 +15,11 @@ Navigate to the [site admin panel]({{< var portal.root_url >}}/admin), and log i
 If you do not have the link or credentials, please [contact the helpdesk](mailto:{{< var helpdesk.email >}}).
 :::
 
-![Screenshot of admin panel landing page](/img/partners/add-sample-annotation.png)
-Click "Add" on the "Sample annotation" entry.
+![Screenshot of admin panel landing page](/img/partners/add-analysis-summary.png)
+Click "Add" on the "Analysis Summary" entry.
 Depending on your permission level, you may see different objects than shown in the screenshot.
 
-![Screenshot of a sample summary in edit mode](/img/partners/author-analysis-summary.png)
+![Screenshot of an analysis summary in edit mode](/img/partners/author-analysis-summary.png)
 Analysis summaries require a title (which is automatically converted into the URL slug).
 The document itself can be written as
 [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
@@ -27,9 +27,9 @@ To include images, upload them to a hosting site or GitHub repository, and inclu
 There are toolbar buttons in the markdown editor to help you with this syntax.
 
 ![Screenshot of a sample summary in edit mode](/img/partners/link-analysis-summary.png)
-Analysis summaries must be linked to samples and/or entire projects.
-To link them, select the relevant samples and/or projects from the lists on the left,
-and hit the `->` button to move the selected samples/projects to the right-hand list.
+Analysis summaries must be linked to samples and/or projects and/or catalogues.
+To link them, select the relevant samples/projects/catalogues from the lists on the left,
+and hit the `->` button to move the selected samples/projects/catalogues to the right-hand list.
 
 :::{.callout-warning}
 Don’t forget to press "Save and continue editing" now and then!

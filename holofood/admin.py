@@ -8,7 +8,7 @@ from holofood.models import (
     Project,
     SampleMetadataMarker,
     SampleStructuredDatum,
-    SampleAnnotation,
+    AnalysisSummary,
     GenomeCatalogue,
     Genome,
     ViralFragment,
@@ -41,8 +41,8 @@ class SampleAdmin(admin.ModelAdmin):
     search_fields = ("accession", "title")
 
 
-@admin.register(SampleAnnotation)
-class SampleAnnotationAdmin(admin.ModelAdmin):
+@admin.register(AnalysisSummary)
+class AnalysisSummaryAdmin(admin.ModelAdmin):
     readonly_fields = ["created", "updated"]
     prepopulated_fields = {"slug": ("title",)}
     fields = (
@@ -52,6 +52,8 @@ class SampleAnnotationAdmin(admin.ModelAdmin):
         "content",
         "samples",
         "projects",
+        "genome_catalogues",
+        "viral_catalogues",
         "created",
         "updated",
         "is_published",
@@ -59,6 +61,8 @@ class SampleAnnotationAdmin(admin.ModelAdmin):
     filter_horizontal = (
         "samples",
         "projects",
+        "genome_catalogues",
+        "viral_catalogues",
     )
 
     def changeform_view(self, request, *args, **kwargs):

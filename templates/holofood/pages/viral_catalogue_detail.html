@@ -191,4 +191,20 @@
             </div>
         </div>
     </div>
+    <section class="vf-card-container vf-card-container__col-3 | vf-u-background-color--grey--lightest vf-u-fullbleed">
+        <div class="vf-card-container__inner">
+            <div class="vf-section-header">
+                <h2 class="vf-section-header__heading">
+                    Analysis summaries
+                </h2>
+                <p class="vf-section-header__text">
+                    Documents written by HoloFood partners and collaborators relevant to the {{ catalogue.title }} Viral Catalogue
+                </p>
+            </div>
+            {% for analysis_summary in catalogue.analysis_summaries.all %}
+                {% include "holofood/components/analysis_summary_card.html" with analysis_summary=analysis_summary %}
+            {% endfor %}
+            {% include "holofood/components/atoms/possibly_empty_state.html" with items=catalogue.analysis_summaries empty_text="No summaries mention this catalogue" colspan=3 %}
+        </div>
+    </section>
 {% endblock content %}

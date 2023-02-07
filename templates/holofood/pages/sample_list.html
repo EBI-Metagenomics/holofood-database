@@ -9,63 +9,65 @@
                 {% include "holofood/components/form.html" with form=filterset.form method="get" submit="Apply" id="sample_filters" only %}
                 {% include "holofood/scripts/table_sorter.html" with formId="sample_filters" %}
             </div>
-            <div style="overflow-x: scroll">
+            <div>
                 <h2>Samples</h2>
                 <p class="vf-text-body vf-text-body--5">Find individual samples from the <a class="vf-link" href="{% url 'animals_list' %}">animals</a> across HoloFood trials.</p>
                 <a class="vf-button vf-button--link vf-button--sm"
                    href="{% url 'export:samples_list' %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
-                <table class="vf-table scrollable-table">
-                    <thead class="vf-table__header">
-                        <tr class="vf-table__row">
-                            {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Sample accession" param='accession' %}
-                            {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Project" param='project__accession' %}
-                            {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Animal code" param='' %}
-                            {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Treatment code" param='' %}
-                            {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Inclusion level" param='' %}
-                            {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Trial timepoint" param='' %}
-                            {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Data available" param='' %}
-                            {% include 'holofood/components/atoms/maybe_sortable_table_column_heading.html' with form=filterset.form title="Detail" param='' %}
-                        </tr>
-                    </thead>
-                    <tbody class="vf-table__body">
-                        {% for sample in samples %}
+                <div class="scrollable-container">
+                    <table class="vf-table">
+                        <thead class="vf-table__header">
                             <tr class="vf-table__row">
-                                <td class="vf-table__cell">
-                                    <div style="display:flex">
-                                        {% if sample.system == 'chicken' %}
-                                           <img src="{% static "img/icons/chicken.svg" %}"
-                                             class="system-icon"
-                                             alt="Chicken"/>
-                                        {% elif sample.system == 'salmon' %}
-                                            <img src="{% static "img/icons/salmon.svg" %}"
-                                             class="system-icon"
-                                             alt="Salmon"/>
-                                        {% endif %}
-                                        <a class="vf-link" href="{% url 'sample_detail' pk=sample.accession %}">{{ sample.accession }}</a>
-                                    </div>
-                                </td>
-                                <td class="vf-table__cell">
-                                    <a href="{{ ENA_BROWSER_URL }}/{{ sample.project.accession }}"
-                                       class="vf-link">{{ sample.project.accession }}</a>
-                                </td>
-                                <td class="vf-table__cell">{{ sample.animal_code|default:"—" }}</td>
-                                <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment"|default:"—" }}</td>
-                                <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment concentration"|default:"—" }}</td>
-                                <td class="vf-table__cell">{{ sample|metadatum:"trial timepoint"|default:"—" }}</td>
-                                <td class="vf-table__cell">{% data_types sample %}</td>
-                                <td class="vf-table__cell">
-                                    <a class="vf-button vf-button--link vf-button--sm"
-                                       href="{% url 'sample_detail' pk=sample.accession %}">View</a>
-                                </td>
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Sample accession" param="accession" %}
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Project" param="project__accession" %}
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Animal code" param="" %}
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Treatment code" param="" %}
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Inclusion level" param="" %}
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Trial timepoint" param="" %}
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Data available" param="" %}
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Detail" param="" %}
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot class="vf-table__footer">
-                        <tr class="vf-table__row">
-                            <td class="vf-table__cell" colspan="100">{% include "holofood/components/pagination.html" %}</td>
-                        </tr>
-                    </tfoot>
-                </table>
+                        </thead>
+                        <tbody class="vf-table__body">
+                            {% for sample in samples %}
+                                <tr class="vf-table__row">
+                                    <td class="vf-table__cell">
+                                        <div style="display:flex">
+                                            {% if sample.system == 'chicken' %}
+                                               <img src="{% static "img/icons/chicken.svg" %}"
+                                                 class="system-icon"
+                                                 alt="Chicken"/>
+                                            {% elif sample.system == 'salmon' %}
+                                                <img src="{% static "img/icons/salmon.svg" %}"
+                                                 class="system-icon"
+                                                 alt="Salmon"/>
+                                            {% endif %}
+                                            <a class="vf-link" href="{% url 'sample_detail' pk=sample.accession %}">{{ sample.accession }}</a>
+                                        </div>
+                                    </td>
+                                    <td class="vf-table__cell">
+                                        <a href="{{ ENA_BROWSER_URL }}/{{ sample.project.accession }}"
+                                           class="vf-link">{{ sample.project.accession }}</a>
+                                    </td>
+                                    <td class="vf-table__cell">{{ sample.animal_code|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment concentration"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample|metadatum:"trial timepoint"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{% data_types sample %}</td>
+                                    <td class="vf-table__cell">
+                                        <a class="vf-button vf-button--link vf-button--sm"
+                                           href="{% url 'sample_detail' pk=sample.accession %}">View</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot class="vf-table__footer">
+                            <tr class="vf-table__row">
+                                <td class="vf-table__cell" colspan="100">{% include "holofood/components/pagination.html" %}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
