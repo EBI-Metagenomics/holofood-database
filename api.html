@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.189">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -147,7 +147,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com">Data Portal</a>
+    <a class="nav-link" href="http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com">
+ <span class="menu-text">Data Portal</span></a>
   </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
@@ -235,7 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#api-endpoints-and-playground" id="toc-api-endpoints-and-playground" class="nav-link" data-scroll-target="#api-endpoints-and-playground">API Endpoints and Playground</a>
   <ul class="collapse">
   <li><a href="#apisamples" id="toc-apisamples" class="nav-link" data-scroll-target="#apisamples"><code>/api/samples</code></a></li>
-  <li><a href="#apiannotations" id="toc-apiannotations" class="nav-link" data-scroll-target="#apiannotations"><code>/api/annotations</code></a></li>
+  <li><a href="#apianalysis-summaries" id="toc-apianalysis-summaries" class="nav-link" data-scroll-target="#apianalysis-summaries"><code>/api/analysis-summaries</code></a></li>
   <li><a href="#apigenome-catalogues" id="toc-apigenome-catalogues" class="nav-link" data-scroll-target="#apigenome-catalogues"><code>/api/genome-catalogues</code></a></li>
   <li><a href="#apiviral-catalogues" id="toc-apiviral-catalogues" class="nav-link" data-scroll-target="#apiviral-catalogues"><code>/api/viral-catalogues</code></a></li>
   </ul></li>
@@ -261,6 +262,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -278,7 +280,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="https://www.ebi.ac.uk/metagenomics">MGnify</a> for metagenomic-derived analyses and MAGs (metagenome assembled genomes)</li>
 <li><a href="https://www.ebi.ac.uk/metabolights/">MetaboLights</a> for metabolomic analyses</li>
 <li>The websites of various partner institutions and registries where an <a href="https://en.wikipedia.org/wiki/Internationalized_Resource_Identifier">IRI</a> has been supplied with a metadata entry.</li>
-<li>The HoloFood Data Portal itself for “Annotations”, which are documents hosted only by this website.</li>
+<li>The HoloFood Data Portal itself for “Analysis Summaries”, which are documents hosted only by this website.</li>
 <li>The HoloFood Data Portal itself for viral annotations</li>
 </ul>
 </section>
@@ -291,8 +293,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="apisamples"><code>/api/samples</code></h3>
 <p>List samples, or fetch details about a specific sample (like its metadata). List all possible metadata markers (i.e.&nbsp;keys).</p>
 </section>
-<section id="apiannotations" class="level3">
-<h3 class="anchored" data-anchor-id="apiannotations"><code>/api/annotations</code></h3>
+<section id="apianalysis-summaries" class="level3">
+<h3 class="anchored" data-anchor-id="apianalysis-summaries"><code>/api/analysis-summaries</code></h3>
 <p>List summary analyses published on the data portal.</p>
 </section>
 <section id="apigenome-catalogues" class="level3">
@@ -619,7 +621,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -655,24 +674,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>

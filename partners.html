@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.189">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -30,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tutorial.html" rel="prev">
 <link href="./img/hf-logo-brand.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -81,7 +80,8 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com">Data Portal</a>
+    <a class="nav-link" href="http://holofooddataportaldev-env.eba-jwzhg3z2.eu-west-1.elasticbeanstalk.com">
+ <span class="menu-text">Data Portal</span></a>
   </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
@@ -184,6 +184,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -211,9 +212,9 @@ Tip
 <p>If you do not have the link or credentials, please <a href="mailto:holofood-help@ebi.ac.uk">contact the helpdesk</a>.</p>
 </div>
 </div>
-<p><img src="./img/partners/add-sample-annotation.png" class="img-fluid" alt="Screenshot of admin panel landing page"> Click “Add” on the “Sample annotation” entry. Depending on your permission level, you may see different objects than shown in the screenshot.</p>
-<p><img src="./img/partners/author-analysis-summary.png" class="img-fluid" alt="Screenshot of a sample summary in edit mode"> Analysis summaries require a title (which is automatically converted into the URL slug). The document itself can be written as <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a>. To include images, upload them to a hosting site or GitHub repository, and include them via their URL. There are toolbar buttons in the markdown editor to help you with this syntax.</p>
-<p><img src="./img/partners/link-analysis-summary.png" class="img-fluid" alt="Screenshot of a sample summary in edit mode"> Analysis summaries must be linked to samples and/or entire projects. To link them, select the relevant samples and/or projects from the lists on the left, and hit the <code>-&gt;</code> button to move the selected samples/projects to the right-hand list.</p>
+<p><img src="./img/partners/add-analysis-summary.png" class="img-fluid" alt="Screenshot of admin panel landing page"> Click “Add” on the “Analysis Summary” entry. Depending on your permission level, you may see different objects than shown in the screenshot.</p>
+<p><img src="./img/partners/author-analysis-summary.png" class="img-fluid" alt="Screenshot of an analysis summary in edit mode"> Analysis summaries require a title (which is automatically converted into the URL slug). The document itself can be written as <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a>. To include images, upload them to a hosting site or GitHub repository, and include them via their URL. There are toolbar buttons in the markdown editor to help you with this syntax.</p>
+<p><img src="./img/partners/link-analysis-summary.png" class="img-fluid" alt="Screenshot of a sample summary in edit mode"> Analysis summaries must be linked to samples and/or projects and/or catalogues. To link them, select the relevant samples/projects/catalogues from the lists on the left, and hit the <code>-&gt;</code> button to move the selected samples/projects/catalogues to the right-hand list.</p>
 <div class="callout-warning callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -278,7 +279,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -314,36 +332,45 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./tutorial.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Tutorial</span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-  </div>
-</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
