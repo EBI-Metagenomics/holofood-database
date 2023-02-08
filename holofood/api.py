@@ -136,16 +136,9 @@ class SampleSchema(SampleSlimSchema):
     project_analysis_summaries: List[RelatedAnalysisSummarySchema]
 
 
-class AnalysisSummarySchema(RelatedAnalysisSummarySchema):
-    samples: List[SampleSlimSchema]
-    projects: List[RelatedProjectSchema]
-
-    class Config:
-        model = AnalysisSummary
-        model_fields = ["title"]
-
-
 class GenomeCatalogueSchema(ModelSchema):
+    analysis_summaries: List[RelatedAnalysisSummarySchema]
+
     class Config:
         model = GenomeCatalogue
         model_fields = ["id", "title", "biome", "related_mag_catalogue_id", "system"]
@@ -165,6 +158,7 @@ class GenomeSchema(ModelSchema):
 
 class ViralCatalogueSchema(ModelSchema):
     related_genome_catalogue: GenomeCatalogueSchema
+    analysis_summaries: List[RelatedAnalysisSummarySchema]
 
     @staticmethod
     def resolve_related_genome_catalogue_url(obj: ViralCatalogue):
@@ -214,6 +208,17 @@ class ViralFragmentSchema(ModelSchema):
             "host_mag",
             "viral_type",
         ]
+
+
+class AnalysisSummarySchema(RelatedAnalysisSummarySchema):
+    samples: List[SampleSlimSchema]
+    projects: List[RelatedProjectSchema]
+    genome_catalogues: List[GenomeCatalogueSchema]
+    viral_catalogues: List[ViralCatalogueSchema]
+
+    class Config:
+        model = AnalysisSummary
+        model_fields = ["title"]
 
 
 SAMPLES = "Samples"

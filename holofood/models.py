@@ -335,7 +335,7 @@ class AnalysisSummary(models.Model):
 
 
 class GenomeCatalogue(models.Model):
-    id = models.CharField(primary_key=True, max_length=20)
+    id = models.CharField(primary_key=True, max_length=32)
     title = models.CharField(max_length=100)
     biome = models.CharField(max_length=200)
     related_mag_catalogue_id = models.CharField(max_length=100)
@@ -356,7 +356,7 @@ class Genome(models.Model):
 
 
 class ViralCatalogue(models.Model):
-    id = models.CharField(primary_key=True, max_length=20)
+    id = models.CharField(primary_key=True, max_length=32)
     title = models.CharField(max_length=100)
     biome = models.CharField(max_length=200)
     related_genome_catalogue = models.ForeignKey(
