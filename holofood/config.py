@@ -69,6 +69,7 @@ class MetadataTableConfig(BaseModel):
 
 class TablesConfig(BaseModel):
     samples_list: SampleTableConfig = []
+    animals_list: SampleTableConfig = []
     metadata_list: MetadataTableConfig = []
 
 

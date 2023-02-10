@@ -22,6 +22,8 @@ from holofood.models import (
     Genome,
     ViralCatalogue,
     ViralFragment,
+    Animal,
+    AnimalStructuredDatum,
 )
 from holofood.utils import holofood_config
 
@@ -72,6 +74,11 @@ class SampleStructuredDatumSchema(ModelSchema):
         model_fields = ["marker", "measurement", "units"]
 
 
+class AnimalStructuredDatumSchema(SampleStructuredDatumSchema):
+    class Config:
+        model = AnimalStructuredDatum
+
+
 class RelatedAnalysisSummarySchema(ModelSchema):
     @staticmethod
     def resolve_canonical_url(obj: AnalysisSummary):
@@ -119,10 +126,21 @@ class SampleSlimSchema(ModelSchema):
             "accession",
             "title",
             "project",
-            "system",
             "has_metagenomics",
             "has_metabolomics",
         ]
+
+
+class AnimalSlimSchema(ModelSchema):
+    @staticmethod
+    def resolve_canonical_url(obj: Sample):
+        return f"{holofood_config.biosamples.api_root}/{obj.accession}"
+
+    canonical_url: str
+
+    class Config:
+        model = Animal
+        model_fields = ["accession", "system"]
 
 
 class SampleSchema(SampleSlimSchema):
@@ -134,6 +152,10 @@ class SampleSchema(SampleSlimSchema):
         return obj.project.analysis_summaries.all()
 
     project_analysis_summaries: List[RelatedAnalysisSummarySchema]
+
+
+class AnimalSchema(AnimalSlimSchema):
+    samples: List[SampleSlimSchema]
 
 
 class GenomeCatalogueSchema(ModelSchema):
@@ -228,8 +250,8 @@ VIRUSES = "Viruses"
 
 
 class System(Enum):
-    salmon: str = Sample.SALMON
-    chicken: str = Sample.CHICKEN
+    salmon: str = Animal.SALMON
+    chicken: str = Animal.CHICKEN
 
 
 @api.get(
@@ -297,6 +319,58 @@ def list_samples(
     if not q_objects:
         return Sample.objects.all()
     return Sample.objects.filter(reduce(operator.and_, q_objects))
+
+
+@api.get(
+    "/animals/{animal_accession}",
+    response=AnimalSchema,
+    summary="Fetch a single Animal (a host-level BioSample) from the HoloFood database.",
+    description="Retrieve a single Animal by its BioSamples accession, including all structured metadata available. ",
+    url_name="animal_detail",
+    tags=[SAMPLES],
+)
+def get_animal(request, animal_accession: str):
+    animal = get_object_or_404(Animal, accession=animal_accession)
+    return animal
+
+
+@api.get(
+    "/animals",
+    response=List[AnimalSlimSchema],
+    summary="Fetch a list of Animals (host-level BioSamples).",
+    description="Long lists will be paginated, so use the `page=` query parameter to get more pages. "
+    "Several filters are available, which mostly perform case-insensitive containment lookups. "
+    "Animal metadata are *not* returned for each item. "
+    "Use the `/animals/{animal_accession}` endpoint to retrieve those. "
+    "Animal metadata *can* be filtered for with `require_metadata_marker=`: this finds animals where "
+    "the named metadata marker is present and none of `['0', 'false', 'unknown', 'n/a', 'null]`. "
+    "Use `/sample_metadata_markers` to find the exact marker name of interest.",
+    tags=[SAMPLES],
+)
+def list_animals(
+    request,
+    system: System = None,
+    accession: str = None,
+    require_metadata_marker: str = None,
+):
+    q_objects = []
+    if system:
+        q_objects.append(Q(system__icontains=system.value))
+    if accession:
+        q_objects.append(Q(accession__icontains=accession))
+    if require_metadata_marker:
+        animal_ids_with_metadata = (
+            AnimalStructuredDatum.objects.filter(
+                marker__name__iexact=require_metadata_marker
+            )
+            .annotate(measurement_lower=Lower("measurement"))
+            .exclude(measurement_lower__in=("0", "false", "unknown", "n/a", "null"))
+            .values_list("sample_id", flat=True)
+        )
+        q_objects.append(Q(accession__in=animal_ids_with_metadata))
+    if not q_objects:
+        return Animal.objects.all()
+    return Animal.objects.filter(reduce(operator.and_, q_objects))
 
 
 @api.get(

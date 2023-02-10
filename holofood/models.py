@@ -1,7 +1,7 @@
 import logging
 
 from django.db import models
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, Count
 from django.urls import reverse
 from django.utils.text import slugify
 from martor.models import MartorField
@@ -16,6 +16,10 @@ _mgnify = MgnifyApi()
 
 
 class Project(models.Model):
+    """
+    An ENA project (study) is a group of nucleotide-read samples.
+    """
+
     accession = models.CharField(primary_key=True, max_length=15)
     title = models.CharField(max_length=200)
 
@@ -69,6 +73,44 @@ class Project(models.Model):
             )
 
 
+class AnimalManager(models.Manager):
+    def get_queryset(self):
+        prefetchable_markers = (
+            holofood_config.tables.animals_list.default_metadata_marker_columns
+        )
+        primary_markers = AnimalStructuredDatum.objects.filter(
+            marker__name__in=prefetchable_markers
+        )
+        return (
+            super()
+            .get_queryset()
+            .annotate(samples_count=Count("samples"))
+            .prefetch_related(
+                Prefetch(
+                    "structured_metadata",
+                    queryset=primary_markers,
+                    to_attr="primary_metadata",
+                )
+            )
+        )
+
+
+class Animal(models.Model):
+    """
+    A host-level BioSample representing an individual bird or fish,
+    from which other samples are derived.
+    """
+
+    objects = AnimalManager()
+    CHICKEN = "chicken"
+    SALMON = "salmon"
+    SYSTEM_CHOICES = [(CHICKEN, CHICKEN), (SALMON, SALMON)]
+
+    accession = models.CharField(primary_key=True, max_length=15)
+    system = models.CharField(choices=SYSTEM_CHOICES, max_length=10, null=True)
+    animal_code = models.CharField(max_length=10)
+
+
 class SampleManager(models.Manager):
     def get_queryset(self):
         prefetchable_markers = (
@@ -82,6 +124,7 @@ class SampleManager(models.Manager):
             super()
             .get_queryset()
             .select_related("project")
+            .select_related("animal")
             .prefetch_related(
                 Prefetch(
                     "structured_metadata",
@@ -93,17 +136,18 @@ class SampleManager(models.Manager):
 
 
 class Sample(models.Model):
+    """
+    An extraction-level BioSample, derived from an Animal.
+    """
+
     objects = SampleManager()
 
-    CHICKEN = "chicken"
-    SALMON = "salmon"
-    SYSTEM_CHOICES = [(CHICKEN, CHICKEN), (SALMON, SALMON)]
-
     accession = models.CharField(primary_key=True, max_length=15)
-    system = models.CharField(choices=SYSTEM_CHOICES, max_length=10, null=True)
+
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    animal_code = models.CharField(max_length=20)
+    # animal_code = models.CharField(max_length=20)
+    animal = models.ForeignKey(Animal, on_delete=models.CASCADE, related_name="samples")
 
     has_metagenomics = models.BooleanField(default=False)
     has_metabolomics = models.BooleanField(default=False)
@@ -245,6 +289,11 @@ class Sample(models.Model):
 
 
 class SampleMetadataMarker(models.Model):
+    """
+    A metadata marker is a definition for measurements on an Animal or Sample.
+    Often the definition is linked via an IRI to an ontology/controlled vocabulary.
+    """
+
     name = models.CharField(max_length=100)
     iri = models.CharField(max_length=100, null=True, blank=True)
     type = models.CharField(max_length=100, null=True, blank=True)
@@ -260,21 +309,23 @@ class SampleMetadataMarker(models.Model):
         return f"Sample Metadata Marker {self.id}: {self.name} ({self.type})"
 
 
-class SampleStructuredDatumManager(models.Manager):
+class StructuredDatumManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().select_related("marker")
 
 
-class SampleStructuredDatum(models.Model):
-    objects = SampleStructuredDatumManager()
+class AbstractStructuredDatum(models.Model):
+    """
+    An individual measurement on an Animal(-level Sample) or (extraction level-)Sample.
+    Keyed to a SampleMetadataMarker.
+    """
 
     ENA = "ena"
     BIOSAMPLES = "biosamples"
     SOURCE_CHOICES = [(ENA, ENA), (BIOSAMPLES, BIOSAMPLES)]
 
-    sample = models.ForeignKey(
-        Sample, on_delete=models.CASCADE, related_name="structured_metadata"
-    )
+    source = models.CharField(choices=SOURCE_CHOICES, max_length=15)
+
     marker = models.ForeignKey(SampleMetadataMarker, on_delete=models.CASCADE)
     measurement = models.CharField(max_length=200)
     units = models.CharField(max_length=100, null=True, blank=True)
@@ -282,7 +333,21 @@ class SampleStructuredDatum(models.Model):
     partner_name = models.CharField(max_length=100, null=True, blank=True)
     partner_iri = models.CharField(max_length=100, null=True, blank=True)
 
-    source = models.CharField(choices=SOURCE_CHOICES, max_length=15)
+    class Meta:
+        abstract = True
+
+
+class SampleStructuredDatum(AbstractStructuredDatum):
+    """
+    An individual measurement on an (extraction level-)Sample.
+    Keyed by a SampleMetadataMarker.
+    """
+
+    objects = StructuredDatumManager()
+
+    sample = models.ForeignKey(
+        Sample, on_delete=models.CASCADE, related_name="structured_metadata"
+    )
 
     def __str__(self):
         return f"Sample {self.sample.accession} metadata {self.marker.id}: {self.marker.name}"
@@ -295,7 +360,35 @@ class SampleStructuredDatum(models.Model):
         )
 
 
+class AnimalStructuredDatum(AbstractStructuredDatum):
+    """
+    An individual measurement on an (animal level-)Sample.
+    Keyed by a SampleMetadataMarker.
+    """
+
+    objects = StructuredDatumManager()
+
+    animal = models.ForeignKey(
+        Animal, on_delete=models.CASCADE, related_name="structured_metadata"
+    )
+
+    def __str__(self):
+        return f"Animal {self.animal.accession} metadata {self.marker.id}: {self.marker.name}"
+
+    class Meta:
+        ordering = (
+            "marker__type",
+            "marker__name",
+            "id",
+        )
+
+
 class AnalysisSummary(models.Model):
+    """
+    A Markdown document describing some analysis performed by the collaboration,
+    related to (e.g. using) other data types.
+    """
+
     slug = models.SlugField(primary_key=True, max_length=200, unique=True)
     title = models.CharField(max_length=200)
     content = MartorField(
@@ -335,14 +428,24 @@ class AnalysisSummary(models.Model):
 
 
 class GenomeCatalogue(models.Model):
+    """
+    A collection of draft genomes, as a subset of a "related mag catalogue", which is a MAG catalogue
+    on MGnify (https://www.ebi.ac.uk/metagenomics)
+    """
+
     id = models.CharField(primary_key=True, max_length=32)
     title = models.CharField(max_length=100)
     biome = models.CharField(max_length=200)
     related_mag_catalogue_id = models.CharField(max_length=100)
-    system = models.CharField(choices=Sample.SYSTEM_CHOICES, max_length=10, null=False)
+    system = models.CharField(choices=Animal.SYSTEM_CHOICES, max_length=10, null=False)
 
 
 class Genome(models.Model):
+    """
+    A draft genome assembled from the metagenomic samples.
+    Points to a genome accession on MGnify.
+    """
+
     accession = models.CharField(primary_key=True, max_length=15)
     cluster_representative = models.CharField(max_length=15)
     catalogue = models.ForeignKey(
@@ -356,6 +459,10 @@ class Genome(models.Model):
 
 
 class ViralCatalogue(models.Model):
+    """
+    A collection of (probable) viral fragments detected in the metagenomic reads.
+    """
+
     id = models.CharField(primary_key=True, max_length=32)
     title = models.CharField(max_length=100)
     biome = models.CharField(max_length=200)
@@ -366,7 +473,7 @@ class ViralCatalogue(models.Model):
         related_name="viral_catalogues",
         on_delete=models.SET_NULL,
     )
-    system = models.CharField(choices=Sample.SYSTEM_CHOICES, max_length=10, null=False)
+    system = models.CharField(choices=Animal.SYSTEM_CHOICES, max_length=10, null=False)
 
 
 class ViralFragmentClusterManager(models.Manager):
@@ -379,6 +486,13 @@ class ViralFragmentClusterManager(models.Manager):
 
 
 class ViralFragment(models.Model):
+    """
+    A probable viral section of DNA found in a contig assembled from the metagenomic samples.
+    If the fragment maps to a MAG Genome, that is also linked.
+    Contig details are linked to the MGnify Analysis (MGYA) and contig.
+    Fragment are clustered by nucleotide identity, so some are cluster representatives for others.
+    """
+
     objects = ViralFragmentClusterManager()
 
     PROPHAGE = "prophage"

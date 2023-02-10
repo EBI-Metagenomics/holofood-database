@@ -20,12 +20,16 @@
     }
   },
   "tables": {
-    "samples_list": {
+    "animals_list": {
       "default_metadata_marker_columns": [
         "host diet treatment concentration",
         "host diet treatment",
         "trial timepoint",
         "host subject id"
+      ]
+    },
+    "samples_list": {
+      "default_metadata_marker_columns": [
       ]
     },
     "metadata_list": {

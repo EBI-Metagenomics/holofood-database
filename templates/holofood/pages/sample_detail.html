@@ -2,6 +2,30 @@
 {% load sample_metadata %}
 {% load static %}
 {% block content %}
+    <nav class="vf-breadcrumbs" aria-label="Breadcrumb">
+      <ul class="vf-breadcrumbs__list | vf-list vf-list--inline">
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'home' %}" class="vf-breadcrumbs__link">Home</a>
+        </li>
+
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'samples_list' %}" class="vf-breadcrumbs__link">Samples</a>
+        </li>
+
+        <li class="vf-breadcrumbs__item" aria-current="location">
+          {{ sample.accession }}
+        </li>
+      </ul>
+
+      <span class="vf-breadcrumbs__heading">Related:</span>
+
+      <ul class="vf-breadcrumbs__list vf-breadcrumbs__list--related | vf-list vf-list--inline">
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'animal_detail' pk=sample.animal.accession %}" class="vf-breadcrumbs__link">Animal {{ sample.animal.accession }}</a>
+        </li>
+      </ul>
+
+    </nav>
     <h1>{{ sample.accession }}: {{ sample.title }}</h1>
     <p class="vf-lede">
         Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample

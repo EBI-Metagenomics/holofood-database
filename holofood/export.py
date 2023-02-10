@@ -11,8 +11,10 @@ from holofood.api import (
     SampleStructuredDatumSchema,
     GenomeSchema,
     ViralFragmentSchema,
+    AnimalSlimSchema,
+    AnimalStructuredDatumSchema,
 )
-from holofood.models import Sample, GenomeCatalogue, ViralCatalogue
+from holofood.models import Sample, GenomeCatalogue, ViralCatalogue, Animal
 
 
 class CSVRenderer(BaseRenderer):
@@ -74,6 +76,30 @@ def list_samples(
 def get_sample_metadata(request, sample_accession: str):
     sample = get_object_or_404(Sample, accession=sample_accession)
     return sample.structured_metadata.all()
+
+
+@export_api.get(
+    "/animals",
+    response=List[AnimalSlimSchema],
+    summary="Fetch a list of Animals (host-level BioSamples) as a TSV",
+    url_name="animals_list",
+)
+def list_animals(
+    request,
+):
+    return Animal.objects.all()
+
+
+@export_api.get(
+    "/animals/{animal_accession}/metadata",
+    response=List[AnimalStructuredDatumSchema],
+    summary="Fetch a list of an Animal's metadata as a TSV.",
+    description="Retrieve a table of metadata for a single Animal by its BioSamples accession.",
+    url_name="animal_metadata_list",
+)
+def get_animal_metadata(request, animal_accession: str):
+    animal = get_object_or_404(Sample, accession=animal_accession)
+    return animal.structured_metadata.all()
 
 
 @export_api.get(

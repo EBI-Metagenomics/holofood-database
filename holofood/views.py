@@ -24,6 +24,7 @@ from holofood.filters import (
     MultiFieldSearchFilter,
     GenomeFilter,
     ViralFragmentFilter,
+    AnimalFilter,
 )
 from holofood.models import (
     Sample,
@@ -33,6 +34,7 @@ from holofood.models import (
     ViralFragment,
     Genome,
     Project,
+    Animal,
 )
 from holofood.utils import holofood_config, StringAgg
 
@@ -57,6 +59,22 @@ class SampleListView(ListFilterView):
     paginate_by = 10
     template_name = "holofood/pages/sample_list.html"
     filterset_class = SampleFilter
+
+    def get_context_data(self, **kwargs):
+        """
+        If the animal accession filter resolves to a single animal,
+        set it as "from_animal" so that we can render the list as being
+        a single-animal focus.
+        """
+        context = super().get_context_data(**kwargs)
+
+        filters = self.filterset.data
+        animal_filter = filters.get("animal_accession__icontains")
+        if animal_filter:
+            if Animal.objects.filter(accession__iexact=animal_filter).exists():
+                context["from_animal"] = animal_filter
+
+        return context
 
 
 class SampleDetailView(DetailView):
@@ -84,6 +102,23 @@ class SampleDetailView(DetailView):
             context["analyses_error"] = True
 
         return context
+
+
+class AnimalListView(ListFilterView):
+    model = Animal
+    context_object_name = "animals"
+    paginate_by = 10
+    template_name = "holofood/pages/animal_list.html"
+    filterset_class = AnimalFilter
+
+
+class AnimalDetailView(DetailView):
+    model = Animal
+    context_object_name = "animal"
+    template_name = "holofood/pages/animal_detail.html"
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related("structured_metadata")
 
 
 class CustomPaginator(Paginator):

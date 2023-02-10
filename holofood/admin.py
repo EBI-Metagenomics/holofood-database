@@ -13,6 +13,8 @@ from holofood.models import (
     Genome,
     ViralFragment,
     ViralCatalogue,
+    Animal,
+    AnimalStructuredDatum,
 )
 
 
@@ -37,8 +39,28 @@ class SampleStructuredDatumAdmin(admin.ModelAdmin):
 @admin.register(Sample)
 class SampleAdmin(admin.ModelAdmin):
     inlines = [SampleMetadataInline]
-    list_filter = ("system", "project", "has_metagenomics", "has_metabolomics")
-    search_fields = ("accession", "title")
+    list_filter = ("project", "has_metagenomics", "has_metabolomics")
+    search_fields = ("accession", "title", "animal__accession", "animal__animal_code")
+
+
+class AnimalMetadataInline(SampleMetadataInline):
+    model = AnimalStructuredDatum
+
+
+class AnimalSampleInline(TabularInlinePaginated):
+    model = Sample
+    fields = ("accession", "project", "title")
+    per_page = 5
+    can_delete = True
+    show_change_link = True
+    show_full_result_count = True
+
+
+@admin.register(Animal)
+class AnimalAdmin(admin.ModelAdmin):
+    inlines = [AnimalMetadataInline, AnimalSampleInline]
+    list_filter = ("system",)
+    search_fields = ("accession", "animal_code")
 
 
 @admin.register(AnalysisSummary)
