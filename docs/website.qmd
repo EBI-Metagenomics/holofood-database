@@ -6,7 +6,7 @@ title: "Browsing the website"
 ![Screenshot of the global search box](/img/website/global-search.png)
 
 There is a a site-wide ("global") search box at the top of the data portal landing page and most other pages.
-This searches over [project](datasets.qmd#ena-studies-projects) accession and titles; [sample](datasets.qmd#ena-samples) systems, accessions, and titles; [genome](datasets.qmd#metagenome-assembled-genome-mag-catalogues) and [viral](datasets.qmd#viral-fragment-catalogues) catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.
+This searches over [samples](datasets.qmd#ena-samples) systems, accessions, and titles; [genome](datasets.qmd#metagenome-assembled-genome-mag-catalogues) and [viral](datasets.qmd#viral-fragment-catalogues) catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.
 
 If you search for valid sample, project, or MAG accessions, the search will take you straight to an appropriate view in the portal.
 Otherwise, you'll see a normal list of search results.
@@ -17,7 +17,7 @@ Otherwise, you'll see a normal list of search results.
 
 Samples can be found from the "Chicken samples" and "Salmon samples" navigation items.
 On the samples listing pages, there are various filters available to limit which samples are shown in the table.
-For example, you can find all samples from a particular project,
+For example, you can find all samples from a particular animal,
 or all samples with [metabolomics](datasets.qmd#metabolights-metabolomics) data.
 
 The table shows an icon-key detailing which data types are available for each sample.
@@ -69,12 +69,12 @@ Following these file links will download the file.
 ## Finding analysis summaries
 ![Screenshot of a sample detail page with analysis documents links](/img/website/sample-analysis-summaries.png)
 
-[Analysis summaries](datasets.qmd#summary-analyses) are linked to samples (or whole projects).
-Any analysis summaries that mention a sample, or its project, are shown at the bottom of the sample's detail page.
+[Analysis summaries](datasets.qmd#summary-analyses) are linked to samples or catalogues.
+Any analysis summaries that mention a sample are shown at the bottom of the sample's detail page.
 
 ![Screenshot of an analysis document](/img/website/analysis-summary.png)
 
-Analysis summaries also link back to the samples and/or projects they refer to.
+Analysis summaries also link back to the samples and/or catalogues they refer to.
 A complete list of analysis summaries can also be found from the navigation bar.
 
 ## Using the catalogues

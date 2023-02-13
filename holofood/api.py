@@ -14,7 +14,6 @@ from pydantic import AnyHttpUrl
 
 from holofood.models import (
     Sample,
-    Project,
     SampleStructuredDatum,
     SampleMetadataMarker,
     AnalysisSummary,
@@ -40,18 +39,6 @@ api = NinjaAPI(
     default_router=RouterPaginated(),
     csrf=True,
 )
-
-
-class RelatedProjectSchema(ModelSchema):
-    @staticmethod
-    def resolve_canonical_url(obj: Project):
-        return f"{holofood_config.ena.browser_url}/{obj.accession}"
-
-    canonical_url: str
-
-    class Config:
-        model = Project
-        model_fields = ["accession", "title"]
 
 
 class SampleMetadataMarkerSchema(ModelSchema):
@@ -92,8 +79,6 @@ class RelatedAnalysisSummarySchema(ModelSchema):
 
 
 class SampleSlimSchema(ModelSchema):
-    project: RelatedProjectSchema
-
     @staticmethod
     def resolve_canonical_url(obj: Sample):
         return f"{holofood_config.ena.browser_url}/{obj.accession}"
@@ -125,7 +110,6 @@ class SampleSlimSchema(ModelSchema):
         model_fields = [
             "accession",
             "title",
-            "project",
             "has_metagenomics",
             "has_metabolomics",
         ]
@@ -146,12 +130,6 @@ class AnimalSlimSchema(ModelSchema):
 class SampleSchema(SampleSlimSchema):
     structured_metadata: List[SampleStructuredDatumSchema]
     analysis_summaries: List[RelatedAnalysisSummarySchema]
-
-    @staticmethod
-    def resolve_project_analysis_summaries(obj: Sample):
-        return obj.project.analysis_summaries.all()
-
-    project_analysis_summaries: List[RelatedAnalysisSummarySchema]
 
 
 class AnimalSchema(AnimalSlimSchema):
@@ -234,7 +212,6 @@ class ViralFragmentSchema(ModelSchema):
 
 class AnalysisSummarySchema(RelatedAnalysisSummarySchema):
     samples: List[SampleSlimSchema]
-    projects: List[RelatedProjectSchema]
     genome_catalogues: List[GenomeCatalogueSchema]
     viral_catalogues: List[ViralCatalogueSchema]
 
@@ -284,22 +261,17 @@ def list_samples(
     request,
     system: System = None,
     accession: str = None,
-    project_accession: str = None,
-    project_title: str = None,
     title: str = None,
     require_metagenomics: bool = False,
     require_metabolomics: bool = False,
     require_metadata_marker: str = None,
 ):
+    # TODO: add Animal filters
     q_objects = []
     if system:
         q_objects.append(Q(system__icontains=system.value))
     if accession:
         q_objects.append(Q(accession__icontains=accession))
-    if project_accession:
-        q_objects.append(Q(project__accession__icontains=project_accession))
-    if project_title:
-        q_objects.append(Q(project__title__icontains=project_title))
     if title:
         q_objects.append(Q(title__icontains=title))
     if require_metagenomics:
@@ -408,7 +380,7 @@ def list_sample_metadata_markers(
     response=List[AnalysisSummarySchema],
     summary="Fetch a list of Analysis Summary documents.",
     description="Analysis Summary documents are produced by HoloFood partners and collaborators. "
-    "Each summary is tagged as involving 1 or more Samples, Projects, or Catalogues. "
+    "Each summary is tagged as involving 1 or more Samples or Catalogues. "
     "Typically these are aggregative or comparative analyses of the Samples. "
     "These are text and graphic documents. "
     "They are not intended for programmatic consumption, so a website URL is returned for each. ",

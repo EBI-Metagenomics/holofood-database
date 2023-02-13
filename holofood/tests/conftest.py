@@ -1,7 +1,6 @@
 import pytest
 
 from holofood.models import (
-    Project,
     Sample,
     SampleMetadataMarker,
     AnalysisSummary,
@@ -14,18 +13,13 @@ from holofood.models import (
 from holofood.utils import holofood_config
 
 
-@pytest.fixture
-def salmon_project():
-    return Project.objects.create(
-        accession="PRJTESTING", title="HoloFood Donut and Fish"
-    )
+# TODO: add Animal fixtures
 
 
 @pytest.fixture()
-def salmon_sample(salmon_project):
+def salmon_sample():
     return Sample.objects.create(
         accession="SAMEA00000002",
-        project=salmon_project,
         title="HF_DONUT.SALMON.1",
         system=Sample.SALMON,
     )
@@ -2411,19 +2405,13 @@ def LiveTests(request):
     class Fixtures:
         pass
 
-    Project.objects.all().delete()
     Sample.objects.all().delete()
     GenomeCatalogue.objects.all().delete()
     ViralCatalogue.objects.all().delete()
 
-    Fixtures.projects = [
-        Project.objects.create(accession="PRJTESTING", title="HoloFood Donut and Fish")
-    ]
-
     Fixtures.samples = [
         Sample.objects.create(
             accession="SAMEA00000002",
-            project=Fixtures.projects[0],
             title="HF_DONUT.SALMON.1",
             system=Sample.SALMON,
             has_metagenomics=True,

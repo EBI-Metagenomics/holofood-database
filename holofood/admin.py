@@ -5,7 +5,6 @@ from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from holofood.models import (
     Sample,
-    Project,
     SampleMetadataMarker,
     SampleStructuredDatum,
     AnalysisSummary,
@@ -26,11 +25,6 @@ class SampleMetadataInline(TabularInlinePaginated):
     show_full_result_count = True
 
 
-@admin.register(Project, SampleMetadataMarker)
-class GenericAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(SampleStructuredDatum)
 class SampleStructuredDatumAdmin(admin.ModelAdmin):
     search_fields = ("sample__accession", "marker__name")
@@ -39,7 +33,7 @@ class SampleStructuredDatumAdmin(admin.ModelAdmin):
 @admin.register(Sample)
 class SampleAdmin(admin.ModelAdmin):
     inlines = [SampleMetadataInline]
-    list_filter = ("project", "has_metagenomics", "has_metabolomics")
+    list_filter = ("has_metagenomics", "has_metabolomics")
     search_fields = ("accession", "title", "animal__accession", "animal__animal_code")
 
 
@@ -49,7 +43,7 @@ class AnimalMetadataInline(SampleMetadataInline):
 
 class AnimalSampleInline(TabularInlinePaginated):
     model = Sample
-    fields = ("accession", "project", "title")
+    fields = ("accession", "title")
     per_page = 5
     can_delete = True
     show_change_link = True
@@ -73,7 +67,6 @@ class AnalysisSummaryAdmin(admin.ModelAdmin):
         "slug",
         "content",
         "samples",
-        "projects",
         "genome_catalogues",
         "viral_catalogues",
         "created",
@@ -82,7 +75,6 @@ class AnalysisSummaryAdmin(admin.ModelAdmin):
     )
     filter_horizontal = (
         "samples",
-        "projects",
         "genome_catalogues",
         "viral_catalogues",
     )

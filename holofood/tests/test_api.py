@@ -4,6 +4,9 @@ from holofood.models import SampleStructuredDatum, SampleMetadataMarker
 from holofood.tests.conftest import set_metabolights_project_for_sample
 
 
+# TODO: switch project tests for animal hierarchical tests
+
+
 @pytest.mark.django_db
 def test_samples_api_list_empty(client):
     response = client.get("/api/samples")

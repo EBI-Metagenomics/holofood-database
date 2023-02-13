@@ -15,64 +15,6 @@ from holofood.utils import holofood_config
 _mgnify = MgnifyApi()
 
 
-class Project(models.Model):
-    """
-    An ENA project (study) is a group of nucleotide-read samples.
-    """
-
-    accession = models.CharField(primary_key=True, max_length=15)
-    title = models.CharField(max_length=200)
-
-    def __str__(self):
-        return f"Project {self.accession} - {self.title}"
-
-    def refresh_metagenomics_metadata(self):
-        logging.info(
-            f"Checking metagenomics data existence for samples in project {self}"
-        )
-        mgnify_samples = _mgnify.get_metagenomics_samples_for_project(self.accession)
-        samples_to_update = self.sample_set.filter(accession__in=mgnify_samples)
-        samples_to_update.update(has_metagenomics=True)
-        logging.info(
-            f"Project {self} has {len(mgnify_samples)} samples with metagenomics data."
-        )
-
-    def refresh_metabolomics_metadata(self):
-        logging.info(f"Checking metabolomics data files for sample in project {self}")
-        metabolights_projects = (
-            SampleStructuredDatum.objects.filter(
-                sample__project_id=self.pk,
-                marker__name=holofood_config.metabolights.metabolights_accession_marker_in_biosamples,
-            )
-            .order_by("measurement")
-            .values_list("measurement", flat=True)
-            .distinct()
-        )
-        logging.info(
-            f"Project {self} contains samples with metabolights projects: {metabolights_projects}"
-        )
-        for mtbls in metabolights_projects:
-            logging.info(f"Matching samples for {mtbls=} to project {self}")
-            samples_updated_count = 0
-            for sample_id, files in get_metabolights_project_files(mtbls).items():
-                sample = self.sample_set.filter(
-                    Q(accession__iexact=sample_id) | Q(title__iexact=sample_id)
-                ).first()
-                if sample:
-                    sample.metabolights_files = files
-                    sample.has_metabolomics = True
-                    sample.save()
-                    logging.info(f"Update metabolomics files for sample {sample}")
-                    samples_updated_count += 1
-                else:
-                    logging.warning(
-                        f"Project {self} did not contain a sample for MTBLS project {mtbls}'s sample {sample_id}"
-                    )
-            logging.info(
-                f"Updated metabolights for {samples_updated_count} samples from {mtbls}"
-            )
-
-
 class AnimalManager(models.Manager):
     def get_queryset(self):
         prefetchable_markers = (
@@ -123,7 +65,6 @@ class SampleManager(models.Manager):
         return (
             super()
             .get_queryset()
-            .select_related("project")
             .select_related("animal")
             .prefetch_related(
                 Prefetch(
@@ -144,7 +85,6 @@ class Sample(models.Model):
 
     accession = models.CharField(primary_key=True, max_length=15)
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     # animal_code = models.CharField(max_length=20)
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE, related_name="samples")
@@ -392,13 +332,10 @@ class AnalysisSummary(models.Model):
     slug = models.SlugField(primary_key=True, max_length=200, unique=True)
     title = models.CharField(max_length=200)
     content = MartorField(
-        help_text="Markdown document describing an analysis of one or more projects/samples"
+        help_text="Markdown document describing an analysis of one or more catalogues/samples"
     )
     samples = models.ManyToManyField(
         Sample, related_name="analysis_summaries", blank=True
-    )
-    projects = models.ManyToManyField(
-        Project, related_name="analysis_summaries", blank=True
     )
     genome_catalogues = models.ManyToManyField(
         "GenomeCatalogue", related_name="analysis_summaries", blank=True

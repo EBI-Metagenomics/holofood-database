@@ -23,37 +23,12 @@
                         </a>
                     </h3>
                     <p class="vf-summary__text">
-                      A {{ sample.system }} sample from the {{ sample.project.title }} project
+                      A {{ sample.system }} sample derived from animal {{ sample.animal.accession }}
                     </p>
                 </article>
             {% endfor %}
             {% if samples.count > 10 %}
                 <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'samples_list' %}">See more samples</a>
-            {% endif %}
-        </section>
-
-        <section>
-            <h4 class="vf-text vf-text-heading--5">Matching Projects ({{ projects.count }})</h4>
-            {% for project in projects.all|slice:":10" %}
-                <article class="vf-summary hf-search-result">
-                    <p class="vf-summary__date">
-                          {{ project.accession }}
-                      <span class="vf-summary__meta">
-                          {{ project.system }}
-                      </span>
-                    </p>
-                    <h3 class="vf-summary__title">
-                        <a href="{% url 'samples_list' %}?project__accession__icontains={{ project.accession }}" class="vf-summary__link">
-                            {{ project.title }}
-                        </a>
-                    </h3>
-                    <p class="vf-summary__text">
-                      A project with {{ project.sample_set.count }} samples
-                    </p>
-                </article>
-            {% endfor %}
-            {% if projects.count > 10 %}
-                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'samples_list' %}">See more projects</a>
             {% endif %}
         </section>
 

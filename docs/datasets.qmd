@@ -8,11 +8,10 @@ which has [extensive documentation](https://ena-docs.readthedocs.io/).
 Most analyses of the samples are stored in further appropriate supporting databases, 
 with a small number hosted directly in the HoloFood data portal.
 
-## ENA Studies (Projects)
-An ENA Study (or Project) is part of the [ENA Metadata Model](https://ena-docs.readthedocs.io/en/latest/submit/general-guide/metadata.html#metadata-model).
-> A study (project) groups together data submitted to the archive and controls its release date. A study accession is typically used when citing data submitted to ENA.
+## ENA Samples / BioSamples
+BioSamples are the "source of truth" for animals and derived samples created by the project.
+Some samples are also present in ENA (with the same primary accession / identifier), if those samples pertain to nucleotide read data.
 
-## ENA Samples
 An ENA Sample is part of the [ENA Metadata Model](https://ena-docs.readthedocs.io/en/latest/submit/general-guide/metadata.html#metadata-model).
 > A sample contains information about the sequenced source material. Samples are associated with checklists, which define the fields used to annotate the samples.
 

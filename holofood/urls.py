@@ -49,7 +49,6 @@ from holofood.views import (
     ViralCatalogueFragmentView,
     ViralSequenceAnnotationView,
     GlobalSearchView,
-    AnimalCodeListView,
     AnimalListView,
     AnimalDetailView,
 )
