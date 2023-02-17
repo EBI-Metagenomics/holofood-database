@@ -1,0 +1,15 @@
+{% load static %}
+
+<div style="display:flex">
+    {% if animal.system == 'chicken' %}
+       <img src="{% static "img/icons/chicken.svg" %}"
+         class="system-icon"
+         alt="Chicken"/>
+    {% elif animal.system == 'salmon' %}
+        <img src="{% static "img/icons/salmon.svg" %}"
+         class="system-icon"
+         alt="Salmon"/>
+    {% endif %}
+    <a href="{% url 'animal_detail' pk=animal.accession %}"
+       class="vf-link">{{ animal.accession }}</a>
+</div>

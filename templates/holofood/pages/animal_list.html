@@ -50,23 +50,15 @@
                             {% for animal in animals %}
                                 <tr class="vf-table__row">
                                     <td class="vf-table__cell">
-                                        <div style="display:flex">
-                                            {% if animal.system == 'chicken' %}
-                                               <img src="{% static "img/icons/chicken.svg" %}"
-                                                 class="system-icon"
-                                                 alt="Chicken"/>
-                                            {% elif animal.system == 'salmon' %}
-                                                <img src="{% static "img/icons/salmon.svg" %}"
-                                                 class="system-icon"
-                                                 alt="Salmon"/>
-                                            {% endif %}
-                                            <a class="vf-link" href="{% url 'animal_detail' pk=animal.accession %}">{{ animal.accession }}</a>
-                                        </div>
+                                        {% include "holofood/components/atoms/animal_accession.html" with animal=animal only %}
                                     </td>
-                                    <td class="vf-table__cell">{{ animal|metadatum:"host diet treatment"|default:"—" }}</td>
-                                    <td class="vf-table__cell">{{ animal|metadatum:"host diet treatment concentration"|default:"—" }}</td>
-                                    <td class="vf-table__cell">{{ animal|metadatum:"trial timepoint"|default:"—" }}</td>
-                                    <td class="vf-table__cell">{{ animal.samples_count }}</td>
+                                    <td class="vf-table__cell">{{ animal|animal_metadatum:"host diet treatment"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ animal|animal_metadatum:"host diet treatment concentration"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ animal|animal_metadatum:"trial timepoint"|default:"—" }}</td>
+                                    <td class="vf-table__cell">
+                                        <a class="vf-link" href="{% url 'samples_list' %}?animal_accession__icontains={{ animal.accession }}">{{ animal.samples_count }} samples</a>
+                                        {% data_types animal %}
+                                    </td>
                                     <td class="vf-table__cell">
                                         <a class="vf-button vf-button--link vf-button--sm"
                                            href="{% url 'animal_detail' pk=animal.accession %}">View</a>

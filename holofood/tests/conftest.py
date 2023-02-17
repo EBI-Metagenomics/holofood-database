@@ -2386,7 +2386,7 @@ def set_metabolights_project_for_sample(sample: Sample, mtbls: str = "MTBLSDONUT
     SampleStructuredDatum.objects.create(
         marker=mtbls_marker, sample=sample, measurement=mtbls
     )
-    sample.has_metabolomics = True
+    # sample.has_metabolomics = True
     sample.save()
 
 
@@ -2414,8 +2414,9 @@ def LiveTests(request):
             accession="SAMEA00000002",
             title="HF_DONUT.SALMON.1",
             system=Sample.SALMON,
-            has_metagenomics=True,
-            has_metabolomics=True,
+            sample_type=Sample.METABOLOMIC,
+            # has_metagenomics=True,
+            # has_metabolomics=True,
             metabolights_files=[
                 {"file_name": "donut.zip", "sample_name": "SAMEA00000002"}
             ],

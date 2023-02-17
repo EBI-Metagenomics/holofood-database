@@ -57,26 +57,14 @@
                             {% for sample in samples %}
                                 <tr class="vf-table__row">
                                     <td class="vf-table__cell">
-                                        <div style="display:flex">
-                                            {% if sample.animal.system == 'chicken' %}
-                                               <img src="{% static "img/icons/chicken.svg" %}"
-                                                 class="system-icon"
-                                                 alt="Chicken"/>
-                                            {% elif sample.animal.system == 'salmon' %}
-                                                <img src="{% static "img/icons/salmon.svg" %}"
-                                                 class="system-icon"
-                                                 alt="Salmon"/>
-                                            {% endif %}
-                                            <a class="vf-link" href="{% url 'sample_detail' pk=sample.accession %}">{{ sample.accession }}</a>
-                                        </div>
+                                        <a class="vf-link" href="{% url 'sample_detail' pk=sample.accession %}">{{ sample.accession }}</a>
                                     </td>
                                     <td class="vf-table__cell">
-                                        <a href="{% url 'animal_detail' pk=sample.animal.accession %}"
-                                           class="vf-link">{{ sample.animal.accession }}</a>
+                                        {% include "holofood/components/atoms/animal_accession.html" with animal=sample.animal only %}
                                     </td>
-                                    <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment"|default:"—" }}</td>
-                                    <td class="vf-table__cell">{{ sample|metadatum:"host diet treatment concentration"|default:"—" }}</td>
-                                    <td class="vf-table__cell">{{ sample|metadatum:"trial timepoint"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"host diet treatment"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"host diet treatment concentration"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"trial timepoint"|default:"—" }}</td>
                                     <td class="vf-table__cell">{% data_types sample %}</td>
                                     <td class="vf-table__cell">
                                         <a class="vf-button vf-button--link vf-button--sm"

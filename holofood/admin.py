@@ -33,7 +33,7 @@ class SampleStructuredDatumAdmin(admin.ModelAdmin):
 @admin.register(Sample)
 class SampleAdmin(admin.ModelAdmin):
     inlines = [SampleMetadataInline]
-    list_filter = ("has_metagenomics", "has_metabolomics")
+    list_filter = ("sample_type",)
     search_fields = ("accession", "title", "animal__accession", "animal__animal_code")
 
 

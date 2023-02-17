@@ -1,7 +1,7 @@
 import logging
 
 from django.db import models
-from django.db.models import Prefetch, Q, Count
+from django.db.models import Prefetch, Q, Count, Subquery, OuterRef, F, Func
 from django.urls import reverse
 from django.utils.text import slugify
 from martor.models import MartorField
@@ -23,10 +23,18 @@ class AnimalManager(models.Manager):
         primary_markers = AnimalStructuredDatum.objects.filter(
             marker__name__in=prefetchable_markers
         )
+        samples = Sample.objects.filter(animal=OuterRef("pk")).order_by("sample_type")
         return (
             super()
             .get_queryset()
             .annotate(samples_count=Count("samples"))
+            .annotate(
+                sample_types=Subquery(
+                    samples.values_list("sample_type", flat=True)
+                    .annotate(all_types=Func(F("sample_type"), function="GROUP_CONCAT"))
+                    .values("all_types")
+                )
+            )
             .prefetch_related(
                 Prefetch(
                     "structured_metadata",
@@ -56,10 +64,9 @@ class Animal(models.Model):
 class SampleManager(models.Manager):
     def get_queryset(self):
         prefetchable_markers = (
-            holofood_config.tables.samples_list.default_metadata_marker_columns
-            + [holofood_config.metabolights.metabolights_accession_marker_in_biosamples]
+            holofood_config.tables.animals_list.default_metadata_marker_columns
         )
-        primary_markers = SampleStructuredDatum.objects.filter(
+        primary_markers = AnimalStructuredDatum.objects.filter(
             marker__name__in=prefetchable_markers
         )
         return (
@@ -68,7 +75,7 @@ class SampleManager(models.Manager):
             .select_related("animal")
             .prefetch_related(
                 Prefetch(
-                    "structured_metadata",
+                    "animal__structured_metadata",
                     queryset=primary_markers,
                     to_attr="primary_metadata",
                 )
@@ -81,16 +88,28 @@ class Sample(models.Model):
     An extraction-level BioSample, derived from an Animal.
     """
 
+    METAGENOMIC = "metagenomic"
+    METABOLOMIC = "metabolomic"
+    HISTOLOGICAL = "histological"
+    HOST_GENOMIC = "host_genomic"
+
+    SAMPLE_TYPE_CHOICES = [
+        (METAGENOMIC, METAGENOMIC),
+        (METABOLOMIC, METABOLOMIC),
+        (HISTOLOGICAL, HISTOLOGICAL),
+        (HOST_GENOMIC, HOST_GENOMIC),
+    ]
+
     objects = SampleManager()
 
     accession = models.CharField(primary_key=True, max_length=15)
 
     title = models.CharField(max_length=200)
-    # animal_code = models.CharField(max_length=20)
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE, related_name="samples")
 
-    has_metagenomics = models.BooleanField(default=False)
-    has_metabolomics = models.BooleanField(default=False)
+    sample_type = models.CharField(
+        max_length=20, choices=SAMPLE_TYPE_CHOICES, null=True, blank=True
+    )
 
     ena_run_accessions = models.JSONField(default=list, blank=True)
     metabolights_files = models.JSONField(default=list, blank=True)
@@ -170,11 +189,12 @@ class Sample(models.Model):
         self.save(update_fields=["system"])
 
     def refresh_metagenomics_metadata(self):
+        # TODO
         logging.debug(f"Checking metagenomics data existence for sample {self}")
-        self.has_metagenomics = _mgnify.get_metagenomics_existence_for_sample(
-            self.accession
-        )
-        logging.debug(f"Sample {self} has metagenomics data? {self.has_metagenomics}")
+        # self.has_metagenomics = _mgnify.get_metagenomics_existence_for_sample(
+        #     self.accession
+        # )
+        # logging.debug(f"Sample {self} has metagenomics data? {self.has_metagenomics}")
         self.save()
 
     @property
@@ -203,6 +223,7 @@ class Sample(models.Model):
                 return mtbls_metadatum.measurement
 
     def refresh_metabolomics_metadata(self):
+        # TODO
         mtbls = self.metabolights_project
         if not mtbls:
             logging.info(f"No MTBLS accession is present in metadata of {self}")
@@ -221,7 +242,7 @@ class Sample(models.Model):
             )
         else:
             self.metabolights_files = sample_files
-            self.has_metabolomics = True
+            # self.has_metabolomics = True
             logging.info(
                 f"Stored {len(sample_files)} metabolights filenames for {mtbls}"
             )

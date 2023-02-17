@@ -1,30 +1,29 @@
 from typing import Union, List
 
 from django import template
-from holofood.models import Sample, SampleStructuredDatum
+from holofood.models import Sample, SampleStructuredDatum, Animal
 from holofood.utils import holofood_config
 
 register = template.Library()
 
 
-@register.filter(name="metadatum")
-def metadatum(sample: Sample, marker_name: str) -> Union[str, None]:
+@register.filter(name="animal_metadatum")
+def animal_metadatum(animal: Animal, marker_name: str) -> Union[str, None]:
+    primary_marker_list = (
+        holofood_config.tables.animals_list.default_metadata_marker_columns
+    )
     datum = None
-    if (
-        hasattr(sample, "primary_metadata")
-        and marker_name
-        in holofood_config.tables.samples_list.default_metadata_marker_columns
-    ):
+    if hasattr(animal, "primary_metadata") and marker_name in primary_marker_list:
         try:
             datum = next(
-                m for m in sample.primary_metadata if m.marker.name == marker_name
+                m for m in animal.primary_metadata if m.marker.name == marker_name
             )
         except StopIteration:
             # Metadata was prefetched but didn't exist on this sample
             pass
     else:
         # Metadata not prefetched
-        datum = sample.structured_metadata.filter(marker__name=marker_name).first()
+        datum = animal.structured_metadata.filter(marker__name=marker_name).first()
 
     if datum is None:
         return None
@@ -32,22 +31,17 @@ def metadatum(sample: Sample, marker_name: str) -> Union[str, None]:
 
 
 @register.inclusion_tag("holofood/components/data_type_icons.html", name="data_types")
-def data_type_icons(sample: Sample) -> dict:
-    if sample:
-        return {
-            "sample_metadata": (
-                hasattr(sample, "primary_metadata") and len(sample.primary_metadata)
-            )
-            or sample.structured_metadata.exists(),
-            "metagenomics": sample.has_metagenomics,
-            "metabolomics": sample.has_metabolomics,
-        }
-    else:
-        return {
-            "sample_metadata": False,
-            "metagenomics": False,
-            "metabolomics": False,
-        }
+def data_type_icons(sample: Union[Sample, Animal]) -> dict:
+    data_types = {sample_type[0]: False for sample_type in Sample.SAMPLE_TYPE_CHOICES}
+
+    if not sample:
+        return data_types
+    if type(sample) is Sample:
+        data_types[sample.sample_type] = True
+    elif type(sample) is Animal and hasattr(sample, "sample_types"):
+        for sample_type in sample.sample_types.split(","):
+            data_types[sample_type] = True
+    return data_types
 
 
 @register.filter(name="holofood_ordering_rules")

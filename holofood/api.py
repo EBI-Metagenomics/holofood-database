@@ -89,7 +89,7 @@ class SampleSlimSchema(ModelSchema):
     def resolve_metagenomics_url(obj: Sample):
         return (
             f"{holofood_config.mgnify.api_root}/samples/{obj.accession}"
-            if obj.has_metagenomics
+            if obj.sample_type == obj.METAGENOMIC
             else None
         )
 
@@ -99,7 +99,7 @@ class SampleSlimSchema(ModelSchema):
     def resolve_metabolomics_url(obj: Sample):
         return (
             f"{holofood_config.metabolights.api_root}/studies/{obj.metabolights_project}"
-            if obj.has_metabolomics
+            if obj.sample_type == obj.METABOLOMIC
             else None
         )
 
@@ -110,8 +110,7 @@ class SampleSlimSchema(ModelSchema):
         model_fields = [
             "accession",
             "title",
-            "has_metagenomics",
-            "has_metabolomics",
+            "sample_type",
         ]
 
 
@@ -231,6 +230,13 @@ class System(Enum):
     chicken: str = Animal.CHICKEN
 
 
+class SampleType(Enum):
+    metagenomic: str = Sample.METAGENOMIC
+    metabolomic: str = Sample.METABOLOMIC
+    histological: str = Sample.HISTOLOGICAL
+    host_genomic: str = Sample.HOST_GENOMIC
+
+
 @api.get(
     "/samples/{sample_accession}",
     response=SampleSchema,
@@ -262,22 +268,22 @@ def list_samples(
     system: System = None,
     accession: str = None,
     title: str = None,
-    require_metagenomics: bool = False,
-    require_metabolomics: bool = False,
+    sample_type: SampleType = None,
+    animal_accession: str = None,
     require_metadata_marker: str = None,
 ):
-    # TODO: add Animal filters
+    # TODO: switch require_metadata_marker to a flexible animal metadata querier
     q_objects = []
     if system:
         q_objects.append(Q(system__icontains=system.value))
     if accession:
         q_objects.append(Q(accession__icontains=accession))
+    if animal_accession:
+        q_objects.append(Q(animal__accession__icontains=animal_accession))
     if title:
         q_objects.append(Q(title__icontains=title))
-    if require_metagenomics:
-        q_objects.append(Q(has_metagenomics=True))
-    if require_metabolomics:
-        q_objects.append(Q(has_metabolomics=True))
+    if sample_type:
+        q_objects.append(Q(sample_type__iexact=sample_type.value))
     if require_metadata_marker:
         sample_ids_with_metadata = (
             SampleStructuredDatum.objects.filter(

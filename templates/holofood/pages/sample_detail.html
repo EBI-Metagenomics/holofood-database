@@ -31,31 +31,32 @@
         Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample
     </p>
     <br/>
-    {% if sample.structured_metadata.exists %}
-        <a href="#metadata" class="vf-link">
-            <span class="vf-badge hf-badge-has-data">
-                <img src="{% static "img/icons/sample.svg" %}" alt="Has sample metadata"/>
-                Includes metadata
-            </span>
-        </a>
-    {% endif %}
-
-    {% if sample.has_metagenomics %}
-        <a href="#metagenomics" class="vf-link">
-            <span class="vf-badge hf-badge-has-data">
-                <img src="{% static "img/icons/bacteria.svg" %}" alt="Has metagenomics"/>
-                Includes metagenomics
-            </span>
-        </a>
-    {% endif %}
-
-    {% if sample.has_metabolomics %}
-        <a href="#metabolomics" class="vf-link">
-            <span class="vf-badge hf-badge-has-data"><img src="{% static "img/icons/molecule.svg" %}" alt="Has metabolomics"/>
-                Includes metabolomics
-            </span>
-        </a>
-    {% endif %}
+    {#    TODO: add sample type icons #}
+{#    {% if sample.structured_metadata.exists %}#}
+{#        <a href="#metadata" class="vf-link">#}
+{#            <span class="vf-badge hf-badge-has-data">#}
+{#                <img src="{% static "img/icons/sample.svg" %}" alt="Has sample metadata"/>#}
+{#                Includes metadata#}
+{#            </span>#}
+{#        </a>#}
+{#    {% endif %}#}
+{##}
+{#    {% if sample.sample_type == sample.METAGENOMIC %}#}
+{#        <a href="#metagenomics" class="vf-link">#}
+{#            <span class="vf-badge hf-badge-has-data">#}
+{#                <img src="{% static "img/icons/bacteria.svg" %}" alt="A metagenomic sample"/>#}
+{#                Includes metagenomics#}
+{#            </span>#}
+{#        </a>#}
+{#    {% endif %}#}
+{##}
+{#    {% if sample.sample_type == sample.METABOLOMIC %}#}
+{#        <a href="#metabolomics" class="vf-link">#}
+{#            <span class="vf-badge hf-badge-has-data"><img src="{% static "img/icons/molecule.svg" %}" alt="Has metabolomics"/>#}
+{#                Includes metabolomics#}
+{#            </span>#}
+{#        </a>#}
+{#    {% endif %}#}
 
     <details class="vf-details" open>
         <summary class="vf-details--summary">
@@ -206,7 +207,7 @@
             Metagenomics
         </summary>
         <a id="metagenomics"></a>
-        {% if sample.has_metagenomics %}
+        {% if sample.sample_type == sample.METAGENOMIC %}
             <p>
                 Sample {{ sample.accession }} has metagenomic datasets available on MGnify.
                 <a class="vf-button vf-button--link vf-button--sm"
@@ -277,7 +278,7 @@
             Metabolomics
         </summary>
         <a id="metabolomics"></a>
-        {% if sample.has_metabolomics %}
+        {% if sample.sample_type == sample.METABOLOMIC %}
             <p>
                 Sample {{ sample.accession }} has metabolomics analysis on MetaboLights.
                 <a href="{{ METABOLIGHTS_WEB_URL }}/{{ sample.metabolights_project }}" class="vf-button vf-button--link vf-button--sm inline">View project {{ sample.metabolights_project }} on MetaboLights</a>

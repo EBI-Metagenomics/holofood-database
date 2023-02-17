@@ -37,16 +37,6 @@ class SampleFilter(django_filters.FilterSet):
         ),
     )
 
-    has_metagenomics = django_filters.ChoiceFilter(
-        choices=[(True, "Yes"), (False, "No")],
-        label="Has metagenomics data",
-    )
-
-    has_metabolomics = django_filters.ChoiceFilter(
-        choices=[(True, "Yes"), (False, "No")],
-        label="Has metabolomics data",
-    )
-
     ordering = django_filters.OrderingFilter(
         fields=("accession", "animal__accession", "title"),
     )
@@ -56,6 +46,7 @@ class SampleFilter(django_filters.FilterSet):
 
         fields = {
             "animal__system": ["exact"],
+            "sample_type": ["exact"],
             "accession": ["icontains"],
             "title": ["icontains"],
         }
