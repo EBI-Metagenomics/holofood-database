@@ -14,7 +14,7 @@
                     <p class="vf-summary__date">
                           {{ sample.accession }}
                       <span class="vf-summary__meta">
-                          {{ sample.system }}
+                          {{ sample.animal.system }}
                       </span>
                     </p>
                     <h3 class="vf-summary__title">
@@ -23,12 +23,37 @@
                         </a>
                     </h3>
                     <p class="vf-summary__text">
-                      A {{ sample.system }} sample derived from animal {{ sample.animal.accession }}
+                      A {{ sample.animal.system }} {{ sample.sample_type }} sample derived from animal {{ sample.animal.accession }}
                     </p>
                 </article>
             {% endfor %}
             {% if samples.count > 10 %}
                 <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'samples_list' %}">See more samples</a>
+            {% endif %}
+        </section>
+
+        <section>
+            <h4 class="vf-text vf-text-heading--5">Matching Hosts/Animals ({{ animals.count }})</h4>
+            {% for animal in animals.all|slice:":10" %}
+                <article class="vf-summary hf-search-result">
+                    <p class="vf-summary__date">
+                          {{ animal.accession }}
+                      <span class="vf-summary__meta">
+                          {{ animal.system }}
+                      </span>
+                    </p>
+                    <h3 class="vf-summary__title">
+                        <a href="{% url 'animal_detail' pk=animal.accession %}" class="vf-summary__link">
+                            {{ animal.animal_code }}
+                        </a>
+                    </h3>
+                    <p class="vf-summary__text">
+                      A {{ animal.system }} sample with {{ animal.samples_count }} derived samples
+                    </p>
+                </article>
+            {% endfor %}
+            {% if animals.count > 10 %}
+                <a class="vf-button vf-button--secondary vf-button--sm" href="{% url 'animals_list' %}">See more animals</a>
             {% endif %}
         </section>
 

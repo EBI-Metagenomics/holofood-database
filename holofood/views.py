@@ -365,6 +365,7 @@ class GlobalSearchView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["query"] = self.request.GET.get("query")
         context["samples"] = self.multi_search_model(Sample)
+        context["animals"] = self.multi_search_model(Animal)
         context["mag_catalogues"] = self.multi_search_model(GenomeCatalogue)
         context["mags"] = self.multi_search_model(Genome)
         context["viral_catalogues"] = self.multi_search_model(ViralCatalogue)
