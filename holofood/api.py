@@ -41,6 +41,24 @@ api = NinjaAPI(
 )
 
 
+SAMPLES = "Samples"
+ANALYSES = "Analysis Summaries"
+GENOMES = "Genomes"
+VIRUSES = "Viruses"
+
+
+class System(Enum):
+    salmon: str = Animal.SALMON
+    chicken: str = Animal.CHICKEN
+
+
+class SampleType(Enum):
+    metagenomic: str = Sample.METAGENOMIC
+    metabolomic: str = Sample.METABOLOMIC
+    histological: str = Sample.HISTOLOGICAL
+    host_genomic: str = Sample.HOST_GENOMIC
+
+
 class SampleMetadataMarkerSchema(ModelSchema):
     canonical_url: str = Field(None, alias="iri")
 
@@ -116,10 +134,16 @@ class SampleSlimSchema(ModelSchema):
 
 class AnimalSlimSchema(ModelSchema):
     @staticmethod
-    def resolve_canonical_url(obj: Sample):
+    def resolve_canonical_url(obj: Animal):
         return f"{holofood_config.biosamples.api_root}/{obj.accession}"
 
     canonical_url: str
+
+    @staticmethod
+    def resolve_sample_types(obj: Animal):
+        return obj.sample_types.split(",")
+
+    sample_types: List[str]
 
     class Config:
         model = Animal
@@ -219,24 +243,6 @@ class AnalysisSummarySchema(RelatedAnalysisSummarySchema):
         model_fields = ["title"]
 
 
-SAMPLES = "Samples"
-ANALYSES = "Analysis Summaries"
-GENOMES = "Genomes"
-VIRUSES = "Viruses"
-
-
-class System(Enum):
-    salmon: str = Animal.SALMON
-    chicken: str = Animal.CHICKEN
-
-
-class SampleType(Enum):
-    metagenomic: str = Sample.METAGENOMIC
-    metabolomic: str = Sample.METABOLOMIC
-    histological: str = Sample.HISTOLOGICAL
-    host_genomic: str = Sample.HOST_GENOMIC
-
-
 @api.get(
     "/samples/{sample_accession}",
     response=SampleSchema,
@@ -272,7 +278,6 @@ def list_samples(
     animal_accession: str = None,
     require_metadata_marker: str = None,
 ):
-    # TODO: switch require_metadata_marker to a flexible animal metadata querier
     q_objects = []
     if system:
         q_objects.append(Q(system__icontains=system.value))
@@ -322,6 +327,8 @@ def get_animal(request, animal_accession: str):
     "Use the `/animals/{animal_accession}` endpoint to retrieve those. "
     "Animal metadata *can* be filtered for with `require_metadata_marker=`: this finds animals where "
     "the named metadata marker is present and none of `['0', 'false', 'unknown', 'n/a', 'null]`. "
+    "The `require_sample_type=` filter finds only animals where "
+    "at least one derived sample of the specified type exists. "
     "Use `/sample_metadata_markers` to find the exact marker name of interest.",
     tags=[SAMPLES],
 )
@@ -330,6 +337,7 @@ def list_animals(
     system: System = None,
     accession: str = None,
     require_metadata_marker: str = None,
+    require_sample_type: SampleType = None,
 ):
     q_objects = []
     if system:
@@ -346,6 +354,8 @@ def list_animals(
             .values_list("sample_id", flat=True)
         )
         q_objects.append(Q(accession__in=animal_ids_with_metadata))
+    if require_sample_type:
+        q_objects.append(Q(sample_types__icontains=require_sample_type.value))
     if not q_objects:
         return Animal.objects.all()
     return Animal.objects.filter(reduce(operator.and_, q_objects))

@@ -10,7 +10,7 @@ from holofood.external_apis.biosamples.api import get_sample_structured_data
 from holofood.external_apis.ena.browser_api import get_checklist_metadata
 from holofood.external_apis.metabolights.api import get_metabolights_project_files
 from holofood.external_apis.mgnify.api import MgnifyApi
-from holofood.utils import holofood_config
+from holofood.utils import holofood_config, DistinctFunc
 
 _mgnify = MgnifyApi()
 
@@ -31,7 +31,11 @@ class AnimalManager(models.Manager):
             .annotate(
                 sample_types=Subquery(
                     samples.values_list("sample_type", flat=True)
-                    .annotate(all_types=Func(F("sample_type"), function="GROUP_CONCAT"))
+                    .annotate(
+                        all_types=DistinctFunc(
+                            F("sample_type"), function="GROUP_CONCAT"
+                        )
+                    )
                     .values("all_types")
                 )
             )
