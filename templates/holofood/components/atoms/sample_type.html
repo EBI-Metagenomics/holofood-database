@@ -1,0 +1,24 @@
+{% load string_utils %}
+{% load static %}
+
+<div style="display:flex">
+    {% if sample.sample_type == 'metagenomic' %}
+       <img src="{% static "img/icons/bacteria.svg" %}"
+         class="system-icon"
+         alt="Metagenomic data icon"/>
+    {% elif sample.sample_type == 'metabolomic' %}
+        <img src="{% static "img/icons/molecule.svg" %}"
+         class="system-icon"
+         alt="Metabolomic data icon"/>
+    {% elif sample.sample_type == 'histological' %}
+        <img src="{% static "img/icons/microscope.svg" %}"
+         class="system-icon"
+         alt="Histology data icon"/>
+    {% elif sample.sample_type == 'host_genomic' %}
+        <img src="{% static "img/icons/genome.svg" %}"
+         class="system-icon"
+         alt="Host genome data icon"/>
+    {% endif %}
+    <a href="{% url 'samples_list' %}?sample_type={{ sample.sample_type }}"
+       class="vf-link">{{ sample.sample_type|replace:"_>-" }}</a>
+</div>

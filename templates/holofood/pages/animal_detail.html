@@ -48,6 +48,7 @@
                 Samples
             </dt>
             <dd class="vf-list__item vf-list--definition__details">
+                {% data_types animal %}
                 <a class="vf-link"
                    href="{% url 'samples_list' %}?animal_accession__icontains={{ animal.accession }}">View {{ animal.samples_count }} derived sample{{ animal.samples_count|pluralize }}</a>
             </dd>

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load string_utils %}
 {% load sample_metadata %}
 {% load static %}
 {% block content %}
@@ -28,35 +29,9 @@
     </nav>
     <h1>{{ sample.accession }}: {{ sample.title }}</h1>
     <p class="vf-lede">
-        Sample data for {{ sample.accession }}, a HoloFood {{ sample.system }} sample
+        Sample data for {{ sample.accession }}, a HoloFood {{ sample.sample_type|replace:"_>-" }} {{ sample.animal.system }} sample
     </p>
     <br/>
-    {#    TODO: add sample type icons #}
-{#    {% if sample.structured_metadata.exists %}#}
-{#        <a href="#metadata" class="vf-link">#}
-{#            <span class="vf-badge hf-badge-has-data">#}
-{#                <img src="{% static "img/icons/sample.svg" %}" alt="Has sample metadata"/>#}
-{#                Includes metadata#}
-{#            </span>#}
-{#        </a>#}
-{#    {% endif %}#}
-{##}
-{#    {% if sample.sample_type == sample.METAGENOMIC %}#}
-{#        <a href="#metagenomics" class="vf-link">#}
-{#            <span class="vf-badge hf-badge-has-data">#}
-{#                <img src="{% static "img/icons/bacteria.svg" %}" alt="A metagenomic sample"/>#}
-{#                Includes metagenomics#}
-{#            </span>#}
-{#        </a>#}
-{#    {% endif %}#}
-{##}
-{#    {% if sample.sample_type == sample.METABOLOMIC %}#}
-{#        <a href="#metabolomics" class="vf-link">#}
-{#            <span class="vf-badge hf-badge-has-data"><img src="{% static "img/icons/molecule.svg" %}" alt="Has metabolomics"/>#}
-{#                Includes metabolomics#}
-{#            </span>#}
-{#        </a>#}
-{#    {% endif %}#}
 
     <details class="vf-details" open>
         <summary class="vf-details--summary">
@@ -64,11 +39,16 @@
         </summary>
         <dl class="vf-list vf-list--definition">
             <dt class="vf-list__item vf-list--definition__term">
-                System
+                Animal
             </dt>
             <dd class="vf-list__item vf-list--definition__details">
-                <a class="vf-link"
-                   href="{% url 'samples_list' %}?system={{ sample.system }}">{{ sample.system }}</a>
+                {% include "holofood/components/atoms/animal_accession.html" with animal=sample.animal only %}
+            </dd>
+            <dt class="vf-list__item vf-list--definition__term">
+                Sample type
+            </dt>
+            <dd class="vf-list__item vf-list--definition__details">
+                {% include "holofood/components/atoms/sample_type.html" with sample=sample only %}
             </dd>
             <dt class="vf-list__item vf-list--definition__term">
                 API endpoint
@@ -97,7 +77,11 @@
     </script>
     <details class="vf-details">
         <summary class="vf-details--summary">
-            Sample metadata
+            {% if sample.sample_type == 'metagenomic' or sample.sample_type == 'metabolomic' or sample.sample_type == 'host_genomic' %}
+                Sample metadata
+            {% else %}
+                Sample data
+            {% endif %}
         </summary>
         <a id="metadata"></a>
         <p class="vf-text-body">Metadata for sample {{ sample.accession }}, stored in BioSamples and ENA.</p>
@@ -202,12 +186,12 @@
             {% endfor %}
         </div>
     </details>
-    <details class="vf-details">
-        <summary class="vf-details--summary">
-            Metagenomics
-        </summary>
-        <a id="metagenomics"></a>
-        {% if sample.sample_type == sample.METAGENOMIC %}
+    {% if sample.sample_type == sample.METAGENOMIC %}
+        <details class="vf-details">
+            <summary class="vf-details--summary">
+                Metagenomics
+            </summary>
+            <a id="metagenomics"></a>
             <p>
                 Sample {{ sample.accession }} has metagenomic datasets available on MGnify.
                 <a class="vf-button vf-button--link vf-button--sm"
@@ -266,19 +250,14 @@
                     {% endfor %}
                 </tbody>
             </table>
-        {% else %}
-            <p>
-                Sample {{ sample.accession }} has no metagenomics data.
-                <a href="{{ MGNIFY_WEB_URL }}" class="vf-button vf-button--link vf-button--sm inline" target="_blank">Open MGnify</a>
-            </p>
-        {% endif %}
-    </details>
-    <details class="vf-details">
-        <summary class="vf-details--summary">
-            Metabolomics
-        </summary>
-        <a id="metabolomics"></a>
-        {% if sample.sample_type == sample.METABOLOMIC %}
+        </details>
+    {% endif %}
+    {% if sample.sample_type == sample.METABOLOMIC %}
+        <details class="vf-details">
+            <summary class="vf-details--summary">
+                Metabolomics
+            </summary>
+            <a id="metabolomics"></a>
             <p>
                 Sample {{ sample.accession }} has metabolomics analysis on MetaboLights.
                 <a href="{{ METABOLIGHTS_WEB_URL }}/{{ sample.metabolights_project }}" class="vf-button vf-button--link vf-button--sm inline">View project {{ sample.metabolights_project }} on MetaboLights</a>
@@ -305,13 +284,8 @@
                     {% endfor %}
                 </tbody>
             </table>
-        {% else %}
-            <p>
-                Sample {{ sample.accession }} does not appear to have metabolomics analysis on MetaboLights.
-                <a href="{{ METABOLIGHTS_WEB_URL }}" class="vf-button vf-button--link vf-button--sm inline" target="_blank">Open MetaboLights</a>
-            </p>
-        {% endif %}
-    </details>
+        </details>
+    {% endif %}
     <section class="vf-card-container vf-card-container__col-3 | vf-u-background-color--grey--lightest vf-u-fullbleed">
         <div class="vf-card-container__inner">
             <div class="vf-section-header">

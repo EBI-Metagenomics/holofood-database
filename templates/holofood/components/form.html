@@ -4,6 +4,7 @@
       class="vf-stack vf-stack--800"
       id="{{ id }}">
     {{ form.non_field_errors }}
+
     {% for field in form %}
         <div class="vf-form__item vf-stack">
             <label for="text" class="vf-form__label">{{ field.label }}</label>
@@ -18,9 +19,10 @@
             {% for error in field.errors %}<p class="vf-form__helper vf-form__helper--error">{{ error }}</p>{% endfor %}
         </div>
     {% endfor %}
-    <div style="display: flex; justify-content: flex-end;">
+
+    <div style="display: flex; justify-content: stretch;">
         <input type="submit"
-               class="vf-button vf-button--primary vf-button--sm"
+               class="vf-button vf-button--primary vf-button--sm flex-grow"
                value="{{ submit }}"/>
     </div>
 </form>

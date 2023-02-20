@@ -35,7 +35,7 @@ from holofood.models import (
     Genome,
     Animal,
 )
-from holofood.utils import holofood_config, StringAgg
+from holofood.utils import holofood_config
 
 
 class ListFilterView(ListView):
