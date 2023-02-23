@@ -96,10 +96,34 @@ class RelatedAnalysisSummarySchema(ModelSchema):
         model_fields = ["title"]
 
 
+class AnimalSlimSchema(ModelSchema):
+    @staticmethod
+    def resolve_canonical_url(obj: Animal):
+        return f"{holofood_config.biosamples.api_root}/{obj.accession}"
+
+    canonical_url: str
+
+    @staticmethod
+    def resolve_sample_types(obj: Animal):
+        if obj.sample_types is None:
+            return []
+        return obj.sample_types.split(",")
+
+    sample_types: List[str]
+
+    class Config:
+        model = Animal
+        model_fields = ["accession", "system"]
+
+
 class SampleSlimSchema(ModelSchema):
     @staticmethod
     def resolve_canonical_url(obj: Sample):
-        return f"{holofood_config.ena.browser_url}/{obj.accession}"
+        if obj.sample_type in [Sample.METAGENOMIC, Sample.HOST_GENOMIC]:
+            # Sample is nucleotide sequence based
+            return f"{holofood_config.ena.browser_url}/{obj.accession}"
+        else:
+            return f"{holofood_config.biosamples.api_root}/{obj.accession}"
 
     canonical_url: str
 
@@ -118,6 +142,7 @@ class SampleSlimSchema(ModelSchema):
         return (
             f"{holofood_config.metabolights.api_root}/studies/{obj.metabolights_project}"
             if obj.sample_type == obj.METABOLOMIC
+            and obj.metabolights_project is not None
             else None
         )
 
@@ -125,29 +150,7 @@ class SampleSlimSchema(ModelSchema):
 
     class Config:
         model = Sample
-        model_fields = [
-            "accession",
-            "title",
-            "sample_type",
-        ]
-
-
-class AnimalSlimSchema(ModelSchema):
-    @staticmethod
-    def resolve_canonical_url(obj: Animal):
-        return f"{holofood_config.biosamples.api_root}/{obj.accession}"
-
-    canonical_url: str
-
-    @staticmethod
-    def resolve_sample_types(obj: Animal):
-        return obj.sample_types.split(",")
-
-    sample_types: List[str]
-
-    class Config:
-        model = Animal
-        model_fields = ["accession", "system"]
+        model_fields = ["accession", "title", "sample_type", "animal"]
 
 
 class SampleSchema(SampleSlimSchema):
@@ -157,6 +160,7 @@ class SampleSchema(SampleSlimSchema):
 
 class AnimalSchema(AnimalSlimSchema):
     samples: List[SampleSlimSchema]
+    structured_metadata: List[AnimalStructuredDatumSchema]
 
 
 class GenomeCatalogueSchema(ModelSchema):
@@ -280,7 +284,7 @@ def list_samples(
 ):
     q_objects = []
     if system:
-        q_objects.append(Q(system__icontains=system.value))
+        q_objects.append(Q(animal__system__icontains=system.value))
     if accession:
         q_objects.append(Q(accession__icontains=accession))
     if animal_accession:
@@ -351,7 +355,7 @@ def list_animals(
             )
             .annotate(measurement_lower=Lower("measurement"))
             .exclude(measurement_lower__in=("0", "false", "unknown", "n/a", "null"))
-            .values_list("sample_id", flat=True)
+            .values_list("animal_id", flat=True)
         )
         q_objects.append(Q(accession__in=animal_ids_with_metadata))
     if require_sample_type:
@@ -369,22 +373,27 @@ def list_animals(
     "Not every sample will have every metadata marker. "
     "Long lists will be paginated, so use the `page=` query parameter to get more pages. "
     "Use `name=` to search for a marker by name (case insensitive partial matches). "
-    "Use `min_samples=` to search for markers present on at least that many samples.",
+    "Use `min_samples=` to search for markers present on at least that many samples."
+    "Use `min_animals=` to search for marker present on at least that many animals (i.e. host samples).",
     tags=[SAMPLES],
 )
 def list_sample_metadata_markers(
     request,
     name: str = None,
     min_samples: int = None,
+    min_animals: int = None,
 ):
     q_objects = []
     if name:
         q_objects.append(Q(name__icontains=name))
     if min_samples:
         q_objects.append(Q(samples_count__gte=min_samples))
+    if min_animals:
+        q_objects.append(Q(animals_count__gte=min_animals))
 
     annotated_markers = SampleMetadataMarker.objects.annotate(
-        samples_count=models.Count("samplestructureddatum")
+        samples_count=models.Count("samplestructureddatum"),
+        animals_count=models.Count("animalstructureddatum"),
     )
     if not q_objects:
         return annotated_markers.all()

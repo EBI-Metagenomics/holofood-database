@@ -98,7 +98,7 @@ def list_animals(
     url_name="animal_metadata_list",
 )
 def get_animal_metadata(request, animal_accession: str):
-    animal = get_object_or_404(Sample, accession=animal_accession)
+    animal = get_object_or_404(Animal, accession=animal_accession)
     return animal.structured_metadata.all()
 
 

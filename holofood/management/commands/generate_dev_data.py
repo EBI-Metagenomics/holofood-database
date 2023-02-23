@@ -1,4 +1,3 @@
-import logging
 from typing import Union
 
 from django.core.management.base import BaseCommand, CommandError
