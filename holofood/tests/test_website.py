@@ -1,9 +1,12 @@
+import time
+
 import pytest
 import requests_mock
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from seleniumwire import webdriver
 
@@ -25,7 +28,7 @@ class WebsiteTests(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.headless = True
+        options.headless = False
         cls.selenium = webdriver.Chrome(options=options)
         cls.selenium.scopes = [
             ".*metagenomics/api.*",
@@ -40,7 +43,7 @@ class WebsiteTests(StaticLiveServerTestCase):
 
     @requests_mock.Mocker()
     def test_web(self, m):
-        # TODO: all test must be in one method currently... else fixtures dont work right
+        # All tests must be in one method currently... else fixtures don't work right
 
         wait = WebDriverWait(self.selenium, 10)
 
@@ -61,47 +64,70 @@ class WebsiteTests(StaticLiveServerTestCase):
         # ---- Sample listing page ---- #
         self.selenium.get(self.live_server_url + "/samples")
 
-        project = self.hf_fixtures.projects[0]
-        project_link = self.selenium.find_element(
-            by=By.LINK_TEXT, value=project.accession
+        animal = self.hf_fixtures.animals[0]
+        animal_link = self.selenium.find_element(
+            by=By.LINK_TEXT, value=animal.accession
         )
-        self.assertEqual(project_link.text, project.accession)
-        assert "ena" in project_link.get_attribute("href")
+        self.assertEqual(animal_link.text, animal.accession)
+        assert "animal" in animal_link.get_attribute("href")
+
+        # Samples list for specific animal
+        self.selenium.get(
+            f"{self.live_server_url}/samples/?animal_accession__icontains={animal.accession}"
+        )
+        breadcrumbs = self.selenium.find_element(
+            by=By.CLASS_NAME, value="vf-breadcrumbs"
+        )
+        assert f"Animal {animal.accession}" in breadcrumbs.text
+
+        # Sample list filter
+        system_filter = Select(
+            self.selenium.find_element(
+                by=By.XPATH, value="//select[@name='animal__system']"
+            )
+        )
+        system_filter.select_by_visible_text("salmon")
+        apply_button = self.selenium.find_element(
+            by=By.XPATH, value="//*[@id='sample_filters']//input[@type='submit']"
+        )
+        apply_button.click()
+
+        system_filter = Select(
+            self.selenium.find_element(
+                by=By.XPATH, value="//select[@name='animal__system']"
+            )
+        )
+        self.assertEqual(system_filter.first_selected_option.text, "salmon")
+        table_rows = self.selenium.find_elements(
+            by=By.CLASS_NAME, value="vf-table__row"
+        )
+        self.assertEqual(len(table_rows), 4)  # header, 2 samples, footer
+
+        system_filter.select_by_visible_text("chicken")
+        apply_button = self.selenium.find_element(
+            by=By.XPATH, value="//*[@id='sample_filters']//input[@type='submit']"
+        )
+        apply_button.click()
+
+        table_rows = self.selenium.find_elements(
+            by=By.CLASS_NAME, value="vf-table__row"
+        )
+        self.assertEqual(len(table_rows), 2)  # header, footer
 
         # ---- Sample detail page ---- #
-        project = self.hf_fixtures.projects[0]
         sample = self.hf_fixtures.samples[0]
-        m.get(
-            holofood_config.mgnify.api_root + f"/runs/ERR4918394/analyses",
-            json=salmon_metagenomics_analyses_response(sample),
-        )
         self.selenium.get(self.live_server_url + "/sample/" + sample.accession)
-        project_link = self.selenium.find_element(
-            by=By.PARTIAL_LINK_TEXT, value=project.accession
+        animal_link = self.selenium.find_element(
+            by=By.PARTIAL_LINK_TEXT, value=animal.accession
         )
-        self.assertIn(project.title, project_link.text)
+        self.assertIn(animal.accession, animal_link.text)
 
-        system_link = self.selenium.find_element(by=By.LINK_TEXT, value=sample.system)
-        self.assertIn("salmon", system_link.get_attribute("href"))
-
-        # # todo metadata table test
-        metagenomics_expander_link = self.selenium.find_elements(
-            by=By.TAG_NAME, value="summary"
-        )[2]
-        self.assertEqual(metagenomics_expander_link.text, "Metagenomics")
-        metagenomics_expander_link.click()
-
-        mgnify_link = self.selenium.find_element(
-            by=By.LINK_TEXT, value="View sample on MGnify"
-        )
-        self.assertEqual(
-            mgnify_link.get_attribute("href"),
-            f"https://www.ebi.ac.uk/metagenomics/samples/{sample.accession}",
-        )
+        type_link = self.selenium.find_element(by=By.LINK_TEXT, value="metabolomic")
+        self.assertIn("metabolomic", type_link.get_attribute("href"))
 
         metabolomics_expander_link = self.selenium.find_elements(
             by=By.TAG_NAME, value="summary"
-        )[3]
+        )[2]
         self.assertEqual(metabolomics_expander_link.text, "Metabolomics")
         metabolomics_expander_link.click()
 
@@ -117,6 +143,111 @@ class WebsiteTests(StaticLiveServerTestCase):
         self.assertEqual(
             download_link.get_attribute("href"),
             "https://www.ebi.ac.uk/metabolights/ws/studies/MTBLSDONUT/download/public?file=donut.zip",
+        )
+
+        # METAGENOMICS
+        sample = self.hf_fixtures.samples[1]
+        m.get(
+            holofood_config.mgnify.api_root + f"/runs/ERR4918394/analyses",
+            json=salmon_metagenomics_analyses_response(sample),
+        )
+        self.selenium.get(self.live_server_url + "/sample/" + sample.accession)
+
+        metagenomics_expander_link = self.selenium.find_elements(
+            by=By.TAG_NAME, value="summary"
+        )[2]
+        self.assertEqual(metagenomics_expander_link.text, "Metagenomics")
+        metagenomics_expander_link.click()
+
+        mgnify_link = self.selenium.find_element(
+            by=By.LINK_TEXT, value="View sample on MGnify"
+        )
+        self.assertEqual(
+            mgnify_link.get_attribute("href"),
+            f"https://www.ebi.ac.uk/metagenomics/samples/{sample.accession}",
+        )
+
+        # METADATA TABLE
+        metadata_expander_link = self.selenium.find_elements(
+            by=By.TAG_NAME, value="summary"
+        )[1]
+        self.assertEqual(metadata_expander_link.text, "Sample metadata")
+        metadata_expander_link.click()
+        tabs = self.selenium.find_elements(
+            by=By.XPATH, value="//ul[@id='metadata-sections-tabs']/li"
+        )
+        self.assertEqual(len(tabs), 2)
+
+        dimensions_tab = self.selenium.find_element(by=By.LINK_TEXT, value="Dimensions")
+        dimensions_tab.click()
+
+        metadata_table = self.selenium.find_element(
+            by=By.XPATH, value="//section[@id='vf-tabs__section--dimensions']"
+        )
+        self.assertIn("Size of donut", metadata_table.text)
+        self.assertIn("10", metadata_table.text)
+        self.assertIn("cm", metadata_table.text)
+
+        metadata_search_box = self.selenium.find_element(
+            by=By.XPATH, value="//input[@placeholder='Search metadata markers']"
+        )
+
+        metadata_search_box.send_keys("siz")
+        matching_markers = self.selenium.find_elements(
+            by=By.XPATH, value="//ul[@class='typeahead-results']/li"
+        )
+        self.assertEqual(len(matching_markers), 1)
+        self.assertIn("Size of donut", matching_markers[0].text)
+        metadata_search_box.clear()
+
+        metadata_search_box.send_keys("colo")
+        # wait for typeahead
+        match = self.selenium.find_element(
+            by=By.XPATH, value="//ul[@class='typeahead-results']/li"
+        )
+        metadata_search_box.send_keys(Keys.DOWN)
+        colours_tab = self.selenium.find_element(
+            by=By.XPATH, value="//a[@data-metadata-type-key='COLOURS']"
+        )
+        self.assertIn("highlight-tab-match", colours_tab.get_attribute("class"))
+        match.click()
+
+        metadata_table = self.selenium.find_element(
+            by=By.XPATH, value="//section[@id='vf-tabs__section--colours']"
+        )
+        self.assertTrue(metadata_table.is_displayed())
+        self.assertIn("Colour of donut", metadata_table.text)
+        self.assertIn("Yellow", metadata_table.text)
+
+        # ---- Animal listing page ---- #
+
+        self.selenium.get(self.live_server_url + "/animals")
+
+        animal = self.hf_fixtures.animals[0]
+        animal_link = self.selenium.find_element(
+            by=By.LINK_TEXT, value=animal.accession
+        )
+        self.assertEqual(animal_link.text, animal.accession)
+        assert animal.accession in animal_link.get_attribute("href")
+
+        samples_link = self.selenium.find_element(by=By.LINK_TEXT, value="2 samples")
+        assert (
+            f"animal_accession__icontains={animal.accession}"
+            in samples_link.get_attribute("href")
+        )
+
+        # ---- Animal detail page ---- #
+        self.selenium.get(self.live_server_url + "/animal/" + animal.accession)
+
+        system_link = self.selenium.find_element(by=By.LINK_TEXT, value="salmon")
+        assert "?system=salmon" in system_link.get_attribute("href")
+
+        samples_link = self.selenium.find_element(
+            by=By.LINK_TEXT, value="View 2 derived samples"
+        )
+        assert (
+            f"animal_accession__icontains={animal.accession}"
+            in samples_link.get_attribute("href")
         )
 
         # ---- API Docs ---- #
@@ -271,7 +402,7 @@ class WebsiteTests(StaticLiveServerTestCase):
         del self.selenium.request_interceptor
 
         # ---- Global Search ---- #
-        project = self.hf_fixtures.projects[0]
+        animal = self.hf_fixtures.animals[0]
         sample = self.hf_fixtures.samples[0]
 
         m.get(
@@ -285,14 +416,14 @@ class WebsiteTests(StaticLiveServerTestCase):
                 by=By.XPATH, value="//input[@placeholder='Search data and docs']"
             )
 
-        get_search_box().send_keys(project.title.lower())
+        get_search_box().send_keys(animal.animal_code.lower())
         get_search_box().send_keys(Keys.ENTER)
         self.assertEqual(
             self.selenium.current_url,
-            f"{self.live_server_url}/search/?query={project.title.lower().replace(' ', '+')}",
+            f"{self.live_server_url}/search/?query={animal.animal_code.lower().replace(' ', '+')}",
         )
         self.assertIn(
-            project.accession,
+            animal.accession,
             self.selenium.find_element(by=By.TAG_NAME, value="body").text,
         )
 
@@ -304,14 +435,10 @@ class WebsiteTests(StaticLiveServerTestCase):
             f"{self.live_server_url}/sample/{sample.accession}",
         )
 
-        # Searching for exact project accession should go straight to sample listing filtered by project
-        get_search_box().send_keys(project.accession)
+        # Searching for exact animal accession should go straight to detail page
+        get_search_box().send_keys(animal.accession)
         get_search_box().send_keys(Keys.ENTER)
         self.assertEqual(
             self.selenium.current_url,
-            f"{self.live_server_url}/samples/?project__accession__icontains={project.accession}",
+            f"{self.live_server_url}/animal/{animal.accession}",
         )
-        project_filter_box = self.selenium.find_element(
-            by=By.NAME, value="project__accession__icontains"
-        )
-        self.assertEqual(project_filter_box.get_attribute("value"), project.accession)

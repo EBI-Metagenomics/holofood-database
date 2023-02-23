@@ -1166,18 +1166,30 @@ def LiveTests(request):
     GenomeCatalogue.objects.all().delete()
     ViralCatalogue.objects.all().delete()
 
+    Fixtures.animals = [
+        Animal.objects.create(
+            accession="SAMEG04",
+            system=Animal.SALMON,
+            animal_code="SSOPHIE",
+        )
+    ]
+
     Fixtures.samples = [
         Sample.objects.create(
             accession="SAMEA00000002",
-            title="HF_DONUT.SALMON.1",
-            system=Sample.SALMON,
+            title="metabolomic extraction",
+            animal=Fixtures.animals[0],
             sample_type=Sample.METABOLOMIC,
-            # has_metagenomics=True,
-            # has_metabolomics=True,
             metabolights_files=[
                 {"file_name": "donut.zip", "sample_name": "SAMEA00000002"}
             ],
-        )
+        ),
+        Sample.objects.create(
+            accession="SAMEA00000003",
+            title="metagenomic extraction",
+            animal=Fixtures.animals[0],
+            sample_type=Sample.METAGENOMIC,
+        ),
     ]
 
     set_metabolights_project_for_sample(Fixtures.samples[0])
@@ -1187,6 +1199,20 @@ def LiveTests(request):
 
     # set a class attribute on the invoking test context
     request.cls.hf_fixtures = Fixtures()
+
+    sample = Fixtures.samples[1]
+    marker1 = SampleMetadataMarker.objects.create(
+        name="Size of donut", type="DIMENSIONS"
+    )
+    marker2 = SampleMetadataMarker.objects.create(
+        name="Colour of donut", type="COLOURS"
+    )
+    SampleStructuredDatum.objects.create(
+        marker=marker1, sample=sample, measurement="10", units="cm"
+    )
+    SampleStructuredDatum.objects.create(
+        marker=marker2, sample=sample, measurement="Yellow"
+    )
 
 
 @pytest.fixture()
