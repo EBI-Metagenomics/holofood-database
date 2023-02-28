@@ -14,7 +14,6 @@ from pydantic import AnyHttpUrl
 
 from holofood.models import (
     Sample,
-    Project,
     SampleStructuredDatum,
     SampleMetadataMarker,
     AnalysisSummary,
@@ -22,6 +21,8 @@ from holofood.models import (
     Genome,
     ViralCatalogue,
     ViralFragment,
+    Animal,
+    AnimalStructuredDatum,
 )
 from holofood.utils import holofood_config
 
@@ -40,16 +41,22 @@ api = NinjaAPI(
 )
 
 
-class RelatedProjectSchema(ModelSchema):
-    @staticmethod
-    def resolve_canonical_url(obj: Project):
-        return f"{holofood_config.ena.browser_url}/{obj.accession}"
+SAMPLES = "Samples"
+ANALYSES = "Analysis Summaries"
+GENOMES = "Genomes"
+VIRUSES = "Viruses"
 
-    canonical_url: str
 
-    class Config:
-        model = Project
-        model_fields = ["accession", "title"]
+class System(Enum):
+    salmon: str = Animal.SALMON
+    chicken: str = Animal.CHICKEN
+
+
+class SampleType(Enum):
+    metagenomic: str = Sample.METAGENOMIC
+    metabolomic: str = Sample.METABOLOMIC
+    histological: str = Sample.HISTOLOGICAL
+    host_genomic: str = Sample.HOST_GENOMIC
 
 
 class SampleMetadataMarkerSchema(ModelSchema):
@@ -72,6 +79,11 @@ class SampleStructuredDatumSchema(ModelSchema):
         model_fields = ["marker", "measurement", "units"]
 
 
+class AnimalStructuredDatumSchema(SampleStructuredDatumSchema):
+    class Config:
+        model = AnimalStructuredDatum
+
+
 class RelatedAnalysisSummarySchema(ModelSchema):
     @staticmethod
     def resolve_canonical_url(obj: AnalysisSummary):
@@ -84,12 +96,34 @@ class RelatedAnalysisSummarySchema(ModelSchema):
         model_fields = ["title"]
 
 
-class SampleSlimSchema(ModelSchema):
-    project: RelatedProjectSchema
+class AnimalSlimSchema(ModelSchema):
+    @staticmethod
+    def resolve_canonical_url(obj: Animal):
+        return f"{holofood_config.biosamples.api_root}/{obj.accession}"
+
+    canonical_url: str
 
     @staticmethod
+    def resolve_sample_types(obj: Animal):
+        if obj.sample_types is None:
+            return []
+        return obj.sample_types.split(",")
+
+    sample_types: List[str]
+
+    class Config:
+        model = Animal
+        model_fields = ["accession", "system"]
+
+
+class SampleSlimSchema(ModelSchema):
+    @staticmethod
     def resolve_canonical_url(obj: Sample):
-        return f"{holofood_config.ena.browser_url}/{obj.accession}"
+        if obj.sample_type in [Sample.METAGENOMIC, Sample.HOST_GENOMIC]:
+            # Sample is nucleotide sequence based
+            return f"{holofood_config.ena.browser_url}/{obj.accession}"
+        else:
+            return f"{holofood_config.biosamples.api_root}/{obj.accession}"
 
     canonical_url: str
 
@@ -97,7 +131,7 @@ class SampleSlimSchema(ModelSchema):
     def resolve_metagenomics_url(obj: Sample):
         return (
             f"{holofood_config.mgnify.api_root}/samples/{obj.accession}"
-            if obj.has_metagenomics
+            if obj.sample_type == obj.METAGENOMIC
             else None
         )
 
@@ -107,7 +141,8 @@ class SampleSlimSchema(ModelSchema):
     def resolve_metabolomics_url(obj: Sample):
         return (
             f"{holofood_config.metabolights.api_root}/studies/{obj.metabolights_project}"
-            if obj.has_metabolomics
+            if obj.sample_type == obj.METABOLOMIC
+            and obj.metabolights_project is not None
             else None
         )
 
@@ -115,25 +150,17 @@ class SampleSlimSchema(ModelSchema):
 
     class Config:
         model = Sample
-        model_fields = [
-            "accession",
-            "title",
-            "project",
-            "system",
-            "has_metagenomics",
-            "has_metabolomics",
-        ]
+        model_fields = ["accession", "title", "sample_type", "animal"]
 
 
 class SampleSchema(SampleSlimSchema):
     structured_metadata: List[SampleStructuredDatumSchema]
     analysis_summaries: List[RelatedAnalysisSummarySchema]
 
-    @staticmethod
-    def resolve_project_analysis_summaries(obj: Sample):
-        return obj.project.analysis_summaries.all()
 
-    project_analysis_summaries: List[RelatedAnalysisSummarySchema]
+class AnimalSchema(AnimalSlimSchema):
+    samples: List[SampleSlimSchema]
+    structured_metadata: List[AnimalStructuredDatumSchema]
 
 
 class GenomeCatalogueSchema(ModelSchema):
@@ -212,24 +239,12 @@ class ViralFragmentSchema(ModelSchema):
 
 class AnalysisSummarySchema(RelatedAnalysisSummarySchema):
     samples: List[SampleSlimSchema]
-    projects: List[RelatedProjectSchema]
     genome_catalogues: List[GenomeCatalogueSchema]
     viral_catalogues: List[ViralCatalogueSchema]
 
     class Config:
         model = AnalysisSummary
         model_fields = ["title"]
-
-
-SAMPLES = "Samples"
-ANALYSES = "Analysis Summaries"
-GENOMES = "Genomes"
-VIRUSES = "Viruses"
-
-
-class System(Enum):
-    salmon: str = Sample.SALMON
-    chicken: str = Sample.CHICKEN
 
 
 @api.get(
@@ -262,28 +277,22 @@ def list_samples(
     request,
     system: System = None,
     accession: str = None,
-    project_accession: str = None,
-    project_title: str = None,
     title: str = None,
-    require_metagenomics: bool = False,
-    require_metabolomics: bool = False,
+    sample_type: SampleType = None,
+    animal_accession: str = None,
     require_metadata_marker: str = None,
 ):
     q_objects = []
     if system:
-        q_objects.append(Q(system__icontains=system.value))
+        q_objects.append(Q(animal__system__icontains=system.value))
     if accession:
         q_objects.append(Q(accession__icontains=accession))
-    if project_accession:
-        q_objects.append(Q(project__accession__icontains=project_accession))
-    if project_title:
-        q_objects.append(Q(project__title__icontains=project_title))
+    if animal_accession:
+        q_objects.append(Q(animal__accession__icontains=animal_accession))
     if title:
         q_objects.append(Q(title__icontains=title))
-    if require_metagenomics:
-        q_objects.append(Q(has_metagenomics=True))
-    if require_metabolomics:
-        q_objects.append(Q(has_metabolomics=True))
+    if sample_type:
+        q_objects.append(Q(sample_type__iexact=sample_type.value))
     if require_metadata_marker:
         sample_ids_with_metadata = (
             SampleStructuredDatum.objects.filter(
@@ -300,6 +309,63 @@ def list_samples(
 
 
 @api.get(
+    "/animals/{animal_accession}",
+    response=AnimalSchema,
+    summary="Fetch a single Animal (a host-level BioSample) from the HoloFood database.",
+    description="Retrieve a single Animal by its BioSamples accession, including all structured metadata available. ",
+    url_name="animal_detail",
+    tags=[SAMPLES],
+)
+def get_animal(request, animal_accession: str):
+    animal = get_object_or_404(Animal, accession=animal_accession)
+    return animal
+
+
+@api.get(
+    "/animals",
+    response=List[AnimalSlimSchema],
+    summary="Fetch a list of Animals (host-level BioSamples).",
+    description="Long lists will be paginated, so use the `page=` query parameter to get more pages. "
+    "Several filters are available, which mostly perform case-insensitive containment lookups. "
+    "Animal metadata are *not* returned for each item. "
+    "Use the `/animals/{animal_accession}` endpoint to retrieve those. "
+    "Animal metadata *can* be filtered for with `require_metadata_marker=`: this finds animals where "
+    "the named metadata marker is present and none of `['0', 'false', 'unknown', 'n/a', 'null]`. "
+    "The `require_sample_type=` filter finds only animals where "
+    "at least one derived sample of the specified type exists. "
+    "Use `/sample_metadata_markers` to find the exact marker name of interest.",
+    tags=[SAMPLES],
+)
+def list_animals(
+    request,
+    system: System = None,
+    accession: str = None,
+    require_metadata_marker: str = None,
+    require_sample_type: SampleType = None,
+):
+    q_objects = []
+    if system:
+        q_objects.append(Q(system__icontains=system.value))
+    if accession:
+        q_objects.append(Q(accession__icontains=accession))
+    if require_metadata_marker:
+        animal_ids_with_metadata = (
+            AnimalStructuredDatum.objects.filter(
+                marker__name__iexact=require_metadata_marker
+            )
+            .annotate(measurement_lower=Lower("measurement"))
+            .exclude(measurement_lower__in=("0", "false", "unknown", "n/a", "null"))
+            .values_list("animal_id", flat=True)
+        )
+        q_objects.append(Q(accession__in=animal_ids_with_metadata))
+    if require_sample_type:
+        q_objects.append(Q(sample_types__icontains=require_sample_type.value))
+    if not q_objects:
+        return Animal.objects.all()
+    return Animal.objects.filter(reduce(operator.and_, q_objects))
+
+
+@api.get(
     "/sample_metadata_markers",
     response=List[SampleCountedMetadataMarkerSchema],
     summary="Fetch a list of structured metadata markers (i.e. keys).",
@@ -307,22 +373,27 @@ def list_samples(
     "Not every sample will have every metadata marker. "
     "Long lists will be paginated, so use the `page=` query parameter to get more pages. "
     "Use `name=` to search for a marker by name (case insensitive partial matches). "
-    "Use `min_samples=` to search for markers present on at least that many samples.",
+    "Use `min_samples=` to search for markers present on at least that many samples."
+    "Use `min_animals=` to search for marker present on at least that many animals (i.e. host samples).",
     tags=[SAMPLES],
 )
 def list_sample_metadata_markers(
     request,
     name: str = None,
     min_samples: int = None,
+    min_animals: int = None,
 ):
     q_objects = []
     if name:
         q_objects.append(Q(name__icontains=name))
     if min_samples:
         q_objects.append(Q(samples_count__gte=min_samples))
+    if min_animals:
+        q_objects.append(Q(animals_count__gte=min_animals))
 
     annotated_markers = SampleMetadataMarker.objects.annotate(
-        samples_count=models.Count("samplestructureddatum")
+        samples_count=models.Count("samplestructureddatum"),
+        animals_count=models.Count("animalstructureddatum"),
     )
     if not q_objects:
         return annotated_markers.all()
@@ -334,7 +405,7 @@ def list_sample_metadata_markers(
     response=List[AnalysisSummarySchema],
     summary="Fetch a list of Analysis Summary documents.",
     description="Analysis Summary documents are produced by HoloFood partners and collaborators. "
-    "Each summary is tagged as involving 1 or more Samples, Projects, or Catalogues. "
+    "Each summary is tagged as involving 1 or more Samples or Catalogues. "
     "Typically these are aggregative or comparative analyses of the Samples. "
     "These are text and graphic documents. "
     "They are not intended for programmatic consumption, so a website URL is returned for each. ",

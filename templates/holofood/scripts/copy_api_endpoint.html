@@ -1,0 +1,6 @@
+<script>
+    function copyApiEndpoint(e) {
+        navigator.clipboard.writeText('{{ endpoint }}');
+        window.document.getElementById('endpoint-copy-tooltip').textContent = "Copied!";
+    }
+</script>

@@ -3,7 +3,7 @@ title: "Admin access for HoloFood partners"
 ---
 
 ## Managing the database
-Bulk activities, like importing projects, samples, and metadata, are covered in the
+Bulk activities, like importing samples and metadata, are covered in the
 [repository README](https://github.com/EBI-Metagenomics/holofood-database#use).
 
 There is also an Admin Panel where individual database entries can be managed.
@@ -30,9 +30,9 @@ There are toolbar buttons in the markdown editor to help you with this syntax.
 
 ![Screenshot of a sample summary in edit mode](/img/partners/link-analysis-summary.png)
 
-Analysis summaries must be linked to samples and/or projects and/or catalogues.
-To link them, select the relevant samples/projects/catalogues from the lists on the left,
-and hit the `->` button to move the selected samples/projects/catalogues to the right-hand list.
+Analysis summaries must be linked to samples and/or catalogues.
+To link them, select the relevant samples/catalogues from the lists on the left,
+and hit the `->` button to move the selected samples/catalogues to the right-hand list.
 
 :::{.callout-warning}
 Don’t forget to press "Save and continue editing" now and then!

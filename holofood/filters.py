@@ -5,7 +5,7 @@ import django_filters
 from django.db.models import Q, CharField, TextField
 from django.utils.safestring import mark_safe
 
-from holofood.models import Sample, Genome, ViralFragment
+from holofood.models import Sample, Genome, ViralFragment, Animal
 
 
 class MultiFieldSearchFilter(django_filters.FilterSet):
@@ -28,38 +28,41 @@ class MultiFieldSearchFilter(django_filters.FilterSet):
 
 
 class SampleFilter(django_filters.FilterSet):
-    animal_code__icontains = django_filters.CharFilter(
-        field_name="animal_code",
-        label="Animal code contains",
+    animal_accession__icontains = django_filters.CharFilter(
+        field_name="animal__accession",
+        label="Animal accession contains",
         lookup_expr="icontains",
         help_text=mark_safe(
             f'See <a class="vf-link" href="/animals">the list of animals</a> for details'
         ),
     )
 
-    has_metagenomics = django_filters.ChoiceFilter(
-        choices=[(True, "Yes"), (False, "No")],
-        label="Has metagenomics data",
-    )
-
-    has_metabolomics = django_filters.ChoiceFilter(
-        choices=[(True, "Yes"), (False, "No")],
-        label="Has metabolomics data",
-    )
-
     ordering = django_filters.OrderingFilter(
-        fields=("accession", "project__accession", "title"),
+        fields=("accession", "animal__accession", "title"),
     )
 
     class Meta:
         model = Sample
 
         fields = {
+            "animal__system": ["exact"],
+            "sample_type": ["exact"],
+            "accession": ["icontains"],
+            "title": ["icontains"],
+        }
+
+
+class AnimalFilter(django_filters.FilterSet):
+    ordering = django_filters.OrderingFilter(
+        fields=("accession", "samples_count"),
+    )
+
+    class Meta:
+        model = Animal
+
+        fields = {
             "system": ["exact"],
             "accession": ["icontains"],
-            "project__accession": ["icontains"],
-            "project__title": ["icontains"],
-            "title": ["icontains"],
         }
 
 

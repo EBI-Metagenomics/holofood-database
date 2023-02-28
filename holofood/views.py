@@ -24,6 +24,7 @@ from holofood.filters import (
     MultiFieldSearchFilter,
     GenomeFilter,
     ViralFragmentFilter,
+    AnimalFilter,
 )
 from holofood.models import (
     Sample,
@@ -32,9 +33,9 @@ from holofood.models import (
     ViralCatalogue,
     ViralFragment,
     Genome,
-    Project,
+    Animal,
 )
-from holofood.utils import holofood_config, StringAgg
+from holofood.utils import holofood_config
 
 
 class ListFilterView(ListView):
@@ -57,6 +58,22 @@ class SampleListView(ListFilterView):
     paginate_by = 10
     template_name = "holofood/pages/sample_list.html"
     filterset_class = SampleFilter
+
+    def get_context_data(self, **kwargs):
+        """
+        If the animal accession filter resolves to a single animal,
+        set it as "from_animal" so that we can render the list as being
+        a single-animal focus.
+        """
+        context = super().get_context_data(**kwargs)
+
+        filters = self.filterset.data
+        animal_filter = filters.get("animal_accession__icontains")
+        if animal_filter:
+            if Animal.objects.filter(accession__iexact=animal_filter).exists():
+                context["from_animal"] = animal_filter
+
+        return context
 
 
 class SampleDetailView(DetailView):
@@ -86,6 +103,23 @@ class SampleDetailView(DetailView):
         return context
 
 
+class AnimalListView(ListFilterView):
+    model = Animal
+    context_object_name = "animals"
+    paginate_by = 10
+    template_name = "holofood/pages/animal_list.html"
+    filterset_class = AnimalFilter
+
+
+class AnimalDetailView(DetailView):
+    model = Animal
+    context_object_name = "animal"
+    template_name = "holofood/pages/animal_detail.html"
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related("structured_metadata")
+
+
 class CustomPaginator(Paginator):
     page_param = "page"
 
@@ -106,7 +140,6 @@ class AnalysisSummaryDetailView(DetailView):
 
         for related_object_type in [
             "samples",
-            "projects",
             "genome_catalogues",
             "viral_catalogues",
         ]:
@@ -309,13 +342,10 @@ class GlobalSearchView(TemplateView):
         ):
             return reverse("sample_detail", args=[query_upper])
         if (
-            query_upper.startswith("PRJ")
-            and Project.objects.filter(accession=query_upper).exists()
+            query_upper.startswith("SAM")
+            and Animal.objects.filter(accession=query_upper).exists()
         ):
-            return (
-                reverse("samples_list")
-                + f"?project__accession__icontains={query_upper}"
-            )
+            return reverse("animal_detail", args=[query_upper])
         if query_upper.startswith("MGYG"):
             mag = Genome.objects.filter(accession=query_upper).first()
             if mag:
@@ -335,7 +365,7 @@ class GlobalSearchView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["query"] = self.request.GET.get("query")
         context["samples"] = self.multi_search_model(Sample)
-        context["projects"] = self.multi_search_model(Project)
+        context["animals"] = self.multi_search_model(Animal)
         context["mag_catalogues"] = self.multi_search_model(GenomeCatalogue)
         context["mags"] = self.multi_search_model(Genome)
         context["viral_catalogues"] = self.multi_search_model(ViralCatalogue)
@@ -343,23 +373,4 @@ class GlobalSearchView(TemplateView):
         context["analysis_summaries"] = self.multi_search_model(AnalysisSummary)
         context["docs_sections"] = self.get_docs_results()
 
-        return context
-
-
-class AnimalCodeListView(TemplateView):
-    template_name = "holofood/pages/animal_code_list.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        animals_qs = (
-            Sample.objects.all()
-            .values("animal_code")
-            .annotate(
-                samples_count=Count("pk", distinct=True),
-                sample_accessions=StringAgg("accession"),
-            )
-            .order_by()
-        )
-        animals_paginated = CustomPaginator(animals_qs, per_page=10)
-        context["animals"] = animals_paginated.page(self.request.GET.get("page", 1))
         return context

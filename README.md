@@ -72,6 +72,7 @@ python manage.py fetch_project_samples
 python manage.py refresh_external_data
 python manage.py runserver
 ```
+TODO: update README once importer supports hierarchical samples
 
 ### Refreshing external data
 `refresh_external_data` has several options, for fetching data for some or all samples/projects, 

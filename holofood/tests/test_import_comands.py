@@ -11,11 +11,13 @@ from holofood.external_apis.ena.portal_api import API_ROOT as ENAAPIROOT
 from holofood.external_apis.biosamples.api import API_ROOT as BSAPIROOT
 from holofood.external_apis.ena.browser_api import API_ROOT as DBAPIROOT
 from holofood.external_apis.metabolights.api import API_ROOT as MTBLSAPIROOT
-from holofood.models import Sample, Project, ViralCatalogue, GenomeCatalogue
+from holofood.models import Sample, ViralCatalogue, GenomeCatalogue
 from holofood.tests.conftest import set_metabolights_project_for_sample
 from holofood.utils import holofood_config
 
 MGAPIROOT = holofood_config.mgnify.api_root.rstrip("/")
+
+# TODO: rewrite for hierarchical samples import
 
 
 def _call_command(command, *args, **kwargs):
@@ -46,11 +48,9 @@ def test_fetch_project_samples(requests_mock):
     )
     out = _call_command("fetch_project_samples")
     logging.info(out)
-    assert Project.objects.count() == 1
     assert Sample.objects.count() == 1
 
     sample = Sample.objects.first()
-    assert sample.project.title == "HoloFood Donut"
     assert sample.title == "HF_DONUT.JAM.1"
 
 

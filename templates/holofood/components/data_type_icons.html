@@ -1,27 +1,35 @@
 {% load static %}
-<div class="vf-grid vf-grid__col-4 icons-container">
-    {% if sample_metadata %}
-        <div class="tooltiped">
-            <img src="{% static "img/icons/sample.svg" %}"
-             alt="Has sample metadata"
-             class="data-type-icon"/>
-            <span class="tooltip-text">Has sample metadata</span>
-        </div>
-    {% endif %}
-    {% if metagenomics %}
+<div class="vf-grid vf-grid__col-4 icons-container" style="max-width: 128px">
+    {% if metagenomic %}
         <div class="tooltiped">
             <img src="{% static "img/icons/bacteria.svg" %}"
-             alt="Has metagenomics data"
+             alt="Has metagenomic data"
              class="data-type-icon"/>
-            <span class="tooltip-text">Has metagenomics data</span>
+            <span class="tooltip-text">Has metagenomic data</span>
         </div>
     {% endif %}
-    {% if metabolomics %}
+    {% if metabolomic %}
         <div class="tooltiped">
             <img src="{% static "img/icons/molecule.svg" %}"
-             alt="Has metabolomics data"
+             alt="Has metabolomic data"
              class="data-type-icon"/>
-            <span class="tooltip-text">Has metabolomics data</span>
+            <span class="tooltip-text">Has metabolomic data</span>
+        </div>
+    {% endif %}
+    {% if histological %}
+        <div class="tooltiped">
+            <img src="{% static "img/icons/microscope.svg" %}"
+             alt="Has histological data"
+             class="data-type-icon"/>
+            <span class="tooltip-text">Has histological data</span>
+        </div>
+    {% endif %}
+    {% if host_genomic %}
+        <div class="tooltiped">
+            <img src="{% static "img/icons/genome.svg" %}"
+             alt="Has host genomic data"
+             class="data-type-icon"/>
+            <span class="tooltip-text">Has host genomic data</span>
         </div>
     {% endif %}
 </div>

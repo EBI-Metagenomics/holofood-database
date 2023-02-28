@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
+     <nav class="vf-breadcrumbs" aria-label="Breadcrumb">
+      <ul class="vf-breadcrumbs__list | vf-list vf-list--inline">
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'home' %}" class="vf-breadcrumbs__link">Home</a>
+        </li>
+
+        <li class="vf-breadcrumbs__item" aria-current="location">
+          Analysis summaries
+        </li>
+      </ul>
+
+    </nav>
     <div class="vf-stack vf-stack--400">
         <div/>
         <h2>Analysis summaries</h2>

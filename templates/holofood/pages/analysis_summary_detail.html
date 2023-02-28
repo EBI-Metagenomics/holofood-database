@@ -1,5 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
+    <nav class="vf-breadcrumbs" aria-label="Breadcrumb">
+      <ul class="vf-breadcrumbs__list | vf-list vf-list--inline">
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'home' %}" class="vf-breadcrumbs__link">Home</a>
+        </li>
+
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'analysis_summary_list' %}" class="vf-breadcrumbs__link">Analysis summaries</a>
+        </li>
+
+        <li class="vf-breadcrumbs__item" aria-current="location">
+          {{ analysis_summary.slug }}
+        </li>
+      </ul>
+
+    </nav>
     <h1>{{ analysis_summary.title }}</h1>
     <div class="vf-sidebar vf-sidebar--end vf-sidebar--600">
         <div class="vf-sidebar__inner">
@@ -17,11 +33,6 @@
                                 <a class="vf-tabs__link" href="#vf-tabs__section--samples">Related Samples</a>
                             </li>
                         {% endif %}
-                        {% if has_projects %}
-                            <li class="vf-tabs__item">
-                                <a class="vf-tabs__link" href="#vf-tabs__section--projects">Related Projects</a>
-                            </li>
-                        {% endif %}
                         {% if has_genome_catalogues or has_viral_catalogues %}
                             <li class="vf-tabs__item">
                                 <a class="vf-tabs__link" href="#vf-tabs__section--catalogues">Related Catalogues</a>
@@ -36,7 +47,7 @@
                                 <thead class="vf-table__header">
                                     <tr class="vf-table__row">
                                         <th class="vf-table__heading" scope="col">Accession</th>
-                                        <th class="vf-table__heading" scope="col">Project</th>
+                                        <th class="vf-table__heading" scope="col">Animal</th>
                                     </tr>
                                 </thead>
                                 <tbody class="vf-table__body">
@@ -47,8 +58,8 @@
                                                    href="{% url 'sample_detail' pk=sample.accession %}">{{ sample.accession }}</a>
                                             </td>
                                             <td class="vf-table__cell">
-                                                <a href="{{ ENA_BROWSER_URL }}/{{ sample.project.accession }}"
-                                                   class="vf-link inline">{{ sample.project.accession }}</a>
+                                                <a class="vf-button vf-button--link vf-button--sm inline"
+                                                   href="{% url 'sample_detail' pk=sample.animal.accession %}">{{ sample.animal.accession }}</a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -56,41 +67,6 @@
                                 <tfoot class="vf-table__footer">
                                     <tr class="vf-table__row">
                                         <td class="vf-table__cell" colspan="100">{% include "holofood/components/pagination.html" with page_obj=samples %}</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </section>
-                    {% endif %}
-                    {% if has_projects %}
-                        <section class="vf-tabs__section" id="vf-tabs__section--projects">
-                            <table class="vf-table full-width">
-                                <thead class="vf-table__header">
-                                    <tr class="vf-table__row">
-                                        <th class="vf-table__heading" scope="col">Accession</th>
-                                        <th class="vf-table__heading" scope="col">Title</th>
-                                        <th class="vf-table__heading" scope="col">Samples</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="vf-table__body">
-                                    {% for project in projects %}
-                                        <tr class="vf-table__row">
-                                            <td class="vf-table__cell">
-                                                <a href="{{ ENA_BROWSER_URL }}/{{ project.accession }}"
-                                                   class="vf-link inline">{{ project.accession }}</a>
-                                            </td>
-                                            <td class="vf-table__cell">{{ project.title }}</td>
-                                            <td class="vf-table__cell">
-                                                <a class="vf-button vf-button--link vf-button--sm inline"
-                                                   href="{% url 'samples_list' %}?project__accession__icontains={{ project.accession }}">Samples</a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                                <tfoot class="vf-table__footer">
-                                    <tr class="vf-table__row">
-                                        <td class="vf-table__cell" colspan="100">
-                                            {% include "holofood/components/pagination.html" with page_obj=projects %}
-                                        </td>
                                     </tr>
                                 </tfoot>
                             </table>

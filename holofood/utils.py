@@ -4,7 +4,7 @@ from datetime import timedelta
 from typing import Any
 
 from django.conf import settings
-from django.db.models import Aggregate
+from django.db.models import Aggregate, Func
 
 from holofood.config import HolofoodConfig
 
@@ -57,3 +57,7 @@ class StringAgg(Aggregate):
     else:
         function = "MIN"
     name = "Concat"
+
+
+class DistinctFunc(Func):
+    template = "%(function)s(DISTINCT %(expressions)s)"

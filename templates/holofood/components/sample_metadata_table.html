@@ -1,0 +1,98 @@
+{% load sample_metadata %}
+
+<div class="autoComplete_wrapper">
+    <input id="typeahead" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off"/>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+<script>
+    const autoCompleteJS = new autoComplete({
+        selector: "#typeahead",
+        placeHolder: "Search metadata markers",
+        data: {
+            src: [
+                {% for metadatum in sample.structured_metadata.all %}
+                    {name: "{{ metadatum.marker.name }}", type: "{{ metadatum.marker.type }}"},
+                {% endfor %}
+            ],
+            keys: ["name"],
+            cache: true,
+        },
+        resultItem: {
+            highlight: true
+        },
+        resultsList: {
+            class: "typeahead-results",
+            position: "beforebegin"
+        },
+        events: {
+            input: {
+                selection: (event) => {
+                    autoCompleteJS.input.value = event.detail.selection.value.name;
+
+                    const tabPanels = document.querySelectorAll(
+                        "[data-vf-js-tabs-content] [id^=\"vf-tabs__section\"]"
+                    );
+                    const tabForSelectedMarker = document.querySelector(
+                        `[data-vf-js-tabs] .vf-tabs__link[data-metadata-type-key="${event.detail.selection.value.type}"] `
+                    );
+                    vfTabsSwitch(tabForSelectedMarker, tabPanels);
+
+                },
+                navigate: (event) => {
+                    Array.from(document.querySelectorAll('.highlight-tab-match'))
+                        .forEach((el) => el.classList.remove('highlight-tab-match'));
+                    Array.from(document.querySelectorAll('.highlight-tab-select'))
+                        .forEach((el) => el.classList.remove('highlight-tab-select'));
+
+                    const matchingDataTypes = [... new Set(event.detail.matches.map(match => match.value.type))];
+                    matchingDataTypes.forEach((metadataKey => {
+                        const tabs = document.querySelector(`[data-metadata-type-key="${metadataKey}"]`);
+                        tabs.classList.add("highlight-tab-match");
+                    }));
+
+                    document.querySelector(
+                        `[data-metadata-type-key="${event.detail.selection.value.type}"]`
+                    ).classList.add("highlight-tab-select");
+                }
+            }
+        }
+    });
+</script>
+{% regroup sample.structured_metadata.all by marker.type as metadata_sections %}
+<div class="vf-tabs">
+    <ul class="vf-tabs__list" data-vf-js-tabs id="metadata-sections-tabs">
+        {% for metadata_section in metadata_sections %}
+            <li class="vf-tabs__item">
+                <a class="vf-tabs__link"
+                   data-metadata-type-key="{{ metadata_section.grouper }}"
+                   href="#vf-tabs__section--{{ metadata_section.grouper|lower|cut:" " }}">{{ metadata_section.grouper|default:"Generic"|title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="vf-tabs-content" data-vf-js-tabs-content>
+    {% for metadata_section in metadata_sections %}
+        <section class="vf-tabs__section"
+                 id="vf-tabs__section--{{ metadata_section.grouper|lower|cut:" " }}">
+            <h2>{{ metadata_section.grouper|default:"Generic"|title }} metadata</h2>
+            <table class="vf-table scrollable-table">
+                <thead class="vf-table__header">
+                    <tr class="vf-table__row">
+                        <th class="vf-table__heading" scope="col">Marker</th>
+                        <th class="vf-table__heading" scope="col">Measurement</th>
+                        <th class="vf-table__heading" scope="col">Units</th>
+                    </tr>
+                </thead>
+                <tbody class="vf-table__body">
+                    {% for structured_metadatum in metadata_section.list|holofood_ordering_rules %}
+                        <tr class="vf-table__row">
+                            <td class="vf-table__cell">{{ structured_metadatum.marker.name }}</td>
+                            <td class="vf-table__cell">{{ structured_metadatum.measurement|significant_digits:"5" }}</td>
+                            <td class="vf-table__cell">{{ structured_metadatum.units }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    {% endfor %}
+</div>

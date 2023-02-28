@@ -1,7 +1,7 @@
 import pytest
 
+from holofood.management.commands.generate_dev_data import METAB_FILES
 from holofood.models import (
-    Project,
     Sample,
     SampleMetadataMarker,
     AnalysisSummary,
@@ -10,128 +10,126 @@ from holofood.models import (
     ViralCatalogue,
     ViralFragment,
     SampleStructuredDatum,
+    Animal,
 )
 from holofood.utils import holofood_config
 
 
-@pytest.fixture
-def salmon_project():
-    return Project.objects.create(
-        accession="PRJTESTING", title="HoloFood Donut and Fish"
+@pytest.fixture()
+def salmon_animal():
+    return Animal.objects.create(
+        accession="SAMEG04",
+        system=Animal.SALMON,
+        animal_code="SSOPHIE",
     )
 
 
 @pytest.fixture()
-def salmon_sample(salmon_project):
+def chicken_animal():
+    return Animal.objects.create(
+        accession="SAMEG01",
+        system=Animal.CHICKEN,
+        animal_code="CCHARLIE",
+    )
+
+
+@pytest.fixture()
+def salmon_metagenomic_sample(salmon_animal):
     return Sample.objects.create(
         accession="SAMEA00000002",
-        project=salmon_project,
-        title="HF_DONUT.SALMON.1",
-        system=Sample.SALMON,
+        title="HF_DONUT.SALMON.METAG",
+        animal=salmon_animal,
+        sample_type=Sample.METAGENOMIC,
     )
 
 
 @pytest.fixture()
-def salmon_structureddata_response(salmon_sample):
+def salmon_metabolomic_sample(salmon_animal):
+    return Sample.objects.create(
+        accession="SAMEA00000003",
+        animal=salmon_animal,
+        sample_type=Sample.METABOLOMIC,
+        title="HF_DONUT.SALMON.METAB",
+        metabolights_files=METAB_FILES,
+    )
+
+
+@pytest.fixture()
+def salmon_histological_sample(salmon_animal):
+    return Sample.objects.create(
+        accession="SAMEA00000004",
+        animal=salmon_animal,
+        sample_type=Sample.HISTOLOGICAL,
+        title="HF_DONUT.SALMON.HIST",
+    )
+
+
+@pytest.fixture()
+def salmon_host_sample(salmon_animal):
+    return Sample.objects.create(
+        accession="SAMEA00000005",
+        animal=salmon_animal,
+        sample_type=Sample.HOST_GENOMIC,
+        title="HF_DONUT.SALMON.HOST",
+    )
+
+
+@pytest.fixture()
+def chicken_metagenomic_sample(chicken_animal):
+    return Sample.objects.create(
+        accession="SAMEA00000006",
+        title="HF_DONUT.CHICKEN.METAG",
+        animal=chicken_animal,
+        sample_type=Sample.METAGENOMIC,
+    )
+
+
+@pytest.fixture()
+def chicken_metabolomic_sample(chicken_animal):
+    return Sample.objects.create(
+        accession="SAMEA00000007",
+        animal=chicken_animal,
+        sample_type=Sample.METABOLOMIC,
+        title="HF_DONUT.CHICKEN.METAB",
+        metabolights_files=METAB_FILES,
+    )
+
+
+@pytest.fixture()
+def chicken_histological_sample(chicken_animal):
+    return Sample.objects.create(
+        accession="SAMEA00000008",
+        animal=chicken_animal,
+        sample_type=Sample.HISTOLOGICAL,
+        title="HF_DONUT.CHICKEN.HIST",
+    )
+
+
+@pytest.fixture()
+def chicken_host_sample(chicken_animal):
+    return Sample.objects.create(
+        accession="SAMEA00000009",
+        animal=chicken_animal,
+        sample_type=Sample.HOST_GENOMIC,
+        title="HF_DONUT.CHICKEN.HOST",
+    )
+
+
+@pytest.fixture()
+def salmon_animal_structureddata_response(salmon_animal):
     return {
-        "accession": salmon_sample.accession,
+        "accession": salmon_histological_sample.accession,
         "create": "2022-05-05T14:16:35.502Z",
         "update": "2022-05-05T14:16:35.506Z",
         "data": [
             {
                 "domain": None,
                 "webinSubmissionAccountId": "Webin-test",
-                "type": "EXTERNAL LINKS",
+                "type": "TANK",
                 "schema": None,
                 "content": [
                     {
-                        "marker": {"value": "Metabolights accession", "iri": None},
-                        "measurement": {"value": "MTBLSDONUT", "iri": None},
-                    },
-                    {
-                        "marker": {"value": "ENA Run ID", "iri": None},
-                        "measurement": {"value": "ERR4918394", "iri": None},
-                    },
-                    {
-                        "marker": {"value": "ENA Experiment ID", "iri": None},
-                        "measurement": {"value": "ERX4783303", "iri": None},
-                    },
-                ],
-            },
-            {
-                "domain": None,
-                "webinSubmissionAccountId": "Webin-test",
-                "type": "SAMPLE",
-                "schema": None,
-                "content": [
-                    {
-                        "marker": {"value": "Personnel", "iri": None},
-                        "measurement": {"value": "Captain Donut", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Host %", "iri": None},
-                        "measurement": {"value": "0", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Box", "iri": None},
-                        "measurement": {"value": "0", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "ng used for library build", "iri": None},
-                        "measurement": {"value": "399.6", "iri": None},
-                        "measurement_units": {"value": "ng", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "No. Non-host reads", "iri": None},
-                        "measurement": {"value": "0", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Comments", "iri": None},
-                        "measurement": {"value": "NA", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Position", "iri": None},
-                        "measurement": {"value": "0", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Omics", "iri": None},
-                        "measurement": {"value": "Metagenomics", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Storage 2D tube row", "iri": None},
+                        "marker": {"value": "Mid sampling (No. of fish)", "iri": None},
                         "measurement": {"value": "5", "iri": None},
                         "partner": {
                             "value": "DONUT",
@@ -139,168 +137,142 @@ def salmon_structureddata_response(salmon_sample):
                         },
                     },
                     {
-                        "marker": {"value": "Observations", "iri": None},
-                        "measurement": {"value": "NA", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Index PCR cycles", "iri": None},
-                        "measurement": {"value": "9", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Row", "iri": None},
-                        "measurement": {"value": "0", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "No. host reads", "iri": None},
-                        "measurement": {"value": "0", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Pool", "iri": None},
-                        "measurement": {"value": "S-MG-P37-502", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "2D Tube column", "iri": None},
-                        "measurement": {"value": "B", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Empty", "iri": None},
-                        "measurement": {"value": "false", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sequencing company", "iri": None},
-                        "measurement": {"value": "BGI", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "No. Quality-filtered reads", "iri": None},
-                        "measurement": {"value": "0", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                ],
-            },
-            {
-                "domain": None,
-                "webinSubmissionAccountId": "Webin-test",
-                "type": "HEAVY METALS",
-                "schema": None,
-                "content": [
-                    {
-                        "marker": {"value": "Lead", "iri": None},
-                        "measurement": {"value": "<0.006", "iri": None},
-                        "measurement_units": {"value": "mg/kg dw", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Selenium", "iri": None},
-                        "measurement": {"value": "0.33", "iri": None},
-                        "measurement_units": {"value": "mg/kg dw", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Quicksilver", "iri": None},
-                        "measurement": {"value": "0.03", "iri": None},
-                        "measurement_units": {"value": "mg/kg dw", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Total Arsenic", "iri": None},
-                        "measurement": {"value": "0.89", "iri": None},
-                        "measurement_units": {"value": "mg/kg dw", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Organ", "iri": None},
-                        "measurement": {"value": "muscle", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Cadmium", "iri": None},
-                        "measurement": {"value": "<0.001", "iri": None},
-                        "measurement_units": {"value": "mg/kg dw", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                ],
-            },
-            {
-                "domain": None,
-                "webinSubmissionAccountId": "Webin-test",
-                "type": "TRIAL",
-                "schema": None,
-                "content": [
-                    {
-                        "marker": {"value": "Trial end", "iri": None},
-                        "measurement": {"value": "2021-12-15", "iri": None},
-                    },
-                    {
-                        "marker": {"value": "Trial start", "iri": None},
-                        "measurement": {"value": "2021-10-05", "iri": None},
-                    },
-                    {
-                        "marker": {"value": "Trial description", "iri": None},
-                        "measurement": {
-                            "value": "Trial A: Seaweed-dose response",
+                        "marker": {
+                            "value": "End of sampling (No. of fish)",
                             "iri": None,
                         },
+                        "measurement": {"value": "20", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
                     },
                     {
-                        "marker": {"value": "Trial code", "iri": None},
-                        "measurement": {"value": "SA", "iri": None},
+                        "marker": {
+                            "value": "Total end of sampling biomass",
+                            "iri": None,
+                        },
+                        "measurement": {"value": "12081", "iri": None},
+                        "measurement_units": {"value": "g", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
                     },
                     {
-                        "marker": {"value": "Sample code", "iri": None},
-                        "measurement": {"value": "SA01.02C1a", "iri": None},
+                        "marker": {"value": "Total mid sampling biomass", "iri": None},
+                        "measurement": {"value": "1947", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "Total start biomass ", "iri": None},
+                        "measurement": {"value": "47944", "iri": None},
+                        "measurement_units": {"value": "g", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "Total end weight", "iri": None},
+                        "measurement": {"value": "76565", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "Average end weight", "iri": None},
+                        "measurement": {"value": "575.7", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "Tank code", "iri": None},
+                        "measurement": {"value": "SA01", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "LetSea Tank code", "iri": None},
+                        "measurement": {"value": "18", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "Average start weight", "iri": None},
+                        "measurement": {"value": "299.7", "iri": None},
+                        "measurement_units": {"value": "g", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "Mortality (No. of fish)", "iri": None},
+                        "measurement": {"value": "0", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "Standard growth rate", "iri": None},
+                        "measurement": {"value": "1.18", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {
+                            "value": "Start of sampling (No. of fish)",
+                            "iri": None,
+                        },
+                        "measurement": {"value": "160", "iri": None},
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "Feed conversion ratio", "iri": None},
+                        "measurement": {"value": "1.00", "iri": None},
+                        "measurement_units": {
+                            "value": "feed mass/fish weight gain",
+                            "iri": None,
+                        },
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {"value": "Notes", "iri": None},
+                        "measurement": {
+                            "value": "LetSea tank ID for source fishes: 101",
+                            "iri": None,
+                        },
+                        "partner": {
+                            "value": "DONUT",
+                            "iri": "https://www.example.com/donut/",
+                        },
+                    },
+                    {
+                        "marker": {
+                            "value": "The thermal growth coefficient",
+                            "iri": None,
+                        },
+                        "measurement": {"value": "2.26", "iri": None},
                         "partner": {
                             "value": "DONUT",
                             "iri": "https://www.example.com/donut/",
@@ -670,1154 +642,31 @@ def salmon_structureddata_response(salmon_sample):
             {
                 "domain": None,
                 "webinSubmissionAccountId": "Webin-test",
-                "type": "FATTY ACIDS",
+                "type": "TRIAL",
                 "schema": None,
                 "content": [
                     {
-                        "marker": {"value": "22:1n-11", "iri": None},
-                        "measurement": {"value": "1.87", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
+                        "marker": {"value": "Trial end", "iri": None},
+                        "measurement": {"value": "2021-12-15", "iri": None},
                     },
                     {
-                        "marker": {"value": "21:5n-3", "iri": None},
-                        "measurement": {"value": "0.15", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
+                        "marker": {"value": "Trial start", "iri": None},
+                        "measurement": {"value": "2021-10-05", "iri": None},
                     },
                     {
-                        "marker": {"value": "Myristic acid 14:0", "iri": None},
-                        "measurement": {"value": "1.66", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Stearidonic acid 18:4n-3", "iri": None},
-                        "measurement": {"value": "0.56", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Linoleic acid 18:2n-6", "iri": None},
-                        "measurement": {"value": "12.80", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Docosapentaenoic acid 22:5n-3 (DPA)",
+                        "marker": {"value": "Trial description", "iri": None},
+                        "measurement": {
+                            "value": "Trial A: Seaweed-dose response",
                             "iri": None,
                         },
-                        "measurement": {"value": "1.00", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
                     },
                     {
-                        "marker": {"value": "Stearidonic acid 18:4n-3", "iri": None},
-                        "measurement": {"value": "0.80", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
+                        "marker": {"value": "Trial code", "iri": None},
+                        "measurement": {"value": "SA", "iri": None},
                     },
                     {
-                        "marker": {
-                            "value": "Gamma-Linolenic acid 18:3n-6",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.10", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Vaccenic acid 18:1n-7", "iri": None},
-                        "measurement": {"value": "3.40", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Caprylic acid 8:0", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum 20:1", "iri": None},
-                        "measurement": {"value": "2.31", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Paullinic acid 20:1n-7", "iri": None},
-                        "measurement": {"value": "0.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Myristoleic acid 14:1n-9", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum saturated", "iri": None},
-                        "measurement": {"value": "16.60", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Margaric acid 17:0", "iri": None},
-                        "measurement": {"value": "0.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum saturated", "iri": None},
-                        "measurement": {"value": "12.00", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum unidentified", "iri": None},
-                        "measurement": {"value": "1.70", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Eicosadienoic acid 20:2n-6", "iri": None},
-                        "measurement": {"value": "0.90", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Nervonic acid 24:1n-9", "iri": None},
-                        "measurement": {"value": "0.40", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "21:5n-3", "iri": None},
-                        "measurement": {"value": "0.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Eicosatrienoic acid 20:3n-3", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Caproic acid 6:0", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Eicosatetraenoic acid 20:4n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.70", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum n-6", "iri": None},
-                        "measurement": {"value": "15.00", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Lignoceric acid 24:0", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Arachidonic acid 20:4n-6 (ARA)",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.70", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Tetracosapentaenoic acid 24:5n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Oleic acid 18:1n-9", "iri": None},
-                        "measurement": {"value": "24.41", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Eicosatetraenoic acid 20:4n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.47", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "16:4n-3", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Capric acid 10:0", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum identified", "iri": None},
-                        "measurement": {"value": "71.00", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum 22:1", "iri": None},
-                        "measurement": {"value": "3.10", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Organ", "iri": None},
-                        "measurement": {"value": "muscle", "iri": None},
-                    },
-                    {
-                        "marker": {"value": "Behenic acid 22:0", "iri": None},
-                        "measurement": {"value": "0.10", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum fatty acids", "iri": None},
-                        "measurement": {"value": "72.20", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Paullinic acid 20:1n-7", "iri": None},
-                        "measurement": {"value": "0.13", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Pentadecylic acid 15:0", "iri": None},
-                        "measurement": {"value": "0.13", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Arachidic acid 20:0", "iri": None},
-                        "measurement": {"value": "0.18", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "n-3/n-6", "iri": None},
-                        "measurement": {"value": "1.20", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Lignoceric acid 24:0", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Osbond acid 22:5n-6", "iri": None},
-                        "measurement": {"value": "0.08", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Adrenic acid 22:4n-6", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum EPA+DHA", "iri": None},
-                        "measurement": {"value": "7.77", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum polyunsaturated", "iri": None},
-                        "measurement": {"value": "24.00", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Hexadecatrienoic acid 16:3n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Hypogeic acid 16:1n-9", "iri": None},
-                        "measurement": {"value": "0.30", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Tetracosahexaenoic acid 24:6n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Palmitoleic acid 16:1n-7", "iri": None},
-                        "measurement": {"value": "2.50", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Eicosenoic acid 20:1n-9", "iri": None},
-                        "measurement": {"value": "2.87", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Gamma-Linolenic acid 18:3n-6",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.11", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Gadoleic acid 20:1n-11", "iri": None},
-                        "measurement": {"value": "0.30", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Adrenic acid 22:4n-6", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Linoleic acid 18:2n-6", "iri": None},
-                        "measurement": {"value": "9.22", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Tetracosahexaenoic acid 24:6n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.15", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "16:2n-4", "iri": None},
-                        "measurement": {"value": "0.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Eicosenoic acid 20:1n-9", "iri": None},
-                        "measurement": {"value": "4.00", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Hypogeic acid 16:1n-9", "iri": None},
-                        "measurement": {"value": "0.18", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Alpha-Linolenic acid 18:3n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "3.04", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Palmitic acid 16:0", "iri": None},
-                        "measurement": {"value": "10.70", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Mead acid 20:3n-9", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Di-homo-gamma-linolenic acid 20:3n-6",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.24", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Arachidic acid 20:0", "iri": None},
-                        "measurement": {"value": "0.30", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Caprylic acid 8:0", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Myristoleic acid 14:1n-9", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "n-6/n-3", "iri": None},
-                        "measurement": {"value": "0.80", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Eicosapentaenoic acid 20:5n-3 (EPA)",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "2.80", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Nervonic acid 24:1n-9", "iri": None},
-                        "measurement": {"value": "0.27", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum 18:1", "iri": None},
-                        "measurement": {"value": "27.10", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Arachidonic acid 20:4n-6 (ARA)",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.50", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum 16:1", "iri": None},
-                        "measurement": {"value": "1.96", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Eicosapentaenoic acid 20:5n-3 (EPA)",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "2.04", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "n-6/n-3", "iri": None},
-                        "measurement": {"value": "0.80", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum monounsaturate", "iri": None},
-                        "measurement": {"value": "34.80", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Pentadecylic acid 15:0", "iri": None},
-                        "measurement": {"value": "0.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum n-3", "iri": None},
-                        "measurement": {"value": "18.10", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Palmitoleic acid 16:1n-7", "iri": None},
-                        "measurement": {"value": "1.78", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Eicosadienoic acid 20:2n-6", "iri": None},
-                        "measurement": {"value": "0.68", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum n-6", "iri": None},
-                        "measurement": {"value": "10.80", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "22:1n-11", "iri": None},
-                        "measurement": {"value": "2.60", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Myristic acid 14:0", "iri": None},
-                        "measurement": {"value": "2.30", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Docosahexaenoic acid 22:6n-3 (DHA)",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "5.74", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum 20:1", "iri": None},
-                        "measurement": {"value": "4.50", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Stearic acid 18:0", "iri": None},
-                        "measurement": {"value": "2.80", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum monounsaturate", "iri": None},
-                        "measurement": {"value": "48.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "18:1n-11", "iri": None},
-                        "measurement": {"value": "0.22", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Capric acid 10:0", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Eicosatrienoic acid 20:3n-3", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Docosapentaenoic acid 22:5n-3 (DPA)",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.76", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Erucic acid 22:1n-9", "iri": None},
-                        "measurement": {"value": "0.60", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum 18:1", "iri": None},
-                        "measurement": {"value": "37.50", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Oleic acid 18:1n-9", "iri": None},
-                        "measurement": {"value": "33.80", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Tetracosapentaenoic acid 24:5n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.14", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Hexadecatrienoic acid 16:3n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum EPA+DHA", "iri": None},
-                        "measurement": {"value": "10.80", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Stearic acid 18:0", "iri": None},
-                        "measurement": {"value": "2.04", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Caproic acid 6:0", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum identified", "iri": None},
-                        "measurement": {"value": "98.30", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Erucic acid 22:1n-9", "iri": None},
-                        "measurement": {"value": "0.40", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Lauric acid 12:0", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Palmitic acid 16:0", "iri": None},
-                        "measurement": {"value": "7.73", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "18:1n-11", "iri": None},
-                        "measurement": {"value": "0.30", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum polyunsaturated", "iri": None},
-                        "measurement": {"value": "33.30", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Gadoleic acid 20:1n-11", "iri": None},
-                        "measurement": {"value": "0.22", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Osbond acid 22:5n-6", "iri": None},
-                        "measurement": {"value": "0.10", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "n-3/n-6", "iri": None},
-                        "measurement": {"value": "1.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Behenic acid 22:0", "iri": None},
-                        "measurement": {"value": "0.10", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Margaric acid 17:0", "iri": None},
-                        "measurement": {"value": "0.12", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum 16:1", "iri": None},
-                        "measurement": {"value": "2.70", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Di-homo-gamma-linolenic acid 20:3n-6",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "0.30", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "16:4n-3", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum 22:1", "iri": None},
-                        "measurement": {"value": "2.27", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum fatty acids", "iri": None},
-                        "measurement": {"value": "100.00", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Alpha-Linolenic acid 18:3n-3",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "4.20", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Docosahexaenoic acid 22:6n-3 (DHA)",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "7.90", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Lauric acid 12:0", "iri": None},
-                        "measurement": {"value": "<0.1", "iri": None},
-                        "measurement_units": {"value": "%", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum n-3", "iri": None},
-                        "measurement": {"value": "13.00", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Vaccenic acid 18:1n-7", "iri": None},
-                        "measurement": {"value": "2.46", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Sum unidentified", "iri": None},
-                        "measurement": {"value": "1.22", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "16:2n-4", "iri": None},
-                        "measurement": {"value": "0.16", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Mead acid 20:3n-9", "iri": None},
-                        "measurement": {"value": "<0.01", "iri": None},
-                        "measurement_units": {"value": "mg/g", "iri": None},
+                        "marker": {"value": "Sample code", "iri": None},
+                        "measurement": {"value": "SA01.02C1a", "iri": None},
                         "partner": {
                             "value": "DONUT",
                             "iri": "https://www.example.com/donut/",
@@ -1825,164 +674,40 @@ def salmon_structureddata_response(salmon_sample):
                     },
                 ],
             },
+        ],
+    }
+
+
+@pytest.fixture()
+def salmon_metabolomic_structureddata_response(salmon_metabolomic_sample):
+    return {
+        "accession": salmon_histological_sample.accession,
+        "create": "2022-05-05T14:16:35.502Z",
+        "update": "2022-05-05T14:16:35.506Z",
+        "data": [
             {
                 "domain": None,
                 "webinSubmissionAccountId": "Webin-test",
-                "type": "TANK",
+                "type": "EXTERNAL LINKS",
                 "schema": None,
                 "content": [
                     {
-                        "marker": {"value": "Mid sampling (No. of fish)", "iri": None},
-                        "measurement": {"value": "5", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "End of sampling (No. of fish)",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "20", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Total end of sampling biomass",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "12081", "iri": None},
-                        "measurement_units": {"value": "g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Total mid sampling biomass", "iri": None},
-                        "measurement": {"value": "1947", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Total start biomass ", "iri": None},
-                        "measurement": {"value": "47944", "iri": None},
-                        "measurement_units": {"value": "g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Total end weight", "iri": None},
-                        "measurement": {"value": "76565", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Average end weight", "iri": None},
-                        "measurement": {"value": "575.7", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Tank code", "iri": None},
-                        "measurement": {"value": "SA01", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "LetSea Tank code", "iri": None},
-                        "measurement": {"value": "18", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Average start weight", "iri": None},
-                        "measurement": {"value": "299.7", "iri": None},
-                        "measurement_units": {"value": "g", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Mortality (No. of fish)", "iri": None},
-                        "measurement": {"value": "0", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Standard growth rate", "iri": None},
-                        "measurement": {"value": "1.18", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "Start of sampling (No. of fish)",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "160", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Feed conversion ratio", "iri": None},
-                        "measurement": {"value": "1.00", "iri": None},
-                        "measurement_units": {
-                            "value": "feed mass/fish weight gain",
-                            "iri": None,
-                        },
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {"value": "Notes", "iri": None},
-                        "measurement": {
-                            "value": "LetSea tank ID for source fishes: 101",
-                            "iri": None,
-                        },
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
-                    },
-                    {
-                        "marker": {
-                            "value": "The thermal growth coefficient",
-                            "iri": None,
-                        },
-                        "measurement": {"value": "2.26", "iri": None},
-                        "partner": {
-                            "value": "DONUT",
-                            "iri": "https://www.example.com/donut/",
-                        },
+                        "marker": {"value": "Metabolights accession", "iri": None},
+                        "measurement": {"value": "MTBLSDONUT", "iri": None},
                     },
                 ],
-            },
+            }
+        ],
+    }
+
+
+@pytest.fixture()
+def salmon_histological_structureeddata_response(salmon_histological_sample):
+    return {
+        "accession": salmon_histological_sample.accession,
+        "create": "2022-05-05T14:16:35.502Z",
+        "update": "2022-05-05T14:16:35.506Z",
+        "data": [
             {
                 "domain": None,
                 "webinSubmissionAccountId": "Webin-test",
@@ -2014,6 +739,33 @@ def salmon_structureddata_response(salmon_sample):
 
 
 @pytest.fixture()
+def salmon_metagenomic_structureddata_response(salmon_metagenomic_sample):
+    return {
+        "accession": salmon_histological_sample.accession,
+        "create": "2022-05-05T14:16:35.502Z",
+        "update": "2022-05-05T14:16:35.506Z",
+        "data": [
+            {
+                "domain": None,
+                "webinSubmissionAccountId": "Webin-test",
+                "type": "EXTERNAL LINKS",
+                "schema": None,
+                "content": [
+                    {
+                        "marker": {"value": "ENA Run ID", "iri": None},
+                        "measurement": {"value": "ERR4918394", "iri": None},
+                    },
+                    {
+                        "marker": {"value": "ENA Experiment ID", "iri": None},
+                        "measurement": {"value": "ERX4783303", "iri": None},
+                    },
+                ],
+            },
+        ],
+    }
+
+
+@pytest.fixture()
 def salmon_sample_metabolights_response(salmon_sample):
     return {
         "sample_files": [
@@ -2032,16 +784,16 @@ def salmon_sample_metabolights_response(salmon_sample):
 
 
 @pytest.fixture()
-def salmon_submitted_checklist(salmon_sample):
+def salmon_submitted_checklist(salmon_animal):
     return f"""
     <SAMPLE_SET>
-      <SAMPLE accession="{salmon_sample.accession}" alias="{salmon_sample.title}"
+      <SAMPLE accession="{salmon_animal.accession}" alias="{salmon_animal.animal_code}"
                center_name="UNIVERSITY OF DONUTS">
           <IDENTIFIERS>
-             <PRIMARY_ID>{salmon_sample.accession}</PRIMARY_ID>
-             <SUBMITTER_ID namespace="UNIVERSITY OF DONUTS">{salmon_sample.accession}</SUBMITTER_ID>
+             <PRIMARY_ID>{salmon_animal.accession}</PRIMARY_ID>
+             <SUBMITTER_ID namespace="UNIVERSITY OF DONUTS">{salmon_animal.accession}</SUBMITTER_ID>
           </IDENTIFIERS>
-          <TITLE>{salmon_sample.title}</TITLE>
+          <TITLE>{salmon_animal.animal_code}</TITLE>
           <SAMPLE_NAME>
              <TAXON_ID>1602388</TAXON_ID>
              <SCIENTIFIC_NAME>fish gut metagenome</SCIENTIFIC_NAME>
@@ -2219,7 +971,7 @@ def create_genome_objects() -> GenomeCatalogue:
     return catalogue
 
 
-def salmon_metagenomics_analyses_response(salmon_sample):
+def salmon_metagenomics_analyses_response(salmon_metagenomic_sample):
     return {
         "data": [
             {
@@ -2294,7 +1046,7 @@ def salmon_metagenomics_analyses_response(salmon_sample):
                     "sample": {
                         "data": {"id": "ERS211823", "type": "samples"},
                         "links": {
-                            "related": f"https://www.ebi.ac.uk/metagenomics/api/v1/samples/{salmon_sample.accession}?format=json"
+                            "related": f"https://www.ebi.ac.uk/metagenomics/api/v1/samples/{salmon_metagenomic_sample.accession}?format=json"
                         },
                     },
                     "study": {
@@ -2392,7 +1144,6 @@ def set_metabolights_project_for_sample(sample: Sample, mtbls: str = "MTBLSDONUT
     SampleStructuredDatum.objects.create(
         marker=mtbls_marker, sample=sample, measurement=mtbls
     )
-    sample.has_metabolomics = True
     sample.save()
 
 
@@ -2411,27 +1162,34 @@ def LiveTests(request):
     class Fixtures:
         pass
 
-    Project.objects.all().delete()
     Sample.objects.all().delete()
     GenomeCatalogue.objects.all().delete()
     ViralCatalogue.objects.all().delete()
 
-    Fixtures.projects = [
-        Project.objects.create(accession="PRJTESTING", title="HoloFood Donut and Fish")
+    Fixtures.animals = [
+        Animal.objects.create(
+            accession="SAMEG04",
+            system=Animal.SALMON,
+            animal_code="SSOPHIE",
+        )
     ]
 
     Fixtures.samples = [
         Sample.objects.create(
             accession="SAMEA00000002",
-            project=Fixtures.projects[0],
-            title="HF_DONUT.SALMON.1",
-            system=Sample.SALMON,
-            has_metagenomics=True,
-            has_metabolomics=True,
+            title="metabolomic extraction",
+            animal=Fixtures.animals[0],
+            sample_type=Sample.METABOLOMIC,
             metabolights_files=[
                 {"file_name": "donut.zip", "sample_name": "SAMEA00000002"}
             ],
-        )
+        ),
+        Sample.objects.create(
+            accession="SAMEA00000003",
+            title="metagenomic extraction",
+            animal=Fixtures.animals[0],
+            sample_type=Sample.METAGENOMIC,
+        ),
     ]
 
     set_metabolights_project_for_sample(Fixtures.samples[0])
@@ -2442,6 +1200,20 @@ def LiveTests(request):
     # set a class attribute on the invoking test context
     request.cls.hf_fixtures = Fixtures()
 
+    sample = Fixtures.samples[1]
+    marker1 = SampleMetadataMarker.objects.create(
+        name="Size of donut", type="DIMENSIONS"
+    )
+    marker2 = SampleMetadataMarker.objects.create(
+        name="Colour of donut", type="COLOURS"
+    )
+    SampleStructuredDatum.objects.create(
+        marker=marker1, sample=sample, measurement="10", units="cm"
+    )
+    SampleStructuredDatum.objects.create(
+        marker=marker2, sample=sample, measurement="Yellow"
+    )
+
 
 @pytest.fixture()
 def structured_metadata_marker():
@@ -2449,9 +1221,9 @@ def structured_metadata_marker():
 
 
 @pytest.fixture()
-def salmon_analysis_summary_unpub(salmon_sample):
+def salmon_analysis_summary_unpub(salmon_host_sample):
     summary = AnalysisSummary.objects.create(
         title="All about donuts", slug="all-about-donuts", content="# Donuts are a food"
     )
-    summary.samples.set([salmon_sample])
+    summary.samples.set([salmon_host_sample])
     return summary

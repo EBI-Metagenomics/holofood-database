@@ -6,9 +6,9 @@ title: "Browsing the website"
 ![Screenshot of the global search box](/img/website/global-search.png)
 
 There is a a site-wide ("global") search box at the top of the data portal landing page and most other pages.
-This searches over [project](datasets.qmd#ena-studies-projects) accession and titles; [sample](datasets.qmd#ena-samples) systems, accessions, and titles; [genome](datasets.qmd#metagenome-assembled-genome-mag-catalogues) and [viral](datasets.qmd#viral-fragment-catalogues) catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.
+This searches over [host and derived samples](datasets.qmd#ena-samples) accessions, titles, systems, and types; [genome](datasets.qmd#metagenome-assembled-genome-mag-catalogues) and [viral](datasets.qmd#viral-fragment-catalogues) catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.
 
-If you search for valid sample, project, or MAG accessions, the search will take you straight to an appropriate view in the portal.
+If you search for valid sample, animal, or MAG accessions, the search will take you straight to an appropriate view in the portal.
 Otherwise, you'll see a normal list of search results.
 
 
@@ -17,16 +17,16 @@ Otherwise, you'll see a normal list of search results.
 
 Samples can be found from the "Chicken samples" and "Salmon samples" navigation items.
 On the samples listing pages, there are various filters available to limit which samples are shown in the table.
-For example, you can find all samples from a particular project,
-or all samples with [metabolomics](datasets.qmd#metabolights-metabolomics) data.
+For example, you can find all samples from a particular animal,
+or all [metabolomics](datasets.qmd#metabolights-metabolomics) type samples (each sample has a particular type).
 
-The table shows an icon-key detailing which data types are available for each sample.
-Samples may be linked to metadata (almost always), metagenomic, or metabolomic datasets.
+Samples may be linked to metadata (almost always), metagenomic, metabolomic, or host-genomic datasets.
+Other sample types have their results data in the sample metadata.
 
 To view detail about a particular sample, click "View" on its row of the table.
 
 The sample detail page contains information help about the sample in the various supporting databases.
-Metadata is shown in full, in a table.
+Metadata (from BioSamples) is shown in full, in a table.
 Metagenomic and metabolomic data are shown in summary form, with links to the respective public websites where those analyses are held.
 
 The [API](api.ipynb) section shows the API endpoint for this particular sample.
@@ -39,24 +39,26 @@ The complete sample list can be exported to TSV using the "Download all as TSV" 
 The "Download all as TSV" button does reflect any filters on the website table – it contains the complete list.
 :::
 
-![Screenshot of a sample detail page with TSV export option](/img/website/tsv-export.png)
+![Screenshot of a sample detail page with TSV export option](/img/website/sample-detail.png)
 
 The complete metadata for a sample can be downloaded using the "Download all as TSV" button within the "Sample metadata" section
 of a sample detail page.
+For sample types where the metadata also includes results data (like histology measurements),
+the section is instead called "Sample data".
 
 
 ## Finding sample data in other public repositories
 ### Metagenomics
 Some samples have [metagenomics](datasets.qmd#mgnify-metagenomics) data, in [MGnify](https://www.ebi.ac.uk/metagenomics).
-These can be found from the samples listing page by setting the `Has metagenomics` filter to `Yes`.
+These can be found from the samples listing page by setting the `Sample type` filter to `metagenomic`.
 
 MGnify analyses of a sample (identified with `MGYA` accessions) are listed and linked to from the sample detail page.
 
-![Screenshot of a sample detail page with metagenomics data](/img/website/sample-with-metagenomics.png)
+![Screenshot of a metagenomic sample detail page](/img/website/sample-with-metagenomics.png)
 
 ### Metabolomics
 Some other samples have [metabolomics](datasets.qmd#metabolights-metabolomics) data, in [MetaboLights](https://www.ebi.ac.uk/metabolights).
-These can be found form the samples listing page by setting the `Has metabolomics` filter to `Yes`.
+These can be found form the samples listing page by setting the `Sample type` filter to `metabolomic`.
 
 MetaboLights data are identified at a Project level, with `MTBLS` accessions.
 MetaboLights does not store samples as independent objects, instead it stores lists of samples and files (and more) for the project.
@@ -64,17 +66,26 @@ So, the HoloFood data portal sample detail page shows a filtered table of the Me
 that relate to this sample.
 Following these file links will download the file.
 
-![Screenshot of a sample detail page with metabolomics data](/img/website/sample-with-metabolomics.png)
+![Screenshot of a metabolomic sample detail page](/img/website/sample-with-metabolomics.png)
+
+## Finding samples related to the same host animal
+Each host animal (an individual chicken or salmon) is itself a BioSample.
+Host-level measurements of the animal and its tank/pen are available as metadata on the animal.
+The animal listing pages (accessed from links on the sample lists) and the animal detail pages each include
+information about the derived sample types available for a given animal.
+
+![Screenshot of an animal detail page](/img/website/animal-detail.png)
+
 
 ## Finding analysis summaries
 ![Screenshot of a sample detail page with analysis documents links](/img/website/sample-analysis-summaries.png)
 
-[Analysis summaries](datasets.qmd#summary-analyses) are linked to samples (or whole projects).
-Any analysis summaries that mention a sample, or its project, are shown at the bottom of the sample's detail page.
+[Analysis summaries](datasets.qmd#summary-analyses) are linked to samples or catalogues.
+Any analysis summaries that mention a sample are shown at the bottom of the sample's detail page.
 
 ![Screenshot of an analysis document](/img/website/analysis-summary.png)
 
-Analysis summaries also link back to the samples and/or projects they refer to.
+Analysis summaries also link back to the samples and/or catalogues they refer to.
 A complete list of analysis summaries can also be found from the navigation bar.
 
 ## Using the catalogues

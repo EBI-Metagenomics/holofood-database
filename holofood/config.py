@@ -35,7 +35,6 @@ class BiosamplesConfig(BaseModel):
 
 
 class EnaConfig(BaseModel):
-    projects: List[str] = []
     systems: dict = {}
     username: str = ""
     password: str = ""
@@ -68,7 +67,7 @@ class MetadataTableConfig(BaseModel):
 
 
 class TablesConfig(BaseModel):
-    samples_list: SampleTableConfig = []
+    animals_list: SampleTableConfig = []
     metadata_list: MetadataTableConfig = []
 
 
@@ -89,7 +88,7 @@ class HolofoodConfig(BaseSettings):
     class Config:
         env_prefix = "holofood_"
         env_nested_delimiter = "__"
-        # E.g. set the env var `HOLOFOOD_ENA__PROJECTS` to override the default
+        # E.g. set the env var `HOLOFOOD_BIOSAMPLES__API_ROOT` to override the default
 
         @classmethod
         def customise_sources(
