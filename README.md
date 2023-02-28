@@ -3,6 +3,8 @@
 [![Build & Publish Docs](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/docs.yml/badge.svg)](https://github.com/EBI-Metagenomics/holofood-database/actions/workflows/docs.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Code style: djlint](https://img.shields.io/badge/html%20style-djlint-blue.svg)](https://www.djlint.com)
+[![DOI](https://zenodo.org/badge/475986161.svg)](https://zenodo.org/badge/latestdoi/475986161)
+
 
 # Holofood Data Portal / Database
 The database, website, and API to present [Holofood](https://www.holofood.eu) samples,
