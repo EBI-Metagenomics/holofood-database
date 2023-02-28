@@ -175,6 +175,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#metagenomics" id="toc-metagenomics" class="nav-link" data-scroll-target="#metagenomics">Metagenomics</a></li>
   <li><a href="#metabolomics" id="toc-metabolomics" class="nav-link" data-scroll-target="#metabolomics">Metabolomics</a></li>
   </ul></li>
+  <li><a href="#finding-samples-related-to-the-same-host-animal" id="toc-finding-samples-related-to-the-same-host-animal" class="nav-link" data-scroll-target="#finding-samples-related-to-the-same-host-animal">Finding samples related to the same host animal</a></li>
   <li><a href="#finding-analysis-summaries" id="toc-finding-analysis-summaries" class="nav-link" data-scroll-target="#finding-analysis-summaries">Finding analysis summaries</a></li>
   <li><a href="#using-the-catalogues" id="toc-using-the-catalogues" class="nav-link" data-scroll-target="#using-the-catalogues">Using the catalogues</a>
   <ul class="collapse">
@@ -212,8 +213,8 @@ ul.task-list li input[type="checkbox"] {
 <p></p><figcaption class="figure-caption">Screenshot of the global search box</figcaption><p></p>
 </figure>
 </div>
-<p>There is a a site-wide (“global”) search box at the top of the data portal landing page and most other pages. This searches over <a href="./datasets.html#ena-studies-projects">project</a> accession and titles; <a href="./datasets.html#ena-samples">sample</a> systems, accessions, and titles; <a href="./datasets.html#metagenome-assembled-genome-mag-catalogues">genome</a> and <a href="./datasets.html#viral-fragment-catalogues">viral</a> catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.</p>
-<p>If you search for valid sample, project, or MAG accessions, the search will take you straight to an appropriate view in the portal. Otherwise, you’ll see a normal list of search results.</p>
+<p>There is a a site-wide (“global”) search box at the top of the data portal landing page and most other pages. This searches over <a href="./datasets.html#ena-samples">host and derived samples</a> accessions, titles, systems, and types; <a href="./datasets.html#metagenome-assembled-genome-mag-catalogues">genome</a> and <a href="./datasets.html#viral-fragment-catalogues">viral</a> catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.</p>
+<p>If you search for valid sample, animal, or MAG accessions, the search will take you straight to an appropriate view in the portal. Otherwise, you’ll see a normal list of search results.</p>
 </section>
 <section id="finding-samples" class="level2">
 <h2 class="anchored" data-anchor-id="finding-samples">Finding Samples</h2>
@@ -223,10 +224,10 @@ ul.task-list li input[type="checkbox"] {
 <p></p><figcaption class="figure-caption">Screenshot of sample listing webpage</figcaption><p></p>
 </figure>
 </div>
-<p>Samples can be found from the “Chicken samples” and “Salmon samples” navigation items. On the samples listing pages, there are various filters available to limit which samples are shown in the table. For example, you can find all samples from a particular project, or all samples with <a href="./datasets.html#metabolights-metabolomics">metabolomics</a> data.</p>
-<p>The table shows an icon-key detailing which data types are available for each sample. Samples may be linked to metadata (almost always), metagenomic, or metabolomic datasets.</p>
+<p>Samples can be found from the “Chicken samples” and “Salmon samples” navigation items. On the samples listing pages, there are various filters available to limit which samples are shown in the table. For example, you can find all samples from a particular animal, or all <a href="./datasets.html#metabolights-metabolomics">metabolomics</a> type samples (each sample has a particular type).</p>
+<p>Samples may be linked to metadata (almost always), metagenomic, metabolomic, or host-genomic datasets. Other sample types have their results data in the sample metadata.</p>
 <p>To view detail about a particular sample, click “View” on its row of the table.</p>
-<p>The sample detail page contains information help about the sample in the various supporting databases. Metadata is shown in full, in a table. Metagenomic and metabolomic data are shown in summary form, with links to the respective public websites where those analyses are held.</p>
+<p>The sample detail page contains information help about the sample in the various supporting databases. Metadata (from BioSamples) is shown in full, in a table. Metagenomic and metabolomic data are shown in summary form, with links to the respective public websites where those analyses are held.</p>
 <p>The <a href="./api.html">API</a> section shows the API endpoint for this particular sample. You can copy this into a script, for example, to programmatically pull the data.</p>
 </section>
 <section id="downloading-sample-lists-and-metadata" class="level2">
@@ -247,36 +248,46 @@ Note
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./img/website/tsv-export.png" class="img-fluid figure-img"></p>
+<p><img src="./img/website/sample-detail.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Screenshot of a sample detail page with TSV export option</figcaption><p></p>
 </figure>
 </div>
-<p>The complete metadata for a sample can be downloaded using the “Download all as TSV” button within the “Sample metadata” section of a sample detail page.</p>
+<p>The complete metadata for a sample can be downloaded using the “Download all as TSV” button within the “Sample metadata” section of a sample detail page. For sample types where the metadata also includes results data (like histology measurements), the section is instead called “Sample data”.</p>
 </section>
 <section id="finding-sample-data-in-other-public-repositories" class="level2">
 <h2 class="anchored" data-anchor-id="finding-sample-data-in-other-public-repositories">Finding sample data in other public repositories</h2>
 <section id="metagenomics" class="level3">
 <h3 class="anchored" data-anchor-id="metagenomics">Metagenomics</h3>
-<p>Some samples have <a href="./datasets.html#mgnify-metagenomics">metagenomics</a> data, in <a href="https://www.ebi.ac.uk/metagenomics">MGnify</a>. These can be found from the samples listing page by setting the <code>Has metagenomics</code> filter to <code>Yes</code>.</p>
+<p>Some samples have <a href="./datasets.html#mgnify-metagenomics">metagenomics</a> data, in <a href="https://www.ebi.ac.uk/metagenomics">MGnify</a>. These can be found from the samples listing page by setting the <code>Sample type</code> filter to <code>metagenomic</code>.</p>
 <p>MGnify analyses of a sample (identified with <code>MGYA</code> accessions) are listed and linked to from the sample detail page.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="./img/website/sample-with-metagenomics.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Screenshot of a sample detail page with metagenomics data</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Screenshot of a metagenomic sample detail page</figcaption><p></p>
 </figure>
 </div>
 </section>
 <section id="metabolomics" class="level3">
 <h3 class="anchored" data-anchor-id="metabolomics">Metabolomics</h3>
-<p>Some other samples have <a href="./datasets.html#metabolights-metabolomics">metabolomics</a> data, in <a href="https://www.ebi.ac.uk/metabolights">MetaboLights</a>. These can be found form the samples listing page by setting the <code>Has metabolomics</code> filter to <code>Yes</code>.</p>
+<p>Some other samples have <a href="./datasets.html#metabolights-metabolomics">metabolomics</a> data, in <a href="https://www.ebi.ac.uk/metabolights">MetaboLights</a>. These can be found form the samples listing page by setting the <code>Sample type</code> filter to <code>metabolomic</code>.</p>
 <p>MetaboLights data are identified at a Project level, with <code>MTBLS</code> accessions. MetaboLights does not store samples as independent objects, instead it stores lists of samples and files (and more) for the project. So, the HoloFood data portal sample detail page shows a filtered table of the MetaboLights project’s files, that relate to this sample. Following these file links will download the file.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="./img/website/sample-with-metabolomics.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Screenshot of a sample detail page with metabolomics data</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Screenshot of a metabolomic sample detail page</figcaption><p></p>
 </figure>
 </div>
 </section>
+</section>
+<section id="finding-samples-related-to-the-same-host-animal" class="level2">
+<h2 class="anchored" data-anchor-id="finding-samples-related-to-the-same-host-animal">Finding samples related to the same host animal</h2>
+<p>Each host animal (an individual chicken or salmon) is itself a BioSample. Host-level measurements of the animal and its tank/pen are available as metadata on the animal. The animal listing pages (accessed from links on the sample lists) and the animal detail pages each include information about the derived sample types available for a given animal.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/website/animal-detail.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Screenshot of an animal detail page</figcaption><p></p>
+</figure>
+</div>
 </section>
 <section id="finding-analysis-summaries" class="level2">
 <h2 class="anchored" data-anchor-id="finding-analysis-summaries">Finding analysis summaries</h2>
@@ -286,14 +297,14 @@ Note
 <p></p><figcaption class="figure-caption">Screenshot of a sample detail page with analysis documents links</figcaption><p></p>
 </figure>
 </div>
-<p><a href="./datasets.html#summary-analyses">Analysis summaries</a> are linked to samples (or whole projects). Any analysis summaries that mention a sample, or its project, are shown at the bottom of the sample’s detail page.</p>
+<p><a href="./datasets.html#summary-analyses">Analysis summaries</a> are linked to samples or catalogues. Any analysis summaries that mention a sample are shown at the bottom of the sample’s detail page.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="./img/website/analysis-summary.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Screenshot of an analysis document</figcaption><p></p>
 </figure>
 </div>
-<p>Analysis summaries also link back to the samples and/or projects they refer to. A complete list of analysis summaries can also be found from the navigation bar.</p>
+<p>Analysis summaries also link back to the samples and/or catalogues they refer to. A complete list of analysis summaries can also be found from the navigation bar.</p>
 </section>
 <section id="using-the-catalogues" class="level2">
 <h2 class="anchored" data-anchor-id="using-the-catalogues">Using the catalogues</h2>
