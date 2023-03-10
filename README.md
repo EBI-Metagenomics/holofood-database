@@ -173,8 +173,20 @@ Refer to
 for the SSO parameters. Use `aws configure sso --profile eb-cli` to sign in.
 Occasionally you’ll need `aws sso login --profile eb-cli` to get a new token.
 
-### Centos VM
-`TODO`
+### Kubernetes
+#### Local
+- Use [`minikube`](https://minikube.sigs.k8s.io/docs/start/).
+- Make a secrets .env file at `k8s/secrets-k8s.env` with e.g. `DJANGO_SECRET_KEY`.
+- `kubectl create secret generic holofood-secret --from-env-file=k8s/secrets-k8s.env`
+- `minikube image build -t holofood -f k8s/Dockerfile .`
+- `kubectl apply -f k8s`
+- `kubectl get pods -A` and find the pod ID for `holofood-app-...`
+- `kubectl exec --stdin --tty holofood-app-......... -- /bin/bash`
+- `python manage.py migrate` will make the `/app/data/db.sqlite3`
+- `minikube service holofood`
+
+#### EBI WebProd k8s
+TODO
 
 ## Documentation
 There is an [Quarto](https://www.quarto.org/) based documentation pack in the `docs/` folder,

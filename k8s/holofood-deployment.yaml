@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: holofood-app
+  labels:
+    app: holofood
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: holofood
+  template:
+    metadata:
+      labels:
+        app: holofood
+    spec:
+      volumes:
+        - name: holofood-app-storage
+          persistentVolumeClaim:
+            claimName: holofood-volume-claim
+      containers:
+        - image: holofood
+          imagePullPolicy: Never
+          name: holofood
+          envFrom:
+            - secretRef:
+              name: holofood-secret
+            - configMapRef:
+              name: holofood-config
+          ports:
+            - containerPort: 8000
+              name: gunicorn
+          volumeMounts:
+            - mountPath: "/app/data"
+              name: holofood-app-storage
