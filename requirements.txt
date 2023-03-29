@@ -10,6 +10,7 @@ django-compressor==4.1
 martor==1.6.14
 django-ninja==0.19.1
 django-admin-inline-paginator==0.3.0
+django-unfold==0.5.0
 
 # AWS EB requirements
 gunicorn==20.1.0

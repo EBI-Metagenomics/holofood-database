@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib import admin
 from django.db import models
+from unfold.admin import ModelAdmin
+
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from holofood.models import (
@@ -26,12 +28,12 @@ class SampleMetadataInline(TabularInlinePaginated):
 
 
 @admin.register(SampleStructuredDatum)
-class SampleStructuredDatumAdmin(admin.ModelAdmin):
+class SampleStructuredDatumAdmin(ModelAdmin):
     search_fields = ("sample__accession", "marker__name")
 
 
 @admin.register(Sample)
-class SampleAdmin(admin.ModelAdmin):
+class SampleAdmin(ModelAdmin):
     inlines = [SampleMetadataInline]
     list_filter = ("sample_type",)
     search_fields = ("accession", "title", "animal__accession", "animal__animal_code")
@@ -51,14 +53,14 @@ class AnimalSampleInline(TabularInlinePaginated):
 
 
 @admin.register(Animal)
-class AnimalAdmin(admin.ModelAdmin):
+class AnimalAdmin(ModelAdmin):
     inlines = [AnimalMetadataInline, AnimalSampleInline]
     list_filter = ("system",)
     search_fields = ("accession", "animal_code")
 
 
 @admin.register(AnalysisSummary)
-class AnalysisSummaryAdmin(admin.ModelAdmin):
+class AnalysisSummaryAdmin(ModelAdmin):
     readonly_fields = ["created", "updated"]
     prepopulated_fields = {"slug": ("title",)}
     fields = (
@@ -96,7 +98,7 @@ class GenomeInline(TabularInlinePaginated):
 
 
 @admin.register(GenomeCatalogue)
-class GenomeCatalogueAdmin(admin.ModelAdmin):
+class GenomeCatalogueAdmin(ModelAdmin):
     inlines = [GenomeInline]
 
 
@@ -110,12 +112,12 @@ class ViralFragmentInline(TabularInlinePaginated):
 
 
 @admin.register(ViralCatalogue)
-class ViralCatalogueAdmin(admin.ModelAdmin):
+class ViralCatalogueAdmin(ModelAdmin):
     inlines = [ViralFragmentInline]
 
 
 @admin.register(ViralFragment)
-class ViralFragmentAdmin(admin.ModelAdmin):
+class ViralFragmentAdmin(ModelAdmin):
     formfield_overrides = {
         models.TextField: {
             "widget": forms.Textarea(
