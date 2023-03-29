@@ -72,7 +72,7 @@ class TablesConfig(BaseModel):
 
 
 class DocsConfig(BaseModel):
-    docs_url: AnyHttpUrl = "https://ebi-metagenomics.github.io/holofood-database"
+    docs_url: AnyHttpUrl = "https://docs.holofooddata.org"
 
 
 class HolofoodConfig(BaseSettings):
