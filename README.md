@@ -40,6 +40,13 @@ These are both configured if you install the pre-commit tools as above.
 To manually run them:
 `black .` and `djlint . --extension=html --lint` (or `--reformat`).
 
+### Fake data
+Once a database is created and migrated (see below), there is a management command to fill the database
+with some minimal fake data for development ease. 
+```shell
+python manage.py generate_dev_data
+```
+
 ## Testing
 ```shell
 # You most likely need (see below):
