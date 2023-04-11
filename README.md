@@ -193,7 +193,13 @@ Occasionally you’ll need `aws sso login --profile eb-cli` to get a new token.
 - `minikube service holofood`
 
 #### EBI WebProd k8s
-TODO
+- EBI operates a two-clusters-per-service policy (primary in "HH" data centre, fallback in "HX"). The app needs to be deployed to both. There are stub configs in `k8s-hl` and `k8s-hx` for these.
+- K8s cluster configurations are provided as YML files by EBI's webprod team.
+- Make a secrets .env file at `k8s-hl/secrets-k8s.env` with e.g. `DJANGO_SECRET_KEY=`.
+- `kubectl --kubeconfig ~/webprod-configs/mgnify-k8s-team-admin-hh.conf create secret generic holofood-secret --from-env-file=k8s-hl/secrets-k8s.env`
+- Get authentication credentials for quay.io (the built image is private). You can get a Kubernetes secrets yaml file from your Quay.io user settings, in the "CLI Password" section.
+	- Download the secrets yaml and name the secret `name: quay-pull-secret` in the metadata section.
+- Deploy: `kubectl --kubeconfig ~/webprod-configs/mgnify-k8s-team-admin-hh.conf apply -f k8s-hl`
 
 ## Documentation
 There is an [Quarto](https://www.quarto.org/) based documentation pack in the `docs/` folder,
