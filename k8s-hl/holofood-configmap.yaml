@@ -2,6 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: holofood-config
+  namespace: holofood-hl-prod
 data:
   HOLOFOOD_ENV_FILE: "/app/config/local.env"
   SQLITE_DB_NAME: "/app/data/db.sqlite3"
+  DATA_PORTAL_URL: "www.holofooddata.org"
