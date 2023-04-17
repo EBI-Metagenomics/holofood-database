@@ -27,6 +27,8 @@ import logging
 import os
 from pathlib import Path
 
+from django.templatetags.static import static
+
 from holofood.config import HolofoodConfig
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -66,6 +68,9 @@ HOLOFOOD_CONFIG = HolofoodConfig(_env_file=holofood_config_env)
 # Application definition
 
 INSTALLED_APPS = [
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -84,6 +89,7 @@ if DEBUG:
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -135,7 +141,7 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": os.environ.get("SQLITE_DB_NAME", BASE_DIR / "db.sqlite3"),
         }
     }
 
@@ -184,6 +190,7 @@ STATICFILES_FINDERS = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -225,3 +232,22 @@ MARTOR_TOOLBAR_BUTTONS = [
     "help",
 ]
 NINJA_PAGINATION_CLASS: str = "ninja.pagination.PageNumberPagination"
+
+UNFOLD = {
+    "SITE_ICON": lambda request: static("img/icons/hf-logo-brand.png"),
+    "COLORS": {
+        "primary": {
+            "900": "8 80 37",
+            "800": "11 99 47",
+            "700": "15 117 56",
+            "600": "19 134 66",
+            "500": "24 151 76",
+            "400": "59 170 80",
+            "300": "98 188 95",
+            "200": "150 205 131",
+            "100": "#194 221 168",
+            "050": "228 237 206",
+        },
+    },
+    "SIDEBAR": {"show_search": True},
+}

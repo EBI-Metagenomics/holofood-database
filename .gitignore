@@ -5,16 +5,20 @@
 .idea
 
 # Secrets
-secrets.env
+secret*.env
+secret*.yml
 
 # Artefacts
-db.sqlite3
+db.*
 staticfiles
+static/scss/*.css
+__pycache__
 
 # Testing
 .coverage
 .pytest_cache
 test-results
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

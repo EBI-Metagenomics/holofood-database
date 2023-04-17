@@ -2,7 +2,16 @@ from typing import Union
 
 from django.core.management.base import BaseCommand, CommandError
 
-from holofood.models import Animal, Sample, SampleMetadataMarker
+from holofood.models import (
+    Animal,
+    Sample,
+    SampleMetadataMarker,
+    AnalysisSummary,
+    GenomeCatalogue,
+    Genome,
+    ViralCatalogue,
+    ViralFragment,
+)
 
 
 def _attach_metadata_to(
@@ -163,6 +172,13 @@ class Command(BaseCommand):
         _attach_metadata_to("histology marker 2", "HISTOLOGY", charlie_hist, 0.7, "um")
         _attach_metadata_to("histology marker 1", "HISTOLOGY", sophie_hist, 0.3, "um")
 
+        _attach_metadata_to(
+            "Metabolights accession", "METABOLIGHTS", charlie_metab, "MTBLS1", ""
+        )
+        _attach_metadata_to(
+            "Metabolights accession", "METABOLIGHTS", sophie_metab, "MTBLS2", ""
+        )
+
         for a in range(5, 20):
             animal = Animal.objects.create(
                 accession=f"SAMEG{a:02d}",
@@ -195,3 +211,63 @@ class Command(BaseCommand):
                     accession=f"SAMEA{a * 10 + s}",
                     sample_type=Sample.METAGENOMIC,
                 )
+
+        summary = AnalysisSummary.objects.create(
+            slug="fish-viruses",
+            title="Salmon viral catalogue info",
+            content="""## Viral fragments found
+Fish in Trial A...
+![Viral fragments found](https://www.holofood.eu/files/salmon.png)""",
+            is_published=True,
+            author="HoloFood Team",
+        )
+        summary.samples.add(sophie_metag)
+
+        genome_catalogue = GenomeCatalogue.objects.create(
+            id="hf-mag-cat-v1",
+            title="HoloFood Salmon MAG Catalogue v1.0",
+            biome="Salmon Gut",
+            related_mag_catalogue_id="non-model-fish-gut-v1-0",
+            system=Animal.SALMON,
+        )
+
+        Genome.objects.create(
+            accession="MGYG000299500",
+            cluster_representative="MGYG000299502",
+            catalogue=genome_catalogue,
+            taxonomy="Bacteria > Proteobacteria > Gammaproteobacteria > Enterobacterales > Enterobacteriaceae > Escherichia > Escherichia coli",
+            metadata={},
+        )
+
+        summary.genome_catalogues.add(genome_catalogue)
+
+        viral_catalogue = ViralCatalogue.objects.create(
+            id="hf-salmon-vir-cat-v1",
+            title="HoloFood Salmon Viral Catalogue v1",
+            biome="Salmon Gut",
+            related_genome_catalogue=genome_catalogue,
+            system=Animal.SALMON,
+        )
+        rep = ViralFragment.objects.create(
+            id="MGYC001-start-1000-end-2000",
+            catalogue=viral_catalogue,
+            start_within_contig=1000,
+            end_within_contig=2000,
+            contig_id="ERZ2627283.1-NODE-1-length-143081-cov-101.301728",
+            viral_type=ViralFragment.PROPHAGE,
+            mgnify_analysis_accession="MGYA00606123",
+            gff="ERZ2627283.1-NODE-1-length-143081-cov-101.301728\tViPhOg\tCDS\t1020\t1990\t.\t-\t.\tID=MGYC001;viphog=ViPhOG1\n",
+        )
+        ViralFragment.objects.create(
+            id="MGYC001-start-3000-end-4000",
+            catalogue=viral_catalogue,
+            start_within_contig=3000,
+            end_within_contig=4000,
+            contig_id="ERZ2627283.1-NODE-1-length-143081-cov-101.301728",
+            viral_type=ViralFragment.PROPHAGE,
+            mgnify_analysis_accession="MGYA00606123",
+            cluster_representative=rep,
+            gff="ERZ2627283.1-NODE-1-length-143081-cov-101.301728\tViPhOg\tCDS\t3020\t3090\t.\t-\t.\tID=MGYC001;viphog=ViPhOG2\n",
+        )
+
+        summary.viral_catalogues.add(viral_catalogue)

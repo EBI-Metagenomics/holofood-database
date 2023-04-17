@@ -40,6 +40,13 @@ These are both configured if you install the pre-commit tools as above.
 To manually run them:
 `black .` and `djlint . --extension=html --lint` (or `--reformat`).
 
+### Fake data
+Once a database is created and migrated (see below), there is a management command to fill the database
+with some minimal fake data for development ease. 
+```shell
+python manage.py generate_dev_data
+```
+
 ## Testing
 ```shell
 # You most likely need (see below):
@@ -173,8 +180,28 @@ Refer to
 for the SSO parameters. Use `aws configure sso --profile eb-cli` to sign in.
 Occasionally you’ll need `aws sso login --profile eb-cli` to get a new token.
 
-### Centos VM
-`TODO`
+### Kubernetes
+#### Local
+- Use [`minikube`](https://minikube.sigs.k8s.io/docs/start/).
+- Make a secrets .env file at `k8s/secrets-k8s.env` with e.g. `DJANGO_SECRET_KEY`.
+- `kubectl create secret generic holofood-secret --from-env-file=k8s/secrets-k8s.env`
+- `minikube image build -t holofood -f k8s/Dockerfile .`
+- `kubectl apply -f k8s`
+- `kubectl get pods -A` and find the pod ID for `holofood-app-...`
+- `kubectl exec --stdin --tty holofood-app-......... -- /bin/bash`
+- `python manage.py migrate` will make the `/app/data/db.sqlite3`
+- `minikube service holofood`
+
+#### EBI WebProd k8s
+- EBI operates a two-clusters-per-service policy (primary in "HL" data centre a.k.a. "HH" in some places, fallback in "HX"). The app needs to be deployed to both. There are stub configs in `k8s-hl` and `k8s-hx` for these.
+- K8s cluster configurations are provided as YML files by EBI's webprod team. You need these to deploy.
+- Build the image (with some customisation for EBI's NFS filesystem): `docker build -f k8s-hl/Dockerfile -t quay.io/microbiome-informatics/holofood-data-portal:ebi-k8s-hl .`
+- `docker push quay.io/microbiome-informatics/holofood-data-portal:ebi-k8s-hl` (you need appropriate Quay credentials for this).
+- Make a secrets .env file at `k8s-hl/secrets-k8s.env` with e.g. `DJANGO_SECRET_KEY=....`.
+	- Push it with e.g.: `kubectl --kubeconfig ~/webprod-configs/mgnify-k8s-team-admin-hh.conf --namespace holofood-hl-prod create secret generic holofood-secret --from-env-file=k8s-hl/secrets-k8s.env`
+- Get authentication credentials for quay.io (the built image is private). You can get a Kubernetes secrets yaml file from your Quay.io user settings, in the "CLI Password" section.
+	- Download the secrets yaml and name the secret `name: quay-pull-secret` in the metadata section. Put this into the `k8s-hl` folder.
+- Deploy: `kubectl --kubeconfig ~/webprod-configs/mgnify-k8s-team-admin-hh.conf apply -f k8s-hl`. If the namespace doesn't exist, you might need to apply twice.
 
 ## Documentation
 There is an [Quarto](https://www.quarto.org/) based documentation pack in the `docs/` folder,

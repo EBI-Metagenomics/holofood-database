@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: holofood-app
+  namespace: holofood-hl-prod
+  labels:
+    app: holofood
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: holofood
+  template:
+    metadata:
+      labels:
+        app: holofood
+    spec:
+      securityContext:
+        runAsUser: 7123
+        runAsGroup: 1347
+      volumes:
+        - name: holofood-app-storage
+          persistentVolumeClaim:
+            claimName: holofood-volume-claim
+      containers:
+        - image: quay.io/microbiome-informatics/holofood-data-portal:ebi-k8s-hl
+          imagePullPolicy: Always
+          name: holofood-data-portal
+          envFrom:
+            - secretRef:
+                name: holofood-secret
+            - configMapRef:
+                name: holofood-config
+          ports:
+            - containerPort: 8000
+              name: gunicorn
+          volumeMounts:
+            - mountPath: "/app/data"
+              name: holofood-app-storage
+      imagePullSecrets:
+        - name: quay-pull-secret
