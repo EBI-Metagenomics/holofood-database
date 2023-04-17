@@ -193,13 +193,15 @@ Occasionally you’ll need `aws sso login --profile eb-cli` to get a new token.
 - `minikube service holofood`
 
 #### EBI WebProd k8s
-- EBI operates a two-clusters-per-service policy (primary in "HH" data centre, fallback in "HX"). The app needs to be deployed to both. There are stub configs in `k8s-hl` and `k8s-hx` for these.
-- K8s cluster configurations are provided as YML files by EBI's webprod team.
-- Make a secrets .env file at `k8s-hl/secrets-k8s.env` with e.g. `DJANGO_SECRET_KEY=`.
-- `kubectl --kubeconfig ~/webprod-configs/mgnify-k8s-team-admin-hh.conf create secret generic holofood-secret --from-env-file=k8s-hl/secrets-k8s.env`
+- EBI operates a two-clusters-per-service policy (primary in "HL" data centre a.k.a. "HH" in some places, fallback in "HX"). The app needs to be deployed to both. There are stub configs in `k8s-hl` and `k8s-hx` for these.
+- K8s cluster configurations are provided as YML files by EBI's webprod team. You need these to deploy.
+- Build the image (with some customisation for EBI's NFS filesystem): `docker build -f k8s-hl/Dockerfile -t quay.io/microbiome-informatics/holofood-data-portal:ebi-k8s-hl .`
+- `docker push quay.io/microbiome-informatics/holofood-data-portal:ebi-k8s-hl` (you need appropriate Quay credentials for this).
+- Make a secrets .env file at `k8s-hl/secrets-k8s.env` with e.g. `DJANGO_SECRET_KEY=....`.
+	- Push it with e.g.: `kubectl --kubeconfig ~/webprod-configs/mgnify-k8s-team-admin-hh.conf --namespace holofood-hl-prod create secret generic holofood-secret --from-env-file=k8s-hl/secrets-k8s.env`
 - Get authentication credentials for quay.io (the built image is private). You can get a Kubernetes secrets yaml file from your Quay.io user settings, in the "CLI Password" section.
-	- Download the secrets yaml and name the secret `name: quay-pull-secret` in the metadata section.
-- Deploy: `kubectl --kubeconfig ~/webprod-configs/mgnify-k8s-team-admin-hh.conf apply -f k8s-hl`
+	- Download the secrets yaml and name the secret `name: quay-pull-secret` in the metadata section. Put this into the `k8s-hl` folder.
+- Deploy: `kubectl --kubeconfig ~/webprod-configs/mgnify-k8s-team-admin-hh.conf apply -f k8s-hl`. If the namespace doesn't exist, you might need to apply twice.
 
 ## Documentation
 There is an [Quarto](https://www.quarto.org/) based documentation pack in the `docs/` folder,
