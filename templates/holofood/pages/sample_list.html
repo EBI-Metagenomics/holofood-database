@@ -62,7 +62,7 @@
                                     <td class="vf-table__cell">
                                         {% include "holofood/components/atoms/animal_accession.html" with animal=sample.animal only %}
                                     </td>
-                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"host diet treatment"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"Treatment code"|default:"—" }}</td>
                                     <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"host diet treatment concentration"|default:"—" }}</td>
                                     <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"trial timepoint"|default:"—" }}</td>
                                     <td class="vf-table__cell">{% include "holofood/components/atoms/sample_type.html" with sample=sample only %}</td>

@@ -124,8 +124,20 @@ class Sample(models.Model):
     class Meta:
         ordering = ("accession",)
 
-    def refresh_structureddata(self):
-        metadata = get_sample_structured_data(self.accession)
+    def refresh_structureddata(
+        self, structured_metadata: dict = None, checklist: list = None
+    ):
+        """
+        Set the metadata on Sample, either using a dict of structured metadata from BioSamples,
+        or optionally fetching that from the BioSamples API.
+        :param checklist: Optional list of checklist data like ENA API returns, e.g. if known from sample import.
+        :param structured_metadata: Optional dict of metadata sections, e.g. if known from sample import.
+        :return:
+        """
+        if not structured_metadata:
+            metadata = get_sample_structured_data(self.accession)
+        else:
+            metadata = structured_metadata
 
         for metadata_type, metadata_content in metadata.items():
             if not metadata_content:
@@ -152,7 +164,10 @@ class Sample(models.Model):
                     },
                 )
 
-        checklist_metadata = get_checklist_metadata(self.accession)
+        if checklist:
+            checklist_metadata = checklist
+        else:
+            checklist_metadata = get_checklist_metadata(self.accession)
 
         for metadatum in checklist_metadata:
             marker, created = SampleMetadataMarker.objects.update_or_create(
@@ -168,29 +183,6 @@ class Sample(models.Model):
                     "units": metadatum.units,
                 },
             )
-
-        self.refresh_from_db()
-        tax_id_data = self.structured_metadata.filter(marker__name="host taxid").first()
-        if not tax_id_data:
-            raise Exception(f"Error determining System for Sample {self.accession}")
-        try:
-            system = holofood_config.ena.systems[str(tax_id_data.measurement)]
-        except KeyError as e:
-            logging.error(f"Error determining System for Sample {self.accession}")
-            raise e
-        logging.info(f"Setting system to {system} for sample {self.accession}")
-        self.system = system
-
-        animal_code = self.structured_metadata.filter(
-            marker__name="host subject id"
-        ).first()
-        if not animal_code:
-            raise Exception(
-                f"Error determining animal code for Sample {self.accession}"
-            )
-        self.animal_code = animal_code.measurement
-
-        self.save(update_fields=["system"])
 
     def refresh_metagenomics_metadata(self):
         # TODO

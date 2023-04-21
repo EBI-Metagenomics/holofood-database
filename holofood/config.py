@@ -32,6 +32,9 @@ def data_config_source(settings: BaseSettings) -> dict[str, Any]:
 class BiosamplesConfig(BaseModel):
     api_root: AnyHttpUrl = "https://www.ebi.ac.uk/biosamples"
     project_id: str = "HF"
+    username: str = ""
+    password: str = ""
+    auth_url: AnyHttpUrl = "https://www.ebi.ac.uk/ena/submit/webin/auth/token"
 
 
 class EnaConfig(BaseModel):
