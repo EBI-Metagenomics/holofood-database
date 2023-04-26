@@ -35,6 +35,8 @@ website:
             - text: '---'
             - href: tutorial.ipynb
             - text: '---'
+            - href: publications.qmd
+            - text: '---'
             - href: partners.qmd
 
         tools:
