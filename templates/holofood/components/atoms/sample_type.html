@@ -2,14 +2,14 @@
 {% load static %}
 
 <div style="display:flex">
-    {% if sample.sample_type == 'metagenomic' %}
+    {% if sample.sample_type == 'metagenomic_assembly' or sample.sample_type == 'metagenomic_amplicon' or sample.sample_type == 'metatranscriptomic' %}
        <img src="{% static "img/icons/bacteria.svg" %}"
          class="system-icon"
-         alt="Metagenomic data icon"/>
-    {% elif sample.sample_type == 'metabolomic' %}
+         alt="Metagenomic / metatranscriptomic data icon"/>
+    {% elif sample.sample_type == 'metabolomic' or sample.sample_type == 'metabolomic_targeted' or sample.sample_type == 'iodine' or sample.sample_type == 'fatty_acids' or sample.sample_type == 'heavy_metals' %}
         <img src="{% static "img/icons/molecule.svg" %}"
          class="system-icon"
-         alt="Metabolomic data icon"/>
+         alt="Metabolomic / chemical data icon"/>
     {% elif sample.sample_type == 'histological' %}
         <img src="{% static "img/icons/microscope.svg" %}"
          class="system-icon"
@@ -18,6 +18,14 @@
         <img src="{% static "img/icons/genome.svg" %}"
          class="system-icon"
          alt="Host genome data icon"/>
+    {% elif sample.sample_type == 'transcriptomic' %}
+        <img src="{% static "img/icons/transcriptome.svg" %}"
+         class="system-icon"
+         alt="Host transcriptome data icon"/>
+    {% elif sample.sample_type == 'inflammatory_markers' %}
+        <img src="{% static "img/icons/protein.svg" %}"
+         class="system-icon"
+         alt="Inflammatory markers data icon"/>
     {% endif %}
     <a href="{% url 'samples_list' %}?sample_type={{ sample.sample_type }}"
        class="vf-link">{{ sample.sample_type|replace:"_>-" }}</a>

@@ -186,7 +186,7 @@
             {% endfor %}
         </div>
     </details>
-    {% if sample.sample_type == sample.METAGENOMIC %}
+    {% if sample.sample_type == sample.METAGENOMIC_ASSEMBLY or sample.sample_type == sample.METAGENOMIC_AMPLICON %}
         <details class="vf-details">
             <summary class="vf-details--summary">
                 Metagenomics

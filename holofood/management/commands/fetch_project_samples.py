@@ -26,23 +26,38 @@ class Command(BaseCommand):
             metavar="WEBIN",
             default=["Webin-40894", "Webin-51990"],
         )
-
-    # @staticmethod
-    # def _sample_for_run(run):
-    #     return run["sample_accession"]
+        parser.add_argument(
+            "--biosamples_page_cursor",
+            type=str,
+            help="Pagination cursor value for biosamples, useful to continue running from a page other than the first.",
+            default=None,
+        )
+        parser.add_argument(
+            "--max_pages",
+            type=int,
+            help="Maximum page count to retrieve from biomsamples",
+            default=None,
+        )
 
     @staticmethod
     def is_animal(sample: dict) -> bool:
-        has_no_parent = len(sample.get("relationships", [])) == 0
-        return has_no_parent
+        for relationship in sample.get("relationships", []):
+            if relationship.get("type") == "DERIVED_FROM" and relationship.get(
+                "source"
+            ) == sample.get("accession"):
+                return False
+        return True
 
     @staticmethod
-    def get_system(sample: dict) -> str:
-        host_tax_id = Command.get_from_characteristics(sample, "host tax id")
-        if not host_tax_id:
-            # Some samples have this without whitespace...
-            host_tax_id = Command.get_from_characteristics(sample, "host taxid")
-        return holofood_config.ena.systems.get(host_tax_id)
+    def get_system(sample: dict) -> Optional[str]:
+        for system_characteristic in ["host tax id", "host taxid", "Organism"]:
+            characteristic_value = Command.get_from_characteristics(
+                sample, system_characteristic
+            )
+            system = holofood_config.ena.systems.get(characteristic_value)
+            if system:
+                return system
+        return None
 
     @staticmethod
     def get_parent_animal(sample: dict) -> Optional[str]:
@@ -98,11 +113,42 @@ class Command(BaseCommand):
         experiment_type = Command.get_from_structured_data(
             sample, "SAMPLE", "Experiment"
         )
+        if not experiment_type:
+            logging.warning(
+                f"No experiment type in metadata for {sample.get('accession')}"
+            )
+            return
+        experiment_type = experiment_type.lower()
+
         if experiment_type in ["metagenomic", "metagenomics"]:
-            return Sample.METAGENOMIC
-        else:
-            # TODO: fix me
+            return Sample.METAGENOMIC_ASSEMBLY
+        if experiment_type == "amplicon":
+            return Sample.METAGENOMIC_AMPLICON
+        if experiment_type == "transcriptomics":
+            return Sample.TRANSCRIPTOMIC
+        if experiment_type == "metatranscriptomics":
+            return Sample.META_TRANSCRIPTOMIC
+        if experiment_type == "genomics":
+            return Sample.HOST_GENOMIC
+        if experiment_type == "ntm":
             return Sample.METABOLOMIC
+        if experiment_type == "fatty_acids":
+            return Sample.FATTY_ACIDS
+        if experiment_type == "iodine":
+            return Sample.IODINE
+        if experiment_type == "heavy_metals":
+            return Sample.HEAVY_METALS
+        if experiment_type == "histology":
+            return Sample.HISTOLOGICAL
+        if experiment_type == "tm":
+            return Sample.METABOLOMIC_TARGETED
+        if experiment_type == "inflammatory_markers":
+            return Sample.INFLAMMATORY_MARKERS
+
+        else:
+            logging.warning(
+                f"Could not determine experiment/sample type for {sample.get('accession')}"
+            )
 
     @staticmethod
     def characteristics_to_checklist_obj(sample: dict):
@@ -122,12 +168,25 @@ class Command(BaseCommand):
             ChecklistItem(k, v[0]) for k, v in characteristics.items() if len(v) > 0
         ]
 
+    @staticmethod
+    def get_metabolights_study(sample: dict):
+        external_refs = sample.get("externalReferences")
+        for ref in external_refs:
+            if "MTBLS" in ref.get("url", ""):
+                return f"MTBLS{ref['url'].split('MTBLS')[1]}"
+
     def handle(self, *args, **options):
-        samples = get_project_samples(options["project_attr"], options["webin_filter"])
         animals_added = 0
         samples_added = 0
 
-        for biosample in samples:
+        for biosample in get_project_samples(
+            options["project_attr"],
+            options["webin_filter"],
+            options["max_pages"],
+            options["biosamples_page_cursor"],
+        ):
+            logging.info(f"Importing biosample {biosample.get('accession')}")
+
             if self.is_animal(biosample):
                 system = self.get_system(biosample)
                 if not system:
@@ -139,14 +198,20 @@ class Command(BaseCommand):
                     accession=biosample.get("accession"),
                     defaults={
                         "system": system,
-                        "animal_code": self.get_from_characteristics(
-                            biosample, "title"
-                        ),
                     },
+                )
+                structured_metadata = {
+                    data_section.get("type"): data_section.get("content", [])
+                    for data_section in biosample.get("structuredData", [])
+                }
+
+                animal.refresh_structureddata(
+                    structured_metadata,
                 )
                 if created:
                     animals_added += 1
                     logging.info(f"Made animal {animal}")
+
             else:
                 animal_accession = self.get_parent_animal(biosample)
                 system = self.get_system(biosample)
@@ -156,13 +221,10 @@ class Command(BaseCommand):
                     )
                     continue
 
-                animal, created = Animal.objects.get_or_create(
+                animal, created = Animal.objects.update_or_create(
                     accession=animal_accession,
                     defaults={
                         "system": system,
-                        "animal_code": self.get_from_characteristics(
-                            biosample, "host subject id"
-                        ),
                     },
                 )
                 if created:
@@ -171,16 +233,15 @@ class Command(BaseCommand):
                         f"Made animal {animal} based on parentage of sample {biosample.get('accession')}"
                     )
 
-                sample, created = Sample.objects.get_or_create(
+                sample, created = Sample.objects.update_or_create(
                     accession=biosample.get("accession"),
                     defaults={
                         "animal": animal,
                         "title": self.get_from_characteristics(
-                            biosample, "title", raise_if_none=True
-                        ),
-                        "sample_type": self.get_from_structured_data(
-                            biosample, "SAMPLE", "Experiment"
-                        ),
+                            biosample, "title", raise_if_none=False
+                        )
+                        or biosample.get("name", biosample.get("accession")),
+                        "sample_type": self.get_sample_type(biosample),
                     },
                 )
                 structured_metadata = {
@@ -195,6 +256,9 @@ class Command(BaseCommand):
                 if created:
                     samples_added += 1
                     logging.info(f"Made sample {sample}")
+
+                if sample.sample_type == Sample.METABOLOMIC:
+                    sample.metabolights_project = self.get_metabolights_study(biosample)
 
         self.stdout.write(
             self.style.SUCCESS(

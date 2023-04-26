@@ -49,7 +49,21 @@ def get_sample_structured_data(sample: str) -> dict:
     }
 
 
-def get_project_samples(project_attr: str, webin_filter: List[str]) -> List[dict]:
+def get_project_samples(
+    project_attr: str,
+    webin_filter: List[str],
+    max_pages: int = None,
+    begin_at_cursor: str = None,
+) -> List[dict]:
+    """
+    Generator for pages of biosamples for a specific project. Each page is up to 200 biosamples.
+
+    :param begin_at_cursor: Starting cursor value for pagination
+    :param project_attr: e.g. HoloFood - the biosamples search value for attr:project:<value>
+    :param webin_filter: list of webin IDs to limit results to. Discards samples from other submitters.
+    :param max_pages: Max number of pages to yield.
+    :return: List of dicts, each representing the JSON for a biosample.
+    """
     auth_headers = get_auth_headers()
     if auth_headers:
         logging.info("Using authenticated BioSamples API")
@@ -60,7 +74,9 @@ def get_project_samples(project_attr: str, webin_filter: List[str]) -> List[dict
     )
 
     next_url = f"{API_ROOT}/samples?filter=attr:project:{project_attr.strip()}&size=200"
-    filtered_samples = []
+    if begin_at_cursor:
+        next_url = f"{next_url}&cursor={begin_at_cursor}"
+    pages = 0
 
     while next_url is not None:
         response = requests.get(next_url, headers=auth_headers)
@@ -75,8 +91,13 @@ def get_project_samples(project_attr: str, webin_filter: List[str]) -> List[dict
         except KeyError as e:
             logging.error("Could not find URL for next page of data")
             raise e
+        else:
+            pages += 1
+            if max_pages and pages >= max_pages:
+                logging.warning(f"Truncating biosamples pagination after {pages} pages")
+                next_url = None
+
         samples = data.get("_embedded", {}).get("samples", [])
         for sample in samples:
             if sample.get("webinSubmissionAccountId") in webin_filter:
-                filtered_samples.append(sample)
-    return filtered_samples
+                yield sample

@@ -2,7 +2,9 @@
   "ena": {
     "systems": {
       "8030": "salmon",
-      "9031": "chicken"
+      "9031": "chicken",
+      "Salmo salar": "salmon",
+      "Gallus gallus": "chicken"
     }
   },
   "tables": {
@@ -10,9 +12,10 @@
       "default_metadata_marker_columns": [
         "host diet treatment concentration",
         "host diet treatment",
-        "trial timepoint",
+        "Sampling time",
         "Treatment code",
-        "Treatment name"
+        "Treatment name",
+        "Treatment concentration"
       ]
     },
     "metadata_list": {

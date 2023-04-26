@@ -88,7 +88,7 @@
                 Home</a>
             </li>
             <li class="vf-navigation__item">
-                <a href="{% url 'samples_list' %}?system=chicken"
+                <a href="{% url 'samples_list' %}?animal__system=chicken"
                    class="vf-navigation__link">
                     <img src="{% static "img/icons/chicken.svg" %}"
                          class="nav-icon"
@@ -96,7 +96,7 @@
                 Chicken samples</a>
             </li>
             <li class="vf-navigation__item">
-                <a href="{% url 'samples_list' %}?system=salmon"
+                <a href="{% url 'samples_list' %}?animal__system=salmon"
                    class="vf-navigation__link">
                     <img src="{% static "img/icons/salmon.svg" %}"
                          class="nav-icon"

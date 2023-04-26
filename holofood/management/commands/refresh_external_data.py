@@ -2,39 +2,26 @@ import logging
 
 from django.core.management.base import BaseCommand
 
-from holofood.models import Sample, Project
-
-METADATA = "METADATA"
-METAGENOMIC = "METAGENOMIC"
-METABOLOMIC = "METABOLOMIC"
+from holofood.models import Sample, Animal
 
 
 class Command(BaseCommand):
-    help = "(Re)fetch external data for some or all Samples, from external APIs like BioSamples and MGnify"
+    help = "(Re)fetch external data for some or all Samples/Animals, from BioSamples."
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--samples",
             type=str,
-            help="Sample accessions, if only some should be updated. Overrides `--projects` and `--sample_filters`.",
+            help="Sample accessions to update. Overrides `--sample_filters`. Use 'ALL' for all.",
             nargs="+",
             metavar="ACCESSION",
         )
         parser.add_argument(
-            "--projects",
+            "--animals",
             type=str,
-            help="Project accessions, if only some should be updated",
+            help="Animals accessions to update. Overrides `--animal_filters`. Use 'ALL' for all.",
             nargs="+",
             metavar="ACCESSION",
-        )
-        parser.add_argument(
-            "--types",
-            type=str,
-            help=f"Which data types to fetch: {[METADATA, METAGENOMIC, METABOLOMIC]}",
-            nargs="+",
-            metavar="DATATYPE",
-            choices=[METADATA, METAGENOMIC, METABOLOMIC],
-            default=[METADATA, METAGENOMIC, METABOLOMIC],
         )
         parser.add_argument(
             "--sample_filters",
@@ -43,68 +30,41 @@ class Command(BaseCommand):
             nargs="+",
             metavar="FILTER",
         )
-
-    @staticmethod
-    def _refresh_sample(sample: Sample, options: dict):
-        logging.info(f"Refreshing external data for sample {sample.accession}")
-        if METADATA in options["types"]:
-            logging.info(f"Refreshing structureddata for sample {sample.accession}")
-            sample.refresh_structureddata()
-        if METAGENOMIC in options["types"]:
-            logging.info(f"Refreshing metagenomics data for sample {sample.accession}")
-            sample.refresh_metagenomics_metadata()
-        if METABOLOMIC in options["types"]:
-            logging.info(f"Refreshing metabolomics data for sample {sample.accession}")
-            logging.warning(
-                f"It is inefficient, so usually wrong, to refresh metabolights data on a per-sample basis"
-            )
-            sample.refresh_metabolomics_metadata()
-
-    @staticmethod
-    def _refresh_project(project: Project, options: dict):
-        logging.info(f"Refreshing project {project}")
-        if METADATA in options["types"]:
-            logging.info(f"Refreshing structureddata for project {project.accession}")
-            for sample in project.sample_set.all():
-                sample.refresh_structureddata()
-        if METAGENOMIC in options["types"]:
-            logging.info(
-                f"Refreshing metagenomics data for samples in project {project.accession}"
-            )
-            project.refresh_metagenomics_metadata()
-        if METABOLOMIC in options["types"]:
-            logging.info(
-                f"Refreshing metabolomics data for samples in projects {project.accession}"
-            )
-            project.refresh_metabolomics_metadata()
+        parser.add_argument(
+            "--animal_filters",
+            type=str,
+            help="Animal filter as Django-esque query expressions e.g. accession__gt=SAMEA002",
+            nargs="+",
+            metavar="FILTER",
+        )
 
     def handle(self, *args, **options):
+        samples = None
         if options["samples"]:
-            # Specific samples so call APIs one by one
-            samples = Sample.objects.filter(accession__in=options["samples"])
-            logging.info(
-                f"Fetching metadata sample by sample for {samples.count()} samples"
-            )
-            for sample in samples:
-                self._refresh_sample(sample, options)
-            return self.stdout.write(self.style.SUCCESS(f"Done"))
-
-        # Call APIs on a per-project basis if possible
-        if options["projects"]:
-            projects = Project.objects.filter(accession__in=options["projects"])
-        else:
-            projects = Project.objects
-
+            if "ALL" in options["samples"]:
+                samples = Sample.objects.all()
+            else:
+                samples = Sample.objects.filter(accession__in=options["samples"])
         if options["sample_filters"]:
-            # Call APIs per-sample, filtering by project and user-defined filters
             filters = dict(tuple(f.split("=")) for f in options["sample_filters"])
-            samples = Sample.objects.filter(**filters).filter(project__in=projects)
+            samples = Sample.objects.filter(**filters)
+        if samples:
+            logging.info(f"Fetching metadata for {samples.count()} samples")
             for sample in samples:
-                self._refresh_sample(sample, options)
-            return self.stdout.write(self.style.SUCCESS(f"Done"))
+                sample.refresh_structureddata()
+            self.stdout.write(self.style.SUCCESS(f"Done for samples"))
 
-        else:
-            # Call APIs per-project
-            for project in projects:
-                self._refresh_project(project, options)
-        self.stdout.write(self.style.SUCCESS(f"Done"))
+        animals = None
+        if options["animals"]:
+            if "ALL" in options["animals"]:
+                animals = Animal.objects.all()
+            else:
+                animals = Animal.objects.filter(accession__in=options["animals"])
+        if options["animal_filters"]:
+            filters = dict(tuple(f.split("=")) for f in options["animal_filters"])
+            animals = Animal.objects.filter(**filters)
+        if animals:
+            logging.info(f"Fetching metadata for {animals.count()} animals")
+            for animal in animals:
+                animal.refresh_structureddata()
+            self.stdout.write(self.style.SUCCESS(f"Done for animals"))

@@ -8,7 +8,8 @@ from martor.models import MartorField
 
 from holofood.external_apis.biosamples.api import get_sample_structured_data
 from holofood.external_apis.ena.browser_api import get_checklist_metadata
-from holofood.external_apis.metabolights.api import get_metabolights_project_files
+
+# from holofood.external_apis.metabolights.api import get_metabolights_project_files
 from holofood.external_apis.mgnify.api import MgnifyApi
 from holofood.utils import holofood_config, DistinctFunc
 
@@ -62,7 +63,43 @@ class Animal(models.Model):
 
     accession = models.CharField(primary_key=True, max_length=15)
     system = models.CharField(choices=SYSTEM_CHOICES, max_length=10, null=True)
-    animal_code = models.CharField(max_length=10)
+
+    def refresh_structureddata(self, structured_metadata: dict = None):
+        """
+        Set the metadata on Animal, either using a dict of structured metadata from BioSamples,
+        or optionally fetching that from the BioSamples API.
+        :param structured_metadata: Optional dict of metadata sections, e.g. if known from sample import.
+        :return:
+        """
+        if not structured_metadata:
+            metadata = get_sample_structured_data(self.accession)
+        else:
+            metadata = structured_metadata
+
+        for metadata_type, metadata_content in metadata.items():
+            if not metadata_content:
+                logging.debug(
+                    f"{metadata_type=} from {self.accession} was null – skipping"
+                )
+                continue
+            for metadatum in metadata_content:
+                marker, created = SampleMetadataMarker.objects.update_or_create(
+                    name=metadatum["marker"]["value"],
+                    type=metadata_type,
+                    defaults={"iri": metadatum["marker"]["iri"]},
+                )
+                if created:
+                    logging.info(f"Created new SampleMetadataMarker {marker}")
+                self.structured_metadata.update_or_create(
+                    marker=marker,
+                    defaults={
+                        "source": SampleStructuredDatum.BIOSAMPLES,
+                        "measurement": metadatum["measurement"]["value"],
+                        "partner_name": metadatum.get("partner", {}).get("value"),
+                        "partner_iri": metadatum.get("partner", {}).get("iri"),
+                        "units": metadatum.get("measurement_units", {}).get("value"),
+                    },
+                )
 
 
 class SampleManager(models.Manager):
@@ -92,16 +129,32 @@ class Sample(models.Model):
     An extraction-level BioSample, derived from an Animal.
     """
 
-    METAGENOMIC = "metagenomic"
+    METAGENOMIC_ASSEMBLY = "metagenomic_assembly"
+    METAGENOMIC_AMPLICON = "metagenomic_amplicon"
     METABOLOMIC = "metabolomic"
+    METABOLOMIC_TARGETED = "metabolomic_targeted"
     HISTOLOGICAL = "histological"
     HOST_GENOMIC = "host_genomic"
+    TRANSCRIPTOMIC = "transcriptomic"
+    META_TRANSCRIPTOMIC = "metatranscriptomic"
+    IODINE = "iodine"
+    FATTY_ACIDS = "fatty_acids"
+    HEAVY_METALS = "heavy_metals"
+    INFLAMMATORY_MARKERS = "inflammatory_markers"
 
     SAMPLE_TYPE_CHOICES = [
-        (METAGENOMIC, METAGENOMIC),
+        (METAGENOMIC_ASSEMBLY, METAGENOMIC_ASSEMBLY),
+        (METAGENOMIC_AMPLICON, METAGENOMIC_AMPLICON),
         (METABOLOMIC, METABOLOMIC),
+        (METABOLOMIC_TARGETED, METABOLOMIC_TARGETED),
         (HISTOLOGICAL, HISTOLOGICAL),
         (HOST_GENOMIC, HOST_GENOMIC),
+        (TRANSCRIPTOMIC, TRANSCRIPTOMIC),
+        (META_TRANSCRIPTOMIC, META_TRANSCRIPTOMIC),
+        (IODINE, IODINE),
+        (FATTY_ACIDS, FATTY_ACIDS),
+        (HEAVY_METALS, HEAVY_METALS),
+        (INFLAMMATORY_MARKERS, INFLAMMATORY_MARKERS),
     ]
 
     objects = SampleManager()
@@ -116,7 +169,8 @@ class Sample(models.Model):
     )
 
     ena_run_accessions = models.JSONField(default=list, blank=True)
-    metabolights_files = models.JSONField(default=list, blank=True)
+
+    metabolights_study = models.CharField(max_length=15, null=True, blank=True)
 
     def __str__(self):
         return f"Sample {self.accession} - {self.title}"
@@ -141,7 +195,7 @@ class Sample(models.Model):
 
         for metadata_type, metadata_content in metadata.items():
             if not metadata_content:
-                logging.warning(
+                logging.debug(
                     f"{metadata_type=} from {self.accession} was null – skipping"
                 )
                 continue
@@ -193,56 +247,30 @@ class Sample(models.Model):
         # logging.debug(f"Sample {self} has metagenomics data? {self.has_metagenomics}")
         self.save()
 
-    @property
-    def metabolights_project(self) -> str:
-        if hasattr(self, "primary_metadata"):
-            # Use the prefetched values for efficiency
-            try:
-                mtbls_metadatum: SampleStructuredDatum = next(
-                    metadatum
-                    for metadatum in self.primary_metadata
-                    if metadatum.marker.name
-                    == holofood_config.metabolights.metabolights_accession_marker_in_biosamples
-                )
-            except StopIteration:
-                logging.debug(f"No metabolights project for {self}")
-            else:
-                return mtbls_metadatum.measurement
-        else:
-            logging.warning(
-                "No primary_metadata attribute available on sample. Model manager skipped?"
-            )
-            mtbls_metadatum = self.structured_metadata.filter(
-                marker__name=holofood_config.metabolights.metabolights_accession_marker_in_biosamples
-            ).first()
-            if mtbls_metadatum:
-                return mtbls_metadatum.measurement
-
-    def refresh_metabolomics_metadata(self):
-        # TODO
-        mtbls = self.metabolights_project
+    def get_metabolights_files(self):
+        mtbls = self.metabolights_study
         if not mtbls:
-            logging.info(f"No MTBLS accession is present in metadata of {self}")
+            logging.info(f"No MTBLS accession is present in {self}")
             return
         logging.debug(f"Refreshing metabolomics data for {self}: {mtbls}")
-        project_samples_files = get_metabolights_project_files(mtbls)
-        try:
-            sample_files = next(
-                files
-                for sample, files in project_samples_files.items()
-                if sample.lower() in [self.accession.lower(), self.title.lower()]
-            )
-        except StopIteration:
-            logging.warning(
-                f"Sample {self} has metadata suggesting it is in {mtbls}. Yet no sample matched it in that project."
-            )
-        else:
-            self.metabolights_files = sample_files
-            # self.has_metabolomics = True
-            logging.info(
-                f"Stored {len(sample_files)} metabolights filenames for {mtbls}"
-            )
-            self.save()
+        # project_samples_files = get_metabolights_project_files(mtbls)
+        # try:
+        #     sample_files = next(
+        #         files
+        #         for sample, files in project_samples_files.items()
+        #         if sample.lower() in [self.accession.lower(), self.title.lower()]
+        #     )
+        # except StopIteration:
+        #     logging.warning(
+        #         f"Sample {self} has metadata suggesting it is in {mtbls}. Yet no sample matched it in that project."
+        #     )
+        # else:
+        #     self.metabolights_files = sample_files
+        #     # self.has_metabolomics = True
+        #     logging.info(
+        #         f"Stored {len(sample_files)} metabolights filenames for {mtbls}"
+        #     )
+        #     self.save()
 
 
 class SampleMetadataMarker(models.Model):

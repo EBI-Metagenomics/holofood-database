@@ -53,10 +53,18 @@ class System(Enum):
 
 
 class SampleType(Enum):
-    metagenomic: str = Sample.METAGENOMIC
+    metagenomic_assembly: str = Sample.METAGENOMIC_ASSEMBLY
+    metagenomic_amplicon: str = Sample.METAGENOMIC_AMPLICON
     metabolomic: str = Sample.METABOLOMIC
+    metabolomic_targeted: str = Sample.METABOLOMIC_TARGETED
     histological: str = Sample.HISTOLOGICAL
     host_genomic: str = Sample.HOST_GENOMIC
+    iodine: str = Sample.IODINE
+    heavy_metals: str = Sample.HEAVY_METALS
+    fatty_acids: str = Sample.FATTY_ACIDS
+    transcriptomic: str = Sample.TRANSCRIPTOMIC
+    meta_transcriptomic: str = Sample.META_TRANSCRIPTOMIC
+    inflammatory_markers: str = Sample.INFLAMMATORY_MARKERS
 
 
 class SampleMetadataMarkerSchema(ModelSchema):
@@ -119,7 +127,11 @@ class AnimalSlimSchema(ModelSchema):
 class SampleSlimSchema(ModelSchema):
     @staticmethod
     def resolve_canonical_url(obj: Sample):
-        if obj.sample_type in [Sample.METAGENOMIC, Sample.HOST_GENOMIC]:
+        if obj.sample_type in [
+            Sample.METAGENOMIC_AMPLICON,
+            Sample.METAGENOMIC_ASSEMBLY,
+            Sample.HOST_GENOMIC,
+        ]:
             # Sample is nucleotide sequence based
             return f"{holofood_config.ena.browser_url}/{obj.accession}"
         else:
@@ -131,7 +143,7 @@ class SampleSlimSchema(ModelSchema):
     def resolve_metagenomics_url(obj: Sample):
         return (
             f"{holofood_config.mgnify.api_root}/samples/{obj.accession}"
-            if obj.sample_type == obj.METAGENOMIC
+            if obj.sample_type in [obj.METAGENOMIC_AMPLICON, obj.METAGENOMIC_ASSEMBLY]
             else None
         )
 
@@ -140,9 +152,8 @@ class SampleSlimSchema(ModelSchema):
     @staticmethod
     def resolve_metabolomics_url(obj: Sample):
         return (
-            f"{holofood_config.metabolights.api_root}/studies/{obj.metabolights_project}"
-            if obj.sample_type == obj.METABOLOMIC
-            and obj.metabolights_project is not None
+            f"{holofood_config.metabolights.api_root}/studies/{obj.metabolights_study}"
+            if obj.sample_type == obj.METABOLOMIC and obj.metabolights_study is not None
             else None
         )
 
