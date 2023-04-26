@@ -193,7 +193,7 @@
             </summary>
             <a id="metagenomics"></a>
             <p>
-                Sample {{ sample.accession }} has metagenomic datasets available on MGnify.
+                Sample {{ sample.accession }} should have metagenomic analysis datasets available on MGnify.
                 <a class="vf-button vf-button--link vf-button--sm"
                    href="{{ MGNIFY_WEB_URL }}/samples/{{ sample.accession }}">View sample on MGnify</a>
             </p>
@@ -201,7 +201,7 @@
                 <thead class="vf-table__header">
                     <tr class="vf-table__row">
                         <th class="vf-table__heading" scope="col">Analysis accession</th>
-                        <th class="vf-table__heading" scope="col">Run accession</th>
+                        <th class="vf-table__heading" scope="col">Run/assembly accession</th>
                         <th class="vf-table__heading" scope="col">MGnify pipeline version</th>
                         <th class="vf-table__heading" scope="col">Experiment type</th>
                         <th class="vf-table__heading" scope="col">Detail</th>
@@ -233,10 +233,17 @@
                                    class="vf-link">{{ analysis.id }}</a>
                             </td>
                             <td class="vf-table__cell">
-                                <a href="{{ MGNIFY_WEB_URL }}/runs/{{ analysis.relationships.run.data.id }}"
-                                   class="vf-link">
-                                    {{ analysis.relationships.run.data.id }}
-                                </a>
+                                {% if analysis.relationships.run.data %}
+                                    <a href="{{ MGNIFY_WEB_URL }}/runs/{{ analysis.relationships.run.data.id }}"
+                                       class="vf-link">
+                                        {{ analysis.relationships.run.data.id }}
+                                    </a>
+                                {% elif analysis.relationships.assembly.data.id %}
+                                    <a href="{{ MGNIFY_WEB_URL }}/assemblies/{{ analysis.relationships.assembly.data.id }}"
+                                       class="vf-link">
+                                        {{ analysis.relationships.assembly.data.id }}
+                                    </a>
+                                {% endif %}
                             </td>
                             <td class="vf-table__cell">{{ analysis.attributes.pipeline_version }}</td>
                             <td class="vf-table__cell">{{ analysis.attributes.experiment_type }}</td>
@@ -250,6 +257,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% include "holofood/components/atoms/possibly_empty_state.html" with items=analyses empty_text="No analyses found in MGnify" colspan=3 %}
         </details>
     {% endif %}
     {% if sample.sample_type == sample.METABOLOMIC %}
@@ -260,30 +268,47 @@
             <a id="metabolomics"></a>
             <p>
                 Sample {{ sample.accession }} has metabolomics analysis on MetaboLights.
-                <a href="{{ METABOLIGHTS_WEB_URL }}/{{ sample.metabolights_project }}" class="vf-button vf-button--link vf-button--sm inline">View project {{ sample.metabolights_project }} on MetaboLights</a>
+                <a href="{{ METABOLIGHTS_WEB_URL }}/{{ sample.metabolights_study }}" class="vf-button vf-button--link vf-button--sm inline">View project {{ sample.metabolights_study }} on MetaboLights</a>
             </p>
-            <h3>Sample files</h3>
+            <h3>Sample assays and files</h3>
             <table class="vf-table scrollable-table">
                 <thead class="vf-table__header">
                     <tr class="vf-table__row">
+                        <th class="vf-table__heading" scope="col">Assay sheet</th>
                         <th class="vf-table__heading" scope="col">Sample name</th>
-                        <th class="vf-table__heading" scope="col">Filename</th>
+                        <th class="vf-table__heading" scope="col">Raw Spectral Data File</th>
+                        <th class="vf-table__heading" scope="col">Derived Spectral Data File</th>
+                        <th class="vf-table__heading" scope="col">Metabolite Assignment File</th>
                     </tr>
                 </thead>
                 <tbody class="vf-table__body">
-                    {% for file in sample.metabolights_files %}
+                    {% for assay in assays %}
                         <tr class="vf-table__row">
                             <td class="vf-table__cell">
-                                {{ file.sample_name }}
+                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/assays"
+                                   class="vf-link">{{ assay.assay_sheet }}</a>
                             </td>
                             <td class="vf-table__cell">
-                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_project }}/download/public?file={{ file.file_name }}"
-                                   class="vf-link">{{ file.file_name }}</a>
+                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/samples"
+                                   class="vf-link">{{ assay.sample_assay.Sample_Name }}</a>
+                            </td>
+                            <td class="vf-table__cell">
+                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/download/public?file={{ assay.sample_assay.Raw_Spectral_Data_File }}"
+                                   class="vf-link">{{ assay.sample_assay.Raw_Spectral_Data_File }}</a>
+                            </td>
+                            <td class="vf-table__cell">
+                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/download/public?file={{ assay.sample_assay.Derived_Spectral_Data_File }}"
+                                   class="vf-link">{{ assay.sample_assay.Derived_Spectral_Data_File }}</a>
+                            </td>
+                            <td class="vf-table__cell">
+                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/download/public?file={{ assay.sample_assay.Metabolite_Assignment_File }}"
+                                   class="vf-link">{{ assay.sample_assay.Metabolite_Assignment_File }}</a>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            {% include "holofood/components/atoms/possibly_empty_state.html" with items=assays empty_text="No assays found in MetaboLights" colspan=3 %}
         </details>
     {% endif %}
     <section class="vf-card-container vf-card-container__col-3 | vf-u-background-color--grey--lightest vf-u-fullbleed">

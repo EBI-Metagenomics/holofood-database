@@ -5,7 +5,7 @@ from typing import List, Type
 
 import requests
 from django.core.paginator import Paginator
-from django.db.models import Q, Model, CharField, QuerySet, TextField, Count
+from django.db.models import Q, Model, CharField, QuerySet, TextField
 from django.http import Http404, StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -85,20 +85,25 @@ class SampleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         model: Sample = context["sample"]
 
-        mgnify = MgnifyApi()
+        if model.sample_type in [
+            Sample.METAGENOMIC_ASSEMBLY,
+            Sample.METAGENOMIC_AMPLICON,
+        ]:
+            mgnify = MgnifyApi()
 
-        try:
-            context["analyses"] = reduce(
-                operator.concat,
-                map(mgnify.get_metagenomics_analyses_for_run, model.ena_run_accessions),
-                [],
-            )
+            try:
+                context["analyses"] = mgnify.get_metagenomics_analyses_for_sample(
+                    model.accession
+                )
 
-        except Exception as e:
-            logging.error(f"Could not retrieve analyses from MGnify for {model}")
-            logging.error(e)
-            context["analyses"] = []
-            context["analyses_error"] = True
+            except Exception as e:
+                logging.error(f"Could not retrieve analyses from MGnify for {model}")
+                logging.error(e)
+                context["analyses"] = []
+                context["analyses_error"] = True
+
+        if model.sample_type in [Sample.METABOLOMIC, Sample.METABOLOMIC_TARGETED]:
+            context["assays"] = model.get_metabolights_files()
 
         return context
 

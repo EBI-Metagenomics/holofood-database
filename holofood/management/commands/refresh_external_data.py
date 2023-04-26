@@ -1,3 +1,4 @@
+import argparse
 import logging
 
 from django.core.management.base import BaseCommand
@@ -37,6 +38,18 @@ class Command(BaseCommand):
             nargs="+",
             metavar="FILTER",
         )
+        parser.add_argument(
+            "--structured",
+            type=bool,
+            action=argparse.BooleanOptionalAction,
+            help="Whether to refresh structured data.",
+        )
+        parser.add_argument(
+            "--external_references",
+            type=bool,
+            action=argparse.BooleanOptionalAction,
+            help="Whether to refresh external references.",
+        )
 
     def handle(self, *args, **options):
         samples = None
@@ -51,7 +64,10 @@ class Command(BaseCommand):
         if samples:
             logging.info(f"Fetching metadata for {samples.count()} samples")
             for sample in samples:
-                sample.refresh_structureddata()
+                if options["structured"]:
+                    sample.refresh_structureddata()
+                if options["external_references"]:
+                    sample.refresh_external_references()
             self.stdout.write(self.style.SUCCESS(f"Done for samples"))
 
         animals = None

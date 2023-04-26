@@ -7,7 +7,7 @@ from typing import List
 import requests
 
 from holofood.external_apis.metabolights.auth import MTBLS_AUTH
-from holofood.utils import holofood_config
+from holofood.utils import holofood_config, clean_keys
 
 API_ROOT = holofood_config.metabolights.api_root.rstrip("/")
 
@@ -35,7 +35,8 @@ def get_metabolights_assays(mtbls_accession: str, sample_accession: str) -> List
     logging.info(
         f"Fetching metabolights details for {mtbls_accession} {sample_accession}"
     )
-
+    if MTBLS_AUTH:
+        logging.info("Using authenticated metabolights API")
     samples_metadata_filename = None
     response = requests.get(
         f"{API_ROOT}/studies/{mtbls_accession}/files?include_raw_data=false",
@@ -56,11 +57,12 @@ def get_metabolights_assays(mtbls_accession: str, sample_accession: str) -> List
         requests.get(
             f"{API_ROOT}/studies/{mtbls_accession}/download?file={samples_metadata_filename}",
             stream=True,
+            auth=MTBLS_AUTH,
         )
     ) as stream:
-        reader = csv.DictReader(stream.iter_lines(), delimiter="\t")
+        f = (line.decode("utf-8") for line in stream.iter_lines(decode_unicode=True))
+        reader = csv.DictReader(f, delimiter="\t")
         for row in reader:
-            print(row)
             if (
                 row.get(
                     holofood_config.metabolights.biosample_column_name_in_sample_table
@@ -88,12 +90,17 @@ def get_metabolights_assays(mtbls_accession: str, sample_accession: str) -> List
             requests.get(
                 f"{API_ROOT}/studies/{mtbls_accession}/download?file={assay_sheet}",
                 stream=True,
+                auth=MTBLS_AUTH,
             )
         ) as stream:
-            reader = csv.DictReader(stream.iter_lines(), "utf-8", delimiter="\t")
+            f = (
+                line.decode("utf-8") for line in stream.iter_lines(decode_unicode=True)
+            )
+            reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
-                print(row)
                 if row.get("Sample Name") == sample_name:
-                    assay_sheet_rows_for_sample.append(row)
+                    assay_sheet_rows_for_sample.append(
+                        {"assay_sheet": assay_sheet, "sample_assay": clean_keys(row)}
+                    )
 
     return assay_sheet_rows_for_sample

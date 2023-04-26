@@ -1,15 +1,19 @@
 import logging
+from typing import List
 
 from django.db import models
-from django.db.models import Prefetch, Q, Count, Subquery, OuterRef, F, Func
+from django.db.models import Prefetch, Count, Subquery, OuterRef, F
 from django.urls import reverse
 from django.utils.text import slugify
 from martor.models import MartorField
 
-from holofood.external_apis.biosamples.api import get_sample_structured_data
+from holofood.external_apis.biosamples.api import (
+    get_sample_structured_data,
+    get_biosample,
+)
 from holofood.external_apis.ena.browser_api import get_checklist_metadata
+from holofood.external_apis.metabolights.api import get_metabolights_assays
 
-# from holofood.external_apis.metabolights.api import get_metabolights_project_files
 from holofood.external_apis.mgnify.api import MgnifyApi
 from holofood.utils import holofood_config, DistinctFunc
 
@@ -168,8 +172,6 @@ class Sample(models.Model):
         max_length=20, choices=SAMPLE_TYPE_CHOICES, null=True, blank=True
     )
 
-    ena_run_accessions = models.JSONField(default=list, blank=True)
-
     metabolights_study = models.CharField(max_length=15, null=True, blank=True)
 
     def __str__(self):
@@ -238,21 +240,31 @@ class Sample(models.Model):
                 },
             )
 
-    def refresh_metagenomics_metadata(self):
-        # TODO
-        logging.debug(f"Checking metagenomics data existence for sample {self}")
-        # self.has_metagenomics = _mgnify.get_metagenomics_existence_for_sample(
-        #     self.accession
-        # )
-        # logging.debug(f"Sample {self} has metagenomics data? {self.has_metagenomics}")
-        self.save()
+    def refresh_external_references(self, external_references_list: List[dict] = None):
+        """
+        Set the details on Sample, that come from biosamples External References.
+        Either the biosamples externalReferences response section is provided,
+        or optionally fetching that from the BioSamples API.
+        :param external_references_list: Optional structure of `externalReferences` biosamples API response if already known.
+        :return:
+        """
+        if not external_references_list:
+            refs = get_biosample(self.accession).get("externalReferences")
+        else:
+            refs = external_references_list
+        for ref in refs:
+            if "MTBLS" in ref.get("url", ""):
+                self.metabolights_study = f"MTBLS{ref['url'].split('MTBLS')[1]}"
+                self.save()
 
     def get_metabolights_files(self):
         mtbls = self.metabolights_study
         if not mtbls:
             logging.info(f"No MTBLS accession is present in {self}")
             return
-        logging.debug(f"Refreshing metabolomics data for {self}: {mtbls}")
+        assays = get_metabolights_assays(self.metabolights_study, self.accession)
+        logging.info(assays)
+        return assays
         # project_samples_files = get_metabolights_project_files(mtbls)
         # try:
         #     sample_files = next(

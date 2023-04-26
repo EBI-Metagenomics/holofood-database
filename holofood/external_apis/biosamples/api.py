@@ -49,6 +49,25 @@ def get_sample_structured_data(sample: str) -> dict:
     }
 
 
+def get_biosample(sample: str) -> dict:
+    auth_headers = get_auth_headers()
+    if auth_headers:
+        logging.info("Using authenticated BioSamples API")
+
+    logging.info(f"Fetching {sample} from Biosamples {API_ROOT = }")
+
+    response = requests.get(f"{API_ROOT}/samples/{sample}", headers=auth_headers)
+    if response.status_code == requests.codes.not_found:
+        logging.info(f"No biosample for sample {sample}")
+        return {}
+    try:
+        data = response.json()
+    except (JSONDecodeError, KeyError, AttributeError) as e:
+        logging.error("Could not read response from biosamples")
+        raise e
+    return data
+
+
 def get_project_samples(
     project_attr: str,
     webin_filter: List[str],

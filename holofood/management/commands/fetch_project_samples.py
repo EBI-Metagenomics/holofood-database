@@ -168,13 +168,6 @@ class Command(BaseCommand):
             ChecklistItem(k, v[0]) for k, v in characteristics.items() if len(v) > 0
         ]
 
-    @staticmethod
-    def get_metabolights_study(sample: dict):
-        external_refs = sample.get("externalReferences")
-        for ref in external_refs:
-            if "MTBLS" in ref.get("url", ""):
-                return f"MTBLS{ref['url'].split('MTBLS')[1]}"
-
     def handle(self, *args, **options):
         animals_added = 0
         samples_added = 0
@@ -253,12 +246,10 @@ class Command(BaseCommand):
                     structured_metadata,
                     self.characteristics_to_checklist_obj(biosample),
                 )
+                sample.refresh_external_references(biosample.get("externalReferences"))
                 if created:
                     samples_added += 1
                     logging.info(f"Made sample {sample}")
-
-                if sample.sample_type == Sample.METABOLOMIC:
-                    sample.metabolights_project = self.get_metabolights_study(biosample)
 
         self.stdout.write(
             self.style.SUCCESS(
