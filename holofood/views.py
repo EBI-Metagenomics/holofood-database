@@ -272,8 +272,12 @@ class ViralCataloguesView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         catalogue = ViralCatalogue.objects.first()
         if not catalogue:
-            raise Http404
+            return reverse("viral_catalogues_empty_state")
         return reverse("viral_catalogue", kwargs={"pk": catalogue.id})
+
+
+class ViralCataloguesEmptyStateView(TemplateView):
+    template_name = "holofood/pages/viral_catalogues_empty_state.html"
 
 
 class ViralSequenceAnnotationView(BaseDetailView):

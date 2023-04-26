@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+    <nav class="vf-breadcrumbs" aria-label="Breadcrumb">
+      <ul class="vf-breadcrumbs__list | vf-list vf-list--inline">
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'home' %}" class="vf-breadcrumbs__link">Home</a>
+        </li>
+
+        <li class="vf-breadcrumbs__item" aria-current="location">
+          Viral catalogues
+        </li>
+      </ul>
+
+    </nav>
+    <div class="vf-stack vf-stack--400">
+        <div/>
+        <h2>Viral catalogues</h2>
+        <p>
+            Clustered viral catalogues will be available soon.
+            Viral annotations can be found in <a href="{{ MGNIFY_WEB_URL }}" class="vf-link">MGnify</a> for
+            <a href="{% url 'genome_catalogues' %}">HoloFood MAG Catalogues</a>.
+        </p>
+    </div>
+{% endblock content %}
