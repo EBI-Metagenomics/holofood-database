@@ -36,7 +36,11 @@ class SampleStructuredDatumAdmin(ModelAdmin):
 class SampleAdmin(ModelAdmin):
     inlines = [SampleMetadataInline]
     list_filter = ("sample_type",)
-    search_fields = ("accession", "title", "animal__accession", "animal__animal_code")
+    search_fields = (
+        "accession",
+        "title",
+        "animal__accession",
+    )
 
 
 class AnimalMetadataInline(SampleMetadataInline):
@@ -56,7 +60,7 @@ class AnimalSampleInline(TabularInlinePaginated):
 class AnimalAdmin(ModelAdmin):
     inlines = [AnimalMetadataInline, AnimalSampleInline]
     list_filter = ("system",)
-    search_fields = ("accession", "animal_code")
+    search_fields = ("accession",)
 
 
 @admin.register(AnalysisSummary)

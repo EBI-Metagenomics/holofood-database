@@ -32,6 +32,9 @@ def data_config_source(settings: BaseSettings) -> dict[str, Any]:
 class BiosamplesConfig(BaseModel):
     api_root: AnyHttpUrl = "https://www.ebi.ac.uk/biosamples"
     project_id: str = "HF"
+    username: str = ""
+    password: str = ""
+    auth_url: AnyHttpUrl = "https://www.ebi.ac.uk/ena/submit/webin/auth/token"
 
 
 class EnaConfig(BaseModel):
@@ -55,7 +58,7 @@ class MetabolightsConfig(BaseModel):
     api_root: AnyHttpUrl = "https://www.ebi.ac.uk/metabolights/ws"
     web_url: AnyHttpUrl = "https://www.ebi.ac.uk/metabolights"
     user_token: str = None
-    metabolights_accession_marker_in_biosamples: str = "Metabolights accession"
+    biosample_column_name_in_sample_table: str = "Characteristics[BioSamples accession]"
 
 
 class SampleTableConfig(BaseModel):
@@ -73,6 +76,7 @@ class TablesConfig(BaseModel):
 
 class DocsConfig(BaseModel):
     docs_url: AnyHttpUrl = "https://docs.holofooddata.org"
+    portal_doi: str = "10.5281/zenodo.7684072"
 
 
 class HolofoodConfig(BaseSettings):

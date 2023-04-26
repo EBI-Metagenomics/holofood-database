@@ -9,4 +9,5 @@ def apis(request):
         "METABOLIGHTS_WEB_URL": holofood_config.metabolights.web_url,
         "METABOLIGHTS_API_URL": holofood_config.metabolights.api_root,
         "DOCS_URL": holofood_config.docs.docs_url,
+        "PORTAL_DOI": holofood_config.docs.portal_doi,
     }

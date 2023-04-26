@@ -51,6 +51,7 @@ from holofood.views import (
     GlobalSearchView,
     AnimalListView,
     AnimalDetailView,
+    ViralCataloguesEmptyStateView,
 )
 
 admin.site.site_header = "HoloFood Data Portal Admin"
@@ -91,6 +92,11 @@ urlpatterns = [
         name="viral_catalogue_fragment",
     ),
     path("viral-catalogues", ViralCataloguesView.as_view(), name="viral_catalogues"),
+    path(
+        "viral-catalogues-redirect",
+        ViralCataloguesEmptyStateView.as_view(),
+        name="viral_catalogues_empty_state",
+    ),
     path("search/", GlobalSearchView.as_view(), name="global_search"),
     path("api/", api.urls),
     path("export/", export_api.urls),

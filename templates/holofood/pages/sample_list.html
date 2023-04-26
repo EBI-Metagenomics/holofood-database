@@ -47,7 +47,7 @@
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Sample accession" param="accession" %}
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Animal" param="animal__accession" %}
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Treatment code" param="" %}
-                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Inclusion level" param="" %}
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Treatment concentration" param="" %}
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Trial timepoint" param="" %}
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Sample type" param="" %}
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Detail" param="" %}
@@ -62,9 +62,9 @@
                                     <td class="vf-table__cell">
                                         {% include "holofood/components/atoms/animal_accession.html" with animal=sample.animal only %}
                                     </td>
-                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"host diet treatment"|default:"—" }}</td>
-                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"host diet treatment concentration"|default:"—" }}</td>
-                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"trial timepoint"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"Treatment code"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"Treatment concentration"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ sample.animal|animal_metadatum:"Sampling time"|default:"—" }}</td>
                                     <td class="vf-table__cell">{% include "holofood/components/atoms/sample_type.html" with sample=sample only %}</td>
                                     <td class="vf-table__cell">
                                         <a class="vf-button vf-button--link vf-button--sm"

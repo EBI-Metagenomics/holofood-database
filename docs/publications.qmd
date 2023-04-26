@@ -1,0 +1,30 @@
+---
+title: "Publications"
+---
+
+## Publications from the HoloFood consortium
+
+Nyholm, L., Koziol, A., Marcos, S., Botnen, A. B., Aizpurua, O., Gopalakrishnan, S., Limborg, M. T., Gilbert, M. T. P., & Alberdi, A. (2020). 
+[Holo-Omics: Integrated Host-Microbiota Multi-omics for Basic and Applied Biological Research.](https://doi.org/10.1016/j.isci.2020.101414) In iScience (Vol. 23, Issue 8, p. 101414). Elsevier BV. 10.1016/j.isci.2020.101414
+
+Bozzi, D., Rasmussen, J. A., Carøe, C., Sveier, H., Nordøy, K., Gilbert, M. T. P., & Limborg, M. T. (2021). 
+[Salmon gut microbiota correlates with disease infection status: potential for monitoring health in farmed animals.](https://doi.org/10.1186/s42523-021-00096-2) In Animal Microbiome (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1186/s42523-021-00096-2
+
+Duangnumsawang, Y., Zentek, J., & Goodarzi Boroojeni, F. (2021). 
+[Development and Functional Properties of Intestinal Mucus Layer in Poultry.](https://doi.org/10.3389/fimmu.2021.745849) In Frontiers in Immunology (Vol. 12). Frontiers Media SA. 10.3389/fimmu.2021.745849
+
+Eisenhofer, R., Odriozola, I., & Alberdi, A. (2023). 
+[Impact of microbial genome completeness on metagenomic functional inference.](https://doi.org/10.1038/s43705-023-00221-z) In ISME Communications (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1038/s43705-023-00221-z
+
+Duangnumsawang, Y., Zentek, J., Vahjen, W., Tarradas, J., & Goodarzi Boroojeni, F. (2022). 
+[Alterations in bacterial metabolites, cytokines, and mucosal integrity in the caecum of broilers caused by feed additives and host-related factors.](https://doi.org/10.3389/fphys.2022.935870) In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.935870
+
+Tous, N., Marcos, S., Goodarzi Boroojeni, F., Pérez de Rozas, A., Zentek, J., Estonba, A., Sandvang, D., Gilbert, M. T. P., Esteve-Garcia, E., Finn, R., Alberdi, A., & Tarradas, J. (2022). 
+[Novel strategies to improve chicken performance and welfare by unveiling host-microbiota interactions through hologenomics.](https://doi.org/10.3389/fphys.2022.884925) In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.884925
+
+Marcos, S., Parejo, M., Estonba, A., & Alberdi, A. (2022). 
+[Recovering High‐Quality Host Genomes from Gut Metagenomic Data through Genotype Imputation.](https://doi.org/10.1002/ggn2.202100065) In Advanced Genetics (Vol. 3, Issue 3, p. 2100065). Wiley. 10.1002/ggn2.202100065
+
+Brealey, J. C., Lecaudey, L. A., Kodama, M., Rasmussen, J. A., Sveier, H., Dheilly, N. M., Martin, M. D., & Limborg, M. T. (2022). 
+[Microbiome “Inception”: an Intestinal Cestode Shapes a Hierarchy of Microbial Communities Nested within the Host.](https://doi.org/10.1128/mbio.00679-22) In A. August (Ed.), mBio (Vol. 13, Issue 3). American Society for Microbiology. 10.1128/mbio.00679-22
+

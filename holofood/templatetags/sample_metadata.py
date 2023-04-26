@@ -27,7 +27,8 @@ def animal_metadatum(animal: Animal, marker_name: str) -> Union[str, None]:
 
     if datum is None:
         return None
-    return f'{datum.measurement}{datum.units or ""}'
+    measurement_includes_units = str(datum.measurement).endswith(str(datum.units))
+    return f'{datum.measurement}{datum.units if datum.units and not measurement_includes_units else ""}'
 
 
 @register.inclusion_tag("holofood/components/data_type_icons.html", name="data_types")

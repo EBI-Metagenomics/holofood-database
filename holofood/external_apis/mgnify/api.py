@@ -40,43 +40,11 @@ class MgnifyApi:
                 f"Instead, {response.status_code}"
             )
 
-    def get_metagenomics_existence_for_sample(self, sample: str) -> bool:
-        logging.info(f"Fetching {sample} metagenomics data from {self}")
-
-        self._request_slower()
-        response = self.get(
-            f"samples/{sample}",
-        )
-        self.assert_response_is_acceptable(response)
-        return response.status_code == requests.codes.ok
-
-    def get_metagenomics_samples_for_project(self, project: str) -> List[str]:
-        logging.info(f"Fetching {project} metagenomics data from {self}")
-        page = 1
-        samples = []
-        while page:
-            self._request_slower()
-            response = self.get(f"/studies/{project}/samples?{page=}")
-            self.assert_response_is_acceptable(response)
-            if response.status_code == requests.codes.not_found:
-                return samples
-            data = response.json()
-            samples.extend(
-                map(lambda sample: sample["attributes"]["biosample"], data["data"])
-            )
-
-            has_more_pages = data["links"]["next"] is not None
-            if has_more_pages:
-                page += 1
-            else:
-                page = None
-        return samples
-
-    def get_metagenomics_analyses_for_run(self, run: str) -> List[dict]:
-        logging.info(f"Fetching analyses for {run = } from {self}")
+    def get_metagenomics_analyses_for_sample(self, sample: str) -> List[dict]:
+        logging.info(f"Fetching analyses for {sample = } from {self}")
         response = requests.get(
-            f"{self.api_root}/runs/{run}/analyses?page_size=50", timeout=5
+            f"{self.api_root}/analyses?sample_accession={sample}&page_size=50",
+            timeout=5,
         )
         self.assert_response_is_acceptable(response)
-
         return clean_keys(response.json()).get("data", [])

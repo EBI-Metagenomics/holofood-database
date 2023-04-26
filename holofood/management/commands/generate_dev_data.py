@@ -51,34 +51,30 @@ class Command(BaseCommand):
         charlie_chicken = Animal.objects.create(
             accession="SAMEG01",
             system=Animal.CHICKEN,
-            animal_code="CCHARLIE",
         )
         chantelle_chicken = Animal.objects.create(
             accession="SAMEG02",
             system=Animal.CHICKEN,
-            animal_code="CCHANTELLE",
         )
         sandy_salmon = Animal.objects.create(
             accession="SAMEG03",
             system=Animal.SALMON,
-            animal_code="SSANDY",
         )
         sophie_salmon = Animal.objects.create(
             accession="SAMEG04",
             system=Animal.SALMON,
-            animal_code="SSOPHIE",
         )
         charlie_metagen = Sample.objects.create(
             accession="SAMEA01",
             animal=charlie_chicken,
-            sample_type=Sample.METAGENOMIC,
+            sample_type=Sample.METAGENOMIC_ASSEMBLY,
             title="chicken caecum extraction",
             ena_run_accessions=["ERR4918394"],
         )
         chantelle_metagen = Sample.objects.create(
             accession="SAMEA02",
             animal=chantelle_chicken,
-            sample_type=Sample.METAGENOMIC,
+            sample_type=Sample.METAGENOMIC_ASSEMBLY,
             title="chicken ileum extraction",
             ena_run_accessions=["ERR4918394"],
         )
@@ -110,14 +106,14 @@ class Command(BaseCommand):
         sandy_metag = Sample.objects.create(
             accession="SAMEA07",
             animal=sandy_salmon,
-            sample_type=Sample.METAGENOMIC,
+            sample_type=Sample.METAGENOMIC_ASSEMBLY,
             title="salmon extraction",
             ena_run_accessions=["ERR4918394"],
         )
         sophie_metag = Sample.objects.create(
             accession="SAMEA08",
             animal=sophie_salmon,
-            sample_type=Sample.METAGENOMIC,
+            sample_type=Sample.METAGENOMIC_ASSEMBLY,
             title="salmon extraction",
             ena_run_accessions=["ERR4918394"],
         )
@@ -183,7 +179,6 @@ class Command(BaseCommand):
             animal = Animal.objects.create(
                 accession=f"SAMEG{a:02d}",
                 system=Animal.CHICKEN,
-                animal_code=f"EXTRACHI{a}",
             )
             for marker_name in animal_metadata.keys():
                 _attach_metadata_to(marker_name, None, animal, 0)
@@ -193,14 +188,13 @@ class Command(BaseCommand):
                     animal=animal,
                     title=f"extra chicken sample {a}-{s}",
                     accession=f"SAMEA{a*10 + s}",
-                    sample_type=Sample.METAGENOMIC,
+                    sample_type=Sample.METAGENOMIC_ASSEMBLY,
                 )
 
         for a in range(30, 50):
             animal = Animal.objects.create(
                 accession=f"SAMEG{a:02d}",
                 system=Animal.SALMON,
-                animal_code=f"EXTRASAL{a}",
             )
             for marker_name in animal_metadata.keys():
                 _attach_metadata_to(marker_name, None, animal, 0)
@@ -209,7 +203,7 @@ class Command(BaseCommand):
                     animal=animal,
                     title=f"extra salmon sample {a}-{s}",
                     accession=f"SAMEA{a * 10 + s}",
-                    sample_type=Sample.METAGENOMIC,
+                    sample_type=Sample.METAGENOMIC_ASSEMBLY,
                 )
 
         summary = AnalysisSummary.objects.create(

@@ -20,7 +20,6 @@ def salmon_animal():
     return Animal.objects.create(
         accession="SAMEG04",
         system=Animal.SALMON,
-        animal_code="SSOPHIE",
     )
 
 
@@ -29,7 +28,6 @@ def chicken_animal():
     return Animal.objects.create(
         accession="SAMEG01",
         system=Animal.CHICKEN,
-        animal_code="CCHARLIE",
     )
 
 
@@ -39,7 +37,7 @@ def salmon_metagenomic_sample(salmon_animal):
         accession="SAMEA00000002",
         title="HF_DONUT.SALMON.METAG",
         animal=salmon_animal,
-        sample_type=Sample.METAGENOMIC,
+        sample_type=Sample.METAGENOMIC_ASSEMBLY,
     )
 
 
@@ -80,7 +78,7 @@ def chicken_metagenomic_sample(chicken_animal):
         accession="SAMEA00000006",
         title="HF_DONUT.CHICKEN.METAG",
         animal=chicken_animal,
-        sample_type=Sample.METAGENOMIC,
+        sample_type=Sample.METAGENOMIC_ASSEMBLY,
     )
 
 
@@ -793,7 +791,7 @@ def salmon_submitted_checklist(salmon_animal):
              <PRIMARY_ID>{salmon_animal.accession}</PRIMARY_ID>
              <SUBMITTER_ID namespace="UNIVERSITY OF DONUTS">{salmon_animal.accession}</SUBMITTER_ID>
           </IDENTIFIERS>
-          <TITLE>{salmon_animal.animal_code}</TITLE>
+          <TITLE>SALMON ANIMAL</TITLE>
           <SAMPLE_NAME>
              <TAXON_ID>1602388</TAXON_ID>
              <SCIENTIFIC_NAME>fish gut metagenome</SCIENTIFIC_NAME>
@@ -1138,12 +1136,7 @@ def mgnify_contig_annotations_response(viral_fragment: ViralFragment) -> str:
 
 
 def set_metabolights_project_for_sample(sample: Sample, mtbls: str = "MTBLSDONUT"):
-    mtbls_marker, _ = SampleMetadataMarker.objects.get_or_create(
-        name=holofood_config.metabolights.metabolights_accession_marker_in_biosamples
-    )
-    SampleStructuredDatum.objects.create(
-        marker=mtbls_marker, sample=sample, measurement=mtbls
-    )
+    sample.metabolights_study = mtbls
     sample.save()
 
 
@@ -1188,7 +1181,7 @@ def LiveTests(request):
             accession="SAMEA00000003",
             title="metagenomic extraction",
             animal=Fixtures.animals[0],
-            sample_type=Sample.METAGENOMIC,
+            sample_type=Sample.METAGENOMIC_ASSEMBLY,
         ),
     ]
 
