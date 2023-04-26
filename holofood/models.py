@@ -252,6 +252,8 @@ class Sample(models.Model):
             refs = get_biosample(self.accession).get("externalReferences")
         else:
             refs = external_references_list
+        if not refs:
+            return
         for ref in refs:
             if "MTBLS" in ref.get("url", ""):
                 self.metabolights_study = f"MTBLS{ref['url'].split('MTBLS')[1]}"

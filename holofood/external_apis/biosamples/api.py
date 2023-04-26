@@ -73,10 +73,12 @@ def get_project_samples(
     webin_filter: List[str],
     max_pages: int = None,
     begin_at_cursor: str = None,
+    updated_since: str = None,
 ) -> List[dict]:
     """
     Generator for pages of biosamples for a specific project. Each page is up to 200 biosamples.
 
+    :param updated_since: ISO8601 formatted date string to filter for samples updated since
     :param begin_at_cursor: Starting cursor value for pagination
     :param project_attr: e.g. HoloFood - the biosamples search value for attr:project:<value>
     :param webin_filter: list of webin IDs to limit results to. Discards samples from other submitters.
@@ -93,6 +95,8 @@ def get_project_samples(
     )
 
     next_url = f"{API_ROOT}/samples?filter=attr:project:{project_attr.strip()}&size=200"
+    if updated_since:
+        next_url = f"{next_url}&filter=dt:update:from={updated_since}"
     if begin_at_cursor:
         next_url = f"{next_url}&cursor={begin_at_cursor}"
     pages = 0

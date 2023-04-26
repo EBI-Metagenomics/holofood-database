@@ -38,6 +38,12 @@ class Command(BaseCommand):
             help="Maximum page count to retrieve from biomsamples",
             default=None,
         )
+        parser.add_argument(
+            "--updated_since",
+            type=str,
+            help="ISO8601 formatted datetime, to limit samples to those updated since a certain date. E.g. 2023-04-31",
+            default=None,
+        )
 
     @staticmethod
     def is_animal(sample: dict) -> bool:
@@ -177,6 +183,7 @@ class Command(BaseCommand):
             options["webin_filter"],
             options["max_pages"],
             options["biosamples_page_cursor"],
+            options["updated_since"],
         ):
             logging.info(f"Importing biosample {biosample.get('accession')}")
 
