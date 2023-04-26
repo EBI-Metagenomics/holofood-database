@@ -1,7 +1,0 @@
-[run]
-omit =
-    *tests*
-    *migrations*
-    *settings*
-    *asgi.py
-    *wsgi.py
