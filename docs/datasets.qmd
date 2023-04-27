@@ -30,6 +30,10 @@ For HoloFood biosamples, these are registered against a specific ontology.
 
 The majority of HoloFood samples' metadata are hosted in BioSamples.
 
+HoloFood data for samples that don't have a particular repository are also stored as structured data in BioSamples. 
+For example, histology measurements, inflammatory markers, and fatty acid measurements are stored in the structured data of those samples.
+This contrasts to e.g. nucleotide read, metagenome sequencing, and metabolomic mass spectromoetry data which are available through specific repositories.
+
 There is a [BioSamples online training course](https://www.ebi.ac.uk/training/online/courses/biosamples-quick-tour/what-is-biosamples)
 to learn more.
 

@@ -23,6 +23,16 @@ or all [metabolomics](datasets.qmd#metabolights-metabolomics) type samples (each
 Samples may be linked to metadata (almost always), metagenomic, metabolomic, or host-genomic datasets.
 Other sample types have their results data in the sample metadata.
 
+### Treatment search
+Samples may also be search for by the host-animal's treatment condition.
+The "Treatment search" filter is a case-insensitive text search over the samples’ animal treatment metadata.
+Specifically, it filters to samples whose host animal has all of the query strings in the animal's BioSamples metadata fields: "Sampling time", "Treatment name", "Treatment description", "Treatment code", "Treatment concentration".
+
+This means you can search for e.g. `ferm algae 2.0% "day 60"` to find samples from animals treated with **Ferm**ented **Algae** at a **2.0%** concentration and collected on trial **Day 60**.
+
+Note the use of lexical grouping around the "day 60" – this is useful when searching for, e.g. `day 0` which would otherwise partially match `day 60`.
+
+### Sample detail
 To view detail about a particular sample, click "View" on its row of the table.
 
 The sample detail page contains information help about the sample in the various supporting databases.
@@ -50,7 +60,7 @@ the section is instead called "Sample data".
 ## Finding sample data in other public repositories
 ### Metagenomics
 Some samples have [metagenomics](datasets.qmd#mgnify-metagenomics) data, in [MGnify](https://www.ebi.ac.uk/metagenomics).
-These can be found from the samples listing page by setting the `Sample type` filter to `metagenomic`.
+These can be found from the samples listing page by setting the `Sample type` filter to `metagenomic_assembly` or `metagenomic_amplicon`.
 
 MGnify analyses of a sample (identified with `MGYA` accessions) are listed and linked to from the sample detail page.
 
@@ -65,6 +75,10 @@ MetaboLights does not store samples as independent objects, instead it stores li
 So, the HoloFood data portal sample detail page shows a filtered table of the MetaboLights project's files,
 that relate to this sample.
 Following these file links will download the file.
+
+MetaboLights follows the [ISA framework](https://isa-tools.org), so the table shown is a collection of files from the one or more assay sheets 
+relevant to this sample.
+Raw and derived files are available.
 
 ![Screenshot of a metabolomic sample detail page](/img/website/sample-with-metabolomics.png)
 

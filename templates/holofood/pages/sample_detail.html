@@ -272,43 +272,45 @@
                 <a href="{{ METABOLIGHTS_WEB_URL }}/{{ sample.metabolights_study }}" class="vf-button vf-button--link vf-button--sm inline">View project {{ sample.metabolights_study }} on MetaboLights</a>
             </p>
             <h3>Sample assays and files</h3>
-            <table class="vf-table scrollable-table">
-                <thead class="vf-table__header">
-                    <tr class="vf-table__row">
-                        <th class="vf-table__heading" scope="col">Assay sheet</th>
-                        <th class="vf-table__heading" scope="col">Sample name</th>
-                        <th class="vf-table__heading" scope="col">Raw Spectral Data File</th>
-                        <th class="vf-table__heading" scope="col">Derived Spectral Data File</th>
-                        <th class="vf-table__heading" scope="col">Metabolite Assignment File</th>
-                    </tr>
-                </thead>
-                <tbody class="vf-table__body">
-                    {% for assay in assays %}
+            <div class="scrollable-container">
+                <table class="vf-table scrollable-table">
+                    <thead class="vf-table__header">
                         <tr class="vf-table__row">
-                            <td class="vf-table__cell">
-                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/assays"
-                                   class="vf-link">{{ assay.assay_sheet }}</a>
-                            </td>
-                            <td class="vf-table__cell">
-                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/samples"
-                                   class="vf-link">{{ assay.sample_assay.Sample_Name }}</a>
-                            </td>
-                            <td class="vf-table__cell">
-                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/download/public?file={{ assay.sample_assay.Raw_Spectral_Data_File }}"
-                                   class="vf-link">{{ assay.sample_assay.Raw_Spectral_Data_File }}</a>
-                            </td>
-                            <td class="vf-table__cell">
-                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/download/public?file={{ assay.sample_assay.Derived_Spectral_Data_File }}"
-                                   class="vf-link">{{ assay.sample_assay.Derived_Spectral_Data_File }}</a>
-                            </td>
-                            <td class="vf-table__cell">
-                                <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/download/public?file={{ assay.sample_assay.Metabolite_Assignment_File }}"
-                                   class="vf-link">{{ assay.sample_assay.Metabolite_Assignment_File }}</a>
-                            </td>
+                            <th class="vf-table__heading" scope="col">Assay sheet</th>
+                            <th class="vf-table__heading" scope="col">Sample name</th>
+                            <th class="vf-table__heading" scope="col">Raw Spectral Data File</th>
+                            <th class="vf-table__heading" scope="col">Derived Spectral Data File</th>
+                            <th class="vf-table__heading" scope="col">Metabolite Assignment File</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="vf-table__body">
+                        {% for assay in assays %}
+                            <tr class="vf-table__row">
+                                <td class="vf-table__cell">
+                                    <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/assays"
+                                       class="vf-link">{{ assay.assay_sheet }}</a>
+                                </td>
+                                <td class="vf-table__cell">
+                                    <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/samples"
+                                       class="vf-link">{{ assay.sample_assay.Sample_Name }}</a>
+                                </td>
+                                <td class="vf-table__cell">
+                                    <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/download/public?file={{ assay.sample_assay.Raw_Spectral_Data_File }}"
+                                       class="vf-link">{{ assay.sample_assay.Raw_Spectral_Data_File }}</a>
+                                </td>
+                                <td class="vf-table__cell">
+                                    <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/download/public?file={{ assay.sample_assay.Derived_Spectral_Data_File }}"
+                                       class="vf-link">{{ assay.sample_assay.Derived_Spectral_Data_File }}</a>
+                                </td>
+                                <td class="vf-table__cell">
+                                    <a href="{{ METABOLIGHTS_API_URL }}/studies/{{ sample.metabolights_study }}/download/public?file={{ assay.sample_assay.Metabolite_Assignment_File }}"
+                                       class="vf-link">{{ assay.sample_assay.Metabolite_Assignment_File }}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% include "holofood/components/atoms/possibly_empty_state.html" with items=assays empty_text="No assays found in MetaboLights" colspan=3 %}
         </details>
     {% endif %}
