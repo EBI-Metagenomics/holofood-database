@@ -105,6 +105,9 @@ class SampleDetailView(DetailView):
         if model.sample_type in [Sample.METABOLOMIC, Sample.METABOLOMIC_TARGETED]:
             context["assays"] = model.get_metabolights_files()
 
+        if model.is_sequencing_sample:
+            context["ena_records"] = model.get_ena_records()
+
         return context
 
 

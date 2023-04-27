@@ -12,6 +12,7 @@ from holofood.external_apis.biosamples.api import (
     get_biosample,
 )
 from holofood.external_apis.ena.browser_api import get_checklist_metadata
+from holofood.external_apis.ena.portal_api import get_filereport
 from holofood.external_apis.metabolights.api import get_metabolights_assays
 
 from holofood.external_apis.mgnify.api import MgnifyApi
@@ -180,6 +181,16 @@ class Sample(models.Model):
     class Meta:
         ordering = ("accession",)
 
+    @property
+    def is_sequencing_sample(self):
+        return self.sample_type in [
+            self.HOST_GENOMIC,
+            self.METAGENOMIC_AMPLICON,
+            self.METAGENOMIC_ASSEMBLY,
+            self.TRANSCRIPTOMIC,
+            self.META_TRANSCRIPTOMIC,
+        ]
+
     def refresh_structureddata(
         self, structured_metadata: dict = None, checklist: list = None
     ):
@@ -267,24 +278,9 @@ class Sample(models.Model):
         assays = get_metabolights_assays(self.metabolights_study, self.accession)
         logging.info(assays)
         return assays
-        # project_samples_files = get_metabolights_project_files(mtbls)
-        # try:
-        #     sample_files = next(
-        #         files
-        #         for sample, files in project_samples_files.items()
-        #         if sample.lower() in [self.accession.lower(), self.title.lower()]
-        #     )
-        # except StopIteration:
-        #     logging.warning(
-        #         f"Sample {self} has metadata suggesting it is in {mtbls}. Yet no sample matched it in that project."
-        #     )
-        # else:
-        #     self.metabolights_files = sample_files
-        #     # self.has_metabolomics = True
-        #     logging.info(
-        #         f"Stored {len(sample_files)} metabolights filenames for {mtbls}"
-        #     )
-        #     self.save()
+
+    def get_ena_records(self):
+        return get_filereport(self.accession)
 
 
 class SampleMetadataMarker(models.Model):

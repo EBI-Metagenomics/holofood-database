@@ -2,6 +2,7 @@
 {% load string_utils %}
 {% load sample_metadata %}
 {% load static %}
+{% load humanize %}
 {% block content %}
     <nav class="vf-breadcrumbs" aria-label="Breadcrumb">
       <ul class="vf-breadcrumbs__list | vf-list vf-list--inline">
@@ -311,6 +312,83 @@
             {% include "holofood/components/atoms/possibly_empty_state.html" with items=assays empty_text="No assays found in MetaboLights" colspan=3 %}
         </details>
     {% endif %}
+    {% if sample.is_sequencing_sample %}
+        <details class="vf-details">
+            <summary class="vf-details--summary">
+                Nucleotide sequencing data
+            </summary>
+            <a id="sequencing"></a>
+            <p>
+                Sample {{ sample.accession }} has nucleotide sequencing data in the European Nucleotide Archive (ENA):
+                {{ ena_records.base_count|intcomma|default:"Unknown" }}bp sequenced by {{ ena_records.read_count|intcomma|default:"unknown" }} reads.
+                <a href="{{ ENA_BROWSER_URL }}/{{ sample.accession }}" class="vf-button vf-button--link vf-button--sm inline">View sample {{ sample.accession }} in ENA</a>
+            </p>
+            <h3>Related records in ENA</h3>
+            <table class="vf-table scrollable-table">
+                <thead class="vf-table__header">
+                    <tr class="vf-table__row">
+                        <th class="vf-table__heading" scope="col">Data domain</th>
+                        <th class="vf-table__heading" scope="col">Accession</th>
+                        <th class="vf-table__heading" scope="col">Title/alias</th>
+                    </tr>
+                </thead>
+                <tbody class="vf-table__body">
+                    <tr class="vf-table__row">
+                        <td class="vf-table__cell">
+                            Sample
+                        </td>
+                        <td class="vf-table__cell">
+                            <a href="{{ ENA_BROWSER_URL }}/{{ sample.accession }}"
+                               class="vf-link">{{ sample.accession }}</a>
+                        </td>
+                        <td class="vf-table__cell">
+                            {{ ena_records.sample_title }}
+                        </td>
+                    </tr>
+                    <tr class="vf-table__row">
+                        <td class="vf-table__cell">
+                            Reads (Run)
+                        </td>
+                        <td class="vf-table__cell">
+                            <a href="{{ ENA_BROWSER_URL }}/{{ ena_records.run_accession }}"
+                               class="vf-link">{{ ena_records.run_accession }}</a>
+                        </td>
+                        <td class="vf-table__cell">
+                            {{ ena_records.run_alias }}
+                        </td>
+                    </tr>
+                    <tr class="vf-table__row">
+                        <td class="vf-table__cell">
+                            Reads (Experiment)
+                        </td>
+                        <td class="vf-table__cell">
+                            <a href="{{ ENA_BROWSER_URL }}/{{ ena_records.experiment_accession }}"
+                               class="vf-link">{{ ena_records.experiment_accession }}</a>
+                        </td>
+                        <td class="vf-table__cell">
+                            {{ ena_records.experiment_title }}
+                        </td>
+                    </tr>
+                    <tr class="vf-table__row">
+                        <td class="vf-table__cell">
+                            Project/Study
+                        </td>
+                        <td class="vf-table__cell">
+                            <a href="{{ ENA_BROWSER_URL }}/{{ ena_records.study_accession }}"
+                               class="vf-link">{{ ena_records.study_accession }}</a>
+                        </td>
+                        <td class="vf-table__cell">
+                            {{ ena_records.study_title }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% if not ena_records %}
+                {% include "holofood/components/atoms/possibly_empty_state.html" with empty_text="No assays found in MetaboLights" colspan=3 %}
+            {% endif %}
+        </details>
+    {% endif %}
+
     <section class="vf-card-container vf-card-container__col-3 | vf-u-background-color--grey--lightest vf-u-fullbleed">
         <div class="vf-card-container__inner">
             <div class="vf-section-header">
