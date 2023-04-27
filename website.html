@@ -192,7 +192,11 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#global-search" id="toc-global-search" class="nav-link active" data-scroll-target="#global-search">Global Search</a></li>
-  <li><a href="#finding-samples" id="toc-finding-samples" class="nav-link" data-scroll-target="#finding-samples">Finding Samples</a></li>
+  <li><a href="#finding-samples" id="toc-finding-samples" class="nav-link" data-scroll-target="#finding-samples">Finding Samples</a>
+  <ul class="collapse">
+  <li><a href="#treatment-search" id="toc-treatment-search" class="nav-link" data-scroll-target="#treatment-search">Treatment search</a></li>
+  <li><a href="#sample-detail" id="toc-sample-detail" class="nav-link" data-scroll-target="#sample-detail">Sample detail</a></li>
+  </ul></li>
   <li><a href="#downloading-sample-lists-and-metadata" id="toc-downloading-sample-lists-and-metadata" class="nav-link" data-scroll-target="#downloading-sample-lists-and-metadata">Downloading sample lists and metadata</a></li>
   <li><a href="#finding-sample-data-in-other-public-repositories" id="toc-finding-sample-data-in-other-public-repositories" class="nav-link" data-scroll-target="#finding-sample-data-in-other-public-repositories">Finding sample data in other public repositories</a>
   <ul class="collapse">
@@ -250,9 +254,18 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <p>Samples can be found from the “Chicken samples” and “Salmon samples” navigation items. On the samples listing pages, there are various filters available to limit which samples are shown in the table. For example, you can find all samples from a particular animal, or all <a href="./datasets.html#metabolights-metabolomics">metabolomics</a> type samples (each sample has a particular type).</p>
 <p>Samples may be linked to metadata (almost always), metagenomic, metabolomic, or host-genomic datasets. Other sample types have their results data in the sample metadata.</p>
+<section id="treatment-search" class="level3">
+<h3 class="anchored" data-anchor-id="treatment-search">Treatment search</h3>
+<p>Samples may also be search for by the host-animal’s treatment condition. The “Treatment search” filter is a case-insensitive text search over the samples’ animal treatment metadata. Specifically, it filters to samples whose host animal has all of the query strings in the animal’s BioSamples metadata fields: “Sampling time”, “Treatment name”, “Treatment description”, “Treatment code”, “Treatment concentration”.</p>
+<p>This means you can search for e.g.&nbsp;<code>ferm algae 2.0% "day 60"</code> to find samples from animals treated with <strong>Ferm</strong>ented <strong>Algae</strong> at a <strong>2.0%</strong> concentration and collected on trial <strong>Day 60</strong>.</p>
+<p>Note the use of lexical grouping around the “day 60” – this is useful when searching for, e.g.&nbsp;<code>day 0</code> which would otherwise partially match <code>day 60</code>.</p>
+</section>
+<section id="sample-detail" class="level3">
+<h3 class="anchored" data-anchor-id="sample-detail">Sample detail</h3>
 <p>To view detail about a particular sample, click “View” on its row of the table.</p>
 <p>The sample detail page contains information help about the sample in the various supporting databases. Metadata (from BioSamples) is shown in full, in a table. Metagenomic and metabolomic data are shown in summary form, with links to the respective public websites where those analyses are held.</p>
 <p>The <a href="./api.html">API</a> section shows the API endpoint for this particular sample. You can copy this into a script, for example, to programmatically pull the data.</p>
+</section>
 </section>
 <section id="downloading-sample-lists-and-metadata" class="level2">
 <h2 class="anchored" data-anchor-id="downloading-sample-lists-and-metadata">Downloading sample lists and metadata</h2>
@@ -282,7 +295,7 @@ Note
 <h2 class="anchored" data-anchor-id="finding-sample-data-in-other-public-repositories">Finding sample data in other public repositories</h2>
 <section id="metagenomics" class="level3">
 <h3 class="anchored" data-anchor-id="metagenomics">Metagenomics</h3>
-<p>Some samples have <a href="./datasets.html#mgnify-metagenomics">metagenomics</a> data, in <a href="https://www.ebi.ac.uk/metagenomics">MGnify</a>. These can be found from the samples listing page by setting the <code>Sample type</code> filter to <code>metagenomic</code>.</p>
+<p>Some samples have <a href="./datasets.html#mgnify-metagenomics">metagenomics</a> data, in <a href="https://www.ebi.ac.uk/metagenomics">MGnify</a>. These can be found from the samples listing page by setting the <code>Sample type</code> filter to <code>metagenomic_assembly</code> or <code>metagenomic_amplicon</code>.</p>
 <p>MGnify analyses of a sample (identified with <code>MGYA</code> accessions) are listed and linked to from the sample detail page.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -295,6 +308,7 @@ Note
 <h3 class="anchored" data-anchor-id="metabolomics">Metabolomics</h3>
 <p>Some other samples have <a href="./datasets.html#metabolights-metabolomics">metabolomics</a> data, in <a href="https://www.ebi.ac.uk/metabolights">MetaboLights</a>. These can be found form the samples listing page by setting the <code>Sample type</code> filter to <code>metabolomic</code>.</p>
 <p>MetaboLights data are identified at a Project level, with <code>MTBLS</code> accessions. MetaboLights does not store samples as independent objects, instead it stores lists of samples and files (and more) for the project. So, the HoloFood data portal sample detail page shows a filtered table of the MetaboLights project’s files, that relate to this sample. Following these file links will download the file.</p>
+<p>MetaboLights follows the <a href="https://isa-tools.org">ISA framework</a>, so the table shown is a collection of files from the one or more assay sheets relevant to this sample. Raw and derived files are available.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="./img/website/sample-with-metabolomics.png" class="img-fluid figure-img"></p>

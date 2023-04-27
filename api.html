@@ -231,6 +231,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#api-endpoints-and-playground" id="toc-api-endpoints-and-playground" class="nav-link" data-scroll-target="#api-endpoints-and-playground">API Endpoints and Playground</a>
   <ul class="collapse">
   <li><a href="#apisamples" id="toc-apisamples" class="nav-link" data-scroll-target="#apisamples"><code>/api/samples</code></a></li>
+  <li><a href="#apianimals" id="toc-apianimals" class="nav-link" data-scroll-target="#apianimals"><code>/api/animals</code></a></li>
   <li><a href="#apianalysis-summaries" id="toc-apianalysis-summaries" class="nav-link" data-scroll-target="#apianalysis-summaries"><code>/api/analysis-summaries</code></a></li>
   <li><a href="#apigenome-catalogues" id="toc-apigenome-catalogues" class="nav-link" data-scroll-target="#apigenome-catalogues"><code>/api/genome-catalogues</code></a></li>
   <li><a href="#apiviral-catalogues" id="toc-apiviral-catalogues" class="nav-link" data-scroll-target="#apiviral-catalogues"><code>/api/viral-catalogues</code></a></li>
@@ -241,6 +242,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#from-python" id="toc-from-python" class="nav-link" data-scroll-target="#from-python">From Python</a></li>
   </ul></li>
   <li><a href="#filters-using-query-parameters" id="toc-filters-using-query-parameters" class="nav-link" data-scroll-target="#filters-using-query-parameters">Filters using query parameters</a></li>
+  <li><a href="#mgnify" id="toc-mgnify" class="nav-link" data-scroll-target="#mgnify">MGnify</a></li>
+  <li><a href="#metabolights" id="toc-metabolights" class="nav-link" data-scroll-target="#metabolights">MetaboLights</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ebi-metagenomics/holofood-database/blob/main/docs/api.ipynb" class="toc-action">Edit this page</a></p><p><a href="https://github.com/ebi-metagenomics/holofood-database/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -271,7 +274,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Throughout the API, <code>canonical_url</code>s are returned which point to the canonical database entry, i.e.&nbsp;the authoritative source, for each data object.</p>
 <p>These are:</p>
 <ul>
-<li>The <a href="https://www.ebi.ac.uk/ena/browser/home">European Nucleotide Archive Browser</a> for Samples and Projects.</li>
+<li><a href="https://www.ebi.ac.uk/biosamples">BioSamples</a> for Samples (both host-animal level and derived-extraction level).</li>
+<li>The <a href="https://www.ebi.ac.uk/ena/browser/home">European Nucleotide Archive Browser</a> for nucleotide sequencing data.</li>
 <li><a href="https://www.ebi.ac.uk/metagenomics">MGnify</a> for metagenomic-derived analyses and MAGs (metagenome assembled genomes)</li>
 <li><a href="https://www.ebi.ac.uk/metabolights/">MetaboLights</a> for metabolomic analyses</li>
 <li>The websites of various partner institutions and registries where an <a href="https://en.wikipedia.org/wiki/Internationalized_Resource_Identifier">IRI</a> has been supplied with a metadata entry.</li>
@@ -287,6 +291,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="apisamples" class="level3">
 <h3 class="anchored" data-anchor-id="apisamples"><code>/api/samples</code></h3>
 <p>List samples, or fetch details about a specific sample (like its metadata). List all possible metadata markers (i.e.&nbsp;keys).</p>
+</section>
+<section id="apianimals" class="level3">
+<h3 class="anchored" data-anchor-id="apianimals"><code>/api/animals</code></h3>
+<p>List animals (hosts), or fetch details about a specific animal (like its metadata and derived samples).</p>
 </section>
 <section id="apianalysis-summaries" class="level3">
 <h3 class="anchored" data-anchor-id="apianalysis-summaries"><code>/api/analysis-summaries</code></h3>
@@ -308,18 +316,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Use a command line tool like <a href="https://curl.se/">cURL</a> to query the API. Responses are in <a href="https://www.json.org/json-en.html">JSON</a> format.</p>
 <p>For example to list all samples:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://www.holofooddata.org/api/samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To find the <code>Acetic acid</code> metadata associated with sample <code>SAMEA14099422</code>, we could (using <a href="https://stedolan.github.io/jq/"><code>jq</code></a> to handle JSON data on the command line):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://www.holofooddata.org/api/samples/SAMEA14099422 <span class="kw">|</span> <span class="ex">jq</span> <span class="st">'.structured_metadata | .[] | select(.marker.name == "Acetic acid")'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To find the <code>Stearic acid 18:0</code> data associated with Fatty Acids sample <code>SAMEA112949944</code>, we could (using <a href="https://stedolan.github.io/jq/"><code>jq</code></a> to handle JSON data on the command line):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://www.holofooddata.org/api/samples/SAMEA112949944 <span class="kw">|</span> <span class="ex">jq</span> <span class="st">'.structured_metadata | .[] | select(.marker.name == "Stearic acid 18:0")'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>and get</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"marker"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Acetic acid"</span><span class="fu">,</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"FATTY ACIDS"</span><span class="fu">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Stearic acid 18:0"</span><span class="fu">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"FATTY ACIDS MG"</span><span class="fu">,</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"canonical_url"</span><span class="fu">:</span> <span class="kw">null</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"measurement"</span><span class="fu">:</span> <span class="st">"62.30155"</span><span class="fu">,</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"units"</span><span class="fu">:</span> <span class="st">"umol/g digesta"</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"measurement"</span><span class="fu">:</span> <span class="st">"1,47"</span><span class="fu">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"units"</span><span class="fu">:</span> <span class="st">"mg/g"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"marker"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Stearic acid 18:0"</span><span class="fu">,</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"FATTY ACIDS PERCENTAGE"</span><span class="fu">,</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"canonical_url"</span><span class="fu">:</span> <span class="kw">null</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"measurement"</span><span class="fu">:</span> <span class="st">"1,47"</span><span class="fu">,</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"units"</span><span class="fu">:</span> <span class="st">"%"</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="from-python" class="level3">
 <h3 class="anchored" data-anchor-id="from-python">From Python</h3>
@@ -337,15 +354,17 @@ Packages required
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install requests pandas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>samples <span class="op">=</span> requests.get(<span class="st">'https://www.holofooddata.org/api/samples'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell" data-execution_count="32">
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>samples <span class="op">=</span> requests.get(<span class="st">'https://www.holofooddata.org/api/samples'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>samples_df <span class="op">=</span> pd.json_normalize(samples.json()[<span class="st">'items'</span>])</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>samples_df.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
 
@@ -355,51 +374,43 @@ Packages required
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">accession</th>
 <th data-quarto-table-cell-role="th">title</th>
-<th data-quarto-table-cell-role="th">system</th>
-<th data-quarto-table-cell-role="th">has_metagenomics</th>
+<th data-quarto-table-cell-role="th">sample_type</th>
+<th data-quarto-table-cell-role="th">animal</th>
 <th data-quarto-table-cell-role="th">canonical_url</th>
 <th data-quarto-table-cell-role="th">metagenomics_url</th>
-<th data-quarto-table-cell-role="th">project.accession</th>
-<th data-quarto-table-cell-role="th">project.title</th>
-<th data-quarto-table-cell-role="th">project.canonical_url</th>
+<th data-quarto-table-cell-role="th">metabolomics_url</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
-<td>SAMEA14099422</td>
-<td>CB03.16F1a</td>
-<td>chicken</td>
-<td>False</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA14...</td>
+<td>SAMEA10104908</td>
+<td>CA01.07F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112905066</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
 <td>None</td>
-<td>PRJEB39110</td>
-<td>HoloFood Chicken - MAG Catalogue from Caecum c...</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/PRJEB39110</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
-<td>SAMEA7025234</td>
-<td>CA01.10F1a</td>
-<td>chicken</td>
-<td>False</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA70...</td>
+<td>SAMEA10104910</td>
+<td>CA02.12F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904813</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
 <td>None</td>
-<td>PRJEB39110</td>
-<td>HoloFood Chicken - MAG Catalogue from Caecum c...</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/PRJEB39110</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
-<td>SAMEA7025235</td>
-<td>CA02.14F1a</td>
-<td>chicken</td>
-<td>False</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA70...</td>
+<td>SAMEA10104911</td>
+<td>CA02.18F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904777</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
 <td>None</td>
-<td>PRJEB39110</td>
-<td>HoloFood Chicken - MAG Catalogue from Caecum c...</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/PRJEB39110</td>
 </tr>
 </tbody>
 </table>
@@ -421,60 +432,65 @@ Paginated data
 <p>The <code>?page=</code> URL query parameter lets us retrieve subsequent pages.</p>
 </div>
 </div>
-<div class="cell" data-execution_count="45">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(samples_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="45">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>100</code></pre>
 </div>
 </div>
 <p>The API response does tell us how many items there are <em>in total</em>:</p>
-<div class="cell" data-execution_count="55">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>samples.json()[<span class="st">'count'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="55">
-<pre><code>429</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>9889</code></pre>
 </div>
 </div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>samples_endpoint_base <span class="op">=</span> <span class="st">'https://www.holofooddata.org/api/samples'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>samples_endpoint_base <span class="op">=</span> <span class="st">'https://www.holofooddata.org/api/samples'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>page <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> page:</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'Fetching </span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    samples_page <span class="op">=</span> requests.get(<span class="ss">f'</span><span class="sc">{</span>samples_endpoint_base<span class="sc">}</span><span class="ss">?</span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">'</span>).json()</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    samples_page_df <span class="op">=</span> pd.json_normalize(samples_page[<span class="st">'items'</span>])</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> page <span class="op">==</span> <span class="dv">1</span>:</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        samples_df <span class="op">=</span> samples_page_df</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        samples_df <span class="op">=</span> pd.concat([samples_df, samples_page_df])</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    page <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(samples_df) <span class="op">&gt;=</span> samples_page[<span class="st">'count'</span>]:</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We will only fetch the first 10 pages for now...</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>max_pages <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> page <span class="kw">and</span> page <span class="op">&lt;</span> max_pages:</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'Fetching </span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    samples_page <span class="op">=</span> requests.get(<span class="ss">f'</span><span class="sc">{</span>samples_endpoint_base<span class="sc">}</span><span class="ss">?</span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">'</span>).json()</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    samples_page_df <span class="op">=</span> pd.json_normalize(samples_page[<span class="st">'items'</span>])</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> page <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        samples_df <span class="op">=</span> samples_page_df</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        samples_df <span class="op">=</span> pd.concat([samples_df, samples_page_df])</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    page <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(samples_df) <span class="op">&gt;=</span> samples_page[<span class="st">'count'</span>]:</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fetching page=1
 Fetching page=2
 Fetching page=3
 Fetching page=4
-Fetching page=5</code></pre>
+Fetching page=5
+Fetching page=6
+Fetching page=7
+Fetching page=8
+Fetching page=9</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(samples_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>429</code></pre>
-</div>
-</div>
-<section id="find-all-salmon-samples" class="level4">
-<h4 class="anchored" data-anchor-id="find-all-salmon-samples">Find all <em>salmon</em> samples:</h4>
 <div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>salmon <span class="op">=</span> samples_df[samples_df.system <span class="op">==</span> <span class="st">'salmon'</span>]</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(salmon))</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>salmon.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>359</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(samples_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>900</code></pre>
+</div>
+</div>
+<section id="find-all-metagenomic-assembly-samples" class="level4">
+<h4 class="anchored" data-anchor-id="find-all-metagenomic-assembly-samples">Find all <em>metagenomic assembly</em> samples:</h4>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>samples_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -484,51 +500,185 @@ Fetching page=5</code></pre>
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">accession</th>
 <th data-quarto-table-cell-role="th">title</th>
-<th data-quarto-table-cell-role="th">system</th>
-<th data-quarto-table-cell-role="th">has_metagenomics</th>
+<th data-quarto-table-cell-role="th">sample_type</th>
+<th data-quarto-table-cell-role="th">animal</th>
 <th data-quarto-table-cell-role="th">canonical_url</th>
 <th data-quarto-table-cell-role="th">metagenomics_url</th>
-<th data-quarto-table-cell-role="th">project.accession</th>
-<th data-quarto-table-cell-role="th">project.title</th>
-<th data-quarto-table-cell-role="th">project.canonical_url</th>
+<th data-quarto-table-cell-role="th">metabolomics_url</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">68</td>
-<td>SAMEA7678309</td>
-<td>SA01.05C1a</td>
-<td>salmon</td>
-<td>False</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA76...</td>
+<td data-quarto-table-cell-role="th">0</td>
+<td>SAMEA10104908</td>
+<td>CA01.07F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112905066</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
 <td>None</td>
-<td>PRJEB41657</td>
-<td>HoloFood Salmon - Metagenomic DNA</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/PRJEB41657</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">69</td>
-<td>SAMEA7678310</td>
-<td>SB10.13C1a</td>
-<td>salmon</td>
-<td>False</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA76...</td>
+<td data-quarto-table-cell-role="th">1</td>
+<td>SAMEA10104910</td>
+<td>CA02.12F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904813</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
 <td>None</td>
-<td>PRJEB41657</td>
-<td>HoloFood Salmon - Metagenomic DNA</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/PRJEB41657</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">70</td>
-<td>SAMEA7687880</td>
-<td>SA01.01C1a</td>
-<td>salmon</td>
-<td>False</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA76...</td>
+<td data-quarto-table-cell-role="th">2</td>
+<td>SAMEA10104911</td>
+<td>CA02.18F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904777</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
 <td>None</td>
-<td>PRJEB41657</td>
-<td>HoloFood Salmon - Metagenomic DNA</td>
-<td>https://www.ebi.ac.uk/ena/browser/view/PRJEB41657</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>SAMEA10104912</td>
+<td>CA03.10F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904752</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>SAMEA10104914</td>
+<td>CA04.10F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904915</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">95</td>
+<td>SAMEA112369857</td>
+<td>SB11.04B1a</td>
+<td>transcriptomic</td>
+<td>SAMEA112949107</td>
+<td>https://www.ebi.ac.uk/biosamples/SAMEA112369857</td>
+<td>None</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">96</td>
+<td>SAMEA112369858</td>
+<td>SB11.05B1a</td>
+<td>transcriptomic</td>
+<td>SAMEA112949088</td>
+<td>https://www.ebi.ac.uk/biosamples/SAMEA112369858</td>
+<td>None</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">97</td>
+<td>SAMEA112369859</td>
+<td>SB11.11B1a</td>
+<td>transcriptomic</td>
+<td>SAMEA112949878</td>
+<td>https://www.ebi.ac.uk/biosamples/SAMEA112369859</td>
+<td>None</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">98</td>
+<td>SAMEA112369860</td>
+<td>SB11.12B1a</td>
+<td>transcriptomic</td>
+<td>SAMEA112948858</td>
+<td>https://www.ebi.ac.uk/biosamples/SAMEA112369860</td>
+<td>None</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">99</td>
+<td>SAMEA112369861</td>
+<td>SB11.13B1a</td>
+<td>transcriptomic</td>
+<td>SAMEA112948701</td>
+<td>https://www.ebi.ac.uk/biosamples/SAMEA112369861</td>
+<td>None</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+
+<p>900 rows × 7 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>metagenome_assembly_samples <span class="op">=</span> samples_df[samples_df.sample_type <span class="op">==</span> <span class="st">'metagenomic_assembly'</span>]</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(metagenome_assembly_samples))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>metagenome_assembly_samples.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>458</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">accession</th>
+<th data-quarto-table-cell-role="th">title</th>
+<th data-quarto-table-cell-role="th">sample_type</th>
+<th data-quarto-table-cell-role="th">animal</th>
+<th data-quarto-table-cell-role="th">canonical_url</th>
+<th data-quarto-table-cell-role="th">metagenomics_url</th>
+<th data-quarto-table-cell-role="th">metabolomics_url</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>SAMEA10104908</td>
+<td>CA01.07F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112905066</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>SAMEA10104910</td>
+<td>CA02.12F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904813</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>SAMEA10104911</td>
+<td>CA02.18F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904777</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
 </tr>
 </tbody>
 </table>
@@ -541,37 +691,290 @@ Fetching page=5</code></pre>
 </section>
 <section id="filters-using-query-parameters" class="level2">
 <h2 class="anchored" data-anchor-id="filters-using-query-parameters">Filters using query parameters</h2>
-<p>We didn’t need to fetch all the samples to then select only the Salmon ones. We can instead fetch only the salmon ones using a <strong>query parameter filter</strong>. (If you’re familiar with SQL, this eventually maps to a <code>WHERE</code> clause on the database.)</p>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>page <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> page:</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'Fetching </span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    salmon_page <span class="op">=</span> requests.get(<span class="ss">f'</span><span class="sc">{</span>samples_endpoint_base<span class="sc">}</span><span class="ss">?</span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">&amp;system=salmon'</span>).json()</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    salmon_page_df <span class="op">=</span> pd.json_normalize(salmon_page[<span class="st">'items'</span>])</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> page <span class="op">==</span> <span class="dv">1</span>:</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        salmon_df <span class="op">=</span> salmon_page_df</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>        salmon_df <span class="op">=</span> pd.concat([salmon_df, salmon_page_df])</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    page <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(salmon_df) <span class="op">&gt;=</span> salmon_page[<span class="st">'count'</span>]:</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We didn’t need to fetch all the samples to then select only the metagenomic ones. We can instead fetch only the metagenomic ones using a <strong>query parameter filter</strong>. (If you’re familiar with SQL, this eventually maps to a <code>WHERE</code> clause on the database.)</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>page <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> page:</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'Fetching </span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    mg_samples_page <span class="op">=</span> requests.get(<span class="ss">f'</span><span class="sc">{</span>samples_endpoint_base<span class="sc">}</span><span class="ss">?</span><span class="sc">{</span>page<span class="op">=</span><span class="sc">}</span><span class="ss">&amp;sample_type=metagenomic_assembly'</span>).json()</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    mg_samples_page_df <span class="op">=</span> pd.json_normalize(mg_samples_page[<span class="st">'items'</span>])</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> page <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        mg_samples_df <span class="op">=</span> mg_samples_page_df</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>        mg_samples_df <span class="op">=</span> pd.concat([mg_samples_df, mg_samples_page_df])</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    page <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(mg_samples_df) <span class="op">&gt;=</span> mg_samples_page[<span class="st">'count'</span>]:</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fetching page=1
 Fetching page=2
 Fetching page=3
-Fetching page=4</code></pre>
+Fetching page=4
+Fetching page=5
+Fetching page=6
+Fetching page=7
+Fetching page=8
+Fetching page=9
+Fetching page=10
+Fetching page=11
+Fetching page=12
+Fetching page=13
+Fetching page=14</code></pre>
 </div>
 </div>
-<p>And so, we’ve more efficiently fetched the same set of (salmon) samples:</p>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>salmon_df.size <span class="op">==</span> samples_df[samples_df.system <span class="op">==</span> <span class="st">'salmon'</span>].size</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>True</code></pre>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>samples_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">accession</th>
+<th data-quarto-table-cell-role="th">title</th>
+<th data-quarto-table-cell-role="th">sample_type</th>
+<th data-quarto-table-cell-role="th">animal</th>
+<th data-quarto-table-cell-role="th">canonical_url</th>
+<th data-quarto-table-cell-role="th">metagenomics_url</th>
+<th data-quarto-table-cell-role="th">metabolomics_url</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>SAMEA10104908</td>
+<td>CA01.07F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112905066</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>SAMEA10104910</td>
+<td>CA02.12F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904813</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>SAMEA10104911</td>
+<td>CA02.18F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904777</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>SAMEA10104912</td>
+<td>CA03.10F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904752</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>SAMEA10104914</td>
+<td>CA04.10F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904915</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA10...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">78</td>
+<td>SAMEA9449961</td>
+<td>CC17.06F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112905387</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA94...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">79</td>
+<td>SAMEA9449962</td>
+<td>CC17.10F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112905371</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA94...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">80</td>
+<td>SAMEA9449963</td>
+<td>CC16.16F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112905164</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA94...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">81</td>
+<td>SAMEA9449964</td>
+<td>CC18.03F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112904811</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA94...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">82</td>
+<td>SAMEA9449965</td>
+<td>CC18.05F1a</td>
+<td>metagenomic_assembly</td>
+<td>SAMEA112905140</td>
+<td>https://www.ebi.ac.uk/ena/browser/view/SAMEA94...</td>
+<td>https://www.ebi.ac.uk/metagenomics/api/v1/samp...</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+
+<p>1383 rows × 7 columns</p>
 </div>
 </div>
+</div>
+<p>And so, we’ve more efficiently fetch the metagenomic assemblies – by not pulling pages and pages of irrelevant data.</p>
+</section>
+<section id="mgnify" class="level1">
+<h1>MGnify</h1>
+<p>You can obtain information about the analyses present on MGnify for a certain sample, using the <code>metagenomic_url</code> returned by the data portal API:</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(<span class="st">'https://www.holofooddata.org/api/samples/SAMEA13604493'</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>mgnify_url <span class="op">=</span> response.json().get(<span class="st">'metagenomics_url'</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>mgnify_url</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>'https://www.ebi.ac.uk/metagenomics/api/v1/samples/SAMEA13604493'</code></pre>
+</div>
+</div>
+<p>You can then use that <a href="https://www.ebi.ac.uk/metagenomics/api/v1">MGnify API</a> endopint to fetch information about that sample and follow related links through MGnify:</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mgnify_response <span class="op">=</span> requests.get(mgnify_url)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>mgnify_data <span class="op">=</span> mgnify_response.json().get(<span class="st">'data'</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>runs_url <span class="op">=</span> mgnify_data[<span class="st">'relationships'</span>][<span class="st">'runs'</span>][<span class="st">'links'</span>][<span class="st">'related'</span>]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>mgnify_runs_response <span class="op">=</span> requests.get(runs_url)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>mgnify_runs_data <span class="op">=</span> mgnify_runs_response.json().get(<span class="st">'data'</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>mgnify_runs_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<pre><code>[{'type': 'runs',
+  'id': 'ERR9358532',
+  'attributes': {'experiment-type': 'metagenomic',
+   'is-private': False,
+   'accession': 'ERR9358532',
+   'secondary-accession': 'ERR9358532',
+   'ena-study-accession': None,
+   'instrument-platform': 'ILLUMINA',
+   'instrument-model': 'Illumina NovaSeq 6000'},
+  'relationships': {'analyses': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/runs/ERR9358532/analyses'}},
+   'assemblies': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/runs/ERR9358532/assemblies'},
+    'data': [{'type': 'assemblies',
+      'id': 'ERZ13633665',
+      'links': {'self': 'https://www.ebi.ac.uk/metagenomics/api/v1/assemblies/ERZ13633665'}}]},
+   'study': {'data': {'type': 'studies', 'id': 'MGYS00006086'},
+    'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/studies/MGYS00006086'}},
+   'sample': {'data': {'type': 'samples', 'id': 'ERS11206669'},
+    'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/samples/ERS11206669'}},
+   'pipelines': {'data': []}},
+  'links': {'self': 'https://www.ebi.ac.uk/metagenomics/api/v1/runs/ERR9358532'}}]</code></pre>
+</div>
+</div>
+<hr>
+<p>In most cases, you can also use the base endpoint you’re interested in (e.g.&nbsp;<code>/analyses</code>) with a filter based on the sample accession. E.g. to find a MGnify analyses of a sample:</p>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mgnify_response <span class="op">=</span> requests.get(<span class="st">'https://www.ebi.ac.uk/metagenomics/api/v1/analyses?sample_accession=SAMEA13604493'</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>mgnify_response.json().get(<span class="st">'data'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>[{'type': 'analysis-jobs',
+  'id': 'MGYA00617383',
+  'attributes': {'analysis-status': 'completed',
+   'accession': 'MGYA00617383',
+   'experiment-type': 'assembly',
+   'analysis-summary': [{'key': 'Submitted nucleotide sequences',
+     'value': '344'},
+    {'key': 'Nucleotide sequences after format-specific filtering',
+     'value': '344'},
+    {'key': 'Nucleotide sequences after length filtering', 'value': '344'},
+    {'key': 'Nucleotide sequences after undetermined bases filtering',
+     'value': '344'},
+    {'key': 'Reads with predicted CDS', 'value': '330'},
+    {'key': 'Reads with predicted RNA', 'value': '13'},
+    {'key': 'Reads with InterProScan match', 'value': '108'},
+    {'key': 'Predicted CDS', 'value': '531'},
+    {'key': 'Predicted CDS with InterProScan match', 'value': '127'},
+    {'key': 'Total InterProScan matches', 'value': '299'},
+    {'key': 'Predicted SSU sequences', 'value': '0'},
+    {'key': 'Predicted LSU sequences', 'value': '2'}],
+   'pipeline-version': '5.0',
+   'is-private': False,
+   'complete-time': '2022-12-01T19:35:07',
+   'instrument-platform': 'ILLUMINA',
+   'instrument-model': 'Illumina NovaSeq 6000'},
+  'relationships': {'taxonomy-lsu': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/taxonomy/lsu'}},
+   'go-slim': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/go-slim'}},
+   'antismash-gene-clusters': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/antismash-gene-clusters'}},
+   'genome-properties': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/genome-properties'}},
+   'run': {'data': None},
+   'study': {'data': {'type': 'studies', 'id': 'MGYS00006086'},
+    'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/studies/MGYS00006086'}},
+   'go-terms': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/go-terms'}},
+   'taxonomy-itsunite': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/taxonomy/unite'}},
+   'sample': {'data': {'type': 'samples', 'id': 'ERS11206669'},
+    'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/samples/ERS11206669'}},
+   'taxonomy-itsonedb': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/taxonomy/itsonedb'}},
+   'taxonomy': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/taxonomy'}},
+   'assembly': {'data': {'type': 'assemblies', 'id': 'ERZ13633665'},
+    'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/assemblies/ERZ13633665'}},
+   'downloads': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/downloads'}},
+   'interpro-identifiers': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/interpro-identifiers'}},
+   'taxonomy-ssu': {'links': {'related': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383/taxonomy/ssu'}}},
+  'links': {'self': 'https://www.ebi.ac.uk/metagenomics/api/v1/analyses/MGYA00617383'}}]</code></pre>
+</div>
+</div>
+</section>
+<section id="metabolights" class="level1">
+<h1>MetaboLights</h1>
+<p>You can find the MetaboLights URL for a study from the portal API:</p>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>mtbls_response <span class="op">=</span> requests.get(<span class="st">'https://www.holofooddata.org/api/samples/SAMEA112907471'</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>mtbls_url <span class="op">=</span> mtbls_response.json().get(<span class="st">'metabolomics_url'</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>mtbls_url</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>'https://www.ebi.ac.uk/metabolights/ws/studies/MTBLS6988'</code></pre>
+</div>
+</div>
+<p>This URL is for the entire study on MetaboLights, rather than a specific sample. The data portal <strong>website</strong> (but not the API, for performance reasons) navigate the MetaboLights API in order to find the files relevant to a particular sample.</p>
+<p>The <a href="https://github.com/EBI-Metagenomics/holofood-database/blob/main/holofood/external_apis/metabolights/api.py">code that does this in the data portal</a> shows how this can be achieved. In short: fetch the files list from the MetaboLights API, and find the <code>metadata_sample</code> file (it is an ISA-TAB file). Look through that file for the the row where <code>Characteristics[BioSamples accession]</code> is your sample(s) of interest. This field may have slightly different names in different studies. This lets you find the <code>Sample Name</code> corresponding to the BioSample accession.</p>
+<p>Then, find the <code>metadata_assay</code> file(s) from the file list. Concatenate all of these <code>metadata_assay</code> tab files, and find all the rows from all of the <code>metadata_assay</code> sheets where the <code>Sample Name</code> matches.</p>
+<p>These assay sheets will have columns of interest about the assays used, the raw and derived files, and the metabolites association files. These are filenames which you can then download.</p>
 
 
 </section>
