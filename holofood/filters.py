@@ -1,11 +1,22 @@
 import operator
+import shlex
 from functools import reduce
 
 import django_filters
-from django.db.models import Q, CharField, TextField
+from django.db.models import (
+    Q,
+    CharField,
+    TextField,
+    QuerySet,
+    F,
+    Subquery,
+    OuterRef,
+    Func,
+)
 from django.utils.safestring import mark_safe
 
-from holofood.models import Sample, Genome, ViralFragment, Animal
+from holofood.models import Sample, Genome, ViralFragment, Animal, AnimalStructuredDatum
+from holofood.utils import holofood_config
 
 
 class MultiFieldSearchFilter(django_filters.FilterSet):
@@ -27,7 +38,41 @@ class MultiFieldSearchFilter(django_filters.FilterSet):
         )
 
 
-class SampleFilter(django_filters.FilterSet):
+class MetadataMultiFilter(django_filters.FilterSet):
+    metadata_search = django_filters.CharFilter(
+        method="metadata_icontains",
+        label="Treatment Search",
+        help_text='E.g. algae 2.0% "Day 60"',
+    )
+    animal_id_field = "animal_id"
+
+    def metadata_icontains(self, queryset: QuerySet, name, value):
+        primary_marker_list = (
+            holofood_config.tables.animals_list.default_metadata_marker_columns
+        )
+        filter_words = shlex.split(value)
+
+        datums = AnimalStructuredDatum.objects.filter(
+            marker__name__in=primary_marker_list,
+            animal_id=OuterRef(self.animal_id_field),
+        )
+        qs = queryset.annotate(
+            treatment=Subquery(
+                datums.annotate(
+                    treatment_string=Func(F("measurement"), function="GROUP_CONCAT")
+                ).values("treatment_string")
+            )
+        )
+        q_objects = []
+        for word in filter_words:
+            q_objects.append(Q(treatment__icontains=word))
+        qs = qs.filter(reduce(operator.and_, q_objects))
+
+        return qs
+
+
+class SampleFilter(MetadataMultiFilter):
+    animal_id_field = "animal_id"
     animal_accession__icontains = django_filters.CharFilter(
         field_name="animal__accession",
         label="Animal accession contains",
@@ -52,7 +97,8 @@ class SampleFilter(django_filters.FilterSet):
         }
 
 
-class AnimalFilter(django_filters.FilterSet):
+class AnimalFilter(MetadataMultiFilter):
+    animal_id_field = "pk"
     ordering = django_filters.OrderingFilter(
         fields=("accession", "samples_count"),
     )

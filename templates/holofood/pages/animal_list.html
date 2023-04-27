@@ -39,7 +39,7 @@
                         <thead class="vf-table__header">
                             <tr class="vf-table__row">
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Animal accession" param="accession" %}
-                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Treatment code" param="" %}
+                                {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Treatment" param="" %}
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Treatment concentration" param="" %}
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Trial timepoint" param="" %}
                                 {% include "holofood/components/atoms/maybe_sortable_table_column_heading.html" with form=filterset.form title="Samples available" param="samples_count" %}
@@ -52,9 +52,9 @@
                                     <td class="vf-table__cell">
                                         {% include "holofood/components/atoms/animal_accession.html" with animal=animal only %}
                                     </td>
-                                    <td class="vf-table__cell">{{ animal|animal_metadatum:"treatment code"|default:"—" }}</td>
-                                    <td class="vf-table__cell">{{ animal|animal_metadatum:"treatment concentration"|default:"—" }}</td>
-                                    <td class="vf-table__cell">{{ animal|animal_metadatum:"trial timepoint"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ animal|animal_metadatum:"Treatment name||Treatment description"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ animal|animal_metadatum:"Treatment concentration"|default:"—" }}</td>
+                                    <td class="vf-table__cell">{{ animal|animal_metadatum:"Sampling time"|default:"—" }}</td>
                                     <td class="vf-table__cell">
                                         <a class="vf-link" href="{% url 'samples_list' %}?animal_accession__icontains={{ animal.accession }}">{{ animal.samples_count }} samples</a>
                                         {% data_types animal %}

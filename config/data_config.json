@@ -10,11 +10,10 @@
   "tables": {
     "animals_list": {
       "default_metadata_marker_columns": [
-        "host diet treatment concentration",
-        "host diet treatment",
         "Sampling time",
         "Treatment code",
         "Treatment name",
+        "Treatment description",
         "Treatment concentration"
       ]
     },

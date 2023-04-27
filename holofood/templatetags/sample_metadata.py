@@ -9,21 +9,42 @@ register = template.Library()
 
 @register.filter(name="animal_metadatum")
 def animal_metadatum(animal: Animal, marker_name: str) -> Union[str, None]:
+    """
+    Fetch a metadatum value for an animal.
+    :param animal: Animal object
+    :param marker_name: Metadata marker name.
+    Can include '||' to denote a list of marker names that will be checked in order.
+    The first present marker will be returned,
+    :return: Value if one of the marker_names exists.
+    """
     primary_marker_list = (
         holofood_config.tables.animals_list.default_metadata_marker_columns
     )
     datum = None
-    if hasattr(animal, "primary_metadata") and marker_name in primary_marker_list:
-        try:
-            datum = next(
-                m for m in animal.primary_metadata if m.marker.name == marker_name
-            )
-        except StopIteration:
-            # Metadata was prefetched but didn't exist on this sample
-            pass
-    else:
-        # Metadata not prefetched
-        datum = animal.structured_metadata.filter(marker__name=marker_name).first()
+    possible_marker_names = marker_name.split("||")
+    for possible_marker_name in possible_marker_names:
+        if (
+            hasattr(animal, "primary_metadata")
+            and possible_marker_name in primary_marker_list
+        ):
+            try:
+                datum = next(
+                    m
+                    for m in animal.primary_metadata
+                    if m.marker.name == possible_marker_name
+                )
+            except StopIteration:
+                # Metadata was prefetched but didn't exist on this sample
+                continue
+            else:
+                break
+        else:
+            # Metadata not prefetched
+            datum = animal.structured_metadata.filter(
+                marker__name=possible_marker_name
+            ).first()
+            if datum:
+                break
 
     if datum is None:
         return None
