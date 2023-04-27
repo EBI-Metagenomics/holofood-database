@@ -59,6 +59,7 @@ LOGGING = {
 }
 
 ALLOWED_HOSTS = [os.getenv("DATA_PORTAL_URL", "127.0.0.1")]
+CSRF_TRUSTED_ORIGINS = [os.getenv("DATA_PORTAL_URL", "http://127.0.0.1")]
 
 holofood_config_env = os.getenv("HOLOFOOD_ENV_FILE")
 if holofood_config_env:
