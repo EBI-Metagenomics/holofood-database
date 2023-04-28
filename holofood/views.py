@@ -311,16 +311,20 @@ class GlobalSearchView(TemplateView):
         if not query:
             return model.objects.none()
 
-        fields = fields or map(
-            lambda field: field.name,
-            filter(
-                lambda field: isinstance(field, CharField)
-                or isinstance(field, TextField),
-                model._meta.fields,
-            ),
+        fields = fields or list(
+            map(
+                lambda field: field.name,
+                filter(
+                    lambda field: isinstance(field, CharField)
+                    or isinstance(field, TextField),
+                    model._meta.fields,
+                ),
+            )
         )
 
-        logging.info(f"Will search model {model._meta.label} {fields = } for {query}")
+        logging.info(
+            f"Will search model {model._meta.label} fields {list(fields)} for {query}"
+        )
 
         return model.objects.filter(
             reduce(
