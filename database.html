@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>HoloFood Data Portal Documentation - Datasets</title>
+<title>HoloFood Data Portal Documentation - Database snapshots</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +64,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./website.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./api.html" rel="prev">
 <link href="./img/hf-logo-brand.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -97,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./datasets.html">Datasets</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./database.html">Database snapshots</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -144,7 +177,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./datasets.html" class="sidebar-item-text sidebar-link active">
+  <a href="./datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datasets</span></a>
   </div>
 </li>
@@ -162,7 +195,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./database.html" class="sidebar-item-text sidebar-link">
+  <a href="./database.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Database snapshots</span></a>
   </div>
 </li>
@@ -193,29 +226,14 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#ena-samples-biosamples" id="toc-ena-samples-biosamples" class="nav-link active" data-scroll-target="#ena-samples-biosamples">ENA Samples / BioSamples</a></li>
-  <li><a href="#ena-checklist-metadata" id="toc-ena-checklist-metadata" class="nav-link" data-scroll-target="#ena-checklist-metadata">ENA Checklist Metadata</a></li>
-  <li><a href="#biosamples-metadata" id="toc-biosamples-metadata" class="nav-link" data-scroll-target="#biosamples-metadata">BioSamples Metadata</a></li>
-  <li><a href="#mgnify-metagenomics" id="toc-mgnify-metagenomics" class="nav-link" data-scroll-target="#mgnify-metagenomics">MGnify: Metagenomics</a>
-  <ul class="collapse">
-  <li><a href="#metagenome-assembled-genome-mag-catalogues" id="toc-metagenome-assembled-genome-mag-catalogues" class="nav-link" data-scroll-target="#metagenome-assembled-genome-mag-catalogues">Metagenome Assembled Genome (MAG) Catalogues</a></li>
-  <li><a href="#viral-fragment-catalogues" id="toc-viral-fragment-catalogues" class="nav-link" data-scroll-target="#viral-fragment-catalogues">Viral (fragment) Catalogues</a></li>
-  </ul></li>
-  <li><a href="#metabolights-metabolomics" id="toc-metabolights-metabolomics" class="nav-link" data-scroll-target="#metabolights-metabolomics">MetaboLights: Metabolomics</a></li>
-  <li><a href="#summary-analyses" id="toc-summary-analyses" class="nav-link" data-scroll-target="#summary-analyses">Summary analyses</a></li>
-  </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/ebi-metagenomics/holofood-database/edit/main/docs/datasets.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/ebi-metagenomics/holofood-database/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Datasets</h1>
+<h1 class="title">Database snapshots</h1>
 </div>
 
 
@@ -230,62 +248,85 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>All HoloFood samples are registered in <a href="https://ebi.ac.uk/biosamples">BioSamples</a>, which has <a href="https://www.ebi.ac.uk/biosamples/docs">its own documentation</a>.</p>
-<p>Most analyses of the samples are stored in further appropriate supporting databases, with a small number hosted directly in the HoloFood data portal.</p>
-<section id="ena-samples-biosamples" class="level2">
-<h2 class="anchored" data-anchor-id="ena-samples-biosamples">ENA Samples / BioSamples</h2>
-<p>BioSamples are the “source of truth” for animals and derived samples created by the project. Some samples are also present in ENA (with the same primary accession / identifier), if those samples pertain to nucleotide read data.</p>
-<p>An ENA Sample is part of the <a href="https://ena-docs.readthedocs.io/en/latest/submit/general-guide/metadata.html#metadata-model">ENA Metadata Model</a>.</p>
-<blockquote class="blockquote">
-<p>A sample contains information about the sequenced source material. Samples are associated with checklists, which define the fields used to annotate the samples.</p>
-</blockquote>
-<p>ENA has <a href="https://www.ebi.ac.uk/ena/browser/guides">extensive documentation</a>.</p>
-</section>
-<section id="ena-checklist-metadata" class="level2">
-<h2 class="anchored" data-anchor-id="ena-checklist-metadata">ENA Checklist Metadata</h2>
-<p>An <a href="https://ena-docs.readthedocs.io/en/latest/retrieval/ena-project.html?highlight=checklist#sample-checklists">ENA Checklist</a> is a set of metadata (some mandatory) for a given sample type.</p>
-<p>The HoloFood checklist is <a href="https://www.ebi.ac.uk/ena/browser/view/ERC000052">ERC000052</a>.</p>
-</section>
-<section id="biosamples-metadata" class="level2">
-<h2 class="anchored" data-anchor-id="biosamples-metadata">BioSamples Metadata</h2>
-<p>BioSamples is an EBI service hosting annotations keyed against an existing sample hosted elsewhere (in HoloFood’s case, ENA). For HoloFood biosamples, these are registered against a specific ontology.</p>
-<p>The majority of HoloFood samples’ metadata are hosted in BioSamples.</p>
-<p>HoloFood data for samples that don’t have a particular repository are also stored as structured data in BioSamples. For example, histology measurements, inflammatory markers, and fatty acid measurements are stored in the structured data of those samples. This contrasts to e.g.&nbsp;nucleotide read, metagenome sequencing, and metabolomic mass spectromoetry data which are available through specific repositories.</p>
-<p>There is a <a href="https://www.ebi.ac.uk/training/online/courses/biosamples-quick-tour/what-is-biosamples">BioSamples online training course</a> to learn more.</p>
-</section>
-<section id="mgnify-metagenomics" class="level2">
-<h2 class="anchored" data-anchor-id="mgnify-metagenomics">MGnify: Metagenomics</h2>
-<p>Metagenomic-derived analyses are available for some HoloFood samples.</p>
-<p>These datasets and analysis features are hosted by <a href="https://ebi.ac.uk/metagenomics">MGnify</a>, which also has <a href="https://docs.mgnify.org/">extensive documentation</a>.</p>
-<blockquote class="blockquote">
-<p>MGnify is a freely available hub for the analysis and exploration of metagenomic, metatranscriptomic, amplicon and assembly data.</p>
-</blockquote>
-<section id="metagenome-assembled-genome-mag-catalogues" class="level3">
-<h3 class="anchored" data-anchor-id="metagenome-assembled-genome-mag-catalogues">Metagenome Assembled Genome (MAG) Catalogues</h3>
-<p>MAG Catalogues are available for selected biomes. MAGs are draft genomes created by binning assembled metagenomic reads. These MAGs are created using the <a href="https://github.com/EBI-Metagenomics/genomes-pipeline">MGnify Genomes Pipeline</a>. MAGs are annotated using various functional and taxonomic characterisation tools.</p>
-<p>HoloFood MAGs are those created using only reads from HoloFood samples. However, there are other non-HoloFood public data available for the same biomes sampled by this project.</p>
-<p>Each HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify, which is a superset of the HoloFood data and other public data.</p>
-<p>Each MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species. In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG points to itself on the MGnify website. In other cases, a more complete, less contaminated, or isolate genome exists representing the same species, so the HoloFood MAG points to this better representative on MGnify.</p>
-</section>
-<section id="viral-fragment-catalogues" class="level3">
-<h3 class="anchored" data-anchor-id="viral-fragment-catalogues">Viral (fragment) Catalogues</h3>
-<p>Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples. Viral sequences are detected using <a href="https://github.com/EBI-Metagenomics/emg-viral-pipeline">VIRify</a>. Viruses are shown as fragments (regions) of the parent contigs in which they were found. The contigs are those stored in MGnify, from the HoloFood Sample sequencing. Annotations are available on the contigs from the <a href="https://github.com/EBI-Metagenomics/pipeline-v5">MGnify analysis pipeline</a>.</p>
-</section>
-</section>
-<section id="metabolights-metabolomics" class="level2">
-<h2 class="anchored" data-anchor-id="metabolights-metabolomics">MetaboLights: Metabolomics</h2>
-<p>Metabolomics-derived analyses are available for some HoloFood samples.</p>
-<p>These datasets are hosted by <a href="https://www.ebi.ac.uk/metabolights/">MetaboLights</a>.</p>
-</section>
-<section id="summary-analyses" class="level2">
-<h2 class="anchored" data-anchor-id="summary-analyses">Summary analyses</h2>
-<p>Summary analyses are higher level analyses of a Sample or collection of Samples; written documents serving as short analysis summaries.</p>
-<p>These summaries are hosted directly by the HoloFood data portal.</p>
-<p>The documents are written by HoloFood partners and moderated by the HoloFood consortium, but are not peer-reviewed research articles.</p>
-<p>Each analysis summary is linked to one or more Samples that were included in the analysis or are relevant to it.</p>
+<p>Snapshots of the data portal database are available from the <a href="https://ftp.ebi.ac.uk/pub/databases/metagenomics/holofood_data/">EBI FTP server</a></p>
+<p>For most multi-omics data queries, the <a href="./api.html">API</a> provides a set of endpoints to retrieve the desired filtered dataset. However, users may also download a SQLite file of the data portal database if they prefer to query it directly – e.g.&nbsp;to more quickly retrieve many queries.</p>
+<p>The database is a <a href="https://www.sqlite.org/">SQLite3</a> file. Tools to query these databases exist on every platform and for many programming languages. Python has built-in support for them.</p>
+<p>As a realistic example of it’s use, the following SQL query would retrieve a list of chickens’ host genome sample accessions alongside inflammatory marker sample accessions from the same bird, and the dietary treatment of the host animals:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> holofood_animal.accession      <span class="kw">as</span> animal,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>       genomic_samples.accession      <span class="kw">as</span> genomic_sample,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       inflammatory_samples.accession <span class="kw">as</span> inflammatory_sample,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       ha.measurement                 <span class="kw">as</span> treatment</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> holofood_animal</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>         <span class="kw">left</span> <span class="kw">join</span> (<span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">from</span> holofood_sample</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">where</span> sample_type <span class="op">=</span> <span class="st">'host_genomic'</span>) genomic_samples</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                   <span class="kw">on</span> holofood_animal.accession <span class="op">=</span> genomic_samples.animal_id</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>         <span class="kw">left</span> <span class="kw">join</span> (<span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">from</span> holofood_sample</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">where</span> sample_type <span class="op">=</span> <span class="st">'inflammatory_markers'</span>) inflammatory_samples</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                   <span class="kw">on</span> holofood_animal.accession <span class="op">=</span> inflammatory_samples.animal_id</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>         <span class="kw">join</span> holofood_animalstructureddatum ha <span class="kw">on</span> holofood_animal.accession <span class="op">=</span> ha.animal_id</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>         <span class="kw">join</span> holofood_samplemetadatamarker hs <span class="kw">on</span> hs.<span class="kw">id</span> <span class="op">=</span> ha.marker_id</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">where</span> hs.name <span class="op">=</span> <span class="st">'Treatment name'</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">and</span> <span class="kw">system</span> <span class="op">=</span> <span class="st">'chicken'</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">and</span> genomic_sample <span class="kw">is</span> <span class="kw">not</span> <span class="kw">null</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">and</span> inflammatory_sample <span class="kw">is</span> <span class="kw">not</span> <span class="kw">null</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<table class="table">
+<thead>
+<tr class="header">
+<th>animal</th>
+<th>genomic_sample</th>
+<th>inflammatory_sample</th>
+<th>treatment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SAMEA112904734</td>
+<td>SAMEA13389405</td>
+<td>SAMEA112907067</td>
+<td>Probiotic</td>
+</tr>
+<tr class="even">
+<td>SAMEA112904734</td>
+<td>SAMEA13389405</td>
+<td>SAMEA112907391</td>
+<td>Probiotic</td>
+</tr>
+<tr class="odd">
+<td>SAMEA112904734</td>
+<td>SAMEA13389406</td>
+<td>SAMEA112907067</td>
+<td>Probiotic</td>
+</tr>
+<tr class="even">
+<td>SAMEA112904734</td>
+<td>SAMEA13389406</td>
+<td>SAMEA112907391</td>
+<td>Probiotic</td>
+</tr>
+<tr class="odd">
+<td>SAMEA112904735</td>
+<td>SAMEA13389692</td>
+<td>SAMEA112907142</td>
+<td>Control</td>
+</tr>
+<tr class="even">
+<td>SAMEA112904735</td>
+<td>SAMEA13389692</td>
+<td>SAMEA112907466</td>
+<td>Control</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -523,14 +564,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Docs home</span>
+      <a href="./api.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">API for Programmatic Access</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./website.html" class="pagination-link">
-        <span class="nav-page-text">Browsing the website</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
@@ -539,7 +577,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 817729</div>
+    <div class="nav-footer-center">This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 817729<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/ebi-metagenomics/holofood-database/edit/main/docs/database.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/ebi-metagenomics/holofood-database/issues/new" class="toc-action">Report an issue</a></p></div></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
