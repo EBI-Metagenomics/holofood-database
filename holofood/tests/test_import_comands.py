@@ -7,17 +7,11 @@ import pytest
 from django.core.management import call_command
 
 
-from holofood.external_apis.ena.portal_api import API_ROOT as ENAAPIROOT
 from holofood.external_apis.biosamples.api import API_ROOT as BSAPIROOT
-from holofood.external_apis.ena.browser_api import API_ROOT as DBAPIROOT
-from holofood.external_apis.metabolights.api import API_ROOT as MTBLSAPIROOT
-from holofood.models import Sample, ViralCatalogue, GenomeCatalogue
-from holofood.tests.conftest import set_metabolights_project_for_sample
+from holofood.models import Sample, ViralCatalogue, GenomeCatalogue, Animal
 from holofood.utils import holofood_config
 
 MGAPIROOT = holofood_config.mgnify.api_root.rstrip("/")
-
-# TODO: rewrite for hierarchical samples import
 
 
 def _call_command(command, *args, **kwargs):
@@ -35,97 +29,90 @@ def _call_command(command, *args, **kwargs):
 @pytest.mark.django_db
 def test_fetch_project_samples(requests_mock):
     requests_mock.get(
-        f"{ENAAPIROOT}/search?format=json&dataPortal=ena&result=read_run&query=study_accession=PRJTESTING&fields=sample_accession,project_name,sample_title,checklist",
-        json=[
-            {
-                "run_accession": "ERR0000001",
-                "sample_accession": "SAMEA00000001",
-                "project_name": "HoloFood Donut",
-                "sample_title": "HF_DONUT.JAM.1",
-                "checklist": "ERC000052",
+        f"{BSAPIROOT}/samples?filter=attr:project:HoloFood&size=200",
+        json={
+            "_links": {"next": {"href": None}},  # single page
+            "_embedded": {
+                "samples": [
+                    {
+                        "accession": "SAMEA1",
+                        "name": "HF_DONUT.JAM.1",
+                        "webinSubmissionAccountId": "Webin-good",  # project submitter
+                        "relationships": [
+                            {
+                                "source": "SAMEA1",
+                                "target": "SAMEG1",
+                                "type": "DERIVED_FROM",
+                            }
+                        ],
+                        "characteristics": {
+                            "Organism": [{"text": "Salmo salar"}],
+                            "project": [{"text": "HoloFood"}],
+                        },
+                        "structuredData": [
+                            {
+                                "type": "SAMPLE",
+                                "content": [
+                                    {
+                                        "marker": {"value": "Experiment", "iri": None},
+                                        "measurement": {
+                                            "value": "histology",
+                                            "iri": None,
+                                        },
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                    {
+                        "accession": "SAMEA2",
+                        "name": "HF_DONUT.EVIL.1",
+                        "webinSubmissionAccountId": "Webin-bad",  # non-project submitter
+                        "relationships": [
+                            {
+                                "source": "SAMEA2",
+                                "target": "SAMEG1",
+                                "type": "DERIVED_FROM",
+                            }
+                        ],
+                        "characteristics": {
+                            "Organism": [{"text": "Salmo salar"}],
+                            "project": [{"text": "HoloFood"}],
+                        },
+                        "structuredData": [
+                            {
+                                "type": "SAMPLE",
+                                "content": [
+                                    {
+                                        "marker": {"value": "Experiment", "iri": None},
+                                        "measurement": {"value": "tm", "iri": None},
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                ]
             },
-        ],
+        },
     )
-    out = _call_command("fetch_project_samples")
+    requests_mock.get(
+        f"{BSAPIROOT}/samples/SAMEA1",
+        json={"externalReferences": [{"url": "fake://fakebiosamples/MTBLSDONUT"}]},
+    )
+    out = _call_command("fetch_project_samples", webin_filter=["Webin-good"])
     logging.info(out)
     assert Sample.objects.count() == 1
+    # Sample from non-project webin is filtered out
 
     sample = Sample.objects.first()
     assert sample.title == "HF_DONUT.JAM.1"
+    assert sample.sample_type == Sample.HISTOLOGICAL
+    # should have set MTBLS ID from externalReferences call
+    # (illogical in reality, but test case)
+    assert sample.metabolights_study == "MTBLSDONUT"
 
-
-@pytest.mark.django_db
-def test_refresh_external_data(
-    requests_mock,
-    salmon_sample: Sample,
-    salmon_structureddata_response,
-    salmon_submitted_checklist,
-    salmon_sample_metabolights_response,
-):
-    requests_mock.get(
-        f"{BSAPIROOT}/structureddata/{salmon_sample.accession}",
-        json=salmon_structureddata_response,
-    )
-    requests_mock.get(
-        f"{DBAPIROOT}/xml/{salmon_sample.accession}",
-        text=salmon_submitted_checklist,
-    )
-    out = _call_command(
-        "refresh_external_data", samples=[salmon_sample.accession], types=["METADATA"]
-    )
-    logging.info(out)
-    assert (
-        salmon_sample.structured_metadata.count() == 182
-    )  # 182 =  distincted (per section) markers from structureddata + ENA checklist
-
-    requests_mock.get(
-        f"{MGAPIROOT}/samples/{salmon_sample.accession}",
-        status_code=404,  # 404 means sample not in MGnify
-        text="anything",
-    )
-    out = _call_command(
-        "refresh_external_data",
-        samples=[salmon_sample.accession],
-        types=["METADATA", "METAGENOMIC"],
-    )
-    logging.info(out)
-    salmon_sample.refresh_from_db()
-    assert not salmon_sample.has_metagenomics
-
-    requests_mock.get(
-        f"{MGAPIROOT}/samples/{salmon_sample.accession}",
-        status_code=200,  # 200 means sample is in MGnify
-        text="anything",
-    )
-    out = _call_command(
-        "refresh_external_data",
-        samples=[salmon_sample.accession],
-        types=["METAGENOMIC"],
-    )
-    logging.info(out)
-    salmon_sample.refresh_from_db()
-    assert salmon_sample.has_metagenomics
-
-    set_metabolights_project_for_sample(salmon_sample)
-    salmon_sample.refresh_from_db()
-    logging.warning(
-        f"WILLBE{MTBLSAPIROOT}/studies/{salmon_sample.metabolights_project}/files/samples"
-    )
-    requests_mock.get(
-        f"{MTBLSAPIROOT}/studies/{salmon_sample.metabolights_project}/files/samples",
-        status_code=200,
-        json=salmon_sample_metabolights_response,
-    )
-    out = _call_command(
-        "refresh_external_data",
-        samples=[salmon_sample.accession],
-        types=["METABOLOMIC"],
-    )
-    logging.info(out)
-    salmon_sample.refresh_from_db()
-    assert salmon_sample.has_metabolomics
-    assert len(salmon_sample.metabolights_files) == 2
-    assert "donut" in salmon_sample.metabolights_files[0]["file_name"]
+    assert Animal.objects.count() == 1
+    assert Animal.objects.first().accession == "SAMEG1"
 
 
 @pytest.mark.django_db

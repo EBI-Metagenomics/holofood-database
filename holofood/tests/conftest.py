@@ -1,6 +1,5 @@
 import pytest
 
-from holofood.management.commands.generate_dev_data import METAB_FILES
 from holofood.models import (
     Sample,
     SampleMetadataMarker,
@@ -12,7 +11,6 @@ from holofood.models import (
     SampleStructuredDatum,
     Animal,
 )
-from holofood.utils import holofood_config
 
 
 @pytest.fixture()
@@ -48,7 +46,7 @@ def salmon_metabolomic_sample(salmon_animal):
         animal=salmon_animal,
         sample_type=Sample.METABOLOMIC,
         title="HF_DONUT.SALMON.METAB",
-        metabolights_files=METAB_FILES,
+        metabolights_study="MTBLSDONUT",
     )
 
 
@@ -89,7 +87,7 @@ def chicken_metabolomic_sample(chicken_animal):
         animal=chicken_animal,
         sample_type=Sample.METABOLOMIC,
         title="HF_DONUT.CHICKEN.METAB",
-        metabolights_files=METAB_FILES,
+        metabolights_study="MTBLSDONUT",
     )
 
 
@@ -1173,9 +1171,7 @@ def LiveTests(request):
             title="metabolomic extraction",
             animal=Fixtures.animals[0],
             sample_type=Sample.METABOLOMIC,
-            metabolights_files=[
-                {"file_name": "donut.zip", "sample_name": "SAMEA00000002"}
-            ],
+            metabolights_study="MTBLSDONUT",
         ),
         Sample.objects.create(
             accession="SAMEA00000003",
