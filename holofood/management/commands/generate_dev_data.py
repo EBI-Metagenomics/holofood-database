@@ -30,24 +30,15 @@ def _attach_metadata_to(
     )
 
 
-METAB_FILES = [
-    {
-        "file_name": "ADG10003u_007.zip",
-        "reliability": "1.0",
-        "sample_name": "ADG10003u_007",
-    },
-    {
-        "file_name": "ADG10003u_007.nmrML",
-        "reliability": "1.0",
-        "sample_name": "ADG10003u_007",
-    },
-]
-
-
 class Command(BaseCommand):
     help = "Fills the database with a few pieces of data for development purposes."
 
     def handle(self, *args, **options):
+        Animal.objects.all().delete()
+        AnalysisSummary.objects.all().delete()
+        GenomeCatalogue.objects.all().delete()
+        ViralCatalogue.objects.all().delete()
+
         charlie_chicken = Animal.objects.create(
             accession="SAMEG01",
             system=Animal.CHICKEN,
@@ -69,21 +60,19 @@ class Command(BaseCommand):
             animal=charlie_chicken,
             sample_type=Sample.METAGENOMIC_ASSEMBLY,
             title="chicken caecum extraction",
-            ena_run_accessions=["ERR4918394"],
         )
         chantelle_metagen = Sample.objects.create(
             accession="SAMEA02",
             animal=chantelle_chicken,
             sample_type=Sample.METAGENOMIC_ASSEMBLY,
             title="chicken ileum extraction",
-            ena_run_accessions=["ERR4918394"],
         )
         charlie_metab = Sample.objects.create(
             accession="SAMEA03",
             animal=charlie_chicken,
             sample_type=Sample.METABOLOMIC,
             title="chicken untargeted metabolomics",
-            metabolights_files=METAB_FILES,
+            metabolights_study="MTBLS1",
         )
         charlie_hist = Sample.objects.create(
             accession="SAMEA04",
@@ -108,21 +97,19 @@ class Command(BaseCommand):
             animal=sandy_salmon,
             sample_type=Sample.METAGENOMIC_ASSEMBLY,
             title="salmon extraction",
-            ena_run_accessions=["ERR4918394"],
         )
         sophie_metag = Sample.objects.create(
             accession="SAMEA08",
             animal=sophie_salmon,
             sample_type=Sample.METAGENOMIC_ASSEMBLY,
             title="salmon extraction",
-            ena_run_accessions=["ERR4918394"],
         )
         sophie_metab = Sample.objects.create(
             accession="SAMEA09",
             animal=sophie_salmon,
             sample_type=Sample.METABOLOMIC,
             title="salmon extraction",
-            metabolights_files=METAB_FILES,
+            metabolights_study="MTBLS1",
         )
         sophie_hist = Sample.objects.create(
             accession="SAMEA10",
@@ -132,12 +119,12 @@ class Command(BaseCommand):
         )
 
         animal_metadata = {
-            "host diet treatment concentration": ([0.1, 0.2, 0.15, 0.21], "%"),
-            "host diet treatment": (
+            "Treatment concentration": ([0.1, 0.2, 0.15, 0.21], "%"),
+            "Treatment name": (
                 ["Control", "Cornflakes", "Control", "Seaweed"],
                 None,
             ),
-            "trial timepoint": ([30, 60, 21, 42], "days"),
+            "Sampling time": ([30, 60, 21, 42], "days"),
             "host length": ([50, 60, 20, 30], "cm"),
         }
 
