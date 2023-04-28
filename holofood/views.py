@@ -320,6 +320,8 @@ class GlobalSearchView(TemplateView):
             ),
         )
 
+        logging.info(f"Will search model {model._meta.label} {fields = } for {query}")
+
         return model.objects.filter(
             reduce(
                 operator.or_,
@@ -330,18 +332,25 @@ class GlobalSearchView(TemplateView):
     def get_docs_results(self) -> List[dict]:
         query = self.request.GET.get("query")
         try:
+            logging.info(
+                f"Getting docs search JSON from {holofood_config.docs.docs_url}"
+            )
             quarto_search_response = requests.get(
-                holofood_config.docs.docs_url + "/search.json"
+                holofood_config.docs.docs_url + "/search.json", timeout=5
             )
             quarto_sections = quarto_search_response.json()
         except Exception as e:
             logging.error("Failed to retrieve docs search items from Quarto")
             logging.error(e)
             return []
-        matches = filter(
-            lambda sec: query.lower() in sec.get("text", "").lower(), quarto_sections
+        matches = list(
+            filter(
+                lambda sec: query.lower() in sec.get("text", "").lower(),
+                quarto_sections,
+            )
         )
-        return list(matches)
+        logging.info(f"Found {len(matches)} docs matches for {query}")
+        return matches
 
     @staticmethod
     def get_detail_url_if_accession(query: str):
@@ -352,15 +361,18 @@ class GlobalSearchView(TemplateView):
             query_upper.startswith("SAM")
             and Sample.objects.filter(accession=query_upper).exists()
         ):
+            logging.info(f"{query_upper} is a sample accession. Redirecting.")
             return reverse("sample_detail", args=[query_upper])
         if (
             query_upper.startswith("SAM")
             and Animal.objects.filter(accession=query_upper).exists()
         ):
+            logging.info(f"{query_upper} is an animal accession. Redirecting.")
             return reverse("animal_detail", args=[query_upper])
         if query_upper.startswith("MGYG"):
             mag = Genome.objects.filter(accession=query_upper).first()
             if mag:
+                logging.info(f"{query_upper} is a MAG accession. Redirecting.")
                 return (
                     reverse("genome_catalogue", args=[mag.catalogue_id])
                     + f"?accession__icontains={mag.accession}"
@@ -368,6 +380,7 @@ class GlobalSearchView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         query = self.request.GET.get("query")
+        logging.info(f"Global search for {query}")
         detail_url = self.get_detail_url_if_accession(query)
         if detail_url:
             return redirect(detail_url)
