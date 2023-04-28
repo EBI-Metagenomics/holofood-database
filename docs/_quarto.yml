@@ -32,6 +32,7 @@ website:
             - href: datasets.qmd
             - href: website.qmd
             - href: api.ipynb
+            - href: database.qmd
             - text: '---'
             - href: tutorial.ipynb
             - text: '---'

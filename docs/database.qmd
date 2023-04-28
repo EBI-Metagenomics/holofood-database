@@ -1,0 +1,44 @@
+---
+title: "Database snapshots"
+---
+
+Snapshots of the data portal database are available from the [EBI FTP server](https://ftp.ebi.ac.uk/pub/databases/metagenomics/holofood_data/)
+
+For most multi-omics data queries, the [API](api.ipynb) provides a set of endpoints to retrieve the desired filtered dataset. 
+However, users may also download a SQLite file of the data portal database if they prefer to query it directly – e.g. to more quickly retrieve many queries.
+
+The database is a [SQLite3](https://www.sqlite.org/) file. Tools to query these databases exist on every platform and for many programming languages. Python has built-in support for them.
+
+As a realistic example of it's use, the following SQL query would retrieve a list of chickens' host genome sample accessions alongside inflammatory marker sample accessions from the same bird, and the dietary treatment of the host animals:
+
+```sql
+select holofood_animal.accession      as animal,
+       genomic_samples.accession      as genomic_sample,
+       inflammatory_samples.accession as inflammatory_sample,
+       ha.measurement                 as treatment
+from holofood_animal
+         left join (select *
+                    from holofood_sample
+                    where sample_type = 'host_genomic') genomic_samples
+                   on holofood_animal.accession = genomic_samples.animal_id
+         left join (select *
+                    from holofood_sample
+                    where sample_type = 'inflammatory_markers') inflammatory_samples
+                   on holofood_animal.accession = inflammatory_samples.animal_id
+         join holofood_animalstructureddatum ha on holofood_animal.accession = ha.animal_id
+         join holofood_samplemetadatamarker hs on hs.id = ha.marker_id
+where hs.name = 'Treatment name'
+  and system = 'chicken'
+  and genomic_sample is not null
+  and inflammatory_sample is not null
+
+```
+| animal         | genomic_sample | inflammatory_sample | treatment |
+|----------------|----------------|---------------------|-----------|
+| SAMEA112904734 | SAMEA13389405  | SAMEA112907067      | Probiotic |
+| SAMEA112904734 | SAMEA13389405  | SAMEA112907391      | Probiotic |
+| SAMEA112904734 | SAMEA13389406  | SAMEA112907067      | Probiotic |
+| SAMEA112904734 | SAMEA13389406  | SAMEA112907391      | Probiotic |
+| SAMEA112904735 | SAMEA13389692  | SAMEA112907142      | Control   |
+| SAMEA112904735 | SAMEA13389692  | SAMEA112907466      | Control   |
+| ...            | ...            | ...                 | ...       |
