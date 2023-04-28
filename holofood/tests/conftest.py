@@ -46,7 +46,6 @@ def salmon_metabolomic_sample(salmon_animal):
         animal=salmon_animal,
         sample_type=Sample.METABOLOMIC,
         title="HF_DONUT.SALMON.METAB",
-        metabolights_study="MTBLSDONUT",
     )
 
 

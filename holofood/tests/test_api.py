@@ -56,7 +56,7 @@ def test_animals_api_list_filters(
     response = client.get("/api/animals?system=chicken")
     assert_response_has_n_items(response, 1)
 
-    response = client.get("/api/animals?require_sample_type=metagenomic")
+    response = client.get("/api/animals?require_sample_type=metagenomic_assembly")
     assert_response_has_n_items(response, 1)
 
     response = client.get("/api/animals?require_sample_type=metabolomic")
@@ -95,7 +95,7 @@ def test_animal_api_detail(
     assert (
         data.get("samples")[0].get("accession") == salmon_metagenomic_sample.accession
     )
-    assert data.get("sample_types") == [Sample.METAGENOMIC]
+    assert data.get("sample_types") == [Sample.METAGENOMIC_ASSEMBLY]
 
     assert len(data.get("structured_metadata")) == 0
 
@@ -154,7 +154,7 @@ def test_samples_api_list(client, salmon_metagenomic_sample):
     sample = data.get("items")[0]
     assert sample.get("accession") == salmon_metagenomic_sample.accession
     assert sample.get("title") == salmon_metagenomic_sample.title
-    assert sample.get("sample_type") == salmon_metagenomic_sample.METAGENOMIC
+    assert sample.get("sample_type") == salmon_metagenomic_sample.METAGENOMIC_ASSEMBLY
     assert (
         sample.get("canonical_url")
         == f"https://www.ebi.ac.uk/ena/browser/view/{salmon_metagenomic_sample.accession}"
@@ -216,7 +216,7 @@ def test_samples_api_detail(
     assert data.get("accession") == salmon_metagenomic_sample.accession
     assert data.get("title") == salmon_metagenomic_sample.title
     assert data.get("animal") == salmon_metagenomic_sample.animal.accession
-    assert data.get("sample_type") == Sample.METAGENOMIC
+    assert data.get("sample_type") == Sample.METAGENOMIC_ASSEMBLY
     assert (
         data.get("metagenomics_url")
         == f"https://www.ebi.ac.uk/metagenomics/api/v1/samples/{salmon_metagenomic_sample.accession}"
@@ -278,7 +278,7 @@ def test_metagenomics(client, salmon_metagenomic_sample):
     response = client.get(f"/api/samples/{salmon_metagenomic_sample.accession}")
     assert response.status_code == 200
     data = response.json()
-    assert data.get("sample_type") == Sample.METAGENOMIC
+    assert data.get("sample_type") == Sample.METAGENOMIC_ASSEMBLY
     assert "ena" in data.get("canonical_url").lower()
     assert (
         data.get("metagenomics_url")
