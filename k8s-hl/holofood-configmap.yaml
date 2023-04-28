@@ -7,3 +7,8 @@ data:
   HOLOFOOD_ENV_FILE: "/app/config/local.env"
   SQLITE_DB_NAME: "/app/data/db.sqlite3"
   DATA_PORTAL_URL: "www.holofooddata.org"
+  HTTP_PROXY: "http://hh-wwwcache.ebi.ac.uk:3128"
+  HTTPS_PROXY: "http://hh-wwwcache.ebi.ac.uk:3128"
+  http_proxy: "http://hh-wwwcache.ebi.ac.uk:3128"
+  https_proxy: "http://hh-wwwcache.ebi.ac.uk:3128"
+  no_proxy: "localhost,.cluster.local"
