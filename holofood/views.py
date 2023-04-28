@@ -322,9 +322,7 @@ class GlobalSearchView(TemplateView):
             )
         )
 
-        logging.info(
-            f"Will search model {model._meta.label} fields {list(fields)} for {query}"
-        )
+        logging.info(f"Will search model {model._meta.label} {fields = } for {query}")
 
         return model.objects.filter(
             reduce(
