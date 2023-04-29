@@ -78,7 +78,7 @@
     </script>
     <details class="vf-details">
         <summary class="vf-details--summary">
-            {% if sample.sample_type == 'metagenomic' or sample.sample_type == 'metabolomic' or sample.sample_type == 'host_genomic' %}
+            {% if sample.is_sequencing_sample or sample.sample_type == 'metabolomic' %}
                 Sample metadata
             {% else %}
                 Sample data

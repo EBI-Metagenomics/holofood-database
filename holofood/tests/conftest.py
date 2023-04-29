@@ -1,3 +1,6 @@
+import io
+from typing import List
+
 import pytest
 
 from holofood.models import (
@@ -10,6 +13,7 @@ from holofood.models import (
     ViralFragment,
     SampleStructuredDatum,
     Animal,
+    AnimalStructuredDatum,
 )
 
 
@@ -782,7 +786,7 @@ def salmon_sample_metabolights_response(salmon_sample):
 def salmon_submitted_checklist(salmon_animal):
     return f"""
     <SAMPLE_SET>
-      <SAMPLE accession="{salmon_animal.accession}" alias="{salmon_animal.animal_code}"
+      <SAMPLE accession="{salmon_animal.accession}"
                center_name="UNIVERSITY OF DONUTS">
           <IDENTIFIERS>
              <PRIMARY_ID>{salmon_animal.accession}</PRIMARY_ID>
@@ -1132,6 +1136,50 @@ def mgnify_contig_annotations_response(viral_fragment: ViralFragment) -> str:
 {viral_fragment.contig_id}	eggNOG-v2	CDS	2554	3879	.	-	.	ID={viral_fragment.contig_id};brite=ko00000,ko01000,ko00001;cog=IQ;ecnumber=6.2.1.41;eggnog=AMP-binding%20enzyme%20C-terminal%20domain%20;eggnog_evalue=445.7;eggnog_ortholog=1122978.AUFP01000001_gene932;eggnog_score=2.6e-122;kegg=ko:K18687;ogs=NA|NA|NA;interpro=IPR000873,IPR042099,IPR025110;pfam=PF13193,PF00501"""
 
 
+def metabolights_study_file_response() -> dict:
+    return {
+        "study": [
+            {"file": "s_mtbls.txt", "type": "metadata_sample"},
+            {"file": "a_assay.txt", "type": "metadata_assay"},
+        ]
+    }
+
+
+def metabolights_study_sheet_response(sample: Sample) -> io.BytesIO:
+    return io.BytesIO(
+        f"""Sample Name\tCharacteristics[BioSamples accession]
+donut\t{sample.accession}""".encode(
+            "utf-8"
+        )
+    )
+
+
+def metabolights_assay_sheet_response() -> io.BytesIO:
+    return io.BytesIO(
+        f"""Sample Name\tRaw Spectral Data File\tDerived Spectral Data File\tMetabolite Assignment File 
+donut\traw.sheet\tderived.sheet\tmaf.sheet""".encode(
+            "utf-8"
+        )
+    )
+
+
+def ena_sample_file_report_response(sample: Sample) -> List[dict]:
+    return [
+        {
+            "sample_accession": sample.accession,
+            "sample_title": sample.title,
+            "experiment_accession": "ERX1",
+            "experiment_title": "Donut sequencing",
+            "study_accession": "PRJ1",
+            "study_title": "HF DONUTS",
+            "run_accession": "ERR1",
+            "run_alias": "webin-reads-donut-1",
+            "read_count": "99999999",
+            "base_count": "8888888888",
+        }
+    ]
+
+
 def set_metabolights_project_for_sample(sample: Sample, mtbls: str = "MTBLSDONUT"):
     sample.metabolights_study = mtbls
     sample.save()
@@ -1160,7 +1208,6 @@ def LiveTests(request):
         Animal.objects.create(
             accession="SAMEG04",
             system=Animal.SALMON,
-            animal_code="SSOPHIE",
         )
     ]
 
@@ -1200,6 +1247,13 @@ def LiveTests(request):
     )
     SampleStructuredDatum.objects.create(
         marker=marker2, sample=sample, measurement="Yellow"
+    )
+
+    treatment_marker = SampleMetadataMarker.objects.create(
+        name="Treatment name", type="SAMPLE"
+    )
+    AnimalStructuredDatum.objects.create(
+        marker=treatment_marker, animal=Fixtures.animals[0], measurement="Cornflakes"
     )
 
 

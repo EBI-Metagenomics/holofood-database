@@ -17,6 +17,10 @@ from holofood.tests.conftest import (
     salmon_metagenomics_analyses_response,
     mgnify_contig_response,
     mgnify_contig_annotations_response,
+    metabolights_study_file_response,
+    metabolights_study_sheet_response,
+    metabolights_assay_sheet_response,
+    ena_sample_file_report_response,
 )
 from holofood.utils import holofood_config
 
@@ -28,7 +32,7 @@ class WebsiteTests(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.headless = False
+        options.add_argument("--headless")
         cls.selenium = webdriver.Chrome(options=options)
         cls.selenium.scopes = [
             ".*metagenomics/api.*",
@@ -114,8 +118,40 @@ class WebsiteTests(StaticLiveServerTestCase):
         )
         self.assertEqual(len(table_rows), 2)  # header, footer
 
+        # treatment search
+        self.selenium.get(f"{self.live_server_url}/samples/?metadata_search=cornfl")
+        table_rows = self.selenium.find_elements(
+            by=By.CLASS_NAME, value="vf-table__row"
+        )
+        self.assertEqual(len(table_rows), 4)  # header, footer, 2 samples from animal 1
+        cornflakes_cells = self.selenium.find_elements(
+            by=By.XPATH, value="//td[text()='Cornflakes']"
+        )
+        self.assertEqual(len(cornflakes_cells), 2)
+
+        self.selenium.get(f"{self.live_server_url}/samples/?metadata_search=ice cream")
+        table_rows = self.selenium.find_elements(
+            by=By.CLASS_NAME, value="vf-table__row"
+        )
+        self.assertEqual(len(table_rows), 2)  # header, footer, 0 samples
+
         # ---- Sample detail page ---- #
         sample = self.hf_fixtures.samples[0]
+        m.get(
+            holofood_config.metabolights.api_root
+            + f"/studies/MTBLSDONUT/files?include_raw_data=false",
+            json=metabolights_study_file_response(),
+        )
+        m.get(
+            holofood_config.metabolights.api_root
+            + f"/studies/MTBLSDONUT/download?file=s_mtbls.txt",
+            body=metabolights_study_sheet_response(sample),
+        )
+        m.get(
+            holofood_config.metabolights.api_root
+            + f"/studies/MTBLSDONUT/download?file=a_assay.txt",
+            body=metabolights_assay_sheet_response(),
+        )
         self.selenium.get(self.live_server_url + "/sample/" + sample.accession)
         animal_link = self.selenium.find_element(
             by=By.PARTIAL_LINK_TEXT, value=animal.accession
@@ -139,17 +175,23 @@ class WebsiteTests(StaticLiveServerTestCase):
             f"https://www.ebi.ac.uk/metabolights/MTBLSDONUT",
         )
 
-        download_link = self.selenium.find_element(by=By.LINK_TEXT, value="donut.zip")
+        download_link = self.selenium.find_element(by=By.LINK_TEXT, value="raw.sheet")
         self.assertEqual(
             download_link.get_attribute("href"),
-            "https://www.ebi.ac.uk/metabolights/ws/studies/MTBLSDONUT/download/public?file=donut.zip",
+            "https://www.ebi.ac.uk/metabolights/ws/studies/MTBLSDONUT/download/public?file=raw.sheet",
         )
 
         # METAGENOMICS
         sample = self.hf_fixtures.samples[1]
         m.get(
-            holofood_config.mgnify.api_root + f"/runs/ERR4918394/analyses",
+            holofood_config.mgnify.api_root
+            + f"/analyses?sample_accession={sample.accession}",
             json=salmon_metagenomics_analyses_response(sample),
+        )
+        m.get(
+            holofood_config.ena.portal_api_root
+            + f"/filereport?result=read_run&accession={sample.accession}&format=json",
+            json=ena_sample_file_report_response(sample),
         )
         self.selenium.get(self.live_server_url + "/sample/" + sample.accession)
 
@@ -165,6 +207,35 @@ class WebsiteTests(StaticLiveServerTestCase):
         self.assertEqual(
             mgnify_link.get_attribute("href"),
             f"https://www.ebi.ac.uk/metagenomics/samples/{sample.accession}",
+        )
+
+        sequencing_expander_link = self.selenium.find_elements(
+            by=By.TAG_NAME, value="summary"
+        )[3]
+        self.assertEqual(sequencing_expander_link.text, "Nucleotide sequencing data")
+        sequencing_expander_link.click()
+
+        ena_link = self.selenium.find_element(
+            by=By.LINK_TEXT, value=f"View sample {sample.accession} in ENA"
+        )
+        self.assertEqual(
+            ena_link.get_attribute("href"),
+            f"https://www.ebi.ac.uk/ena/browser/view/{sample.accession}",
+        )
+        run_link = self.selenium.find_element(by=By.LINK_TEXT, value="ERR1")
+        self.assertEqual(
+            run_link.get_attribute("href"),
+            "https://www.ebi.ac.uk/ena/browser/view/ERR1",
+        )
+        exp_link = self.selenium.find_element(by=By.LINK_TEXT, value="ERX1")
+        self.assertEqual(
+            exp_link.get_attribute("href"),
+            "https://www.ebi.ac.uk/ena/browser/view/ERX1",
+        )
+        prj_link = self.selenium.find_element(by=By.LINK_TEXT, value="PRJ1")
+        self.assertEqual(
+            prj_link.get_attribute("href"),
+            "https://www.ebi.ac.uk/ena/browser/view/PRJ1",
         )
 
         # METADATA TABLE
