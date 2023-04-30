@@ -117,6 +117,7 @@ class AnimalListView(ListFilterView):
     paginate_by = 10
     template_name = "holofood/pages/animal_list.html"
     filterset_class = AnimalFilter
+    ordering = "accession"
 
 
 class AnimalDetailView(DetailView):
@@ -198,6 +199,7 @@ class DetailViewWithPaginatedRelatedList(DetailView, MultipleObjectMixin):
     """
 
     related_name = None
+    related_ordering = None
     context_related_objects_name = None
     paginate_by = 10
 
@@ -207,10 +209,10 @@ class DetailViewWithPaginatedRelatedList(DetailView, MultipleObjectMixin):
         related_objects = getattr(detail_obj, self.related_name)
         if hasattr(self, "filterset_class"):
             filterset = self.filterset_class(self.request.GET, queryset=related_objects)
-            related_objects = filterset.qs.all()
+            related_objects = filterset.qs.order_by(self.related_ordering).all()
         else:
             filterset = None
-            related_objects = related_objects.all()
+            related_objects = related_objects.order_by(self.related_ordering).all()
         context = super().get_context_data(object_list=related_objects, **kwargs)
         context["filterset"] = filterset
         context_related_name = self.context_related_objects_name or self.related_name
@@ -226,6 +228,7 @@ class GenomeCatalogueView(DetailViewWithPaginatedRelatedList):
     filterset_class = GenomeFilter
 
     related_name = "genomes"
+    related_ordering = "accession"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -251,6 +254,7 @@ class ViralCatalogueView(DetailViewWithPaginatedRelatedList):
     filterset_class = ViralFragmentFilter
 
     related_name = "viral_fragments"
+    related_ordering = "id"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

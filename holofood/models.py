@@ -69,6 +69,9 @@ class Animal(models.Model):
     accession = models.CharField(primary_key=True, max_length=15)
     system = models.CharField(choices=SYSTEM_CHOICES, max_length=10, null=True)
 
+    class Meta:
+        ordering = ("accession",)
+
     def refresh_structureddata(self, structured_metadata: dict = None):
         """
         Set the metadata on Animal, either using a dict of structured metadata from BioSamples,
@@ -523,3 +526,6 @@ class ViralFragment(models.Model):
     @property
     def is_cluster_representative(self):
         return self.cluster_representative is None
+
+    class Meta:
+        ordering = ("id",)
