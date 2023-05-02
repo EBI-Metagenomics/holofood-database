@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 
 import pytest
 import requests_mock
@@ -41,7 +41,13 @@ class WebsiteTests(StaticLiveServerTestCase):
         cls.selenium.implicitly_wait(10)
 
     @classmethod
+    def take_screenshot(cls):
+        file_name = f"screenshot_website_{datetime.today().isoformat()}.png"
+        cls.selenium.save_screenshot(file_name)
+
+    @classmethod
     def tearDownClass(cls):
+        cls.take_screenshot()
         cls.selenium.quit()
         super().tearDownClass()
 
