@@ -33,6 +33,7 @@ class WebsiteTests(StaticLiveServerTestCase):
         super().setUpClass()
         options = Options()
         options.add_argument("--headless")
+        options.add_argument("--window-size=1280,1024")
         cls.selenium = webdriver.Chrome(options=options)
         cls.selenium.scopes = [
             ".*metagenomics/api.*",
