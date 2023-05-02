@@ -27,5 +27,6 @@ WORKDIR /app
 
 EXPOSE 8000
 
+RUN python manage.py compilescss
 RUN python manage.py collectstatic --noinput
 CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "holofood.wsgi"]

@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -r requirements-dev.txt
+      - name: Make stylesheet
+        run: |
+          python manage.py compilescss
       - name: Run Pytest
         run: |
           pytest
