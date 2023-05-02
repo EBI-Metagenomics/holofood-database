@@ -42,7 +42,9 @@ class WebsiteTests(StaticLiveServerTestCase):
 
     @classmethod
     def take_screenshot(cls):
-        file_name = f"screenshot_website_{datetime.today().isoformat()}.png"
+        file_name = f"screenshot_website_{datetime.today().isoformat()}.png".replace(
+            ":", "-"
+        )
         cls.selenium.save_screenshot(file_name)
 
     @classmethod
