@@ -148,6 +148,26 @@ a.inline, button.inline {
 	float: right;
 }
 
+.annotated-data-type-icon {
+	position: relative;
+
+	.data-type-annotation {
+		position: absolute;
+		top: -2px;
+		left: -2px;
+		background-color: #888;
+		border: 1px solid white;
+		color: white;
+		border-radius: 50%;
+		width: 1.2em;
+		height: 1.2em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 12px;
+	}
+}
+
 .data-type-icon {
     height: 16px;
     width: 16px;

@@ -1,19 +1,74 @@
 {% load static %}
 <div class="vf-grid vf-grid__col-4 icons-container" style="max-width: 128px">
-    {% if metagenomic %}
+    {% if metagenomic_assembly or metagenomic_amplicon %}
         <div class="tooltiped">
-            <img src="{% static "img/icons/bacteria.svg" %}"
-             alt="Has metagenomic data"
-             class="data-type-icon"/>
+            <div class="annotated-data-type-icon">
+                <span class="data-type-annotation">G</span>
+                <img src="{% static "img/icons/bacteria.svg" %}"
+                 alt="Has metagenomic data"
+                 class="data-type-icon"/>
+            </div>
             <span class="tooltip-text">Has metagenomic data</span>
         </div>
     {% endif %}
-    {% if metabolomic %}
+    {% if metatranscriptomic %}
+        <div class="tooltiped">
+            <div class="annotated-data-type-icon">
+                <span class="data-type-annotation">T</span>
+                <img src="{% static "img/icons/bacteria.svg" %}"
+                 alt="Has metatranscriptome data"
+                 class="data-type-icon"/>
+            </div>
+            <span class="tooltip-text">Has metatranscriptome data</span>
+        </div>
+    {% endif %}
+    {% if metabolomic or metabolomic_targeted %}
         <div class="tooltiped">
             <img src="{% static "img/icons/molecule.svg" %}"
              alt="Has metabolomic data"
              class="data-type-icon"/>
             <span class="tooltip-text">Has metabolomic data</span>
+        </div>
+    {% endif %}
+    {% if inflammatory_markers %}
+        <div class="tooltiped">
+            <img src="{% static "img/icons/protein.svg" %}"
+             alt="Has inflammatory markers data"
+             class="data-type-icon"/>
+            <span class="tooltip-text">Has inflammatory markers data</span>
+        </div>
+    {% endif %}
+    {% if iodine %}
+        <div class="tooltiped">
+            <div class="annotated-data-type-icon">
+                <span class="data-type-annotation">I</span>
+                <img src="{% static "img/icons/molecule.svg" %}"
+                 alt="Has iodine data"
+                 class="data-type-icon"/>
+            </div>
+            <span class="tooltip-text">Has iodine data</span>
+        </div>
+    {% endif %}
+    {% if fatty_acids %}
+        <div class="tooltiped">
+            <div class="annotated-data-type-icon">
+                <span class="data-type-annotation">F</span>
+                <img src="{% static "img/icons/molecule.svg" %}"
+                 alt="Has fatty acids data"
+                 class="data-type-icon"/>
+            </div>
+            <span class="tooltip-text">Has fatty acids data</span>
+        </div>
+    {% endif %}
+    {% if heavy_metals %}
+        <div class="tooltiped">
+            <div class="annotated-data-type-icon">
+                <span class="data-type-annotation">H</span>
+                <img src="{% static "img/icons/molecule.svg" %}"
+                 alt="Has heavy metals data"
+                 class="data-type-icon"/>
+            </div>
+            <span class="tooltip-text">Has heavy metal data</span>
         </div>
     {% endif %}
     {% if histological %}
@@ -30,6 +85,14 @@
              alt="Has host genomic data"
              class="data-type-icon"/>
             <span class="tooltip-text">Has host genomic data</span>
+        </div>
+    {% endif %}
+    {% if transcriptomic %}
+        <div class="tooltiped">
+            <img src="{% static "img/icons/transcriptome.svg" %}"
+             alt="Has transcriptome data"
+             class="data-type-icon"/>
+            <span class="tooltip-text">Has  transcriptome data</span>
         </div>
     {% endif %}
 </div>
