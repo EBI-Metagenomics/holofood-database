@@ -1,19 +1,5 @@
 [
   {
-    "objectID": "publications.html",
-    "href": "publications.html",
-    "title": "Publications",
-    "section": "",
-    "text": "Nyholm, L., Koziol, A., Marcos, S., Botnen, A. B., Aizpurua, O., Gopalakrishnan, S., Limborg, M. T., Gilbert, M. T. P., & Alberdi, A. (2020). Holo-Omics: Integrated Host-Microbiota Multi-omics for Basic and Applied Biological Research. In iScience (Vol. 23, Issue 8, p. 101414). Elsevier BV. 10.1016/j.isci.2020.101414\nBozzi, D., Rasmussen, J. A., Carøe, C., Sveier, H., Nordøy, K., Gilbert, M. T. P., & Limborg, M. T. (2021). Salmon gut microbiota correlates with disease infection status: potential for monitoring health in farmed animals. In Animal Microbiome (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1186/s42523-021-00096-2\nDuangnumsawang, Y., Zentek, J., & Goodarzi Boroojeni, F. (2021). Development and Functional Properties of Intestinal Mucus Layer in Poultry. In Frontiers in Immunology (Vol. 12). Frontiers Media SA. 10.3389/fimmu.2021.745849\nEisenhofer, R., Odriozola, I., & Alberdi, A. (2023). Impact of microbial genome completeness on metagenomic functional inference. In ISME Communications (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1038/s43705-023-00221-z\nDuangnumsawang, Y., Zentek, J., Vahjen, W., Tarradas, J., & Goodarzi Boroojeni, F. (2022). Alterations in bacterial metabolites, cytokines, and mucosal integrity in the caecum of broilers caused by feed additives and host-related factors. In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.935870\nTous, N., Marcos, S., Goodarzi Boroojeni, F., Pérez de Rozas, A., Zentek, J., Estonba, A., Sandvang, D., Gilbert, M. T. P., Esteve-Garcia, E., Finn, R., Alberdi, A., & Tarradas, J. (2022). Novel strategies to improve chicken performance and welfare by unveiling host-microbiota interactions through hologenomics. In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.884925\nMarcos, S., Parejo, M., Estonba, A., & Alberdi, A. (2022). Recovering High‐Quality Host Genomes from Gut Metagenomic Data through Genotype Imputation. In Advanced Genetics (Vol. 3, Issue 3, p. 2100065). Wiley. 10.1002/ggn2.202100065\nBrealey, J. C., Lecaudey, L. A., Kodama, M., Rasmussen, J. A., Sveier, H., Dheilly, N. M., Martin, M. D., & Limborg, M. T. (2022). Microbiome “Inception”: an Intestinal Cestode Shapes a Hierarchy of Microbial Communities Nested within the Host. In A. August (Ed.), mBio (Vol. 13, Issue 3). American Society for Microbiology. 10.1128/mbio.00679-22"
-  },
-  {
-    "objectID": "publications.html#publications-from-the-holofood-consortium",
-    "href": "publications.html#publications-from-the-holofood-consortium",
-    "title": "Publications",
-    "section": "",
-    "text": "Nyholm, L., Koziol, A., Marcos, S., Botnen, A. B., Aizpurua, O., Gopalakrishnan, S., Limborg, M. T., Gilbert, M. T. P., & Alberdi, A. (2020). Holo-Omics: Integrated Host-Microbiota Multi-omics for Basic and Applied Biological Research. In iScience (Vol. 23, Issue 8, p. 101414). Elsevier BV. 10.1016/j.isci.2020.101414\nBozzi, D., Rasmussen, J. A., Carøe, C., Sveier, H., Nordøy, K., Gilbert, M. T. P., & Limborg, M. T. (2021). Salmon gut microbiota correlates with disease infection status: potential for monitoring health in farmed animals. In Animal Microbiome (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1186/s42523-021-00096-2\nDuangnumsawang, Y., Zentek, J., & Goodarzi Boroojeni, F. (2021). Development and Functional Properties of Intestinal Mucus Layer in Poultry. In Frontiers in Immunology (Vol. 12). Frontiers Media SA. 10.3389/fimmu.2021.745849\nEisenhofer, R., Odriozola, I., & Alberdi, A. (2023). Impact of microbial genome completeness on metagenomic functional inference. In ISME Communications (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1038/s43705-023-00221-z\nDuangnumsawang, Y., Zentek, J., Vahjen, W., Tarradas, J., & Goodarzi Boroojeni, F. (2022). Alterations in bacterial metabolites, cytokines, and mucosal integrity in the caecum of broilers caused by feed additives and host-related factors. In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.935870\nTous, N., Marcos, S., Goodarzi Boroojeni, F., Pérez de Rozas, A., Zentek, J., Estonba, A., Sandvang, D., Gilbert, M. T. P., Esteve-Garcia, E., Finn, R., Alberdi, A., & Tarradas, J. (2022). Novel strategies to improve chicken performance and welfare by unveiling host-microbiota interactions through hologenomics. In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.884925\nMarcos, S., Parejo, M., Estonba, A., & Alberdi, A. (2022). Recovering High‐Quality Host Genomes from Gut Metagenomic Data through Genotype Imputation. In Advanced Genetics (Vol. 3, Issue 3, p. 2100065). Wiley. 10.1002/ggn2.202100065\nBrealey, J. C., Lecaudey, L. A., Kodama, M., Rasmussen, J. A., Sveier, H., Dheilly, N. M., Martin, M. D., & Limborg, M. T. (2022). Microbiome “Inception”: an Intestinal Cestode Shapes a Hierarchy of Microbial Communities Nested within the Host. In A. August (Ed.), mBio (Vol. 13, Issue 3). American Society for Microbiology. 10.1128/mbio.00679-22"
-  },
-  {
     "objectID": "partners.html",
     "href": "partners.html",
     "title": "Admin access for HoloFood partners",
@@ -40,6 +26,20 @@
     "title": "Admin access for HoloFood partners",
     "section": "Editing and publishing Summary Analysis documents",
     "text": "Editing and publishing Summary Analysis documents\nSuperuser credentials are required to publish analysis summaries. Until published, the documents do not appear on the public website. As a superuser, tick the “Is published” checkbox on an analysis summary edit page in the admin panel, and press Save.\nIf you believe you should have superuser credentials, contact the helpdesk."
+  },
+  {
+    "objectID": "publications.html",
+    "href": "publications.html",
+    "title": "Publications",
+    "section": "",
+    "text": "Nyholm, L., Koziol, A., Marcos, S., Botnen, A. B., Aizpurua, O., Gopalakrishnan, S., Limborg, M. T., Gilbert, M. T. P., & Alberdi, A. (2020). Holo-Omics: Integrated Host-Microbiota Multi-omics for Basic and Applied Biological Research. In iScience (Vol. 23, Issue 8, p. 101414). Elsevier BV. 10.1016/j.isci.2020.101414\nBozzi, D., Rasmussen, J. A., Carøe, C., Sveier, H., Nordøy, K., Gilbert, M. T. P., & Limborg, M. T. (2021). Salmon gut microbiota correlates with disease infection status: potential for monitoring health in farmed animals. In Animal Microbiome (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1186/s42523-021-00096-2\nDuangnumsawang, Y., Zentek, J., & Goodarzi Boroojeni, F. (2021). Development and Functional Properties of Intestinal Mucus Layer in Poultry. In Frontiers in Immunology (Vol. 12). Frontiers Media SA. 10.3389/fimmu.2021.745849\nEisenhofer, R., Odriozola, I., & Alberdi, A. (2023). Impact of microbial genome completeness on metagenomic functional inference. In ISME Communications (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1038/s43705-023-00221-z\nDuangnumsawang, Y., Zentek, J., Vahjen, W., Tarradas, J., & Goodarzi Boroojeni, F. (2022). Alterations in bacterial metabolites, cytokines, and mucosal integrity in the caecum of broilers caused by feed additives and host-related factors. In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.935870\nTous, N., Marcos, S., Goodarzi Boroojeni, F., Pérez de Rozas, A., Zentek, J., Estonba, A., Sandvang, D., Gilbert, M. T. P., Esteve-Garcia, E., Finn, R., Alberdi, A., & Tarradas, J. (2022). Novel strategies to improve chicken performance and welfare by unveiling host-microbiota interactions through hologenomics. In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.884925\nMarcos, S., Parejo, M., Estonba, A., & Alberdi, A. (2022). Recovering High‐Quality Host Genomes from Gut Metagenomic Data through Genotype Imputation. In Advanced Genetics (Vol. 3, Issue 3, p. 2100065). Wiley. 10.1002/ggn2.202100065\nBrealey, J. C., Lecaudey, L. A., Kodama, M., Rasmussen, J. A., Sveier, H., Dheilly, N. M., Martin, M. D., & Limborg, M. T. (2022). Microbiome “Inception”: an Intestinal Cestode Shapes a Hierarchy of Microbial Communities Nested within the Host. In A. August (Ed.), mBio (Vol. 13, Issue 3). American Society for Microbiology. 10.1128/mbio.00679-22"
+  },
+  {
+    "objectID": "publications.html#publications-from-the-holofood-consortium",
+    "href": "publications.html#publications-from-the-holofood-consortium",
+    "title": "Publications",
+    "section": "",
+    "text": "Nyholm, L., Koziol, A., Marcos, S., Botnen, A. B., Aizpurua, O., Gopalakrishnan, S., Limborg, M. T., Gilbert, M. T. P., & Alberdi, A. (2020). Holo-Omics: Integrated Host-Microbiota Multi-omics for Basic and Applied Biological Research. In iScience (Vol. 23, Issue 8, p. 101414). Elsevier BV. 10.1016/j.isci.2020.101414\nBozzi, D., Rasmussen, J. A., Carøe, C., Sveier, H., Nordøy, K., Gilbert, M. T. P., & Limborg, M. T. (2021). Salmon gut microbiota correlates with disease infection status: potential for monitoring health in farmed animals. In Animal Microbiome (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1186/s42523-021-00096-2\nDuangnumsawang, Y., Zentek, J., & Goodarzi Boroojeni, F. (2021). Development and Functional Properties of Intestinal Mucus Layer in Poultry. In Frontiers in Immunology (Vol. 12). Frontiers Media SA. 10.3389/fimmu.2021.745849\nEisenhofer, R., Odriozola, I., & Alberdi, A. (2023). Impact of microbial genome completeness on metagenomic functional inference. In ISME Communications (Vol. 3, Issue 1). Springer Science and Business Media LLC. 10.1038/s43705-023-00221-z\nDuangnumsawang, Y., Zentek, J., Vahjen, W., Tarradas, J., & Goodarzi Boroojeni, F. (2022). Alterations in bacterial metabolites, cytokines, and mucosal integrity in the caecum of broilers caused by feed additives and host-related factors. In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.935870\nTous, N., Marcos, S., Goodarzi Boroojeni, F., Pérez de Rozas, A., Zentek, J., Estonba, A., Sandvang, D., Gilbert, M. T. P., Esteve-Garcia, E., Finn, R., Alberdi, A., & Tarradas, J. (2022). Novel strategies to improve chicken performance and welfare by unveiling host-microbiota interactions through hologenomics. In Frontiers in Physiology (Vol. 13). Frontiers Media SA. 10.3389/fphys.2022.884925\nMarcos, S., Parejo, M., Estonba, A., & Alberdi, A. (2022). Recovering High‐Quality Host Genomes from Gut Metagenomic Data through Genotype Imputation. In Advanced Genetics (Vol. 3, Issue 3, p. 2100065). Wiley. 10.1002/ggn2.202100065\nBrealey, J. C., Lecaudey, L. A., Kodama, M., Rasmussen, J. A., Sveier, H., Dheilly, N. M., Martin, M. D., & Limborg, M. T. (2022). Microbiome “Inception”: an Intestinal Cestode Shapes a Hierarchy of Microbial Communities Nested within the Host. In A. August (Ed.), mBio (Vol. 13, Issue 3). American Society for Microbiology. 10.1128/mbio.00679-22"
   },
   {
     "objectID": "database.html",
@@ -82,125 +82,6 @@
     "title": "API for Programmatic Access",
     "section": "Filters using query parameters",
     "text": "Filters using query parameters\nWe didn’t need to fetch all the samples to then select only the metagenomic ones. We can instead fetch only the metagenomic ones using a query parameter filter. (If you’re familiar with SQL, this eventually maps to a WHERE clause on the database.)\n\npage = 1\n\nwhile page:\n    print(f'Fetching {page=}')\n    \n    mg_samples_page = requests.get(f'{samples_endpoint_base}?{page=}&sample_type=metagenomic_assembly').json()\n    mg_samples_page_df = pd.json_normalize(mg_samples_page['items'])\n    \n    if page == 1:\n        mg_samples_df = mg_samples_page_df\n    else:\n        mg_samples_df = pd.concat([mg_samples_df, mg_samples_page_df])\n    page += 1\n    if len(mg_samples_df) &gt;= mg_samples_page['count']:\n        page = False\n\nFetching page=1\nFetching page=2\nFetching page=3\nFetching page=4\nFetching page=5\nFetching page=6\nFetching page=7\nFetching page=8\nFetching page=9\nFetching page=10\nFetching page=11\nFetching page=12\nFetching page=13\nFetching page=14\n\n\n\nsamples_df\n\n\n\n\n\n\n\n\naccession\ntitle\nsample_type\nanimal\ncanonical_url\nmetagenomics_url\nmetabolomics_url\n\n\n\n\n0\nSAMEA10104908\nCA01.07F1a\nmetagenomic_assembly\nSAMEA112905066\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA10...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n1\nSAMEA10104910\nCA02.12F1a\nmetagenomic_assembly\nSAMEA112904813\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA10...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n2\nSAMEA10104911\nCA02.18F1a\nmetagenomic_assembly\nSAMEA112904777\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA10...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n3\nSAMEA10104912\nCA03.10F1a\nmetagenomic_assembly\nSAMEA112904752\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA10...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n4\nSAMEA10104914\nCA04.10F1a\nmetagenomic_assembly\nSAMEA112904915\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA10...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n...\n...\n...\n...\n...\n...\n...\n...\n\n\n78\nSAMEA9449961\nCC17.06F1a\nmetagenomic_assembly\nSAMEA112905387\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA94...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n79\nSAMEA9449962\nCC17.10F1a\nmetagenomic_assembly\nSAMEA112905371\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA94...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n80\nSAMEA9449963\nCC16.16F1a\nmetagenomic_assembly\nSAMEA112905164\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA94...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n81\nSAMEA9449964\nCC18.03F1a\nmetagenomic_assembly\nSAMEA112904811\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA94...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n82\nSAMEA9449965\nCC18.05F1a\nmetagenomic_assembly\nSAMEA112905140\nhttps://www.ebi.ac.uk/ena/browser/view/SAMEA94...\nhttps://www.ebi.ac.uk/metagenomics/api/v1/samp...\nNone\n\n\n\n\n1383 rows × 7 columns\n\n\n\nAnd so, we’ve more efficiently fetch the metagenomic assemblies – by not pulling pages and pages of irrelevant data."
-  },
-  {
-    "objectID": "website.html",
-    "href": "website.html",
-    "title": "Browsing the website",
-    "section": "",
-    "text": "Screenshot of the global search box\n\n\nThere is a a site-wide (“global”) search box at the top of the data portal landing page and most other pages. This searches over host and derived samples accessions, titles, systems, and types; genome and viral catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.\nIf you search for valid sample, animal, or MAG accessions, the search will take you straight to an appropriate view in the portal. Otherwise, you’ll see a normal list of search results."
-  },
-  {
-    "objectID": "website.html#global-search",
-    "href": "website.html#global-search",
-    "title": "Browsing the website",
-    "section": "",
-    "text": "Screenshot of the global search box\n\n\nThere is a a site-wide (“global”) search box at the top of the data portal landing page and most other pages. This searches over host and derived samples accessions, titles, systems, and types; genome and viral catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.\nIf you search for valid sample, animal, or MAG accessions, the search will take you straight to an appropriate view in the portal. Otherwise, you’ll see a normal list of search results."
-  },
-  {
-    "objectID": "website.html#finding-samples",
-    "href": "website.html#finding-samples",
-    "title": "Browsing the website",
-    "section": "Finding Samples",
-    "text": "Finding Samples\n\n\n\nScreenshot of sample listing webpage\n\n\nSamples can be found from the “Chicken samples” and “Salmon samples” navigation items. On the samples listing pages, there are various filters available to limit which samples are shown in the table. For example, you can find all samples from a particular animal, or all metabolomics type samples (each sample has a particular type).\nSamples may be linked to metadata (almost always), metagenomic, metabolomic, or host-genomic datasets. Other sample types have their results data in the sample metadata.\n\nTreatment search\nSamples may also be search for by the host-animal’s treatment condition. The “Treatment search” filter is a case-insensitive text search over the samples’ animal treatment metadata. Specifically, it filters to samples whose host animal has all of the query strings in the animal’s BioSamples metadata fields: “Sampling time”, “Treatment name”, “Treatment description”, “Treatment code”, “Treatment concentration”.\nThis means you can search for e.g. ferm algae 2.0% \"day 60\" to find samples from animals treated with Fermented Algae at a 2.0% concentration and collected on trial Day 60.\nNote the use of lexical grouping around the “day 60” – this is useful when searching for, e.g. day 0 which would otherwise partially match day 60.\n\n\nSample detail\nTo view detail about a particular sample, click “View” on its row of the table.\nThe sample detail page contains information help about the sample in the various supporting databases. Metadata (from BioSamples) is shown in full, in a table. Metagenomic and metabolomic data are shown in summary form, with links to the respective public websites where those analyses are held.\nThe API section shows the API endpoint for this particular sample. You can copy this into a script, for example, to programmatically pull the data."
-  },
-  {
-    "objectID": "website.html#downloading-sample-lists-and-metadata",
-    "href": "website.html#downloading-sample-lists-and-metadata",
-    "title": "Browsing the website",
-    "section": "Downloading sample lists and metadata",
-    "text": "Downloading sample lists and metadata\nThe complete sample list can be exported to TSV using the “Download all as TSV” button.\n\n\n\n\n\n\nNote\n\n\n\nThe “Download all as TSV” button does reflect any filters on the website table – it contains the complete list.\n\n\n\n\n\nScreenshot of a sample detail page with TSV export option\n\n\nThe complete metadata for a sample can be downloaded using the “Download all as TSV” button within the “Sample metadata” section of a sample detail page. For sample types where the metadata also includes results data (like histology measurements), the section is instead called “Sample data”."
-  },
-  {
-    "objectID": "website.html#finding-sample-data-in-other-public-repositories",
-    "href": "website.html#finding-sample-data-in-other-public-repositories",
-    "title": "Browsing the website",
-    "section": "Finding sample data in other public repositories",
-    "text": "Finding sample data in other public repositories\n\nMetagenomics\nSome samples have metagenomics data, in MGnify. These can be found from the samples listing page by setting the Sample type filter to metagenomic_assembly or metagenomic_amplicon.\nMGnify analyses of a sample (identified with MGYA accessions) are listed and linked to from the sample detail page.\n\n\n\nScreenshot of a metagenomic sample detail page\n\n\n\n\nMetabolomics\nSome other samples have metabolomics data, in MetaboLights. These can be found form the samples listing page by setting the Sample type filter to metabolomic.\nMetaboLights data are identified at a Project level, with MTBLS accessions. MetaboLights does not store samples as independent objects, instead it stores lists of samples and files (and more) for the project. So, the HoloFood data portal sample detail page shows a filtered table of the MetaboLights project’s files, that relate to this sample. Following these file links will download the file.\nMetaboLights follows the ISA framework, so the table shown is a collection of files from the one or more assay sheets relevant to this sample. Raw and derived files are available.\n\n\n\nScreenshot of a metabolomic sample detail page"
-  },
-  {
-    "objectID": "website.html#finding-samples-related-to-the-same-host-animal",
-    "href": "website.html#finding-samples-related-to-the-same-host-animal",
-    "title": "Browsing the website",
-    "section": "Finding samples related to the same host animal",
-    "text": "Finding samples related to the same host animal\nEach host animal (an individual chicken or salmon) is itself a BioSample. Host-level measurements of the animal and its tank/pen are available as metadata on the animal. The animal listing pages (accessed from links on the sample lists) and the animal detail pages each include information about the derived sample types available for a given animal.\n\n\n\nScreenshot of an animal detail page"
-  },
-  {
-    "objectID": "website.html#finding-analysis-summaries",
-    "href": "website.html#finding-analysis-summaries",
-    "title": "Browsing the website",
-    "section": "Finding analysis summaries",
-    "text": "Finding analysis summaries\n\n\n\nScreenshot of a sample detail page with analysis documents links\n\n\nAnalysis summaries are linked to samples or catalogues. Any analysis summaries that mention a sample are shown at the bottom of the sample’s detail page.\n\n\n\nScreenshot of an analysis document\n\n\nAnalysis summaries also link back to the samples and/or catalogues they refer to. A complete list of analysis summaries can also be found from the navigation bar."
-  },
-  {
-    "objectID": "website.html#using-the-catalogues",
-    "href": "website.html#using-the-catalogues",
-    "title": "Browsing the website",
-    "section": "Using the catalogues",
-    "text": "Using the catalogues\n\nMAG Catalogues\nMetagenome Assembled Genome (MAG) Catalogues are available for selected biomes. HoloFood MAGs are those created using only reads from HoloFood samples. However, there are other non-HoloFood public data available for the same biomes sampled by this project.\nEach HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify, which is a superset of the HoloFood data and other public data. This is linked from each catalogue page on the HoloFood Data Portal site.\nEach MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species. In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG points to itself on the MGnify website. In other cases, a more complete, less contaminated, or isolate genome exists representing the same species, so the HoloFood MAG points to this better representative on MGnify.\n\n\n\nScreenshot of a MAG catalogue\n\n\nMAG Catalogues can be found from the “Genomes” navigation item, and then selecting a catalogue in the “Catalogues” sub-navigation. MAGs can be found by searching on accession or taxonomy, or for the accession of the cluster representative.\nThe MAGs in a catalogue can be downloaded as a TSV file, using the “Download all as TSV” button.\n\n\nViral Catalogues\n Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples. Viral catalogues can be found from the “Viruses” navigation item, and then selecting a catalogue in the “Catalogues” sub-navigation.\nViral fragment can be searched in various ways, like the parent contig ID, or the taxonomy of the host MAG. Host MAGs are only assigned where there is an exact match between the viral sequence and a host MAG.\nBy default, only species-level clusters are shown (a representative viral fragment is shown).\nThis can be changed either by clicking the “View cluster” link within the table, to see the remainder of that specific cluster, or by changing the “Cluster visibility” dropdown in the filters to the left of the table.\nPressing “View contig” on a viral fragment in the table opens the contig viewer. This loads the contig from MGnify, as well as MGnify’s annotations on the contig. These can be explored in more detail by clicking the parent contig in the table, which links to MGnify.\nIn the contig viewer, ViPhOG annotations are shown. These are unique to the data portal. The viral region is highlighted in green. The GFF containing the ViPhOG(s) can also be downloaded, by viewing a viral fragment and pressing “Download ViPhOGs GFF”."
-  },
-  {
-    "objectID": "datasets.html",
-    "href": "datasets.html",
-    "title": "Datasets",
-    "section": "",
-    "text": "All HoloFood samples are registered in BioSamples, which has its own documentation.\nMost analyses of the samples are stored in further appropriate supporting databases, with a small number hosted directly in the HoloFood data portal."
-  },
-  {
-    "objectID": "datasets.html#ena-samples-biosamples",
-    "href": "datasets.html#ena-samples-biosamples",
-    "title": "Datasets",
-    "section": "ENA Samples / BioSamples",
-    "text": "ENA Samples / BioSamples\nBioSamples are the “source of truth” for animals and derived samples created by the project. Some samples are also present in ENA (with the same primary accession / identifier), if those samples pertain to nucleotide read data.\nAn ENA Sample is part of the ENA Metadata Model.\n\nA sample contains information about the sequenced source material. Samples are associated with checklists, which define the fields used to annotate the samples.\n\nENA has extensive documentation."
-  },
-  {
-    "objectID": "datasets.html#ena-checklist-metadata",
-    "href": "datasets.html#ena-checklist-metadata",
-    "title": "Datasets",
-    "section": "ENA Checklist Metadata",
-    "text": "ENA Checklist Metadata\nAn ENA Checklist is a set of metadata (some mandatory) for a given sample type.\nThe HoloFood checklist is ERC000052."
-  },
-  {
-    "objectID": "datasets.html#biosamples-metadata",
-    "href": "datasets.html#biosamples-metadata",
-    "title": "Datasets",
-    "section": "BioSamples Metadata",
-    "text": "BioSamples Metadata\nBioSamples is an EBI service hosting annotations keyed against an existing sample hosted elsewhere (in HoloFood’s case, ENA). For HoloFood biosamples, these are registered against a specific ontology.\nThe majority of HoloFood samples’ metadata are hosted in BioSamples.\nHoloFood data for samples that don’t have a particular repository are also stored as structured data in BioSamples. For example, histology measurements, inflammatory markers, and fatty acid measurements are stored in the structured data of those samples. This contrasts to e.g. nucleotide read, metagenome sequencing, and metabolomic mass spectromoetry data which are available through specific repositories.\nThere is a BioSamples online training course to learn more."
-  },
-  {
-    "objectID": "datasets.html#mgnify-metagenomics",
-    "href": "datasets.html#mgnify-metagenomics",
-    "title": "Datasets",
-    "section": "MGnify: Metagenomics",
-    "text": "MGnify: Metagenomics\nMetagenomic-derived analyses are available for some HoloFood samples.\nThese datasets and analysis features are hosted by MGnify, which also has extensive documentation.\n\nMGnify is a freely available hub for the analysis and exploration of metagenomic, metatranscriptomic, amplicon and assembly data.\n\n\nMetagenome Assembled Genome (MAG) Catalogues\nMAG Catalogues are available for selected biomes. MAGs are draft genomes created by binning assembled metagenomic reads. These MAGs are created using the MGnify Genomes Pipeline. MAGs are annotated using various functional and taxonomic characterisation tools.\nHoloFood MAGs are those created using only reads from HoloFood samples. However, there are other non-HoloFood public data available for the same biomes sampled by this project.\nEach HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify, which is a superset of the HoloFood data and other public data.\nEach MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species. In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG points to itself on the MGnify website. In other cases, a more complete, less contaminated, or isolate genome exists representing the same species, so the HoloFood MAG points to this better representative on MGnify.\n\n\nViral (fragment) Catalogues\nViral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples. Viral sequences are detected using VIRify. Viruses are shown as fragments (regions) of the parent contigs in which they were found. The contigs are those stored in MGnify, from the HoloFood Sample sequencing. Annotations are available on the contigs from the MGnify analysis pipeline."
-  },
-  {
-    "objectID": "datasets.html#metabolights-metabolomics",
-    "href": "datasets.html#metabolights-metabolomics",
-    "title": "Datasets",
-    "section": "MetaboLights: Metabolomics",
-    "text": "MetaboLights: Metabolomics\nMetabolomics-derived analyses are available for some HoloFood samples.\nThese datasets are hosted by MetaboLights."
-  },
-  {
-    "objectID": "datasets.html#summary-analyses",
-    "href": "datasets.html#summary-analyses",
-    "title": "Datasets",
-    "section": "Summary analyses",
-    "text": "Summary analyses\nSummary analyses are higher level analyses of a Sample or collection of Samples; written documents serving as short analysis summaries.\nThese summaries are hosted directly by the HoloFood data portal.\nThe documents are written by HoloFood partners and moderated by the HoloFood consortium, but are not peer-reviewed research articles.\nEach analysis summary is linked to one or more Samples that were included in the analysis or are relevant to it."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "HoloFood Data Portal",
-    "section": "",
-    "text": "The database and website to present Holofood samples, and unify the datasets stored in supporting services."
-  },
-  {
-    "objectID": "index.html#background",
-    "href": "index.html#background",
-    "title": "HoloFood Data Portal",
-    "section": "Background",
-    "text": "Background\nHoloFood is a consortium and project focussed on understanding the biomolecular and physiological processes triggered by incorporating feed additives and novel sustainable feeds in farmed animals.\nThe data portal is a public website and API for browsing the Samples and datasets created by the project, which are stored in publicly-accessible data repositories.\n\n\n\nDiagram of HoloFood data flow"
   },
   {
     "objectID": "tutorial.html",
@@ -257,5 +138,124 @@
     "title": "Tutorial",
     "section": "",
     "text": "Coding required\n\n\n\nThis objective takes a lot longer than the others – it involves coding and the API.\n\n\n\n\n\n\n\n\nPackages required\n\n\n\npip install requests pandas matplotlib\n\n\n\nUse the API to fetch a list of HoloFood salmon samples as a Pandas dataframe (the API docs will be very helpful)\n\nOnly fetch salmon samples which were taken for Iodine measurements\nOnly fetch salmon samples from tanks SD02 and SD04, which are tanks with treatment of 0.0% and 2.0% concentration seaweed treatment\nOnly fetch samples which have a non-empty value for metadata variable Iodine (that’s the measurement of iodine in the fish feces)\n\nUse the API to fetch sample and animal metadata for each sample and add it to the Pandas dataframe\nMake a histogram of the iodine measurements, grouped by the treatment concentration\n\nHere’s a startpoint for the libraries and base API endpoint you need:\n\nsamples_endpoint_base = 'https://www.holofooddata.org/api/samples'\nanimals_endpoint_base = 'https://www.holofooddata.org/api/animals'\nimport requests\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\nA complete solution is below.\n\n\nCode\nsamples_df = None\n\n# Fetch samples\nfor tank in ['SD02', 'SD04']:\n    page = 1\n    while page:\n        print(f'Fetching {page = } of {tank = }')\n        samples_page = requests.get(\n            f'{samples_endpoint_base}?{page=}&system=salmon&sample_type=iodine&require_metadata_value=Iodine&title={tank}'\n        ).json()\n        samples_page_df = pd.json_normalize(\n            samples_page['items']\n        )\n\n        if samples_df is None:\n            samples_df = samples_page_df\n        else:\n            samples_df = pd.concat(\n                [\n                    samples_df,\n                    samples_page_df\n                ]\n            )\n\n        page += 1\n        if len(samples_df) &gt;= samples_page['count']:\n            page = False\n\ndef get_iodine_and_sample_time(sample):\n    \"\"\"Fetch metadata for the sample and its host animal.\"\"\"\n    sample_detail = requests.get(\n        f'{samples_endpoint_base}/{sample.accession}'\n    ).json()\n    metadata = sample_detail['structured_metadata']\n    iodine = next(\n        metadatum \n        for metadatum in metadata \n        if metadatum['marker']['name'] == 'Iodine'\n    )\n\n    animal_detail = requests.get(\n        f'{animals_endpoint_base}/{sample.animal}'\n    ).json()\n    metadata = animal_detail['structured_metadata']\n    timepoint = next(\n        metadatum\n        for metadatum in metadata\n        if metadatum['marker']['name'] == 'Sampling time'\n    )\n    treatment_concentration = next(\n        metadatum\n        for metadatum in metadata\n        if metadatum['marker']['name'] == 'Treatment concentration'\n    )\n    \n    iodine_measurement = iodine['measurement']\n    iodine_clean = iodine_measurement.replace(',', '.')\n    try:\n        iodine_float = float(iodine_clean)\n    except ValueError:\n        iodine_float = pd.NA\n    \n    return iodine_float, timepoint['measurement'], treatment_concentration['measurement']\n\n# Consolidate the metadata with the samples\nmetadata = samples_df.apply(\n    get_iodine_and_sample_time, \n    axis='columns', \n    result_type='expand'\n).rename(\n    columns={\n        0: 'iodine_mg_kg_ww', \n        1: 'sampling_timepoint',\n        2: 'treatment_concentration'\n    }\n)\ntrial_samples = pd.concat(\n    [\n        samples_df,\n        metadata\n    ],\n    axis=1\n)\n\n# Drop the Day 0 samples\nnot_pretrial_control = trial_samples[trial_samples.sampling_timepoint != 'Day 0']\n\n# Plot iodine measurements\nnot_pretrial_control.groupby('treatment_concentration').iodine_mg_kg_ww.hist(legend=True, bins=5, alpha=0.5)\nplt.xlabel('Iodine mg/kg ww');\n\n\nFetching page = 1 of tank = 'SD02'\nFetching page = 1 of tank = 'SD04'"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "HoloFood Data Portal",
+    "section": "",
+    "text": "The database and website to present Holofood samples, and unify the datasets stored in supporting services."
+  },
+  {
+    "objectID": "index.html#background",
+    "href": "index.html#background",
+    "title": "HoloFood Data Portal",
+    "section": "Background",
+    "text": "Background\nHoloFood is a consortium and project focussed on understanding the biomolecular and physiological processes triggered by incorporating feed additives and novel sustainable feeds in farmed animals.\nThe data portal is a public website and API for browsing the Samples and datasets created by the project, which are stored in publicly-accessible data repositories.\n\n\n\nDiagram of HoloFood data flow"
+  },
+  {
+    "objectID": "datasets.html",
+    "href": "datasets.html",
+    "title": "Datasets",
+    "section": "",
+    "text": "All HoloFood samples are registered in BioSamples, which has its own documentation.\nMost analyses of the samples are stored in further appropriate supporting databases, with a small number hosted directly in the HoloFood data portal."
+  },
+  {
+    "objectID": "datasets.html#ena-samples-biosamples",
+    "href": "datasets.html#ena-samples-biosamples",
+    "title": "Datasets",
+    "section": "ENA Samples / BioSamples",
+    "text": "ENA Samples / BioSamples\nBioSamples are the “source of truth” for animals and derived samples created by the project. Some samples are also present in ENA (with the same primary accession / identifier), if those samples pertain to nucleotide read data.\nAn ENA Sample is part of the ENA Metadata Model.\n\nA sample contains information about the sequenced source material. Samples are associated with checklists, which define the fields used to annotate the samples.\n\nENA has extensive documentation."
+  },
+  {
+    "objectID": "datasets.html#ena-checklist-metadata",
+    "href": "datasets.html#ena-checklist-metadata",
+    "title": "Datasets",
+    "section": "ENA Checklist Metadata",
+    "text": "ENA Checklist Metadata\nAn ENA Checklist is a set of metadata (some mandatory) for a given sample type.\nThe HoloFood checklist is ERC000052."
+  },
+  {
+    "objectID": "datasets.html#biosamples-metadata",
+    "href": "datasets.html#biosamples-metadata",
+    "title": "Datasets",
+    "section": "BioSamples Metadata",
+    "text": "BioSamples Metadata\nBioSamples is an EBI service hosting annotations keyed against an existing sample hosted elsewhere (in HoloFood’s case, ENA). For HoloFood biosamples, these are registered against a specific ontology.\nThe majority of HoloFood samples’ metadata are hosted in BioSamples.\nHoloFood data for samples that don’t have a particular repository are also stored as structured data in BioSamples. For example, histology measurements, inflammatory markers, and fatty acid measurements are stored in the structured data of those samples. This contrasts to e.g. nucleotide read, metagenome sequencing, and metabolomic mass spectromoetry data which are available through specific repositories.\nThere is a BioSamples online training course to learn more."
+  },
+  {
+    "objectID": "datasets.html#mgnify-metagenomics",
+    "href": "datasets.html#mgnify-metagenomics",
+    "title": "Datasets",
+    "section": "MGnify: Metagenomics",
+    "text": "MGnify: Metagenomics\nMetagenomic-derived analyses are available for some HoloFood samples.\nThese datasets and analysis features are hosted by MGnify, which also has extensive documentation.\n\nMGnify is a freely available hub for the analysis and exploration of metagenomic, metatranscriptomic, amplicon and assembly data.\n\n\nMetagenome Assembled Genome (MAG) Catalogues\nMAG Catalogues are available for selected biomes. MAGs are draft genomes created by binning assembled metagenomic reads. These MAGs are created using the MGnify Genomes Pipeline. MAGs are annotated using various functional and taxonomic characterisation tools.\nHoloFood MAGs are those created using only reads from HoloFood samples. However, there are other non-HoloFood public data available for the same biomes sampled by this project.\nEach HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify, which is a superset of the HoloFood data and other public data.\nEach MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species. In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG points to itself on the MGnify website. In other cases, a more complete, less contaminated, or isolate genome exists representing the same species, so the HoloFood MAG points to this better representative on MGnify.\n\n\nViral (fragment) Catalogues\nViral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples. Viral sequences are detected using VIRify. Viruses are shown as fragments (regions) of the parent contigs in which they were found. The contigs are those stored in MGnify, from the HoloFood Sample sequencing. Annotations are available on the contigs from the MGnify analysis pipeline."
+  },
+  {
+    "objectID": "datasets.html#metabolights-metabolomics",
+    "href": "datasets.html#metabolights-metabolomics",
+    "title": "Datasets",
+    "section": "MetaboLights: Metabolomics",
+    "text": "MetaboLights: Metabolomics\nMetabolomics-derived analyses are available for some HoloFood samples.\nThese datasets are hosted by MetaboLights."
+  },
+  {
+    "objectID": "datasets.html#summary-analyses",
+    "href": "datasets.html#summary-analyses",
+    "title": "Datasets",
+    "section": "Summary analyses",
+    "text": "Summary analyses\nSummary analyses are higher level analyses of a Sample or collection of Samples; written documents serving as short analysis summaries.\nThese summaries are hosted directly by the HoloFood data portal.\nThe documents are written by HoloFood partners and moderated by the HoloFood consortium, but are not peer-reviewed research articles.\nEach analysis summary is linked to one or more Samples that were included in the analysis or are relevant to it."
+  },
+  {
+    "objectID": "website.html",
+    "href": "website.html",
+    "title": "Browsing the website",
+    "section": "",
+    "text": "Screenshot of the global search box\n\n\nThere is a a site-wide (“global”) search box at the top of the data portal landing page and most other pages. This searches over host and derived samples accessions, titles, systems, and types; genome and viral catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.\nIf you search for valid sample, animal, or MAG accessions, the search will take you straight to an appropriate view in the portal. Otherwise, you’ll see a normal list of search results."
+  },
+  {
+    "objectID": "website.html#global-search",
+    "href": "website.html#global-search",
+    "title": "Browsing the website",
+    "section": "",
+    "text": "Screenshot of the global search box\n\n\nThere is a a site-wide (“global”) search box at the top of the data portal landing page and most other pages. This searches over host and derived samples accessions, titles, systems, and types; genome and viral catalogue ids, titles, biomes, and related data; MAG accessions and taxonomies; viral fragment ids and contig ids; and this documentation.\nIf you search for valid sample, animal, or MAG accessions, the search will take you straight to an appropriate view in the portal. Otherwise, you’ll see a normal list of search results."
+  },
+  {
+    "objectID": "website.html#finding-samples",
+    "href": "website.html#finding-samples",
+    "title": "Browsing the website",
+    "section": "Finding Samples",
+    "text": "Finding Samples\n\n\n\nScreenshot of sample listing webpage\n\n\nSamples can be found from the “Chicken samples” and “Salmon samples” navigation items. On the samples listing pages, there are various filters available to limit which samples are shown in the table. For example, you can find all samples from a particular animal, or all metabolomics type samples (each sample has a particular type).\nSamples may be linked to metadata (almost always), metagenomic, metabolomic, or host-genomic datasets. Other sample types have their results data in the sample metadata.\n\nTreatment search\nSamples may also be search for by the host-animal’s treatment condition. The “Treatment search” filter is a case-insensitive text search over the samples’ animal treatment metadata. Specifically, it filters to samples whose host animal has all of the query strings in the animal’s BioSamples metadata fields: “Sampling time”, “Treatment name”, “Treatment description”, “Treatment code”, “Treatment concentration”.\nThis means you can search for e.g. ferm algae 2.0% \"day 60\" to find samples from animals treated with Fermented Algae at a 2.0% concentration and collected on trial Day 60.\nNote the use of lexical grouping around the “day 60” – this is useful when searching for, e.g. day 0 which would otherwise partially match day 60.\n\n\nSample detail\nTo view detail about a particular sample, click “View” on its row of the table.\nThe sample detail page contains information help about the sample in the various supporting databases. Metadata (from BioSamples) is shown in full, in a table. Metagenomic and metabolomic data are shown in summary form, with links to the respective public websites where those analyses are held.\nThe API section shows the API endpoint for this particular sample. You can copy this into a script, for example, to programmatically pull the data."
+  },
+  {
+    "objectID": "website.html#downloading-sample-lists-and-metadata",
+    "href": "website.html#downloading-sample-lists-and-metadata",
+    "title": "Browsing the website",
+    "section": "Downloading sample lists and metadata",
+    "text": "Downloading sample lists and metadata\nThe complete sample list can be exported to TSV using the “Download all as TSV” button.\n\n\n\n\n\n\nNote\n\n\n\nThe “Download all as TSV” button does reflect any filters on the website table – it contains the complete list.\n\n\n\n\n\nScreenshot of a sample detail page with TSV export option\n\n\nThe complete metadata for a sample can be downloaded using the “Download all as TSV” button within the “Sample metadata” section of a sample detail page. For sample types where the metadata also includes results data (like histology measurements), the section is instead called “Sample data”."
+  },
+  {
+    "objectID": "website.html#finding-sample-data-in-other-public-repositories",
+    "href": "website.html#finding-sample-data-in-other-public-repositories",
+    "title": "Browsing the website",
+    "section": "Finding sample data in other public repositories",
+    "text": "Finding sample data in other public repositories\n\nMetagenomics\nSome samples have metagenomics data, in MGnify. These can be found from the samples listing page by setting the Sample type filter to metagenomic_assembly or metagenomic_amplicon.\nMGnify analyses of a sample (identified with MGYA accessions) are listed and linked to from the sample detail page.\n\n\n\nScreenshot of a metagenomic sample detail page\n\n\n\n\nMetabolomics\nSome other samples have metabolomics data, in MetaboLights. These can be found form the samples listing page by setting the Sample type filter to metabolomic.\nMetaboLights data are identified at a Project level, with MTBLS accessions. MetaboLights does not store samples as independent objects, instead it stores lists of samples and files (and more) for the project. So, the HoloFood data portal sample detail page shows a filtered table of the MetaboLights project’s files, that relate to this sample. Following these file links will download the file.\nMetaboLights follows the ISA framework, so the table shown is a collection of files from the one or more assay sheets relevant to this sample. Raw and derived files are available.\n\n\n\nScreenshot of a metabolomic sample detail page"
+  },
+  {
+    "objectID": "website.html#finding-samples-related-to-the-same-host-animal",
+    "href": "website.html#finding-samples-related-to-the-same-host-animal",
+    "title": "Browsing the website",
+    "section": "Finding samples related to the same host animal",
+    "text": "Finding samples related to the same host animal\nEach host animal (an individual chicken or salmon) is itself a BioSample. Host-level measurements of the animal and its tank/pen are available as metadata on the animal. The animal listing pages (accessed from links on the sample lists) and the animal detail pages each include information about the derived sample types available for a given animal.\n\n\n\nScreenshot of an animal detail page"
+  },
+  {
+    "objectID": "website.html#finding-analysis-summaries",
+    "href": "website.html#finding-analysis-summaries",
+    "title": "Browsing the website",
+    "section": "Finding analysis summaries",
+    "text": "Finding analysis summaries\n\n\n\nScreenshot of a sample detail page with analysis documents links\n\n\nAnalysis summaries are linked to samples or catalogues. Any analysis summaries that mention a sample are shown at the bottom of the sample’s detail page.\n\n\n\nScreenshot of an analysis document\n\n\nAnalysis summaries also link back to the samples and/or catalogues they refer to. A complete list of analysis summaries can also be found from the navigation bar."
+  },
+  {
+    "objectID": "website.html#using-the-catalogues",
+    "href": "website.html#using-the-catalogues",
+    "title": "Browsing the website",
+    "section": "Using the catalogues",
+    "text": "Using the catalogues\n\nMAG Catalogues\nMetagenome Assembled Genome (MAG) Catalogues are available for selected biomes. HoloFood MAGs are those created using only reads from HoloFood samples. However, there are other non-HoloFood public data available for the same biomes sampled by this project.\nEach HoloFood MAG Catalogue therefore referenced a public MAG Catalogue in MGnify, which is a superset of the HoloFood data and other public data. This is linked from each catalogue page on the HoloFood Data Portal site.\nEach MAG in the HoloFood catalogue references a MAG in the MGnify catalogue which represents the same species. In some cases, the HoloFood MAG is the best available sequence for that species level cluster, so the HoloFood MAG points to itself on the MGnify website. In other cases, a more complete, less contaminated, or isolate genome exists representing the same species, so the HoloFood MAG points to this better representative on MGnify.\n\n\n\nScreenshot of a MAG catalogue\n\n\nMAG Catalogues can be found from the “Genomes” navigation item, and then selecting a catalogue in the “Catalogues” sub-navigation. MAGs can be found by searching on accession or taxonomy, or for the accession of the cluster representative.\nThe MAGs in a catalogue can be downloaded as a TSV file, using the “Download all as TSV” button.\n\n\nViral Catalogues\n Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples. Viral catalogues can be found from the “Viruses” navigation item, and then selecting a catalogue in the “Catalogues” sub-navigation.\nViral fragment can be searched in various ways, like the parent contig ID, or the taxonomy of the host MAG. Host MAGs are only assigned where there is an exact match between the viral sequence and a host MAG.\nBy default, only species-level clusters are shown (a representative viral fragment is shown).\nThis can be changed either by clicking the “View cluster” link within the table, to see the remainder of that specific cluster, or by changing the “Cluster visibility” dropdown in the filters to the left of the table.\nPressing “View contig” on a viral fragment in the table opens the contig viewer. This loads the contig from MGnify, as well as MGnify’s annotations on the contig. These can be explored in more detail by clicking the parent contig in the table, which links to MGnify.\nIn the contig viewer, ViPhOG annotations are shown. These are unique to the data portal. The viral region is highlighted in green. The GFF containing the ViPhOG(s) can also be downloaded, by viewing a viral fragment and pressing “Download ViPhOGs GFF”."
   }
 ]

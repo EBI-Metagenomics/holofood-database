@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.3.361">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -92,7 +92,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
@@ -137,7 +138,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./api.html">API for Programmatic Access</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -979,7 +980,7 @@ Fetching page=14</code></pre>
 </div>
 </div>
 <p>This URL is for the entire study on MetaboLights, rather than a specific sample. The data portal <strong>website</strong> (but not the API, for performance reasons) navigate the MetaboLights API in order to find the files relevant to a particular sample.</p>
-<p>The <a href="https://github.com/EBI-Metagenomics/holofood-database/blob/main/holofood/external_apis/metabolights/api.py">code that does this in the data portal</a> shows how this can be achieved. In short: fetch the files list from the MetaboLights API, and find the <code>metadata_sample</code> file (it is an ISA-TAB file). Look through that file for the the row where <code>Characteristics[BioSamples accession]</code> is your sample(s) of interest. This field may have slightly different names in different studies. This lets you find the <code>Sample Name</code> corresponding to the BioSample accession.</p>
+<p>The <a href="https://github.com/EBI-Metagenomics/holofood-database/blob/main/holofood/external_apis/metabolights/api.py">code that does this in the data portal</a> shows how this can be achieved. In short: fetch the files list from the MetaboLights API, and find the <code>metadata_sample</code> file (it is an ISA-TAB file). Look through that file for the the row where <code>Comment[BioSamples accession]</code> is your sample(s) of interest. This field may have slightly different names in different studies. This lets you find the <code>Sample Name</code> corresponding to the BioSample accession.</p>
 <p>Then, find the <code>metadata_assay</code> file(s) from the file list. Concatenate all of these <code>metadata_assay</code> tab files, and find all the rows from all of the <code>metadata_assay</code> sheets where the <code>Sample Name</code> matches.</p>
 <p>These assay sheets will have columns of interest about the assays used, the raw and derived files, and the metabolites association files. These are filenames which you can then download.</p>
 
