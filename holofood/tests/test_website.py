@@ -211,7 +211,7 @@ class WebsiteTests(StaticLiveServerTestCase):
         metagenomics_expander_link.click()
 
         mgnify_link = self.selenium.find_element(
-            by=By.LINK_TEXT, value="View sample on MGnify"
+            by=By.LINK_TEXT, value="Lookup sample on MGnify"
         )
         self.assertEqual(
             mgnify_link.get_attribute("href"),
