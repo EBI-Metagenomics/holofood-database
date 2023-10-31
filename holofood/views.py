@@ -35,7 +35,7 @@ from holofood.models import (
     Genome,
     Animal,
 )
-from holofood.utils import holofood_config
+from holofood.utils import holofood_config, find_by_path, write_signpost
 
 
 class ListFilterView(ListView):
@@ -50,6 +50,54 @@ class ListFilterView(ListView):
         context = super().get_context_data(**kwargs)
         context["filterset"] = self.filterset
         return context
+
+
+class SignpostedDetailView(DetailView):
+    """
+    Adds signposting.org headers to a detail view request.
+    These direct robots to the related resources of a landing page
+    (in the case of HFDP, that means the API endpoint and spec).
+    The collection an item is obtained from is also linked to,
+    i.e. the relevant list view of the API.
+    """
+
+    api_url_name: str
+    api_url_args_from_context_path = {"accession": "object.pk"}
+    api_list_url_name: str
+
+    DESCRIBED_BY = "describedBy"
+    COLLECTION = "collection"
+    JSON = "application/json"
+
+    def render_to_response(self, context, **response_kwargs):
+        described_by_signpost = reverse(
+            self.api_url_name,
+            kwargs={
+                url_param: find_by_path(context, path)
+                for url_param, path in self.api_url_args_from_context_path.items()
+            },
+        )
+
+        headers = response_kwargs.setdefault("headers", {})
+        links = headers.get("Link", "")
+
+        if links and not links.endswith(","):
+            links += ", "
+        links += write_signpost(
+            described_by_signpost,
+            self.JSON,
+            self.DESCRIBED_BY,
+            reverse("api:openapi-json"),
+        )
+
+        collection_signpost = reverse(self.api_list_url_name)
+        links += ", " + write_signpost(
+            collection_signpost, self.JSON, self.COLLECTION, reverse("api:openapi-json")
+        )
+
+        headers["Link"] = links
+        response_kwargs["headers"] = headers
+        return super().render_to_response(context, **response_kwargs)
 
 
 class SampleListView(ListFilterView):
@@ -76,10 +124,14 @@ class SampleListView(ListFilterView):
         return context
 
 
-class SampleDetailView(DetailView):
+class SampleDetailView(SignpostedDetailView):
     model = Sample
     context_object_name = "sample"
     template_name = "holofood/pages/sample_detail.html"
+
+    api_url_name = "api:sample_detail"
+    api_url_args_from_context_path = {"sample_accession": "sample.pk"}
+    api_list_url_name = "api:list_samples"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -120,10 +172,14 @@ class AnimalListView(ListFilterView):
     ordering = "accession"
 
 
-class AnimalDetailView(DetailView):
+class AnimalDetailView(SignpostedDetailView):
     model = Animal
     context_object_name = "animal"
     template_name = "holofood/pages/animal_detail.html"
+
+    api_url_name = "api:animal_detail"
+    api_url_args_from_context_path = {"animal_accession": "object.pk"}
+    api_list_url_name = "api:list_animals"
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related("structured_metadata")
@@ -220,7 +276,7 @@ class DetailViewWithPaginatedRelatedList(DetailView, MultipleObjectMixin):
         return context
 
 
-class GenomeCatalogueView(DetailViewWithPaginatedRelatedList):
+class GenomeCatalogueView(SignpostedDetailView, DetailViewWithPaginatedRelatedList):
     model = GenomeCatalogue
     context_object_name = "catalogue"
     paginate_by = 10
@@ -229,6 +285,10 @@ class GenomeCatalogueView(DetailViewWithPaginatedRelatedList):
 
     related_name = "genomes"
     related_ordering = "accession"
+
+    api_url_name = "api:get_genome_catalogue"
+    api_url_args_from_context_path = {"catalogue_id": "object.pk"}
+    api_list_url_name = "api:list_genome_catalogues"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

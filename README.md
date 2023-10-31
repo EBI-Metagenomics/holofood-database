@@ -182,7 +182,7 @@ Occasionally you’ll need `aws sso login --profile eb-cli` to get a new token.
 
 ### Kubernetes
 #### Local
-- Use [`minikube`](https://minikube.sigs.k8s.io/docs/start/).
+- Use [`minikube`](https://minikube.sigs.k8s.io/docs/start/) or [`kind`](https://kind.sigs.k8s.io).
 - Make a secrets .env file at `k8s/secrets-k8s.env` with e.g. `DJANGO_SECRET_KEY`.
 - `kubectl create secret generic holofood-secret --from-env-file=k8s/secrets-k8s.env`
 - `minikube image build -t holofood -f k8s/Dockerfile .`

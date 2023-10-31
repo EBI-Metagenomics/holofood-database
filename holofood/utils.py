@@ -1,6 +1,7 @@
 import logging
 import time
 from datetime import timedelta
+from functools import reduce
 from typing import Any
 
 from django.conf import settings
@@ -61,3 +62,27 @@ class StringAgg(Aggregate):
 
 class DistinctFunc(Func):
     template = "%(function)s(DISTINCT %(expressions)s)"
+
+
+def find_by_path(object, attr_path: str):
+    def getter(item, attr_or_key):
+        if hasattr(item, attr_or_key):
+            return getattr(item, attr_or_key)
+        if type(item) is dict:
+            return item.get(attr_or_key)
+
+    return reduce(getter, attr_path.split("."), object)
+
+
+def write_signpost(url: str, mimetype: str, signpost_type: str, profile: str) -> str:
+    def resolve(_url):
+        if _url.startswith("/"):
+            return f"{holofood_config.portal.url_root}{_url}"
+        else:
+            return _url
+
+    header_value = f"<{resolve(url)}>"
+    header_value += f" ; rel={signpost_type} ; type={mimetype}"
+    if profile:
+        header_value += f" ; profile={resolve(profile)}"
+    return header_value

@@ -79,6 +79,10 @@ class DocsConfig(BaseModel):
     portal_doi: str = "10.5281/zenodo.7684072"
 
 
+class PortalConfig(BaseModel):
+    url_root: AnyHttpUrl = "https://www.holofooddata.org"
+
+
 class HolofoodConfig(BaseSettings):
     mock_apis: bool = False
 
@@ -88,6 +92,7 @@ class HolofoodConfig(BaseSettings):
     docs: DocsConfig = DocsConfig()
     metabolights: MetabolightsConfig = MetabolightsConfig()
     tables: TablesConfig = TablesConfig()
+    portal: PortalConfig = PortalConfig()
 
     class Config:
         env_prefix = "holofood_"
