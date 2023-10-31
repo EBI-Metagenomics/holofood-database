@@ -82,7 +82,7 @@ def write_signpost(url: str, mimetype: str, signpost_type: str, profile: str) ->
             return _url
 
     header_value = f"<{resolve(url)}>"
-    header_value += f" ; rel={signpost_type} ; type={mimetype}"
+    header_value += f' ; rel="{signpost_type}" ; type="{mimetype}"'
     if profile:
-        header_value += f" ; profile={resolve(profile)}"
+        header_value += f' ; profile="{resolve(profile)}"'
     return header_value
