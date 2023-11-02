@@ -3,7 +3,6 @@ from enum import Enum
 from functools import reduce
 from typing import Optional, List
 
-from django.db import models
 from django.db.models import Q
 from django.db.models.functions import Lower
 from django.shortcuts import get_object_or_404
@@ -73,10 +72,6 @@ class SampleMetadataMarkerSchema(ModelSchema):
     class Config:
         model = SampleMetadataMarker
         model_fields = ["name", "type"]
-
-
-class SampleCountedMetadataMarkerSchema(SampleMetadataMarkerSchema):
-    samples_count: int
 
 
 class SampleStructuredDatumSchema(ModelSchema):
@@ -378,37 +373,21 @@ def list_animals(
 
 @api.get(
     "/sample_metadata_markers",
-    response=List[SampleCountedMetadataMarkerSchema],
+    response=List[SampleMetadataMarkerSchema],
     summary="Fetch a list of structured metadata markers (i.e. keys).",
     description="Each marker is present in the metadata of at least one sample. "
     "Not every sample will have every metadata marker. "
     "Long lists will be paginated, so use the `page=` query parameter to get more pages. "
-    "Use `name=` to search for a marker by name (case insensitive partial matches). "
-    "Use `min_samples=` to search for markers present on at least that many samples."
-    "Use `min_animals=` to search for marker present on at least that many animals (i.e. host samples).",
+    "Use `name=` to search for a marker by name (case insensitive partial matches). ",
     tags=[SAMPLES],
 )
 def list_sample_metadata_markers(
     request,
     name: str = None,
-    min_samples: int = None,
-    min_animals: int = None,
 ):
-    q_objects = []
     if name:
-        q_objects.append(Q(name__icontains=name))
-    if min_samples:
-        q_objects.append(Q(samples_count__gte=min_samples))
-    if min_animals:
-        q_objects.append(Q(animals_count__gte=min_animals))
-
-    annotated_markers = SampleMetadataMarker.objects.annotate(
-        samples_count=models.Count("samplestructureddatum"),
-        animals_count=models.Count("animalstructureddatum"),
-    )
-    if not q_objects:
-        return annotated_markers.all()
-    return annotated_markers.filter(reduce(operator.and_, q_objects))
+        return SampleMetadataMarker.objects.filter(name__icontains=name)
+    return SampleMetadataMarker.objects.all()
 
 
 @api.get(

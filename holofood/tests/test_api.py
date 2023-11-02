@@ -249,28 +249,8 @@ def test_sample_metadata_markers_api_list_filters(
     response = client.get("/api/sample_metadata_markers?name=donut")
     assert_response_has_n_items(response, 1)
 
-    response = client.get("/api/sample_metadata_markers?name=donut&min_samples=2")
-    assert_response_has_n_items(response, 0)
-
     response = client.get("/api/sample_metadata_markers?name=cronut")
     assert_response_has_n_items(response, 0)
-
-    AnimalStructuredDatum.objects.create(
-        animal=salmon_animal, marker=structured_metadata_marker, measurement="2"
-    )
-    SampleStructuredDatum.objects.create(
-        sample=salmon_metabolomic_sample,
-        marker=structured_metadata_marker,
-        measurement="3",
-    )
-    response = client.get("/api/sample_metadata_markers?min_samples=2")
-    assert_response_has_n_items(response, 0)
-    response = client.get("/api/sample_metadata_markers?min_animals=2")
-    assert_response_has_n_items(response, 0)
-    response = client.get("/api/sample_metadata_markers?min_samples=1")
-    assert_response_has_n_items(response, 1)
-    response = client.get("/api/sample_metadata_markers?min_animals=1")
-    assert_response_has_n_items(response, 1)
 
 
 @pytest.mark.django_db
