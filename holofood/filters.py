@@ -145,8 +145,7 @@ class ViralFragmentFilter(django_filters.FilterSet):
             "id": ["icontains"],
             "contig_id": ["icontains"],
             "viral_type": ["exact"],
-            "host_mag__taxonomy": ["icontains"],
-            "host_mag__accession": ["icontains"],
+            "taxonomy": ["icontains"],
         }
 
     def cluster_representative_status(self, queryset, name, value):

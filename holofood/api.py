@@ -209,7 +209,6 @@ class ViralCatalogueSchema(ModelSchema):
 
 class ViralFragmentSchema(ModelSchema):
     cluster_representative: Optional["ViralFragmentSchema"]
-    host_mag: Optional[GenomeSchema]
 
     @staticmethod
     def resolve_contig_url(obj: ViralFragment):
@@ -238,8 +237,8 @@ class ViralFragmentSchema(ModelSchema):
             "start_within_contig",
             "end_within_contig",
             "metadata",
-            "host_mag",
             "viral_type",
+            "taxonomy",
         ]
 
 
@@ -483,9 +482,7 @@ def get_viral_catalogue(request, catalogue_id: str):
     "found in the assembly contigs of HoloFood samples."
     "The Catalogue’s viral fragments are all from the same biome."
     "Viral sequences are clustered by sequence identity, at a species-level."
-    "Both cluster representatives and cluster members are included."
-    "Where a viral sequence is found in a related MAG (metagenome assembly genome,"
-    " e.g. a bacterial species), this MAG is considered a “host MAG”.",
+    "Both cluster representatives and cluster members are included.",
     tags=[VIRUSES],
 )
 def list_viral_catalogue_fragments(request, catalogue_id: str):

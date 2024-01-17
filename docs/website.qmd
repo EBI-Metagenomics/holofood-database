@@ -130,8 +130,7 @@ The MAGs in a catalogue can be downloaded as a TSV file, using the "Download all
 Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples.
 Viral catalogues can be found from the "Viruses" navigation item, and then selecting a catalogue in the "Catalogues" sub-navigation.
 
-Viral fragment can be searched in various ways, like the parent contig ID, or the taxonomy of the host MAG.
-Host MAGs are only assigned where there is an exact match between the viral sequence and a host MAG.
+Viral fragment can be searched in various ways, like the parent contig ID, or the taxonomy of the viral prediction.
 
 By default, only species-level clusters are shown (a representative viral fragment is shown).
 
