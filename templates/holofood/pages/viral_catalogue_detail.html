@@ -124,8 +124,6 @@
                             <th class="vf-table__heading" scope="col">Parent contig</th>
                             <th class="vf-table__heading" scope="col">Type</th>
                             <th class="vf-table__heading" scope="col">Taxonomy</th>
-                            <th class="vf-table__heading" scope="col">Host MAG</th>
-                            <th class="vf-table__heading" scope="col">Host taxonomy</th>
                             <th class="vf-table__heading" scope="col">View</th>
                         </tr>
                     </thead>
@@ -141,23 +139,6 @@
                                     {{ viral_fragment.viral_type }}
                                 </td>
                                 <td class="vf-table__cell">{% taxonomy_tooltip taxonomy=viral_fragment.taxonomy %}</td>
-                                <td class="vf-table__cell">
-                                    {% if viral_fragment.host_mag %}
-                                        <a class="vf-button vf-button--link vf-button--sm inline"
-                                           href="{% url 'genome_catalogue' pk=catalogue.related_genome_catalogue.id %}?accession__icontains={{ viral_fragment.host_mag.accession }}">
-                                            {{ viral_fragment.host_mag.accession }}
-                                        </a>
-                                    {% else %}
-                                        —
-                                    {% endif %}
-                                </td>
-                                <td class="vf-table__cell">
-                                    {% if viral_fragment.host_mag %}
-                                        {% taxonomy_tooltip taxonomy=viral_fragment.host_mag.taxonomy %}
-                                    {% else %}
-                                        —
-                                    {% endif %}
-                                </td>
                                 <td class="vf-table__cell">
                                     {% if viral_fragment.id == selected_viral_fragment.id %}
                                         <b>Viewing</b>

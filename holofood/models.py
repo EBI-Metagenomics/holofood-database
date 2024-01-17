@@ -491,8 +491,8 @@ class ViralFragment(models.Model):
     objects = ViralFragmentClusterManager()
 
     PROPHAGE = "prophage"
-    PHAGE = "phage"
-    VIRAL_TYPE_CHOICES = [(PHAGE, PHAGE), (PROPHAGE, PROPHAGE)]
+    VIRAL_SEQUENCE = "viral_sequence"
+    VIRAL_TYPE_CHOICES = [(VIRAL_SEQUENCE, VIRAL_SEQUENCE), (PROPHAGE, PROPHAGE)]
 
     id = models.CharField(primary_key=True, max_length=100, verbose_name="ID")
     catalogue = models.ForeignKey(
@@ -510,15 +510,7 @@ class ViralFragment(models.Model):
     start_within_contig = models.IntegerField()
     end_within_contig = models.IntegerField()
     metadata = models.JSONField(default=dict, blank=True)
-    host_mag = models.ForeignKey(
-        Genome,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="viral_fragments",
-        verbose_name="Host MAG",
-    )
-    viral_type = models.CharField(choices=VIRAL_TYPE_CHOICES, max_length=10)
+    viral_type = models.CharField(choices=VIRAL_TYPE_CHOICES, max_length=15)
     taxonomy = models.CharField(null=True, blank=True, max_length=100)
 
     gff = models.TextField(blank=True, default="")

@@ -94,7 +94,6 @@ class Command(BaseCommand):
             "sequence_end": "end_within_contig",
             "cluster_representative": "cluster_representative_id",
             "mgya": "mgnify_analysis_accession",
-            "host_mgyg": "host_mag_id",
             "viral_type": "viral_type",
             "contig": "contig_id",
             "viral_taxonomy": "taxonomy",
@@ -130,14 +129,14 @@ class Command(BaseCommand):
                 for col_name, field_name in column_mapping.items()
                 if sequence[col_name] != ""
             }
-
-            vir_data["taxonomy"] = (
-                vir_data["taxonomy"]
-                .replace(";", " > ")
-                .strip()
-                .lstrip(" >")
-                .rstrip(" >")
-            )
+            if "taxonomy" in vir_data:
+                vir_data["taxonomy"] = (
+                    vir_data["taxonomy"]
+                    .replace(";", " > ")
+                    .strip()
+                    .lstrip(" >")
+                    .rstrip(" >")
+                )
 
             contig_id = sequence["contig"]
 
