@@ -28,3 +28,6 @@ Marcos, S., Parejo, M., Estonba, A., & Alberdi, A. (2022).
 Brealey, J. C., Lecaudey, L. A., Kodama, M., Rasmussen, J. A., Sveier, H., Dheilly, N. M., Martin, M. D., & Limborg, M. T. (2022). 
 [Microbiome “Inception”: an Intestinal Cestode Shapes a Hierarchy of Microbial Communities Nested within the Host.](https://doi.org/10.1128/mbio.00679-22) In A. August (Ed.), mBio (Vol. 13, Issue 3). American Society for Microbiology. 10.1128/mbio.00679-22
 
+Brealey, J. C., Kodama. M., Rasmussen. J. A., et al (2024).
+[Host-gut microbiota interactions shape parasite infections in farmed Atlantic salmon.](https://doi.org/10.1128/msystems.01043-23) In Msystem (s. 2024). American Society for Microbiology. 10.1128/msystems.01043-23
+
