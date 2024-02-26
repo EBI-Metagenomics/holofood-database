@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/EBI-Metagenomics/holofood-database/api.html</loc>
-    <lastmod>2024-01-17T15:28:53.783Z</lastmod>
+    <loc>https://EBI-Metagenomics.github.io/holofood-database/publications.html</loc>
+    <lastmod>2024-02-26T11:16:44.632Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/EBI-Metagenomics/holofood-database/tutorial.html</loc>
-    <lastmod>2024-01-17T15:28:52.575Z</lastmod>
+    <loc>https://EBI-Metagenomics.github.io/holofood-database/partners.html</loc>
+    <lastmod>2024-02-26T11:16:44.632Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/EBI-Metagenomics/holofood-database/database.html</loc>
-    <lastmod>2024-01-17T15:28:51.775Z</lastmod>
+    <loc>https://EBI-Metagenomics.github.io/holofood-database/tutorial.html</loc>
+    <lastmod>2024-02-26T11:16:44.632Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/EBI-Metagenomics/holofood-database/publications.html</loc>
-    <lastmod>2024-01-17T15:28:51.127Z</lastmod>
+    <loc>https://EBI-Metagenomics.github.io/holofood-database/index.html</loc>
+    <lastmod>2024-02-26T11:16:44.632Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/EBI-Metagenomics/holofood-database/partners.html</loc>
-    <lastmod>2024-01-17T15:28:50.543Z</lastmod>
+    <loc>https://EBI-Metagenomics.github.io/holofood-database/api.html</loc>
+    <lastmod>2024-02-26T11:16:44.596Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/EBI-Metagenomics/holofood-database/datasets.html</loc>
-    <lastmod>2024-01-17T15:28:51.471Z</lastmod>
+    <loc>https://EBI-Metagenomics.github.io/holofood-database/datasets.html</loc>
+    <lastmod>2024-02-26T11:16:44.596Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/EBI-Metagenomics/holofood-database/index.html</loc>
-    <lastmod>2024-01-17T15:28:52.035Z</lastmod>
+    <loc>https://EBI-Metagenomics.github.io/holofood-database/database.html</loc>
+    <lastmod>2024-02-26T11:16:44.596Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/EBI-Metagenomics/holofood-database/website.html</loc>
-    <lastmod>2024-01-17T15:28:53.011Z</lastmod>
+    <loc>https://EBI-Metagenomics.github.io/holofood-database/website.html</loc>
+    <lastmod>2024-02-26T11:16:44.632Z</lastmod>
   </url>
 </urlset>
