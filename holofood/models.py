@@ -325,7 +325,7 @@ class AbstractStructuredDatum(models.Model):
     source = models.CharField(choices=SOURCE_CHOICES, max_length=15)
 
     marker = models.ForeignKey(SampleMetadataMarker, on_delete=models.CASCADE)
-    measurement = models.CharField(max_length=200)
+    measurement = models.CharField(max_length=300)
     units = models.CharField(max_length=100, null=True, blank=True)
 
     partner_name = models.CharField(max_length=100, null=True, blank=True)
