@@ -138,7 +138,12 @@ class SampleSlimSchema(ModelSchema):
     def resolve_metagenomics_url(obj: Sample):
         return (
             f"{holofood_config.mgnify.api_root}/samples/{obj.accession}"
-            if obj.sample_type in [obj.METAGENOMIC_AMPLICON, obj.METAGENOMIC_ASSEMBLY]
+            if obj.sample_type
+            in [
+                obj.METAGENOMIC_AMPLICON,
+                obj.METAGENOMIC_ASSEMBLY,
+                obj.META_TRANSCRIPTOMIC,
+            ]
             else None
         )
 

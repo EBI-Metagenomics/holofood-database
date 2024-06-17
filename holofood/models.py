@@ -194,6 +194,14 @@ class Sample(models.Model):
             self.META_TRANSCRIPTOMIC,
         ]
 
+    @property
+    def is_metagenomic_sample(self):
+        return self.sample_type in [
+            self.METAGENOMIC_ASSEMBLY,
+            self.METAGENOMIC_AMPLICON,
+            self.META_TRANSCRIPTOMIC,
+        ]
+
     def refresh_structureddata(
         self, structured_metadata: dict = None, checklist: list = None
     ):

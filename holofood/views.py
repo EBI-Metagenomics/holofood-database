@@ -137,10 +137,7 @@ class SampleDetailView(SignpostedDetailView):
         context = super().get_context_data(**kwargs)
         model: Sample = context["sample"]
 
-        if model.sample_type in [
-            Sample.METAGENOMIC_ASSEMBLY,
-            Sample.METAGENOMIC_AMPLICON,
-        ]:
+        if model.is_metagenomic_sample:
             mgnify = MgnifyApi()
 
             try:
