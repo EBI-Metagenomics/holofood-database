@@ -20,7 +20,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "catalogue_file",
             type=argparse.FileType("r"),
-            help="Path to the TSV file listing viral sequences",
+            help="Path to the TSV file listing MAGs.",
         )
         parser.add_argument(
             "title",

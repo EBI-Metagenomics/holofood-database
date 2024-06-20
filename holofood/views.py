@@ -25,6 +25,7 @@ from holofood.filters import (
     GenomeFilter,
     ViralFragmentFilter,
     AnimalFilter,
+    GenomeSampleContainmentFilter,
 )
 from holofood.models import (
     Sample,
@@ -301,6 +302,31 @@ class GenomeCataloguesView(RedirectView):
         if not catalogue:
             raise Http404
         return reverse("genome_catalogue", kwargs={"pk": catalogue.id})
+
+
+class GenomeDetailView(SignpostedDetailView, DetailViewWithPaginatedRelatedList):
+    model = Genome
+    context_object_name = "genome"
+    paginate_by = 10
+    template_name = "holofood/pages/genome_detail.html"
+    filterset_class = GenomeSampleContainmentFilter
+
+    related_name = "samples_containing"
+    related_ordering = "-containment"
+
+    api_url_name = "api:get_genome"
+    api_url_args_from_context_path = {
+        "genome_id": "object.pk",
+        "genome_catalogue_id": "object.catalogue_id",
+    }
+    api_list_url_name = "api:list_genome_catalogues"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["catalogue"] = get_object_or_404(
+            GenomeCatalogue, id=self.kwargs.get("catalogue_pk")
+        )
+        return context
 
 
 class ViralCatalogueView(DetailViewWithPaginatedRelatedList):

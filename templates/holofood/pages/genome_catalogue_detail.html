@@ -39,7 +39,12 @@
                     <tbody class="vf-table__body">
                         {% for genome in genomes %}
                             <tr class="vf-table__row">
-                                <td class="vf-table__cell">{{ genome.accession }}</td>
+                                <td class="vf-table__cell">
+                                    <a class="vf-link"
+                                       href="{% url 'genome_detail' catalogue_pk=catalogue.id pk=genome.accession %}">
+                                        {{ genome.accession }}
+                                    </a>
+                                </td>
                                 <td class="vf-table__cell">
                                     <a class="vf-link"
                                        href="{{ MGNIFY_WEB_URL }}/genomes/{{ genome.cluster_representative }}">{{ genome.cluster_representative }}</a>

@@ -13,8 +13,9 @@ from holofood.api import (
     ViralFragmentSchema,
     AnimalSlimSchema,
     AnimalStructuredDatumSchema,
+    GenomeSampleContainmentSchema,
 )
-from holofood.models import Sample, GenomeCatalogue, ViralCatalogue, Animal
+from holofood.models import Sample, GenomeCatalogue, ViralCatalogue, Animal, Genome
 
 
 class CSVRenderer(BaseRenderer):
@@ -112,6 +113,23 @@ def get_animal_metadata(request, animal_accession: str):
 def list_genome_catalogue_genomes(request, catalogue_id: str):
     catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
     return catalogue.genomes.all()
+
+
+@export_api.get(
+    "/genome-catalogues/{genome_catalogue_id}/genomes/{genome_id}/samples_containing",
+    response=List[GenomeSampleContainmentSchema],
+    summary="Fetch the list of Samples contained by a Genome, as a TSV",
+    description="A Genomes is a Metagenomic Assembled Genome (MAG)."
+    "Each MAG originates from HoloFood samples."
+    "Each MAG has also been clustered with MAGs from other projects."
+    "Each HoloFood MAG references the best representative of these clusters, in MGnify."
+    "Each species representative MAG has also been searched in all of the project samples, "
+    "to find samples which contain the kmers of genome.",
+    url_name="get_samples_containing_genome",
+)
+def get_genome(request, genome_catalogue_id: str, genome_id: str):
+    genome = get_object_or_404(Genome, accession=genome_id)
+    return genome.samples_containing
 
 
 @export_api.get(
