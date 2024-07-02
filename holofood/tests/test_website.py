@@ -358,12 +358,47 @@ class WebsiteTests(StaticLiveServerTestCase):
             "metagenomics/genome-catalogues", mgnify_link.get_attribute("href")
         )
 
-        species_rep_link = self.selenium.find_element(
+        species_rep_links = self.selenium.find_elements(
             by=By.PARTIAL_LINK_TEXT, value="MGYG"
         )
+        # first link is the genome detail
+        self.assertEqual(species_rep_links[0].text, catalogue.genomes.first().accession)
+
+        # second link is the cluster rep
         self.assertEqual(
-            species_rep_link.text, catalogue.genomes.first().cluster_representative
+            species_rep_links[1].text, catalogue.genomes.first().cluster_representative
         )
+
+        # GENOME DETAIL PAGE
+        species_rep_links[0].click()
+        self.assertEqual(
+            self.selenium.current_url,
+            f"{self.live_server_url}/genome-catalogue/{catalogue.id}/{catalogue.genomes.first().accession}",
+        )
+
+        export_link = self.selenium.find_element(
+            by=By.PARTIAL_LINK_TEXT, value="Download all as TSV"
+        )
+        self.assertIn("export", export_link.get_attribute("href"))
+
+        # should be one sample containing this MAG
+        table = self.selenium.find_element(by=By.TAG_NAME, value="tbody")
+        self.assertEqual(len(table.find_elements(by=By.TAG_NAME, value="tr")), 1)
+
+        # change containment to very high, so MAG is contained sufficiently in NO samples
+        slider = self.selenium.find_element(by=By.NAME, value="minimum_containment")
+        for i in range(8):
+            # increase slider by 0.05 * 8 = 0.4. So ends at 0.9.
+            slider.send_keys(Keys.RIGHT)
+        self.selenium.find_element(
+            by=By.XPATH, value=("//input[@type='submit' and @value='Apply']")
+        ).click()
+        self.assertIn(
+            "minimum_containment=0.9",
+            self.selenium.current_url,
+        )
+        table = self.selenium.find_element(by=By.TAG_NAME, value="tbody")
+        self.assertEqual(table.size["height"], 0)
 
         # ---- Viral catalogues ---- #
         catalogue: ViralCatalogue = self.hf_fixtures.viral_catalogues[0]

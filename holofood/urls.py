@@ -52,6 +52,7 @@ from holofood.views import (
     AnimalListView,
     AnimalDetailView,
     ViralCataloguesEmptyStateView,
+    GenomeDetailView,
 )
 
 admin.site.site_header = "HoloFood Data Portal Admin"
@@ -81,6 +82,11 @@ urlpatterns = [
         name="genome_catalogue",
     ),
     path("genome-catalogues", GenomeCataloguesView.as_view(), name="genome_catalogues"),
+    path(
+        "genome-catalogue/<str:catalogue_pk>/<str:pk>",
+        GenomeDetailView.as_view(),
+        name="genome_detail",
+    ),
     path(
         "viral-catalogue/<str:pk>",
         ViralCatalogueView.as_view(),

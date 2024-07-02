@@ -22,6 +22,7 @@ from holofood.models import (
     ViralFragment,
     Animal,
     AnimalStructuredDatum,
+    GenomeSampleContainment,
 )
 from holofood.utils import holofood_config
 
@@ -192,6 +193,16 @@ class GenomeSchema(ModelSchema):
     class Config:
         model = Genome
         model_fields = ["accession", "cluster_representative", "taxonomy", "metadata"]
+
+
+class GenomeSampleContainmentSchema(ModelSchema):
+    class Config:
+        model = GenomeSampleContainment
+        model_fields = ["sample", "containment"]
+
+
+class GenomeWithContainingSamplesSchema(GenomeSchema):
+    samples_containing: List[GenomeSampleContainmentSchema]
 
 
 class ViralCatalogueSchema(ModelSchema):
@@ -451,6 +462,23 @@ def get_genome_catalogue(request, catalogue_id: str):
 def list_genome_catalogue_genomes(request, catalogue_id: str):
     catalogue = get_object_or_404(GenomeCatalogue, id=catalogue_id)
     return catalogue.genomes.all()
+
+
+@api.get(
+    "/genome-catalogues/{genome_catalogue_id}/genomes/{genome_id}",
+    response=GenomeWithContainingSamplesSchema,
+    summary="Fetch the detail of a Genome",
+    description="A Genomes is a Metagenomic Assembled Genome (MAG)."
+    "Each MAG originates from HoloFood samples."
+    "Each MAG has also been clustered with MAGs from other projects."
+    "Each HoloFood MAG references the best representative of these clusters, in MGnify."
+    "Each MAG has also been searched in all of the project samples, to find samples which contain the kmers of genome.",
+    tags=[GENOMES],
+    url_name="get_genome",
+)
+def get_genome(request, genome_catalogue_id: str, genome_id: str):
+    genome = get_object_or_404(Genome, accession=genome_id)
+    return genome
 
 
 @api.get(

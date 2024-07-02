@@ -8,7 +8,14 @@ from django.core.management import call_command
 
 
 from holofood.external_apis.biosamples.api import API_ROOT as BSAPIROOT
-from holofood.models import Sample, ViralCatalogue, GenomeCatalogue, Animal
+from holofood.models import (
+    Sample,
+    ViralCatalogue,
+    GenomeCatalogue,
+    Animal,
+    GenomeSampleContainment,
+    Genome,
+)
 from holofood.utils import holofood_config
 
 MGAPIROOT = holofood_config.mgnify.api_root.rstrip("/")
@@ -169,3 +176,22 @@ def test_import_mag_catalogue():
         created_catalogue.genomes.order_by("-accession").first().taxonomy
         == "Bacteria > Firmicutes_A > Clostridia > Oscillospirales > Acutalibacteraceae > RUG420 > RUG420 sp900317985"
     )
+
+
+@pytest.mark.django_db
+def test_import_mag_sample_mapping(chicken_mag_catalogue, chicken_metagenomic_sample):
+    tests_path = os.path.dirname(__file__)
+    out = _call_command(
+        "import_mag_sample_mapping",
+        f"{tests_path}/static_fixtures/mag-sample-mapping.tsv",
+        f"--catalogue_id_to_preclear={chicken_mag_catalogue.id}",
+    )
+    logging.info(out)
+
+    assert GenomeSampleContainment.objects.count() == 1
+    mag = Genome.objects.first()
+    assert mag.samples_containing.count() == 1
+
+    containment = GenomeSampleContainment.objects.first()
+    assert containment.sample.accession == chicken_metagenomic_sample.accession
+    assert containment.containment == 0.93

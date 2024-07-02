@@ -461,6 +461,52 @@ class Genome(models.Model):
         ordering = ("accession",)
 
 
+class GenomeSampleContainmentManager(models.Manager):
+    def get_queryset(self):
+        prefetchable_markers = (
+            holofood_config.tables.animals_list.default_metadata_marker_columns
+        )
+        primary_markers = AnimalStructuredDatum.objects.filter(
+            marker__name__in=prefetchable_markers
+        )
+        return (
+            super()
+            .get_queryset()
+            .select_related("sample")
+            .select_related("genome")
+            .select_related("sample__animal")
+            .prefetch_related(
+                Prefetch(
+                    "sample__animal__structured_metadata",
+                    queryset=primary_markers,
+                    to_attr="primary_metadata",
+                )
+            )
+        )
+
+
+class GenomeSampleContainment(models.Model):
+    """
+    An instance of a genome being present ("contained") within a metagenomic sample.
+    """
+
+    sample = models.ForeignKey(
+        Sample, on_delete=models.CASCADE, related_name="genomes_contained"
+    )
+    genome = models.ForeignKey(
+        Genome, on_delete=models.CASCADE, related_name="samples_containing"
+    )
+    containment = models.FloatField(default=0)
+
+    objects = GenomeSampleContainmentManager()
+
+    class Meta:
+        ordering = ("genome", "-containment")
+
+    def __str__(self):
+        return f"Containment of {self.genome} in {self.sample}"
+
+
 class ViralCatalogue(models.Model):
     """
     A collection of (probable) viral fragments detected in the metagenomic reads.

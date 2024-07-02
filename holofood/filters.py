@@ -13,9 +13,17 @@ from django.db.models import (
     OuterRef,
     Func,
 )
+from django.forms import NumberInput
 from django.utils.safestring import mark_safe
 
-from holofood.models import Sample, Genome, ViralFragment, Animal, AnimalStructuredDatum
+from holofood.models import (
+    Sample,
+    Genome,
+    ViralFragment,
+    Animal,
+    AnimalStructuredDatum,
+    GenomeSampleContainment,
+)
 from holofood.utils import holofood_config
 
 
@@ -120,6 +128,28 @@ class GenomeFilter(django_filters.FilterSet):
             "accession": ["icontains"],
             "cluster_representative": ["icontains"],
             "taxonomy": ["icontains"],
+        }
+
+
+class GenomeSampleContainmentFilter(django_filters.FilterSet):
+    minimum_containment = django_filters.NumberFilter(
+        field_name="containment",
+        label="Minimum containment",
+        lookup_expr="gte",
+        min_value=0.0,
+        max_value=1.0,
+        help_text=mark_safe("Fraction of MAG kmers present in samples"),
+        widget=NumberInput(
+            attrs={"type": "range", "min": "0.2", "max": "1.0", "step": "0.05"}
+        ),
+    )
+
+    class Meta:
+        model = GenomeSampleContainment
+
+        fields = {
+            "sample__accession": ["icontains"],
+            "sample__animal__accession": ["icontains"],
         }
 
 

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load string_utils %}
+{% load taxonomy %}
+{% load static %}
+{% load sample_metadata %}
+{% block content %}
+    <nav class="vf-breadcrumbs" aria-label="Breadcrumb">
+      <ul class="vf-breadcrumbs__list | vf-list vf-list--inline">
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'home' %}" class="vf-breadcrumbs__link">Home</a>
+        </li>
+
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'genome_catalogues' %}" class="vf-breadcrumbs__link">Genomes</a>
+        </li>
+
+        <li class="vf-breadcrumbs__item" aria-current="location">
+          {{ genome.accession }}
+        </li>
+      </ul>
+
+      <span class="vf-breadcrumbs__heading">Related:</span>
+
+      <ul class="vf-breadcrumbs__list vf-breadcrumbs__list--related | vf-list vf-list--inline">
+        <li class="vf-breadcrumbs__item">
+          <a href="{% url 'genome_catalogue' pk=catalogue.id %}" class="vf-breadcrumbs__link">{{ catalogue.title }} catalogue</a>
+        </li>
+      </ul>
+
+    </nav>
+    <h1>{{ genome.accession }}</h1>
+    <p class="vf-lede">
+        Details for {{ genome.accession }}, a genome assembled from HoloFood {{ catalogue.system }} metagenomes
+    </p>
+    <br/>
+
+    <details class="vf-details" open>
+        <summary class="vf-details--summary">
+            Genome details
+        </summary>
+        <dl class="vf-list vf-list--definition">
+            <dt class="vf-list__item vf-list--definition__term">
+                Taxonomy
+            </dt>
+            <dd class="vf-list__item vf-list--definition__details">
+                {% taxonomy_tooltip taxonomy=genome.taxonomy %}
+            </dd>
+            <dt class="vf-list__item vf-list--definition__term">
+                Cluster representative
+            </dt>
+            <dd class="vf-list__item vf-list--definition__details">
+                <p class="vf-text-body--2">
+                    {{ genome.cluster_representative }}
+                </p>
+                <p class="vf-text-body--5">
+                    Genomes in MGnify Genome Catalogues are clustered by sequence similarity, at the species level.
+                    A cluster representative genome is chosen as the best quality genome for each cluster.
+                    This representative may or may not be from HoloFood data.
+                </p>
+                <a class="vf-button vf-button--link vf-button--sm inline"
+                   href="{{ MGNIFY_WEB_URL }}/genomes/{{ genome.cluster_representative }}"><i class="icon icon-common icon-external-link-square-alt"></i>&nbsp;View {{ genome.cluster_representative }} on MGnify</a>
+                <br/>
+                <a class="vf-button vf-button--link vf-button--sm inline"
+                   href="{% url 'genome_catalogue' pk=genome.catalogue_id %}?cluster_representative__icontains={{ genome.cluster_representative }}"><i class="icon icon-common icon-search"></i>&nbsp;Show other genomes in cluster</a>
+
+            </dd>
+            <dt class="vf-list__item vf-list--definition__term">
+                API endpoint
+            </dt>
+            {% url 'api:get_genome' genome_catalogue_id=genome.catalogue_id genome_id=genome.accession as endpoint %}
+            <dd class="vf-list__item vf-list--definition__details">
+                <span class="api-endpoint">
+                    <a class="vf-link" href="{{ endpoint }}">{{ endpoint }}</a>
+                    <span class="tooltiped">
+                        <button class="vf-button vf-button--link vf-button--sm inline"
+                            onclick="copyApiEndpoint()">
+                            <img src="{% static 'img/icons/copy.svg' %}" height="16px" alt="Copy"/>
+                        </button>
+                        <span id="endpoint-copy-tooltip" class="tooltip-text">Copy API Endpoint</span>
+                    </span>
+
+                </span>
+            </dd>
+        </dl>
+    </details>
+    <script>
+        function copyApiEndpoint(e) {
+            navigator.clipboard.writeText('{{ endpoint }}');
+            window.document.getElementById('endpoint-copy-tooltip').textContent = "Copied!";
+        }
+    </script>
+    <details class="vf-details" open>
+        <summary class="vf-details--summary">
+            Samples containing this genome
+        </summary>
+        <p class="vf-text-body--5">
+            {{ genome.accession }}’s cluster representative ({{ genome.cluster_representative }})
+            has been searched for in all HoloFood samples, using a <a href="https://sourmash.bio">sourmash</a>-based tool.
+            These samples contain some or all of the kmers in {{ genome.cluster_representative }}’s sequence.
+            Because {{ genome.accession }} has been clustered with {{ genome.cluster_representative }}
+            at 95% sequence similarity, this indicates that these samples are likely to contain {{ genome.accession }}.
+        </p>
+        <div class="vf-sidebar vf-sidebar--start vf-sidebar--800">
+            <div class="vf-sidebar__inner">
+                <div>
+                    <h2>Filter containing samples</h2>
+                    {% include "holofood/components/form.html" with form=filterset.form method="get" submit="Apply" id="genome_sample_containments_filters" only %}
+                </div>
+                <div style="overflow-x: scroll">
+                    <h2>Samples containing cluster representative {{ genome.cluster_representative }}</h2>
+                    <a class="vf-button vf-button--link vf-button--sm"
+                       href="{% url 'export:get_samples_containing_genome' genome_catalogue_id=genome.catalogue_id genome_id=genome.pk %}"><i class="icon icon-common icon-download"></i>&nbsp;Download all as TSV</a>
+                    <table class="vf-table scrollable-table">
+                        <thead class="vf-table__header">
+                            <tr class="vf-table__row">
+                                <th class="vf-table__heading" scope="col">Containment</th>
+                                <th class="vf-table__heading" scope="col">Sample accession</th>
+                                <th class="vf-table__heading" scope="col">Animal accession</th>
+                                <th class="vf-table__heading" scope="col">Treatment</th>
+                            </tr>
+                        </thead>
+                        <tbody class="vf-table__body">
+                            {% for genome_sample_containment in samples_containing %}
+                                <tr class="vf-table__row">
+                                    <td class="vf-table__cell">
+                                        {{ genome_sample_containment.containment | floatformat:2 }}
+                                    </td>
+                                    <td class="vf-table__cell">
+                                        <a class="vf-link"
+                                           href="{% url 'sample_detail' pk=genome_sample_containment.sample_id %}">{{ genome_sample_containment.sample_id }}</a>
+                                    </td>
+                                    <td class="vf-table__cell">
+                                        {% include "holofood/components/atoms/animal_accession.html" with animal=genome_sample_containment.sample.animal only %}
+                                    </td>
+                                    <td class="vf-table__cell">
+                                         {{ genome_sample_containment.sample.animal|animal_metadatum:"Treatment name||Treatment description"|default:"—" }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot class="vf-table__footer">
+                            <tr class="vf-table__row">
+                                <td class="vf-table__cell" colspan="100">{% include "holofood/components/pagination.html" %}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </details>
+
+{% endblock content %}

@@ -7,7 +7,6 @@ from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from holofood.models import (
     Sample,
-    SampleMetadataMarker,
     SampleStructuredDatum,
     AnalysisSummary,
     GenomeCatalogue,
@@ -16,6 +15,7 @@ from holofood.models import (
     ViralCatalogue,
     Animal,
     AnimalStructuredDatum,
+    GenomeSampleContainment,
 )
 
 
@@ -104,6 +104,19 @@ class GenomeInline(TabularInlinePaginated):
 @admin.register(GenomeCatalogue)
 class GenomeCatalogueAdmin(ModelAdmin):
     inlines = [GenomeInline]
+
+
+class GenomeSampleContainmentInline(TabularInlinePaginated):
+    model = GenomeSampleContainment
+    per_page = 5
+    can_delete = True
+    show_change_link = True
+    show_full_result_count = True
+
+
+@admin.register(Genome)
+class GenomeAdmin(ModelAdmin):
+    inlines = [GenomeSampleContainmentInline]
 
 
 class ViralFragmentInline(TabularInlinePaginated):
