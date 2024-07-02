@@ -14,6 +14,7 @@ from holofood.models import (
     SampleStructuredDatum,
     Animal,
     AnimalStructuredDatum,
+    GenomeSampleContainment,
 )
 
 
@@ -947,7 +948,7 @@ def salmon_submitted_checklist(salmon_animal):
     """
 
 
-def create_genome_objects() -> GenomeCatalogue:
+def create_genome_objects(sample: Sample) -> GenomeCatalogue:
     catalogue, _ = GenomeCatalogue.objects.get_or_create(
         id="hf-mag-cat-v1",
         defaults={
@@ -958,7 +959,7 @@ def create_genome_objects() -> GenomeCatalogue:
         },
     )
 
-    Genome.objects.get_or_create(
+    genome, _ = Genome.objects.get_or_create(
         accession="MGYG999",
         defaults={
             "cluster_representative": "MGYG001",
@@ -967,6 +968,11 @@ def create_genome_objects() -> GenomeCatalogue:
             "metadata": {},
         },
     )
+
+    GenomeSampleContainment.objects.get_or_create(
+        genome=genome, sample=sample, defaults={"containment": 0.7}
+    )
+
     return catalogue
 
 
@@ -1098,7 +1104,7 @@ def create_viral_objects() -> ViralCatalogue:
         id="hf-donut-vir-cat-v1",
         title="HoloFood Donut Viral Catalogue v1",
         biome="Donut Surface",
-        related_genome_catalogue=create_genome_objects(),
+        related_genome_catalogue=create_genome_objects(Sample.objects.first()),
         system="chicken",
     )
     rep = ViralFragment.objects.create(
@@ -1186,12 +1192,12 @@ def set_metabolights_project_for_sample(sample: Sample, mtbls: str = "MTBLSDONUT
 
 
 @pytest.fixture()
-def chicken_mag_catalogue():
-    return create_genome_objects()
+def chicken_mag_catalogue(chicken_metagenomic_sample):
+    return create_genome_objects(chicken_metagenomic_sample)
 
 
 @pytest.fixture()
-def chicken_viral_catalogue():
+def chicken_viral_catalogue(chicken_metagenomic_sample):
     return create_viral_objects()
 
 
@@ -1229,7 +1235,7 @@ def LiveTests(request):
 
     set_metabolights_project_for_sample(Fixtures.samples[0])
 
-    Fixtures.genome_catalogues = [create_genome_objects()]
+    Fixtures.genome_catalogues = [create_genome_objects(Sample.objects.first())]
     Fixtures.viral_catalogues = [create_viral_objects()]
 
     # set a class attribute on the invoking test context

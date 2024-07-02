@@ -91,7 +91,8 @@ class Command(BaseCommand):
                     f"Created genome-sample-containment {genome_sample_containment}"
                 )
             else:
-                if mapping["containment"] > genome_sample_containment.containment:
+                containment = float(mapping["containment"])
+                if containment > genome_sample_containment.containment:
                     logging.info(
                         f"Genome-sample-containment {genome_sample_containment} already exists, but updating "
                     )

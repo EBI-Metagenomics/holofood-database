@@ -376,6 +376,19 @@ def test_mag_catalogues(client, chicken_mag_catalogue):
         == chicken_mag_catalogue.genomes.first().accession
     )
 
+    response = client.get(
+        f"/api/genome-catalogues/{chicken_mag_catalogue.id}/genomes/MGYG999"
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("cluster_representative") == "MGYG001"
+    assert data.get("taxonomy") == "Root > Foods > Donuts > Sugar Monster"
+    assert len(data.get("samples_containing")) == 1
+    assert data.get("samples_containing")[0] == {
+        "sample": "SAMEA00000006",
+        "containment": 0.7,
+    }
+
 
 @pytest.mark.django_db
 def test_mag_catalogues_export(client, chicken_mag_catalogue):
@@ -386,6 +399,17 @@ def test_mag_catalogues_export(client, chicken_mag_catalogue):
     data = response.content.decode()
     assert "accession" in data
     assert chicken_mag_catalogue.genomes.first().accession in data
+
+
+@pytest.mark.django_db
+def test_mag_containment_export(client, chicken_mag_catalogue):
+    response = client.get(
+        f"/export/genome-catalogues/{chicken_mag_catalogue.id}/genomes/MGYG999/samples_containing"
+    )
+    assert response.status_code == 200
+    data = response.content.decode()
+    assert "sample" in data
+    assert "SAMEA00000006" in data
 
 
 @pytest.mark.django_db
