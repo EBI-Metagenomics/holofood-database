@@ -125,6 +125,37 @@ MAGs can be found by searching on accession or taxonomy, or for the accession of
 
 The MAGs in a catalogue can be downloaded as a TSV file, using the "Download all as TSV" button.
 
+#### MAG Annotations
+MGnify Genomes catalogues use a standardised pipeline ([Gurbich et al. 2023](https://europepmc.org/article/MED/36806692)) to annotate 
+the assembled genomes with various tools.
+These annotations are performed on the species-level cluster representative genomes.
+These annotations can all be accessed via the data portal’s links to MGnify.
+
+Given the HoloFood project's aims, [CAZy](https://cazy.org) (Carbohydrate-Active enZymes) annotations are particularly relevant to
+the HoloFood MAG catalogues.
+
+A summary of the CAZy annotations, in the form of counts per CAZy category, is therefore shown on the detail view of each MAG.
+(Note that, like all MAG annotations, these CAZy annotations refer to the MAG's cluster representative genome – not necesarily the HoloFood-data-derived MAG itself.)
+
+![Screenshot of a MAG’s detail page, including CAZy annotations](/img/website/mag-annotations.png)
+
+These annotations are also available via each genome's [API](api.ipynb) endpoint.
+
+#### MAG containment within samples
+To facilitate the linking of MAGs to other samples within the HoloFood dataset, the data portal also includes a list of "containments" for each MAG within all of the project’s metagenomic samples.
+
+For each MAG, a sample list was found using Mastiff (a tool based on [sourmash](https://sourmash.bio), [Irber et al. 2022](https://www.biorxiv.org/content/10.1101/2022.11.02.514947v1)).
+Each sample in this list contains the MAG at some level, equivalent to the fraction of the MAG’s kmers that are present in the sample’s sequencing reads.
+The list can be filtered to find only the samples that contain the MAG above some minimum containment threshold.
+
+![Screenshot of a MAG’s sample containment list](/img/website/mag-containment.png)
+
+These sample containment lists are also available via each genome's [API](api.ipynb) endpoint, as well as via the TSV export option above the table.
+
+Together with the [MAG’s CAZy annotations](website.qmd#mag-annotations), this feature means the prevalence of 
+carbohydrate-active enzymes can be compared at the genome level between samples originating from animals
+under different experimental conditions.
+
 ### Viral Catalogues
 ![Screenshot of a viral catalogue](/img/website/viral-catalogue.png)
 Viral catalogues are lists of the unique (at species-level) viruses found in HoloFood samples.
