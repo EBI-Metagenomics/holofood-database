@@ -69,7 +69,7 @@
             <dd class="vf-list__item vf-list--definition__details">
                 <p class="vf-text-body--5">
                     {{ genome.accession }}’s cluster representative genome {{ genome.cluster_representative }} has been annotated by MGnify’s Genomes pipeline.
-                    <a href="https://cazy.org" target="_newtab" class="vf-link">CAZy (Carbohydrate-Active enZymes)</a> annotations are particularly relevant to HoloFood’s experimental goals,
+                    {# djlint:off #}<a href="http://www.cazy.org" target="_newtab" class="vf-link">CAZy (Carbohydrate-Active enZymes)</a>{# djlint:on #} annotations are particularly relevant to HoloFood’s experimental goals,
                     and this graphic shows the number of CAZy annotations on {{ genome.cluster_representative }} from each CAZy category.
                 </p>
                 {% include "holofood/scripts/cazy_chart.html" with cazy_annotations=cazy_annotations only %}

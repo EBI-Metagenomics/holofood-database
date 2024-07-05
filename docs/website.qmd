@@ -131,7 +131,7 @@ the assembled genomes with various tools.
 These annotations are performed on the species-level cluster representative genomes.
 These annotations can all be accessed via the data portal’s links to MGnify.
 
-Given the HoloFood project's aims, [CAZy](https://cazy.org) (Carbohydrate-Active enZymes) annotations are particularly relevant to
+Given the HoloFood project's aims, [CAZy](http://www.cazy.org) (Carbohydrate-Active enZymes) annotations are particularly relevant to
 the HoloFood MAG catalogues.
 
 A summary of the CAZy annotations, in the form of counts per CAZy category, is therefore shown on the detail view of each MAG.
