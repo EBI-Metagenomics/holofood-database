@@ -1,7 +1,8 @@
 [run]
 omit =
-    *tests*
-    *migrations*
+    */tests/*
+    */migrations/*
     *settings*
     *asgi.py
     *wsgi.py
+    *generate_dev_data.py
