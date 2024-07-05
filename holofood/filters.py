@@ -16,6 +16,7 @@ from django.db.models import (
 from django.forms import NumberInput
 from django.utils.safestring import mark_safe
 
+from holofood.forms import CazyAnnotationsFilterForm
 from holofood.models import (
     Sample,
     Genome,
@@ -123,12 +124,26 @@ class AnimalFilter(MetadataMultiFilter):
 class GenomeFilter(django_filters.FilterSet):
     class Meta:
         model = Genome
+        form = CazyAnnotationsFilterForm
 
         fields = {
             "accession": ["icontains"],
             "cluster_representative": ["icontains"],
             "taxonomy": ["icontains"],
         }
+
+    def filter_queryset(self, queryset):
+        qs = queryset
+        for name, value in self.form.cleaned_data.items():
+            if name in self.filters:
+                qs = self.filters[name].filter(qs, value)
+
+        filters = Q()
+        if self.data:
+            cazy_annotations = self.data.getlist("cazy_annotations")
+            for key in cazy_annotations:
+                filters &= Q(**{f"annotations__cazy__{key}__gt": 0})
+        return qs.filter(filters)
 
 
 class GenomeSampleContainmentFilter(django_filters.FilterSet):

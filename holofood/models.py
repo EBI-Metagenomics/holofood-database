@@ -456,6 +456,7 @@ class Genome(models.Model):
     )
     taxonomy = models.CharField(max_length=200)
     metadata = models.JSONField(default=dict, blank=True)
+    annotations = models.JSONField(default=dict, blank=True)
 
     class Meta:
         ordering = ("accession",)

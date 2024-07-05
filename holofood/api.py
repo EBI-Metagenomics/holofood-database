@@ -192,7 +192,13 @@ class GenomeSchema(ModelSchema):
 
     class Config:
         model = Genome
-        model_fields = ["accession", "cluster_representative", "taxonomy", "metadata"]
+        model_fields = [
+            "accession",
+            "cluster_representative",
+            "taxonomy",
+            "metadata",
+            "annotations",
+        ]
 
 
 class GenomeSampleContainmentSchema(ModelSchema):

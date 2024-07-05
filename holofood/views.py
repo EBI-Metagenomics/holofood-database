@@ -326,6 +326,23 @@ class GenomeDetailView(SignpostedDetailView, DetailViewWithPaginatedRelatedList)
         context["catalogue"] = get_object_or_404(
             GenomeCatalogue, id=self.kwargs.get("catalogue_pk")
         )
+        cazy = self.object.annotations.get("cazy")
+        if cazy:
+            cazy_categories = {
+                "GH": "Glycoside Hydrolase",
+                "CB": "Carbohydrate-Binding",
+                "PL": "Polysaccharide Lyases",
+                "CE": "Carbohydrate Esterases",
+                "AA": "Auxiliary Activities",
+                "GT": "GlycosylTransferases",
+            }
+            context["cazy_annotations"] = {
+                cazy_categories[cat]: count
+                for cat, count in cazy.items()
+                if cat in cazy_categories
+            }
+        else:
+            context["cazy_annotations"] = {}
         return context
 
 

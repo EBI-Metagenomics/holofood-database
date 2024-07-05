@@ -1,0 +1,33 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div id="cazy_chart"></div>
+{{ cazy_annotations | json_script:"cazy_annotations_data" }}
+<script>
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawAxisTickColors);
+
+    function drawAxisTickColors() {
+          const jsonData = JSON.parse(document.getElementById('cazy_annotations_data').textContent);
+
+          const dataArray = [['CAZy', 'Count', { role: 'style' }]];
+          for (const [key, value] of Object.entries(jsonData)) {
+            dataArray.push([key, value, "#18974c"]);
+          }
+
+          var data = google.visualization.arrayToDataTable(dataArray);
+
+          var options = {
+            title: 'CAZy category counts',
+            chartArea: { width: '50%' },
+            hAxis: {
+              title: 'Annotation count',
+              minValue: 0,
+            },
+            vAxis: {
+              title: 'CAZy category',
+            },
+            legend: { position: "none" },
+          };
+          var chart = new google.visualization.BarChart(document.getElementById('cazy_chart'));
+          chart.draw(data, options);
+        }
+</script>
