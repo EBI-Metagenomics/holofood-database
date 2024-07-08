@@ -388,6 +388,7 @@ def test_mag_catalogues(client, chicken_mag_catalogue):
         "sample": "SAMEA00000006",
         "containment": 0.7,
     }
+    assert data.get("annotations", {}).get("cazy", {}).get("GH") == 6
 
 
 @pytest.mark.django_db

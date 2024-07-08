@@ -60,7 +60,7 @@ class WebsiteTests(StaticLiveServerTestCase):
 
         wait = WebDriverWait(self.selenium, 10)
 
-        # # ---- Home page ---- #
+        # ---- Home page ---- #
         self.selenium.get(self.live_server_url)
         self.selenium.add_cookie(
             {
@@ -381,8 +381,27 @@ class WebsiteTests(StaticLiveServerTestCase):
         )
         self.assertIn("export", export_link.get_attribute("href"))
 
+        # chart should be showing cazys. test accessible/aria version of chart rather than svg.
+        cazy_accessible_table = self.selenium.find_element(
+            by=By.XPATH, value="//*[@id='cazy_chart']//table/tbody"
+        )
+        self.assertEqual(
+            len(cazy_accessible_table.find_elements(by=By.TAG_NAME, value="tr")), 6
+        )
+
+        # element is hidden so use selenium script to get text
+        first_cazy_label = self.selenium.execute_script(
+            "return document.evaluate(\"//*[@id='cazy_chart']//table/tbody/tr[1]/td[1]\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.textContent;"
+        )
+        self.assertEqual(first_cazy_label.strip(), "Glycoside Hydrolase")
+
+        first_cazy_count = self.selenium.execute_script(
+            "return document.evaluate(\"//*[@id='cazy_chart']//table/tbody/tr[1]/td[2]\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.textContent;"
+        )
+        self.assertEqual(first_cazy_count.strip(), "6")
+
         # should be one sample containing this MAG
-        table = self.selenium.find_element(by=By.TAG_NAME, value="tbody")
+        table = self.selenium.find_element(by=By.CLASS_NAME, value="vf-table__body")
         self.assertEqual(len(table.find_elements(by=By.TAG_NAME, value="tr")), 1)
 
         # change containment to very high, so MAG is contained sufficiently in NO samples
@@ -397,7 +416,7 @@ class WebsiteTests(StaticLiveServerTestCase):
             "minimum_containment=0.9",
             self.selenium.current_url,
         )
-        table = self.selenium.find_element(by=By.TAG_NAME, value="tbody")
+        table = self.selenium.find_element(by=By.CLASS_NAME, value="vf-table__body")
         self.assertEqual(table.size["height"], 0)
 
         # ---- Viral catalogues ---- #

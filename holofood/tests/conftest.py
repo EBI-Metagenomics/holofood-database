@@ -966,6 +966,9 @@ def create_genome_objects(sample: Sample) -> GenomeCatalogue:
             "catalogue": catalogue,
             "taxonomy": "Root > Foods > Donuts > Sugar Monster",
             "metadata": {},
+            "annotations": {
+                "cazy": {"GH": 6, "PL": 5, "CE": 4, "AA": 3, "CB": 2, "GT": 1, "CL": 0}
+            },
         },
     )
 

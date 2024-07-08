@@ -42,6 +42,11 @@ class Command(BaseCommand):
             type=str,
             help="System (chicken/salmon) of the catalogue (or None to copy from related MAG catalogue)",
         )
+        parser.add_argument(
+            "--representatives_cazy_annotations_file",
+            type=argparse.FileType("r"),
+            help="Optional path to a TSV file listing cazy annotations for the cluster representative MAGs.",
+        )
 
     @staticmethod
     def _parse_taxonomic_lineage(lineage_string: str) -> str:
@@ -79,6 +84,17 @@ class Command(BaseCommand):
             system=options["system"],
         )
         logging.info(f"Created MAG {catalogue=}")
+
+        cazy_file = options["representatives_cazy_annotations_file"]
+        cazy_annotations = {}
+        if cazy_file:
+            cazy_reader = DictReader(cazy_file, delimiter="\t")
+            for row in cazy_reader:
+                cazy_annotations.setdefault(row["Genome"], {})[
+                    row["CAZy_category"]
+                ] = int(row["Counts"])
+            cazy_file.close()
+
         for mag in reader:
             mag_data = {
                 field_name: mag[col_name]
@@ -89,6 +105,10 @@ class Command(BaseCommand):
                 mag_data["taxonomy"] = self._parse_taxonomic_lineage(
                     mag_data["taxonomy"]
                 )
+
+            mag_data["annotations"] = {
+                "cazy": cazy_annotations.get(mag_data["cluster_representative"], {})
+            }
 
             metadata = {
                 col_name: col_val

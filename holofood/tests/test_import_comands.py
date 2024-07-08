@@ -161,6 +161,7 @@ def test_import_mag_catalogue():
         "public-donut-v1-0",
         "Donut Surface",
         "chicken",
+        f"--representatives_cazy_annotations_file={tests_path}/static_fixtures/mag-catalogue-cazy.tsv",
     )
     logging.info(out)
 
