@@ -76,7 +76,7 @@ class TablesConfig(BaseModel):
 
 class DocsConfig(BaseModel):
     docs_url: AnyHttpUrl = "https://docs.holofooddata.org"
-    portal_doi: str = "10.5281/zenodo.7684072"
+    portal_doi: str = "10.5281/zenodo.7684071"
 
 
 class PortalConfig(BaseModel):

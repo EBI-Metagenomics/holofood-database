@@ -7,7 +7,7 @@ data:
   HOLOFOOD_ENV_FILE: "/app/config/local.env"
   SQLITE_DB_NAME: "/app/data/db.sqlite3"
   DATA_PORTAL_URL: "www.holofooddata.org"
-  HOLOFOOD_DOCS__PORTAL_DOI: "10.5281/zenodo.7886047"
+  HOLOFOOD_DOCS__PORTAL_DOI: "10.5281/zenodo.7684071"
   HOLOFOOD_METABOLIGHTS__BIOSAMPLE_COLUMN_NAME_IN_SAMPLE_TABLE: "Comment[BioSamples accession]"
   HTTP_PROXY: "http://hh-wwwcache.ebi.ac.uk:3128"
   HTTPS_PROXY: "http://hh-wwwcache.ebi.ac.uk:3128"
