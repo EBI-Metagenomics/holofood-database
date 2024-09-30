@@ -33,6 +33,22 @@
                     defer></script>
             <!-- For autocomplete/typeahead -->
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.02.min.css"/>
+
+            <!-- Matomo -->
+            <script>
+              var _paq = window._paq = window._paq || [];
+              /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+              _paq.push(['trackPageView']);
+              _paq.push(['enableLinkTracking']);
+              (function() {
+                var u="https://ebi-mgnify.matomo.cloud/";
+                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setSiteId', '7']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.async=true; g.src='https://cdn.matomo.cloud/ebi-mgnify.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
+              })();
+            </script>
+            <!-- End Matomo Code -->
         {% endblock head %}
     </head>
     <body class="vf-body | vf-stack vf-stack--200">
