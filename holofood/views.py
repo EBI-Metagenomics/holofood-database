@@ -66,7 +66,7 @@ class SignpostedDetailView(DetailView):
     api_url_args_from_context_path = {"accession": "object.pk"}
     api_list_url_name: str
 
-    DESCRIBED_BY = "describedBy"
+    DESCRIBED_BY = "describedby"
     COLLECTION = "collection"
     JSON = "application/json"
 
