@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.53">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -36,10 +36,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9df69681824720e666972b6af672cf86.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-404e67d2bfd45b3494a1e6616c725f46.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -203,7 +203,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#publications-from-the-holofood-consortium" id="toc-publications-from-the-holofood-consortium" class="nav-link active" data-scroll-target="#publications-from-the-holofood-consortium">Publications from the HoloFood consortium</a></li>
+  <li><a href="#publication-covering-the-holofood-data-portal" id="toc-publication-covering-the-holofood-data-portal" class="nav-link active" data-scroll-target="#publication-covering-the-holofood-data-portal">Publication covering the HoloFood Data Portal</a></li>
+  <li><a href="#publications-from-the-holofood-consortium" id="toc-publications-from-the-holofood-consortium" class="nav-link" data-scroll-target="#publications-from-the-holofood-consortium">Publications from the HoloFood consortium</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/ebi-metagenomics/holofood-database/edit/main/docs/publications.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ebi-metagenomics/holofood-database/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -229,6 +230,10 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="publication-covering-the-holofood-data-portal" class="level2">
+<h2 class="anchored" data-anchor-id="publication-covering-the-holofood-data-portal">Publication covering the HoloFood Data Portal</h2>
+<p>Rogers, A. B., Kale, V., Baldi, G., Alberdi, A., Gilbert, M. T. P., Gupta, D., Limborg, M. T., Li, S., Payne, T., Petersen, B., Rasmussen, J. A., Richardson, L., Finn, R. D. (2025). <a href="https://doi.org/10.1093/database/baae112">HoloFood Data Portal: holo-omic datasets for analysing host–microbiota interactions in animal production.</a> In Database (Vol. 2025, Article ID: baae112), Oxford University Press. 10.1093/database/baae112</p>
+</section>
 <section id="publications-from-the-holofood-consortium" class="level2">
 <h2 class="anchored" data-anchor-id="publications-from-the-holofood-consortium">Publications from the HoloFood consortium</h2>
 <p>Nyholm, L., Koziol, A., Marcos, S., Botnen, A. B., Aizpurua, O., Gopalakrishnan, S., Limborg, M. T., Gilbert, M. T. P., &amp; Alberdi, A. (2020). <a href="https://doi.org/10.1016/j.isci.2020.101414">Holo-Omics: Integrated Host-Microbiota Multi-omics for Basic and Applied Biological Research.</a> In iScience (Vol. 23, Issue 8, p.&nbsp;101414). Elsevier BV. 10.1016/j.isci.2020.101414</p>
@@ -327,8 +332,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -439,7 +442,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.53">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -72,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9df69681824720e666972b6af672cf86.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-404e67d2bfd45b3494a1e6616c725f46.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -258,7 +258,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#filters-using-query-parameters" id="toc-filters-using-query-parameters" class="nav-link" data-scroll-target="#filters-using-query-parameters">Filters using query parameters</a></li>
   <li><a href="#mgnify" id="toc-mgnify" class="nav-link" data-scroll-target="#mgnify">MGnify</a></li>
-  <li><a href="#metabolights" id="toc-metabolights" class="nav-link" data-scroll-target="#metabolights">MetaboLights</a></li>
+  <li><a href="#metabolights" id="toc-metabolights" class="nav-link" data-scroll-target="#metabolights">MetaboLights</a>
+  <ul class="collapse">
+  <li><a href="#from-r" id="toc-from-r" class="nav-link" data-scroll-target="#from-r">From R</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.dev/ebi-metagenomics/holofood-database/blob/main/docs/api.ipynb" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ebi-metagenomics/holofood-database/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -992,8 +995,12 @@ Fetching page=14</code></pre>
 <p>The <a href="https://github.com/EBI-Metagenomics/holofood-database/blob/main/holofood/external_apis/metabolights/api.py">code that does this in the data portal</a> shows how this can be achieved. In short: fetch the files list from the MetaboLights API, and find the <code>metadata_sample</code> file (it is an ISA-TAB file). Look through that file for the the row where <code>Comment[BioSamples accession]</code> is your sample(s) of interest. This field may have slightly different names in different studies. This lets you find the <code>Sample Name</code> corresponding to the BioSample accession.</p>
 <p>Then, find the <code>metadata_assay</code> file(s) from the file list. Concatenate all of these <code>metadata_assay</code> tab files, and find all the rows from all of the <code>metadata_assay</code> sheets where the <code>Sample Name</code> matches.</p>
 <p>These assay sheets will have columns of interest about the assays used, the raw and derived files, and the metabolites association files. These are filenames which you can then download.</p>
+<section id="from-r" class="level3">
+<h3 class="anchored" data-anchor-id="from-r">From R</h3>
+<p>Users of the R language may wish to use the <a href="https://ebi-metagenomics.github.io/HoloFoodR/">HoloFoodR package</a> to access the API.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1079,8 +1086,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1191,7 +1196,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
