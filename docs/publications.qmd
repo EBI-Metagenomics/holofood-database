@@ -3,9 +3,13 @@ title: "Publications"
 ---
 
 ## Publication covering the HoloFood Data Portal
-
 Rogers, A. B., Kale, V., Baldi, G., Alberdi, A., Gilbert, M. T. P., Gupta, D., Limborg, M. T., Li, S., Payne, T., Petersen, B., Rasmussen, J. A., Richardson, L., Finn, R. D. (2025).
 [HoloFood Data Portal: holo-omic datasets for analysing host–microbiota interactions in animal production.](https://doi.org/10.1093/database/baae112) In Database (Vol. 2025, Article ID: baae112), Oxford University Press. 10.1093/database/baae112
+
+*If you make use of the the `R` package, HoloFoodR, to access the portal, please consider also citing:*
+
+Borman T, Sannikov A, Finn RD, Limborg MT, Rogers AB, Kale V, Hanhineva K, Lahti L. (2025).
+[HoloFoodR: a statistical programming framework for holo-omics data integration workflows.](https://doi.org/10.1093/bioinformatics/btaf605) Bioinformatics (Oxford, England), 41(11), btaf605. 1093/bioinformatics/btaf605
 
 ## Publications from the HoloFood consortium
 
@@ -35,4 +39,3 @@ Brealey, J. C., Lecaudey, L. A., Kodama, M., Rasmussen, J. A., Sveier, H., Dheil
 
 Brealey, J. C., Kodama. M., Rasmussen. J. A., et al (2024).
 [Host-gut microbiota interactions shape parasite infections in farmed Atlantic salmon.](https://doi.org/10.1128/msystems.01043-23) In Msystem (s. 2024). American Society for Microbiology. 10.1128/msystems.01043-23
-
